@@ -7,7 +7,6 @@ const useFeed = () => {
   useEffect(() => {
     const init = async () => {
       const response = await getFeed();
-      console.log('SWEETRS response', response);
       setFeed(response);
     };
     init();

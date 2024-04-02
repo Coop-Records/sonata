@@ -23,7 +23,6 @@ const Feed = ({ feed }: any) => (
         {cast.embeds.map((embed: any) => {
           const trackId = getSpotifyTrackId(embed.url);
           if (!trackId) return null;
-          console.log('SWEETS TRACK ID', trackId);
           return (
             <iframe
               style={{ borderRadius: '12px' }}
