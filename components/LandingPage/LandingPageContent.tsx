@@ -1,21 +1,15 @@
 import { useProvider } from '@/providers/Provider';
-import GenerateButton from '../GenerateButton';
 import MadeBySweets from '../MadeBySweets';
-import Output from '../Output';
 import LandingPageHeader from './LandingPageHeader';
-import SaleStrategyInput from './SaleStrategyInput';
-import FundsRecipientInput from './FundsRecipientInput';
+import Feed from '../Feed';
 
 const LandingPageContent = () => {
-  const { setupActions } = useProvider();
+  const { feed, setupActions } = useProvider();
 
   return (
     <div className="container flex flex-col items-center justify-center gap-4 px-4 text-center sm:gap-8 md:px-6">
       <LandingPageHeader />
-      <FundsRecipientInput />
-      <SaleStrategyInput />
-      {setupActions.length > 0 && <Output />}
-      <GenerateButton />
+      {feed?.casts?.length > 0 && <Feed feed={feed} />}
       <MadeBySweets />
     </div>
   );

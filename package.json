@@ -13,6 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "@coinbase/onchainkit": "^0.9.5",
+    "@neynar/nodejs-sdk": "^1.14.0",
     "@vercel/og": "^0.6.2",
     "@xmtp/frames-validator": "^0.5.2",
     "@zoralabs/protocol-sdk": "^0.5.7",
