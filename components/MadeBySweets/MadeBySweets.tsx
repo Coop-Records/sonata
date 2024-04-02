@@ -1,6 +1,6 @@
 const MadeBySweets = () => (
   <a
-    href="https://github.com/SweetmanTech/viem-transfers"
+    href="https://github.com/SweetmanTech/invest-in-music"
     target="_blank"
     className="flex justify-center items-center gap-5"
   >
