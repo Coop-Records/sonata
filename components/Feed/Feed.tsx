@@ -1,10 +1,11 @@
 import getSpotifyTrackId from '@/lib/spotify/getSpotifyTrackId';
 import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import React from 'react';
+import SoundCloudEmbed from './SoundCloudEmbed';
 
 const Feed = ({ feed }: any) => (
   <div>
-    {feed.casts.map((cast: Cast, index: number) => (
+    {feed.map((cast: Cast, index: number) => (
       <div key={index} style={{ marginBottom: '20px', border: '1px solid #ddd', padding: '10px' }}>
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
           <img
@@ -21,17 +22,24 @@ const Feed = ({ feed }: any) => (
         </div>
         <div style={{ marginBottom: '10px' }}>{cast.text}</div>
         {cast.embeds.map((embed: any) => {
+          const isSpotify = embed.url.includes('spotify');
+          const isSoundcloud = embed.url.includes('soundcloud');
           const trackId = getSpotifyTrackId(embed.url);
-          if (!trackId) return null;
+          if (!trackId && !isSoundcloud) return null;
           return (
-            <iframe
-              style={{ borderRadius: '12px' }}
-              src={`https://open.spotify.com/embed/track/${trackId}?utm_source=generator`}
-              width="100%"
-              height="100%"
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy"
-            />
+            <div>
+              {isSpotify && (
+                <iframe
+                  style={{ borderRadius: '12px' }}
+                  src={`https://open.spotify.com/embed/track/${trackId}?utm_source=generator`}
+                  width="100%"
+                  height="100%"
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy"
+                />
+              )}
+              {isSoundcloud && <SoundCloudEmbed trackUrl={embed.url} />}
+            </div>
           );
         })}
       </div>

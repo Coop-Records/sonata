@@ -6,8 +6,10 @@ const useFeed = () => {
 
   useEffect(() => {
     const init = async () => {
-      const response = await getFeed();
-      setFeed(response);
+      const response = await getFeed('spotify.com/track');
+      const soundCloud = await getFeed('soundcloud.com');
+      console.log('SWEETS SOUNDCLOUD', soundCloud);
+      setFeed([...response.casts, ...soundCloud.casts]);
     };
     init();
   }, []);

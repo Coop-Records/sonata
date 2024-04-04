@@ -7,10 +7,6 @@ simple implementation of setup actions for zora's create Tool using
 
 <img width="1440" alt="Screenshot 2024-04-01 at 10 09 48 PM" src="https://github.com/SweetmanTech/setup-actions/assets/23249402/93ab1cb6-8f2a-47a7-a282-b6e185391da2">
 
-## Components
-
-- `@/components/GenerateButton`: UI component to create setup actions.
-
 ## Libraries
 
 - `@/lib/zora/getSetupActions`: call to get array of the following setup actions.
