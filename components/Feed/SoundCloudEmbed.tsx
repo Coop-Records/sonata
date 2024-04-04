@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 const SoundCloudEmbed = ({ trackUrl }: any) => {
   const [embedHtml, setEmbedHtml] = useState('');
+  const [embedData, setEmbedData] = useState({} as any);
 
   useEffect(() => {
     const init = async () => {
@@ -9,6 +10,7 @@ const SoundCloudEmbed = ({ trackUrl }: any) => {
       const response = await fetch(oEmbedUrl);
       const data = await response.json();
       setEmbedHtml(data.html);
+      setEmbedData(data);
       console.log('SWEETS data', data);
     };
     init();
@@ -16,7 +18,7 @@ const SoundCloudEmbed = ({ trackUrl }: any) => {
 
   return (
     <div>
-      <div dangerouslySetInnerHTML={{ __html: embedHtml }} />
+      <div dangerouslySetInnerHTML={{ __html: embedData?.html }} />
       <div
         style={{
           fontSize: '10px',
@@ -30,24 +32,20 @@ const SoundCloudEmbed = ({ trackUrl }: any) => {
             'Interstate, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Garuda, Verdana, Tahoma, sans-serif',
           fontWeight: '100',
         }}
+        className="flex justify-center"
       >
         <a
-          href="https://soundcloud.com/v4w-enko"
-          title="v4w.enko"
+          href={embedData?.author_url}
+          title={embedData?.author_name}
           target="_blank"
           style={{ color: '#cccccc', textDecoration: 'none' }}
         >
-          v4w.enko
-        </a>{' '}
-        ·{' '}
-        <a
-          href="https://soundcloud.com/v4w-enko/0212-44100-hz"
-          title="V4W.ENKO - 0212"
-          target="_blank"
-          style={{ color: '#cccccc', textDecoration: 'none' }}
-        >
-          V4W.ENKO - 0212
+          {embedData?.author_name}
         </a>
+        ·{' '}
+        <p title={embedData?.title} style={{ color: '#cccccc', textDecoration: 'none' }}>
+          {embedData?.title}
+        </p>
       </div>
     </div>
   );
