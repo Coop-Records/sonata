@@ -1,10 +1,11 @@
 import React from 'react';
 import Cast from '../Cast';
+import { Cast as CastType } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 
 const Feed = ({ feed }: any) => (
   <div>
-    {feed.map((cast: Cast, index: number) => (
-      <Cast key={index} cast={cast} />
+    {feed.map((cast: CastType) => (
+      <Cast key={cast.hash} cast={cast} />
     ))}
   </div>
 );
