@@ -6,8 +6,14 @@ const useFeed = () => {
 
   useEffect(() => {
     const init = async () => {
-      const response = await getFeed();
-      setFeed(response);
+      const response = await getFeed('spotify.com/track');
+      const soundCloud = await getFeed('soundcloud.com');
+      const combinedFeeds = [...response.casts, ...soundCloud.casts];
+      const sortedFeeds = combinedFeeds.sort(
+        (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
+      );
+
+      setFeed(sortedFeeds);
     };
     init();
   }, []);
