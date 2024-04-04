@@ -4,7 +4,10 @@ import SoundCloudEmbed from '../Feed/SoundCloudEmbed';
 import SpotifyEmbed from './SpotifyEmbed';
 
 const Cast = ({ cast }: { cast: Cast }) => {
-  console.log('SWEETS GET EMBEDS', cast);
+  const embed = (cast.embeds[0] as any)?.url;
+  const isSpotify = embed.includes('spotify');
+  const isSoundcloud = embed.includes('soundcloud');
+  const trackId = getSpotifyTrackId(embed);
 
   return (
     <div style={{ marginBottom: '20px', border: '1px solid #ddd', padding: '10px' }}>
@@ -22,18 +25,10 @@ const Cast = ({ cast }: { cast: Cast }) => {
         </div>
       </div>
       <div style={{ marginBottom: '10px' }}>{cast.text}</div>
-      {cast.embeds.map((embed: any) => {
-        const isSpotify = embed.url.includes('spotify');
-        const isSoundcloud = embed.url.includes('soundcloud');
-        const trackId = getSpotifyTrackId(embed.url);
-        if (!trackId && !isSoundcloud) return null;
-        return (
-          <div>
-            {isSpotify && <SpotifyEmbed trackId={trackId as string} />}
-            {isSoundcloud && <SoundCloudEmbed trackUrl={embed.url} />}
-          </div>
-        );
-      })}
+      <div>
+        {isSpotify && <SpotifyEmbed trackId={trackId as string} />}
+        {isSoundcloud && <SoundCloudEmbed trackUrl={embed} />}
+      </div>
     </div>
   );
 };
