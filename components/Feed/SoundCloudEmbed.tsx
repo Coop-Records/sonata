@@ -11,7 +11,6 @@ const SoundCloudEmbed = ({ trackUrl }: any) => {
       const data = await response.json();
       setEmbedHtml(data.html);
       setEmbedData(data);
-      console.log('SWEETS data', data);
     };
     init();
   }, [trackUrl]);
