@@ -1,15 +1,14 @@
 import getSpotifyTrackId from '@/lib/spotify/getSpotifyTrackId';
 import { Cast as CastType } from '@neynar/nodejs-sdk/build/neynar-api/v2';
-import SoundCloudEmbed from '../Feed/SoundCloudEmbed';
 import SpotifyEmbed from './SpotifyEmbed';
+import SoundCloudEmbed from './SoundCloudEmbed';
+import SoundXyzEmbed from './SoundXyzEmbed';
 
 const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
   const embed = (cast?.embeds?.[0] as any)?.url;
-  if (cast?.embeds.length > 1) {
-    console.log('SWEETS MULTIPLE EMBEDs', cast?.embeds);
-  }
   const isSpotify = embed?.includes?.('spotify');
   const isSoundcloud = embed?.includes?.('soundcloud');
+  const isSoundxyz = embed?.includes?.('sound.xyz');
   const trackId = getSpotifyTrackId(embed);
 
   return (
@@ -31,6 +30,7 @@ const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
       <div>
         {isSpotify && <SpotifyEmbed trackId={trackId as string} />}
         {isSoundcloud && <SoundCloudEmbed trackUrl={embed} />}
+        {isSoundxyz && <SoundXyzEmbed url={embed} />}
       </div>
     </div>
   );
