@@ -1,12 +1,14 @@
 import getSpotifyTrackId from '@/lib/spotify/getSpotifyTrackId';
-import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
-import SoundCloudEmbed from '../Feed/SoundCloudEmbed';
+import { Cast as CastType } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import SpotifyEmbed from './SpotifyEmbed';
+import SoundCloudEmbed from './SoundCloudEmbed';
+import SoundXyzEmbed from './SoundXyzEmbed';
 
-const Cast = ({ cast }: { cast: Cast }) => {
-  const embed = (cast.embeds[0] as any)?.url;
-  const isSpotify = embed.includes('spotify');
-  const isSoundcloud = embed.includes('soundcloud');
+const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
+  const embed = (cast?.embeds?.[0] as any)?.url;
+  const isSpotify = embed?.includes?.('spotify');
+  const isSoundcloud = embed?.includes?.('soundcloud');
+  const isSoundxyz = embed?.includes?.('sound.xyz');
   const trackId = getSpotifyTrackId(embed);
 
   return (
@@ -24,10 +26,11 @@ const Cast = ({ cast }: { cast: Cast }) => {
           <div>{new Date(cast.timestamp).toLocaleString()}</div>
         </div>
       </div>
-      <div style={{ marginBottom: '10px' }}>{cast.text}</div>
+      <div style={{ marginBottom: '10px' }}>{JSON.stringify(cast?.embeds)}</div>
       <div>
         {isSpotify && <SpotifyEmbed trackId={trackId as string} />}
         {isSoundcloud && <SoundCloudEmbed trackUrl={embed} />}
+        {isSoundxyz && <SoundXyzEmbed url={embed} />}
       </div>
     </div>
   );

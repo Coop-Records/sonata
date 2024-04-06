@@ -1,5 +1,5 @@
 {
-  "name": "a-frame-in-100-lines",
+  "name": "sonata",
   "version": "0.9.4",
   "scripts": {
     "build": "rm -rf .next && next build",
@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "https://warpcast.com/crazzywizard",
+  "author": "https://warpcast.com/sweetman-eth",
   "license": "MIT",
   "dependencies": {
     "@coinbase/onchainkit": "^0.9.5",
