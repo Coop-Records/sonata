@@ -1,12 +1,12 @@
 import getSpotifyTrackId from '@/lib/spotify/getSpotifyTrackId';
-import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
+import { Cast as CastType } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import SoundCloudEmbed from '../Feed/SoundCloudEmbed';
 import SpotifyEmbed from './SpotifyEmbed';
 
-const Cast = ({ cast }: { cast: Cast }) => {
-  const embed = (cast.embeds[0] as any)?.url;
-  const isSpotify = embed.includes('spotify');
-  const isSoundcloud = embed.includes('soundcloud');
+const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
+  const embed = (cast?.embeds?.[0] as any)?.url;
+  const isSpotify = embed?.includes?.('spotify');
+  const isSoundcloud = embed?.includes?.('soundcloud');
   const trackId = getSpotifyTrackId(embed);
 
   return (

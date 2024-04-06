@@ -1,9 +1,9 @@
 import useFeed from '@/hooks/useFeed';
 import { createContext, useContext, useMemo, useState } from 'react';
 
-const Context = createContext<any>(null);
+const FeedContext = createContext<any>(null);
 
-const Provider = ({ children }: any) => {
+const FeedProvider = ({ children }: any) => {
   const [setupActions, setSetupActions] = useState<string[]>([]);
   const [copied, setCopied] = useState<boolean>(false);
   const [fundsRecipient, setFundsRecipient] = useState<`0x${string}`>();
@@ -35,15 +35,15 @@ const Provider = ({ children }: any) => {
     ],
   );
 
-  return <Context.Provider value={value as any}>{children}</Context.Provider>;
+  return <FeedContext.Provider value={value as any}>{children}</FeedContext.Provider>;
 };
 
-export const useProvider = () => {
-  const context = useContext(Context);
+export const useFeedProvider = () => {
+  const context = useContext(FeedContext);
   if (!context) {
-    throw new Error('useProvider must be used within a Provider');
+    throw new Error('useFeedProvider must be used within a FeedProvider');
   }
   return context;
 };
 
-export default Provider;
+export default FeedProvider;
