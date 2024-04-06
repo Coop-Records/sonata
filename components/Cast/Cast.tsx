@@ -5,6 +5,9 @@ import SpotifyEmbed from './SpotifyEmbed';
 
 const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
   const embed = (cast?.embeds?.[0] as any)?.url;
+  if (cast?.embeds.length > 1) {
+    console.log('SWEETS MULTIPLE EMBEDs', cast?.embeds);
+  }
   const isSpotify = embed?.includes?.('spotify');
   const isSoundcloud = embed?.includes?.('soundcloud');
   const trackId = getSpotifyTrackId(embed);
@@ -24,7 +27,7 @@ const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
           <div>{new Date(cast.timestamp).toLocaleString()}</div>
         </div>
       </div>
-      <div style={{ marginBottom: '10px' }}>{cast.text}</div>
+      <div style={{ marginBottom: '10px' }}>{JSON.stringify(cast?.embeds)}</div>
       <div>
         {isSpotify && <SpotifyEmbed trackId={trackId as string} />}
         {isSoundcloud && <SoundCloudEmbed trackUrl={embed} />}
