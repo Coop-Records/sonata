@@ -16,7 +16,6 @@
     "@neynar/nodejs-sdk": "^1.14.0",
     "@vercel/og": "^0.6.2",
     "@xmtp/frames-validator": "^0.5.2",
-    "@zoralabs/protocol-sdk": "^0.5.7",
     "bufferutil": "^4.0.8",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",

@@ -6,19 +6,13 @@ const useFeed = () => {
 
   useEffect(() => {
     const init = async () => {
-      const [response, soundCloud, soundxyz, zora] = await Promise.all([
+      const [response, soundCloud, soundxyz] = await Promise.all([
         getFeed('spotify.com/track'),
         getFeed('soundcloud.com'),
         getFeed('sound.xyz'),
-        getFeed('zora.co'),
       ]);
 
-      const combinedFeeds = [
-        ...response.casts,
-        ...soundCloud.casts,
-        ...soundxyz.casts,
-        ...zora.casts,
-      ];
+      const combinedFeeds = [...response.casts, ...soundCloud.casts, ...soundxyz.casts];
       const sortedFeeds = combinedFeeds.sort(
         (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
       );
