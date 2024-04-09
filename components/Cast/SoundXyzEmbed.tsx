@@ -13,9 +13,7 @@ const SoundXyzEmbed = ({ url }: { url: string }) => {
       const { artist, trackName } = extractSoundArtistAndTrack(url);
       const soundResponse = await getSoundTrack(artist, trackName);
       const { mintedRelease } = soundResponse;
-      if (!mintedRelease) {
-        console.log('SWEETS UNABLE TO GET SOUND TRACK FOR URL', url);
-      }
+      if (!mintedRelease) return;
       setTrackInfo(mintedRelease);
     };
     init();
