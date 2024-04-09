@@ -24,9 +24,8 @@ const SoundCloudEmbed = ({ trackUrl }: any) => {
           color: '#cccccc',
           lineBreak: 'anywhere',
           wordBreak: 'normal',
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-          textOverflow: 'ellipsis',
+          overflow: 'visible',
+          textOverflow: 'clip',
           fontFamily:
             'Interstate, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Garuda, Verdana, Tahoma, sans-serif',
           fontWeight: '100',
@@ -39,12 +38,11 @@ const SoundCloudEmbed = ({ trackUrl }: any) => {
           target="_blank"
           style={{ color: '#cccccc', textDecoration: 'none' }}
         >
-          {embedData?.author_name}
+          {embedData?.author_name}·{' '}
+          <p title={embedData?.title} style={{ color: '#cccccc', textDecoration: 'none' }}>
+            {embedData?.title}
+          </p>
         </a>
-        ·{' '}
-        <p title={embedData?.title} style={{ color: '#cccccc', textDecoration: 'none' }}>
-          {embedData?.title}
-        </p>
       </div>
     </div>
   );
