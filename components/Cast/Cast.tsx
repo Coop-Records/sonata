@@ -23,10 +23,8 @@ const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
           <div>
             <strong>{cast.author.display_name}</strong>
           </div>
-          <div>{new Date(cast.timestamp).toLocaleString()}</div>
         </div>
       </div>
-      <div style={{ marginBottom: '10px' }}>{JSON.stringify(cast?.embeds)}</div>
       <div>
         {isSpotify && <SpotifyEmbed trackId={trackId as string} />}
         {isSoundcloud && <SoundCloudEmbed trackUrl={embed} />}
