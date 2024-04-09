@@ -1,4 +1,5 @@
-import getFeed from '@/lib/neynar/getFeed';
+import getCombinedFeed from '@/lib/getCombinedFeed';
+import getZoraFeed from '@/lib/zora/getZoraFeed';
 import { useEffect, useState } from 'react';
 
 const useFeed = () => {
@@ -6,24 +7,10 @@ const useFeed = () => {
 
   useEffect(() => {
     const init = async () => {
-      const [response, soundCloud, soundxyz, zora] = await Promise.all([
-        getFeed('spotify.com/track'),
-        getFeed('soundcloud.com'),
-        getFeed('sound.xyz'),
-        getFeed('zora.co'),
-      ]);
-
-      const combinedFeeds = [
-        ...response.casts,
-        ...soundCloud.casts,
-        ...soundxyz.casts,
-        ...zora.casts,
-      ];
-      const sortedFeeds = combinedFeeds.sort(
-        (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
-      );
-
-      setFeed(sortedFeeds);
+      const combinedFeeds = await getCombinedFeed();
+      setFeed(combinedFeeds);
+      const zoraResponse = await getZoraFeed();
+      console.log('SWEETS ZORA RESPONSE', zoraResponse);
     };
     init();
   }, []);
