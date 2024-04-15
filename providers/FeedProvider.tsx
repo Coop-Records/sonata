@@ -1,4 +1,5 @@
 import useFeed from '@/hooks/useFeed';
+import useSigner from '@/hooks/useSigner';
 import { createContext, useContext, useMemo, useState } from 'react';
 
 const FeedContext = createContext<any>(null);
