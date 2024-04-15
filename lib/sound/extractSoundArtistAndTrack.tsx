@@ -7,7 +7,7 @@ const extractSoundArtistAndTrack = (soundUrl: string) => {
     artist = parts[2];
     track = parts[3];
   }
-  track = track.split('?')[0];
+  track = track?.split?.('?')?.[0];
 
   return { artist, trackName: track };
 };
