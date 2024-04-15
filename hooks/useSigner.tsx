@@ -3,6 +3,12 @@
 import { Signer } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { useEffect, useState } from 'react';
 
+declare global {
+  interface Window {
+    onSignInSuccess?: (data: any) => void;
+  }
+}
+
 const useSigner = () => {
   const [signer, setSigner] = useState<Signer | null>(() => {
     // Retrieve the signer from localStorage on initial load

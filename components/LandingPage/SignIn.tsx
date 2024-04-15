@@ -1,12 +1,6 @@
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { useCallback, useState } from 'react';
 
-declare global {
-  interface Window {
-    onSignInSuccess: (data: any) => void;
-  }
-}
-
 const Signin = () => {
   const { signer } = useNeynarProvider();
   const [theme, setTheme] = useState('light');
