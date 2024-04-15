@@ -12,12 +12,9 @@ export const viewport = {
 };
 
 const config = {
-  // For a production app, replace this with an Optimism Mainnet
-  // RPC URL from a provider like Alchemy or Infura.
   relay: 'https://relay.farcaster.xyz',
   rpcUrl: 'https://mainnet.optimism.io',
   domain: 'sonatamusic.vercel.app',
-  siweUri: 'http://localhost:3000/',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
