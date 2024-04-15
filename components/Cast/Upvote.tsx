@@ -1,7 +1,6 @@
 import createReaction from '@/lib/neynar/createReaction';
 import getCastReactions from '@/lib/neynar/getCastReactions';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
-import { ReactionLike } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { useEffect, useState } from 'react';
 import { MdArrowCircleUp } from 'react-icons/md';
 import { Address } from 'viem';
@@ -26,7 +25,7 @@ const Upvote = ({ target }: { target: Address }) => {
     setVotes(castResponse?.reactions?.length);
     const { fid } = signer;
     const userHasUpvoted = castResponse.reactions.some((reaction: any) => reaction.user.fid == fid);
-    if (userHasUpvoted) setUpvoted(true); // Update the upvoted state if the fid matches the signer's fid
+    if (userHasUpvoted) setUpvoted(true);
   };
 
   useEffect(() => {
