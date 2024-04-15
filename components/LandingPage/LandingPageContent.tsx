@@ -2,7 +2,7 @@ import MadeBySweets from '../MadeBySweets';
 import LandingPageHeader from './LandingPageHeader';
 import Feed from '../Feed';
 import { useFeedProvider } from '@/providers/FeedProvider';
-import { SignInButton } from '@farcaster/auth-kit';
+import SignInButton from './SignInButton';
 
 const LandingPageContent = () => {
   const { feed } = useFeedProvider();
