@@ -1,5 +1,3 @@
-'use client';
-
 import { Signer } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { useEffect, useState } from 'react';
 
@@ -9,10 +7,15 @@ declare global {
   }
 }
 
+const isClient = typeof window !== 'undefined';
+
 const useSigner = () => {
   const [signer, setSigner] = useState<Signer | null>(() => {
-    const savedSigner = localStorage.getItem('signer');
-    return savedSigner ? JSON.parse(savedSigner) : null;
+    if (isClient) {
+      const savedSigner = localStorage.getItem('signer');
+      return savedSigner ? JSON.parse(savedSigner) : null;
+    }
+    return null;
   });
 
   useEffect(() => {
