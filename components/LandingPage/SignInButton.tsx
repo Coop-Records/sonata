@@ -18,8 +18,7 @@ const SignInButton = () => {
   const customLogoUrl = '';
 
   const client_id = process.env.NEXT_PUBLIC_NEYNAR_CLIENT_ID;
-  const neynar_login_url =
-    process.env.NEXT_PUBLIC_NEYNAR_LOGIN_URL || 'https://app.neynar.com/login';
+  const neynar_login_url = 'https://app.neynar.com/login';
 
   if (!client_id) {
     throw new Error('NEXT_PUBLIC_NEYNAR_CLIENT_ID is not defined in .env');
