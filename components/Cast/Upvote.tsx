@@ -1,10 +1,10 @@
 import createReaction from '@/lib/neynar/createReaction';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
+import { Cast } from '@/types/Cast';
 import { useState } from 'react';
 import { MdArrowCircleUp } from 'react-icons/md';
-import { Address } from 'viem';
 
-const Upvote = ({ cast }: { cast: any }) => {
+const Upvote = ({ cast }: { cast: Cast }) => {
   const { signer } = useNeynarProvider();
   const [upvoted, setUpvoted] = useState<boolean>(
     cast.reactions.likes.some((like: any) => like.fid == signer.fid),

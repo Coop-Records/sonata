@@ -1,4 +1,4 @@
-import { Cast as CastType } from '@neynar/nodejs-sdk/build/neynar-api/v2';
+import { Cast as CastType } from '@/types/Cast';
 import AuthorDetails from './AuthorDetails';
 import PlayButton from './PlayButton';
 import Upvote from './Upvote';
