@@ -6,12 +6,8 @@ import { useFeedProvider } from '@/providers/FeedProvider';
 export default function Trending() {
   const { feed } = useFeedProvider();
 
-  const trendingFeed = feed.sort((cast1: any, cast2: any) => {
-    return (
-      cast2.reactions.likes.length +
-      cast2.reactions.recasts.length -
-      (cast1.reactions.likes.length + cast1.reactions.recasts.length)
-    );
+  const trendingFeed = feed.toSorted((cast1: any, cast2: any) => {
+    return cast2.reactions.likes.length - cast1.reactions.likes.length;
   });
 
   return (
