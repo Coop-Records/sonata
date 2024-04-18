@@ -1,6 +1,6 @@
 import { Address } from 'viem';
 
-const getCastReactions = async (hash: Address) => {
+const getCastLikes = async (hash: Address) => {
   const options = {
     method: 'GET',
     headers: { accept: 'application/json', api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY },
@@ -9,7 +9,7 @@ const getCastReactions = async (hash: Address) => {
   try {
     const queryParams = new URLSearchParams({
       hash,
-      types: 'like',
+      types: 'likes',
       limit: '25',
     });
 
@@ -18,11 +18,11 @@ const getCastReactions = async (hash: Address) => {
       options,
     );
     const data = await response.json();
-    return data;
+    return data.reactions;
   } catch (error) {
     console.error(error);
     return { error };
   }
 };
 
-export default getCastReactions;
+export default getCastLikes;
