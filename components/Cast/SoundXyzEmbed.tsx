@@ -24,7 +24,7 @@ const SoundXyzEmbed = ({ url }: { url: string }) => {
       {src && (
         <iframe
           src={`https://embed.sound.xyz/v1/release/${trackId}?referral=${REFERRAL}&referral_source=embed-sound`}
-          style={{ borderRadius: '8px;' }}
+          style={{ borderRadius: '8px' }}
           width="100%"
           height="188px"
           allow="clipboard-write"

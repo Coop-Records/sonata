@@ -23,9 +23,13 @@ const Upvote = ({ target }: { target: Address }) => {
   const refetchData = async () => {
     const castResponse = await getCastReactions(target);
     setVotes(castResponse?.reactions?.length);
-    const { fid } = signer;
-    const userHasUpvoted = castResponse.reactions.some((reaction: any) => reaction.user.fid == fid);
-    if (userHasUpvoted) setUpvoted(true);
+    if (signer) {
+      const { fid } = signer;
+      const userHasUpvoted = castResponse.reactions.some(
+        (reaction: any) => reaction.user.fid == fid,
+      );
+      if (userHasUpvoted) setUpvoted(true);
+    }
   };
 
   useEffect(() => {
