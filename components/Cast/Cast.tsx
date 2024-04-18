@@ -6,13 +6,12 @@ import { Address } from 'viem';
 
 const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
   const embed = (cast?.embeds?.[0] as any)?.url;
-  const { hash } = cast;
 
   return (
     <div className="flex flex-col gap-3 mb-[20px] border border-500-[#ddd] p-[10px]">
       <AuthorDetails pfpUrl={cast.author.pfp_url} displayName={cast.author.display_name} />
       <div className="flex items-center w-full">
-        <Upvote target={hash as Address} cast={cast} />
+        <Upvote cast={cast} />
         <PlayButton embed={embed} />
       </div>
     </div>

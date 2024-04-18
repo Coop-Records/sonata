@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { MdArrowCircleUp } from 'react-icons/md';
 import { Address } from 'viem';
 
-const Upvote = ({ target, cast }: { target: Address; cast: any }) => {
+const Upvote = ({ cast }: { cast: any }) => {
   const { signer } = useNeynarProvider();
   const [upvoted, setUpvoted] = useState<boolean>(
     cast.reactions.likes.some((like: any) => like.fid == signer.fid),
@@ -13,7 +13,7 @@ const Upvote = ({ target, cast }: { target: Address; cast: any }) => {
 
   const handleClick = async () => {
     const { signer_uuid } = signer;
-    const response = await createReaction(signer_uuid, target);
+    const response = await createReaction(signer_uuid, cast.hash);
     if (response.success) {
       setUpvoted(true);
       setVotes(votes + 1);
