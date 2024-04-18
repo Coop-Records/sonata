@@ -2,7 +2,6 @@ import { Cast as CastType } from '@/types/Cast';
 import AuthorDetails from './AuthorDetails';
 import PlayButton from './PlayButton';
 import Upvote from './Upvote';
-import { Address } from 'viem';
 
 const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
   const embed = (cast?.embeds?.[0] as any)?.url;
