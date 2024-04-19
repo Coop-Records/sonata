@@ -1,6 +1,6 @@
 import React from 'react';
 import Cast from '../Cast';
-import { Cast as CastType } from '@neynar/nodejs-sdk/build/neynar-api/v2';
+import { Cast as CastType } from '@/types/Cast';
 
 const Feed = ({ feed }: any) => (
   <div className="max-w-[333px] md:max-w-[444px]">
