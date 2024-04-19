@@ -7,7 +7,7 @@ import { MdArrowCircleUp } from 'react-icons/md';
 const Upvote = ({ cast }: { cast: Cast }) => {
   const { signer } = useNeynarProvider();
   const [upvoted, setUpvoted] = useState<boolean>(
-    cast.reactions.likes.some((like: any) => like.fid == signer.fid),
+    signer && cast.reactions.likes.some((like: any) => like?.fid === signer?.fid),
   );
   const [votes, setVotes] = useState<number>(cast.reactions.likes.length);
 
