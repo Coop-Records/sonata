@@ -13,4 +13,8 @@ export type SpotifyTrack = {
   name: string;
   preview_url?: string;
   uri: string;
+  error?: {
+    status: number;
+    message: string;
+  };
 };

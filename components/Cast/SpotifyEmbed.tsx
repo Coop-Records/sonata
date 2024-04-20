@@ -50,6 +50,11 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
 
   if (!track) return <></>;
 
+  if (track.error) {
+    console.error(track.error);
+    return <></>;
+  }
+
   return (
     <div className="w-full relative z-0">
       <CustomEmbed

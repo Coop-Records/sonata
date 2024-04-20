@@ -53,9 +53,13 @@ const SoundCloudEmbed = ({ trackUrl }: any) => {
     setWidget(widget);
 
     return () => {
-      widget.unbind(SC.Widget.Events.PLAY);
-      widget.unbind(SC.Widget.Events.PAUSE);
-      widget.unbind(SC.Widget.Events.PLAY_PROGRESS);
+      try {
+        widget.unbind(SC.Widget.Events.PLAY);
+        widget.unbind(SC.Widget.Events.PAUSE);
+        widget.unbind(SC.Widget.Events.PLAY_PROGRESS);
+      } catch (e) {
+        console.error(e);
+      }
     };
   }, [iframeRef.current, iframeSrc]);
 
