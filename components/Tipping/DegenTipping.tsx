@@ -8,12 +8,13 @@ const DegenTipping = () => {
   };
 
   const submitTip = () => {
-        // TODO: Submit tip amount as a comment
+    // TODO: Submit tip amount as a comment
   };
 
   return (
     <div>
       {/* Preset buttons for tipping amounts */}
+      50,000 Available
       <div className="flex space-x-4 mb-4">
         <button
           className="bg-blue-500 text-white rounded px-4 py-2"

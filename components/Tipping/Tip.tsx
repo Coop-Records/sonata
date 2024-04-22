@@ -11,9 +11,18 @@ const TipButton = ({ verifications }: { verifications: string[] }) => {
   };
 
   return verifications && verifications.length > 0 ? (
-    <Button className="text-black border-black border-2" onClick={tip}>
-      TIP
-    </Button>
+    <div className="w-full flex justify-between items-center text-xs">
+      <div className="inline-flex gap-4">
+        <div>0 *NOTES LOGO*</div>
+        <div className="text-xs">0 *DEGEN LOGO*</div>
+      </div>
+      <Button
+        className="bg-transparent hover:bg-gray-100 text-black py-1 px-3 border border-gray-300 rounded"
+        onClick={tip}
+      >
+        TIP
+      </Button>
+    </div>
   ) : (
     <></>
   );
