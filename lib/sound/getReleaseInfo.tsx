@@ -1,7 +1,7 @@
 import fetchSoundGraphQL from './fetchSoundGraphQL';
 import { MINTED_RELEASE_QUERY } from './queries';
 
-const getSoundTrack = async (
+const getReleaseInfo = async (
   soundHandle: string = 'xcelencia',
   releaseSlug: string = 'chimbita',
 ) => {
@@ -13,4 +13,4 @@ const getSoundTrack = async (
   return response;
 };
 
-export default getSoundTrack;
+export default getReleaseInfo;
