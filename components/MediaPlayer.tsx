@@ -1,7 +1,7 @@
 import { formatDuration } from '@/lib/utils';
 import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';
 
-type CustomEmbedProps = {
+type MediaPlayerProps = {
   artistName: string;
   trackName: string;
   artworkUrl: string;
@@ -12,7 +12,7 @@ type CustomEmbedProps = {
   duration: number;
 };
 
-export default function CustomEmbed({
+export default function MediaPlayer({
   artistName,
   artworkUrl,
   trackName,
@@ -21,7 +21,7 @@ export default function CustomEmbed({
   playing,
   position,
   duration,
-}: CustomEmbedProps) {
+}: MediaPlayerProps) {
   return (
     <div className="w-full rounded-lg p-2 bg-blue-500 flex flex-col gap-4">
       <div className="flex gap-4">

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import CustomEmbed from './CustomEmbed';
 import { OEmbedData } from '@/types/OEmbedData';
 import { useSoundcloudApi } from '@/providers/SoundcloudApiProvider';
+import MediaPlayer from '@/components/MediaPlayer';
 
 const SoundCloudEmbed = ({ trackUrl }: any) => {
   const [playing, setPlaying] = useState(false);
@@ -67,7 +67,7 @@ const SoundCloudEmbed = ({ trackUrl }: any) => {
 
   return (
     <>
-      <CustomEmbed
+      <MediaPlayer
         artistName={embedData.author_name || ''}
         trackName={embedData.title.split(' - ')[0].split(' by ')[0]}
         artworkUrl={embedData.thumbnail_url}

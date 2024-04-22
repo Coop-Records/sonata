@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import CustomEmbed from './CustomEmbed';
 import { useSpotifyApi } from '@/providers/SpotifyApiProvider';
 import { SpotifyPlaybackUpdateEvent } from '@/types/SpotifyPlaybackUpdateEvent';
 import getSpotifyTrackId from '@/lib/spotify/getSpotifyTrackId';
 import getSpotifyTrack from '@/lib/spotify/getSpotifyTrack';
 import { SpotifyTrack } from '@/types/SpotifyTrack';
+import MediaPlayer from '@/components/MediaPlayer';
 
 export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
   const trackId = useMemo(() => getSpotifyTrackId(trackUrl), [trackUrl]);
@@ -57,7 +57,7 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
 
   return (
     <div className="w-full relative z-0">
-      <CustomEmbed
+      <MediaPlayer
         artistName={track.artists.map((artist: any) => artist.name).join(', ')}
         trackName={track.name}
         artworkUrl={track.album.images[0].url}
