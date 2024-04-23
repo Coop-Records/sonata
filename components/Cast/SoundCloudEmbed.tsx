@@ -68,9 +68,9 @@ const SoundCloudEmbed = ({ trackUrl }: any) => {
           duration: duration,
         }}
         controls={{
-          play: widget.play,
-          pause: widget.pause,
-          seek: widget.seekTo,
+          play: () => widget.play(),
+          pause: () => widget.pause(),
+          seek: (time) => widget.seekTo(time),
         }}
         position={position}
       />
