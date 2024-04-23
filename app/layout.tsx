@@ -5,6 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import Header from '@/components/Header';
 import { Inter } from 'next/font/google';
 import { cn } from '@/lib/utils';
+import GlobalPlayer from '@/components/GlobalPlayer';
 
 export const viewport = {
   width: 'device-width',
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Header />
           {children}
           <ToastContainer />
+          <GlobalPlayer />
         </Providers>
       </body>
     </html>

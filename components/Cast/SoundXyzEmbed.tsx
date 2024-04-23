@@ -6,7 +6,6 @@ import MediaPlayer from '@/components/MediaPlayer';
 const SoundXyzEmbed = ({ url }: { url: string }) => {
   const [releaseInfo, setReleaseInfo] = useState<any>({});
   const [audio, setAudio] = useState<HTMLAudioElement>();
-  const [playing, setPlaying] = useState(false);
   const [position, setPosition] = useState(0);
 
   useEffect(() => {
@@ -22,11 +21,11 @@ const SoundXyzEmbed = ({ url }: { url: string }) => {
 
   useEffect(() => {
     if (!releaseInfo?.id) return;
+
     const src = releaseInfo.track.audio.audioOriginal.url;
     const audio = new Audio(src);
-    audio.onplaying = () => setPlaying(true);
-    audio.onpause = () => setPlaying(false);
-    audio.ontimeupdate = (e) => setPosition(audio.currentTime * 1000);
+    audio.preload = 'none';
+    audio.ontimeupdate = () => setPosition(audio.currentTime * 1000);
     setAudio(audio);
   }, [releaseInfo?.id]);
 
@@ -34,17 +33,21 @@ const SoundXyzEmbed = ({ url }: { url: string }) => {
 
   return (
     <MediaPlayer
-      artistName={releaseInfo.artist.name}
-      trackName={releaseInfo.title}
-      artworkUrl={releaseInfo.coverImage.url}
-      duration={releaseInfo.track.duration * 1000}
-      onPlay={() => {
-        audio.play();
+      metadata={{
+        id: releaseInfo.id,
+        type: 'soundxyz',
+        artistName: releaseInfo.artist.name,
+        trackName: releaseInfo.title,
+        artworkUrl: releaseInfo.coverImage.url,
+        duration: releaseInfo.track.duration * 1000,
       }}
-      onPause={() => {
-        audio.pause();
+      controls={{
+        play: () => audio.play(),
+        pause: () => audio.pause(),
+        seek: (time: number) => {
+          audio.currentTime = time / 1000;
+        },
       }}
-      playing={playing}
       position={position}
     />
   );
