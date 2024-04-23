@@ -1,15 +1,13 @@
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+
 const AuthorDetails = ({ pfpUrl, displayName }: any) => (
-  <div style={{ display: 'flex', alignItems: 'center' }}>
-    <img
-      src={pfpUrl}
-      alt="profile"
-      style={{ width: '50px', height: '50px', borderRadius: '50%', marginRight: '10px' }}
-    />
-    <div>
-      <div>
-        <strong>{displayName}</strong>
-      </div>
-    </div>
+  <div className="flex items-center space-x-3">
+    <Avatar className="size-8">
+      <AvatarImage src={pfpUrl} />
+      <AvatarFallback>{displayName}</AvatarFallback>
+    </Avatar>
+
+    <span className="text-sm font-light font-inter">{displayName}</span>
   </div>
 );
 

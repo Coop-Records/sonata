@@ -1,9 +1,9 @@
 import { Cast } from '@/types/Cast';
 import { FeedFilter } from '@/types/FeedFilter';
-import { EmbedUrl, EmbeddedCast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
+import { EmbedUrl } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 
 export default function findValidEmbed(cast: Cast, filter: FeedFilter = {}) {
-  const embeds = cast.embeds as EmbeddedCast[];
+  const embeds = cast.embeds;
 
   const validEmbed = embeds.find((embed) => {
     if (!('url' in embed)) return false;

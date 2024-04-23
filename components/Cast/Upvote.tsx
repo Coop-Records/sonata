@@ -2,7 +2,7 @@ import createReaction from '@/lib/neynar/createReaction';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { Cast } from '@/types/Cast';
 import { useState } from 'react';
-import { MdArrowCircleUp } from 'react-icons/md';
+import { IoIosArrowDropup, IoIosArrowDropupCircle } from 'react-icons/io';
 
 const Upvote = ({ cast }: { cast: Cast }) => {
   const { signer } = useNeynarProvider();
@@ -22,8 +22,12 @@ const Upvote = ({ cast }: { cast: Cast }) => {
 
   return (
     <button type="button" onClick={handleClick}>
-      <MdArrowCircleUp size={50} color={upvoted ? 'red' : 'black'} />
-      <span>{votes}</span>
+      {upvoted ? (
+        <IoIosArrowDropupCircle className="text-red-500 text-4xl" />
+      ) : (
+        <IoIosArrowDropup className="text-red-500 text-4xl" />
+      )}
+      <span className="text-lg font-semibold font-inter text-red-300">{votes}</span>
     </button>
   );
 };

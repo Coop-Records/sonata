@@ -3,21 +3,21 @@ import getReleaseInfo from '@/lib/sound/getReleaseInfo';
 import { useEffect, useState } from 'react';
 import MediaPlayer from '@/components/MediaPlayer';
 
-const SoundXyzEmbed = ({ url }: { url: string }) => {
+const SoundXyzEmbed = ({ trackUrl }: { trackUrl: string }) => {
   const [releaseInfo, setReleaseInfo] = useState<any>({});
   const [audio, setAudio] = useState<HTMLAudioElement>();
   const [position, setPosition] = useState(0);
 
   useEffect(() => {
     const init = async () => {
-      if (!url) return;
-      const { artist, trackName } = extractSoundArtistAndTrack(url);
+      if (!trackUrl) return;
+      const { artist, trackName } = extractSoundArtistAndTrack(trackUrl);
       const { mintedRelease } = await getReleaseInfo(artist, trackName);
       if (!mintedRelease) return;
       setReleaseInfo(mintedRelease);
     };
     init();
-  }, [url]);
+  }, [trackUrl]);
 
   useEffect(() => {
     if (!releaseInfo?.id) return;
