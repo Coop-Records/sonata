@@ -31,8 +31,10 @@ export default function CustomEmbed({
           alt=""
         />
         <div className="grow flex flex-col gap-1 text-left pt-2">
-          <div className="text-sm font-bold text-white font-inter">{trackName}</div>
-          <div className="text-xs font-extralight text-white font-inter">{artistName}</div>
+          <div className="text-sm font-bold text-white font-inter line-clamp-2">{trackName}</div>
+          <div className="text-xs font-extralight text-white font-inter line-clamp-2">
+            {artistName}
+          </div>
         </div>
         <div className="my-auto">
           {playing ? (
