@@ -12,8 +12,6 @@ export default function Feed({ feed }: any) {
     setFilter((prev) => ({ ...prev, ...change }));
   };
 
-  if (!(feed && feed.length)) return <></>;
-
   const filteredFeed: any = useMemo(
     () => feed.filter((cast: CastType) => findValidEmbed(cast, filter)),
     [filter.platform],
