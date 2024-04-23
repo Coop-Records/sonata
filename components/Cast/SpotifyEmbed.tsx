@@ -62,9 +62,9 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
           duration: track.duration_ms,
         }}
         controls={{
-          play: embedController.play,
-          pause: embedController.pause,
-          seek: embedController.seek,
+          play: () => embedController.play(),
+          pause: () => embedController.pause(),
+          seek: (time) => embedController.seek(time),
         }}
         position={position}
       />
