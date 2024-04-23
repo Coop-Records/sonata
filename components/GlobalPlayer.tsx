@@ -7,7 +7,6 @@ export default function GlobalPlayer() {
   const [player, dispatch] = usePlayer();
   const { metadata, position } = player;
 
-  console.log({ player });
   if (!metadata) return <></>;
 
   const handlePlay = () => {
