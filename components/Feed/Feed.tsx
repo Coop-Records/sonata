@@ -9,11 +9,8 @@ export default function Feed({ feed }: any) {
   const [filter, setFilter] = useState<FeedFilter>({});
 
   const handleFilterChange = (change: any) => {
-    console.log({ change });
     setFilter((prev) => ({ ...prev, ...change }));
   };
-
-  if (!(feed && feed.length)) return <></>;
 
   const filteredFeed: any = useMemo(
     () => feed.filter((cast: CastType) => findValidEmbed(cast, filter)),

@@ -20,7 +20,7 @@ export default function findValidEmbed(cast: Cast, filter: FeedFilter = {}) {
     } else if (url.includes('soundcloud')) {
       valid = true;
     } else if (url.includes('sound.xyz')) {
-      if (!url.match(/\/post\//)) {
+      if (!url.match(/(\/post\/)|(\/playlist\/)/)) {
         valid = true;
       }
     }
