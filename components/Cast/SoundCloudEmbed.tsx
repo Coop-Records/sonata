@@ -4,7 +4,6 @@ import { useSoundcloudApi } from '@/providers/SoundcloudApiProvider';
 import MediaPlayer from '@/components/MediaPlayer';
 
 const SoundCloudEmbed = ({ trackUrl }: any) => {
-  const [playing, setPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
   const [position, setPosition] = useState(0);
   const [embedData, setEmbedData] = useState<OEmbedData>();
@@ -33,14 +32,6 @@ const SoundCloudEmbed = ({ trackUrl }: any) => {
     const widget = SC.Widget(iframe);
 
     widget.bind(SC.Widget.Events.READY, function () {
-      widget.bind(SC.Widget.Events.PLAY, () => {
-        setPlaying(true);
-      });
-
-      widget.bind(SC.Widget.Events.PAUSE, () => {
-        setPlaying(false);
-      });
-
       widget.bind(SC.Widget.Events.PLAY_PROGRESS, (position: any) => {
         setPosition(position.currentPosition);
       });
@@ -68,13 +59,19 @@ const SoundCloudEmbed = ({ trackUrl }: any) => {
   return (
     <>
       <MediaPlayer
-        artistName={embedData.author_name || ''}
-        trackName={embedData.title.split(' - ')[0].split(' by ')[0]}
-        artworkUrl={embedData.thumbnail_url}
-        onPause={() => widget.pause()}
-        onPlay={() => widget.play()}
-        playing={playing}
-        duration={duration}
+        metadata={{
+          id: trackUrl,
+          type: 'soundcloud',
+          artistName: embedData.author_name || '',
+          trackName: embedData.title.split(' - ')[0].split(' by ')[0],
+          artworkUrl: embedData.thumbnail_url,
+          duration: duration,
+        }}
+        controls={{
+          play: widget.play,
+          pause: widget.pause,
+          seek: widget.seekTo,
+        }}
         position={position}
       />
       <iframe
