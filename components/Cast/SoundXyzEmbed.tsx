@@ -1,8 +1,7 @@
-import { REFERRAL } from '@/lib/consts';
 import extractSoundArtistAndTrack from '@/lib/sound/extractSoundArtistAndTrack';
 import getReleaseInfo from '@/lib/sound/getReleaseInfo';
 import { useEffect, useState } from 'react';
-import CustomEmbed from './CustomEmbed';
+import MediaPlayer from '@/components/MediaPlayer';
 
 const SoundXyzEmbed = ({ url }: { url: string }) => {
   const [releaseInfo, setReleaseInfo] = useState<any>({});
@@ -34,7 +33,7 @@ const SoundXyzEmbed = ({ url }: { url: string }) => {
   if (!(releaseInfo && audio)) return <></>;
 
   return (
-    <CustomEmbed
+    <MediaPlayer
       artistName={releaseInfo.artist.name}
       trackName={releaseInfo.title}
       artworkUrl={releaseInfo.coverImage.url}
