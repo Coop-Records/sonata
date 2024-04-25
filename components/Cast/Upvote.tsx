@@ -2,7 +2,7 @@ import createReaction from '@/lib/neynar/createReaction';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { Cast } from '@/types/Cast';
 import { useState } from 'react';
-import { IoIosArrowDropup, IoIosArrowDropupCircle } from 'react-icons/io';
+import { twJoin } from 'tailwind-merge';
 
 const Upvote = ({ cast }: { cast: Cast }) => {
   const { signer } = useNeynarProvider();
@@ -21,14 +21,12 @@ const Upvote = ({ cast }: { cast: Cast }) => {
   };
 
   return (
-    <button type="button" onClick={handleClick}>
-      {upvoted ? (
-        <IoIosArrowDropupCircle className="text-red-500 text-4xl" />
-      ) : (
-        <IoIosArrowDropup className="text-red-500 text-4xl" />
-      )}
-      <span className="text-lg font-semibold font-inter text-red-300">{votes}</span>
-    </button>
+    <div className="flex flex-col items-center">
+      <button type="button" onClick={handleClick}>
+        <span className={twJoin('text-3xl', upvoted && 'font-bold text-green-500')}>↑</span>
+      </button>
+      <span className="text-xl font-semibold font-inter">{votes}</span>
+    </div>
   );
 };
 
