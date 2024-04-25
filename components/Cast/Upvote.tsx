@@ -6,12 +6,9 @@ import { IoIosArrowDropup, IoIosArrowDropupCircle } from 'react-icons/io';
 
 const Upvote = ({ cast }: { cast: Cast }) => {
   const { signer } = useNeynarProvider();
-  const [upvoted, setUpvoted] = useState<boolean>(() => {
-    if (signer && cast.reactions.likes.some((like: any) => like?.fid === signer?.fid)) {
-      return true;
-    }
-    return false;
-  });
+  const [upvoted, setUpvoted] = useState<boolean>(
+    Boolean(signer && cast.reactions.likes.some((like: any) => like?.fid === signer?.fid)),
+  );
   const [votes, setVotes] = useState<number>(cast.reactions.likes.length);
 
   const handleClick = async () => {

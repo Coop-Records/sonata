@@ -7,13 +7,15 @@ const SignInButton = () => {
   return (
     <button
       onClick={user ? signOut : signIn}
-      className="rounded-md bg-black text-white py-2 px-4 flex gap-2 items-center font-light"
+      className="rounded-md bg-farcaster text-white py-2 px-4 flex gap-2 items-center font-light"
     >
       {user ? (
         'Logout'
       ) : (
         <>
-          <Image src="/images/warpcast.png" width={32} height={32} alt="" />
+          <div className="w-8">
+            <Image src="/images/farcaster.svg" width={323} height={297} alt="" />
+          </div>
           Sign In
         </>
       )}
