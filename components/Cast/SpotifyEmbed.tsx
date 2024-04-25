@@ -25,7 +25,7 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
   }, [trackId]);
 
   useEffect(() => {
-    if (!(elementRef.current && track?.uri)) return;
+    if (!(elementRef.current && track?.uri && iframeApi)) return;
 
     const options = {
       height: '10',
@@ -41,7 +41,7 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
         setPosition(data.position);
       });
     });
-  }, [elementRef.current, track?.uri]);
+  }, [elementRef.current, track?.uri, iframeApi]);
 
   if (!track) return <></>;
 
@@ -68,7 +68,7 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
         }}
         position={position}
       />
-      <div className="absolute -z-10">
+      <div className="absolute top-0 left-0 opacity-0 -z-10">
         <div ref={elementRef} />
       </div>
     </div>

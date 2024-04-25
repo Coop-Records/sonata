@@ -20,7 +20,7 @@ export default function GlobalPlayer() {
   return (
     <div
       data-type={metadata.type}
-      className="fixed bottom-0 left-0 w-full p-2 bg-blue-500 flex flex-col gap-4"
+      className="fixed bottom-0 left-0 w-full p-2 bg-black flex flex-col gap-4"
     >
       <div className="flex gap-4">
         <img
@@ -53,9 +53,9 @@ export default function GlobalPlayer() {
           <span>{formatDuration(position)}</span>
           <span>{formatDuration(metadata.duration)}</span>
         </div>
-        <div className="bg-white w-full h-1 rounded-lg overflow-hidden">
+        <div className="bg-gray-600 w-full h-1 rounded-lg overflow-hidden">
           <div
-            className="bg-blue-800 h-1 rounded-lg"
+            className="bg-white h-1 rounded-lg"
             style={{ width: `${(position / metadata.duration) * 100}%` }}
           />
         </div>
