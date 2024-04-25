@@ -23,7 +23,7 @@ const Upvote = ({ cast }: { cast: Cast }) => {
   return (
     <div className="flex flex-col items-center">
       <button type="button" onClick={handleClick}>
-        <span className={twJoin('text-3xl', upvoted && 'font-bold text-green-500')}>↑</span>
+        <span className={twJoin('text-3xl', upvoted && 'font-bold')}>↑</span>
       </button>
       <span className="text-xl font-semibold font-inter">{votes}</span>
     </div>
