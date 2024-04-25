@@ -63,6 +63,7 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-sans)', ...fontFamily.sans],
         helvetica: ['HelveticaNeue', 'sans-serif'],
+        inter: ['var(--font-inter)', 'sans-serif'],
       },
       keyframes: {
         'accordion-down': {

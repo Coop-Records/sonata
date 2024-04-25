@@ -3,6 +3,9 @@ export const MINTED_RELEASE_QUERY = `
     mintedRelease(releaseSlug: $releaseSlug, soundHandle: $soundHandle) {
       id
       title
+      artist{
+        name
+      }
       track {
         id
         duration
@@ -12,6 +15,9 @@ export const MINTED_RELEASE_QUERY = `
             url
           }
         }
+      }
+      coverImage{
+        url
       }
     }
   }

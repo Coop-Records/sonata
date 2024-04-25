@@ -1,0 +1,21 @@
+'use client';
+
+import Feed from '@/components/Feed';
+import { useFeedProvider } from '@/providers/FeedProvider';
+
+export default function Trending() {
+  const { feed } = useFeedProvider();
+
+  const trendingFeed =
+    feed?.length &&
+    feed.toSorted((cast1: any, cast2: any) => {
+      return cast2.reactions.likes.length - cast1.reactions.likes.length;
+    });
+
+  return (
+    <div className="container pt-10 flex flex-col gap-8 items-center">
+      <h1 className="text-3xl">Trending</h1>
+      {trendingFeed?.length && <Feed feed={trendingFeed} />}
+    </div>
+  );
+}

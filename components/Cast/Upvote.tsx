@@ -1,40 +1,24 @@
 import createReaction from '@/lib/neynar/createReaction';
-import getCastReactions from '@/lib/neynar/getCastReactions';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
-import { useEffect, useState } from 'react';
+import { Cast } from '@/types/Cast';
+import { useState } from 'react';
 import { MdArrowCircleUp } from 'react-icons/md';
-import { Address } from 'viem';
 
-const Upvote = ({ target }: { target: Address }) => {
+const Upvote = ({ cast }: { cast: Cast }) => {
   const { signer } = useNeynarProvider();
-  const [upvoted, setUpvoted] = useState<boolean>(false);
-  const [votes, setVotes] = useState<number>(0);
+  const [upvoted, setUpvoted] = useState<boolean>(
+    signer && cast.reactions.likes.some((like: any) => like?.fid === signer?.fid),
+  );
+  const [votes, setVotes] = useState<number>(cast.reactions.likes.length);
 
   const handleClick = async () => {
     const { signer_uuid } = signer;
-    const response = await createReaction(signer_uuid, target);
-    await refetchData();
+    const response = await createReaction(signer_uuid, cast.hash);
     if (response.success) {
       setUpvoted(true);
       setVotes(votes + 1);
     }
   };
-
-  const refetchData = async () => {
-    const castResponse = await getCastReactions(target);
-    setVotes(castResponse?.reactions?.length);
-    if (signer) {
-      const { fid } = signer;
-      const userHasUpvoted = castResponse.reactions.some(
-        (reaction: any) => reaction.user.fid == fid,
-      );
-      if (userHasUpvoted) setUpvoted(true);
-    }
-  };
-
-  useEffect(() => {
-    refetchData();
-  }, [signer]);
 
   return (
     <button type="button" onClick={handleClick}>

@@ -1,19 +1,17 @@
-import getSpotifyTrackId from '@/lib/spotify/getSpotifyTrackId';
 import SpotifyEmbed from './SpotifyEmbed';
 import SoundCloudEmbed from './SoundCloudEmbed';
 import SoundXyzEmbed from './SoundXyzEmbed';
 
-const PlayButton = ({ embed }: { embed: string }) => {
-  const isSpotify = embed?.includes?.('spotify');
-  const isSoundcloud = embed?.includes?.('soundcloud');
-  const isSoundxyz = embed?.includes?.('sound.xyz');
-  const trackId = getSpotifyTrackId(embed);
+const PlayButton = ({ url }: { url: string }) => {
+  const isSpotify = url?.includes?.('spotify');
+  const isSoundcloud = url?.includes?.('soundcloud');
+  const isSoundxyz = url?.includes?.('sound.xyz');
 
   return (
     <div className="flex flex-col w-full justify-center items-center">
-      {isSpotify && <SpotifyEmbed trackId={trackId as string} />}
-      {isSoundcloud && <SoundCloudEmbed trackUrl={embed} />}
-      {isSoundxyz && <SoundXyzEmbed url={embed} />}
+      {isSpotify && <SpotifyEmbed trackUrl={url} />}
+      {isSoundcloud && <SoundCloudEmbed trackUrl={url} />}
+      {isSoundxyz && <SoundXyzEmbed url={url} />}
     </div>
   );
 };

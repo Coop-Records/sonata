@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 
 const SignInButton = () => {
   const theme = 'light';
@@ -27,7 +27,7 @@ const SignInButton = () => {
   const getButton = useCallback(() => {
     return (
       <div
-        className="neynar_signin mt-6"
+        className="neynar_signin"
         data-client_id={client_id}
         data-neynar_login_url={neynar_login_url}
         data-success-callback="onSignInSuccess"
@@ -66,7 +66,7 @@ const SignInButton = () => {
     customLogoUrl,
   ]);
 
-  return <div className="mx-5 flex flex-col items-center justify-center">{getButton()}</div>;
+  return getButton();
 };
 
 export default SignInButton;
