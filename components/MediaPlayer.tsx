@@ -31,10 +31,7 @@ export default function MediaPlayer({ metadata, controls, position }: MediaPlaye
   };
 
   return (
-    <div
-      data-type={metadata.type}
-      className="w-full rounded-lg p-2 bg-blue-500 flex flex-col gap-4"
-    >
+    <div data-type={metadata.type} className="w-full rounded-lg p-2 bg-black flex flex-col gap-4">
       <div className="flex gap-4">
         <img
           className="w-16 aspect-square rounded-lg shadow-md flex-shrink-0 my-auto"
@@ -66,9 +63,9 @@ export default function MediaPlayer({ metadata, controls, position }: MediaPlaye
           <span>{formatDuration(displayPosition)}</span>
           <span>{formatDuration(metadata.duration)}</span>
         </div>
-        <div className="bg-white w-full h-1 rounded-lg overflow-hidden">
+        <div className="bg-gray-600 w-full h-1 rounded-lg overflow-hidden">
           <div
-            className="bg-blue-800 h-1 rounded-lg"
+            className="bg-white h-1 rounded-lg"
             style={{ width: `${(displayPosition / metadata.duration) * 100}%` }}
           />
         </div>

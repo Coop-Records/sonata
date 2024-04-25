@@ -28,7 +28,7 @@ const SoundCloudEmbed = ({ trackUrl }: any) => {
 
   useEffect(() => {
     const iframe = iframeRef.current;
-    if (!(iframe && iframeSrc)) return;
+    if (!(iframe && iframeSrc && SC)) return;
     const widget = SC.Widget(iframe);
 
     widget.bind(SC.Widget.Events.READY, function () {
@@ -52,7 +52,7 @@ const SoundCloudEmbed = ({ trackUrl }: any) => {
         console.error(e);
       }
     };
-  }, [iframeRef.current, iframeSrc]);
+  }, [iframeRef.current, iframeSrc, SC]);
 
   if (!embedData) return <></>;
 

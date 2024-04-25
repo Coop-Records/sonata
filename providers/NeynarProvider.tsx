@@ -1,19 +1,75 @@
-import useSigner from '@/hooks/useSigner';
-import { createContext, useContext, useMemo } from 'react';
+import { createContext, useContext, useCallback, useState, useEffect } from 'react';
+import { Signer, User } from '@neynar/nodejs-sdk/build/neynar-api/v2';
+import getUser from '@/lib/neynar/getUser';
 
-const NeynarContext = createContext<any>(null);
+const clientId = process.env.NEXT_PUBLIC_NEYNAR_CLIENT_ID;
+const loginUrl = 'https://app.neynar.com/login';
+
+const isClient = typeof window !== 'undefined';
+
+type NeynarContextType = {
+  signer: Signer | null;
+  signIn: () => void;
+  signOut: () => void;
+  user?: User;
+};
+
+const NeynarContext = createContext<NeynarContextType>({ signer: null, signIn() {}, signOut() {} });
 
 const NeynarProvider = ({ children }: any) => {
-  const signer = useSigner();
+  if (!clientId) {
+    throw new Error('NEXT_PUBLIC_NEYNAR_CLIENT_ID is not defined in .env');
+  }
 
-  const value = useMemo(
-    () => ({
-      ...signer,
-    }),
-    [signer],
+  const [signer, setSigner] = useState<Signer | null>(() => {
+    if (isClient) {
+      const savedSigner = localStorage.getItem('signer');
+      return savedSigner ? JSON.parse(savedSigner) : null;
+    }
+    return null;
+  });
+
+  const [user, setUser] = useState<User>();
+
+  const signIn = useCallback(() => {
+    const authUrl = new URL(loginUrl);
+    const authOrigin = new URL(loginUrl).origin;
+    authUrl.searchParams.append('client_id', clientId);
+    const authWindow = window.open(authUrl.toString());
+
+    const messageHandler = (event: any) => {
+      if (event.origin === authOrigin && event.data.is_authenticated) {
+        if (authWindow) {
+          authWindow.close();
+        }
+        window.removeEventListener('message', messageHandler);
+        const signerData = event.data as Signer;
+        setSigner(signerData);
+        localStorage.setItem('signer', JSON.stringify(signerData));
+      }
+    };
+
+    window.addEventListener('message', messageHandler, false);
+  }, []);
+
+  const signOut = useCallback(() => {
+    setSigner(null);
+    localStorage.removeItem('signer');
+  }, []);
+
+  useEffect(() => {
+    const updateUser = async () => {
+      if (!(signer && signer.fid)) return;
+      const user = await getUser(signer.fid);
+      setUser(user);
+    };
+    updateUser();
+  }, [signer?.fid]);
+  return (
+    <NeynarContext.Provider value={{ signer, signIn, signOut, user }}>
+      {children}
+    </NeynarContext.Provider>
   );
-
-  return <NeynarContext.Provider value={value as any}>{children}</NeynarContext.Provider>;
 };
 
 export const useNeynarProvider = () => {
