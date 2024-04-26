@@ -34,7 +34,11 @@ const TippingModal = ({ closeModal }: { closeModal: Function }) => {
         </button>
       </div>
       <div className="mt-4">
-        {activeTab === 'DEGEN' ? <DegenTipping /> : <NotesTipping closeModal={closeModal} />}
+        {activeTab === 'DEGEN' ? (
+          <DegenTipping closeModal={closeModal} />
+        ) : (
+          <NotesTipping closeModal={closeModal} />
+        )}
       </div>
     </div>
   );
