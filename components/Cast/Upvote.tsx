@@ -7,7 +7,7 @@ import { twJoin } from 'tailwind-merge';
 const Upvote = ({ cast }: { cast: Cast }) => {
   const { signer } = useNeynarProvider();
   const [upvoted, setUpvoted] = useState<boolean>(
-    Boolean(signer && cast.reactions.likes.some((like: any) => like?.fid === signer?.fid)),
+    Boolean(signer && cast.reactions.likes.some((like) => like?.fid === String(signer?.fid))),
   );
   const [votes, setVotes] = useState<number>(cast.reactions.likes.length);
 

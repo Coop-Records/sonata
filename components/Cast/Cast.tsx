@@ -10,15 +10,16 @@ import SoundXyzEmbed from './SoundXyzEmbed';
 const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
   const embed = findValidEmbed(cast);
 
-  if (!embed) return <></>;
-
-  const url = embed.url;
+  const url = embed?.url;
 
   const EmbedComponent = useMemo(() => {
+    if (!url) return null;
     if (url.includes('spotify')) return SpotifyEmbed;
     if (url.includes('soundcloud')) return SoundCloudEmbed;
     if (url.includes('sound.xyz')) return SoundXyzEmbed;
   }, [url]);
+
+  if (!url) return <></>;
 
   return (
     <div className="flex gap-5 p-2.5 items-center">

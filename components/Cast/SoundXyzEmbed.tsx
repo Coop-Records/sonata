@@ -19,15 +19,15 @@ const SoundXyzEmbed = ({ trackUrl }: { trackUrl: string }) => {
     init();
   }, [trackUrl]);
 
+  const audioUrl = releaseInfo?.track?.audio?.audioOriginal?.url;
   useEffect(() => {
-    if (!releaseInfo?.id) return;
+    if (!audioUrl) return;
 
-    const src = releaseInfo.track.audio.audioOriginal.url;
-    const audio = new Audio(src);
+    const audio = new Audio(audioUrl);
     audio.preload = 'none';
     audio.ontimeupdate = () => setPosition(audio.currentTime * 1000);
     setAudio(audio);
-  }, [releaseInfo?.id]);
+  }, [audioUrl]);
 
   if (!(releaseInfo && audio)) return <></>;
 

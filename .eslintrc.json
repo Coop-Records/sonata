@@ -1,0 +1,26 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "env": {
+    "es6": true
+  },
+  "settings": {
+    "import/resolver": {
+      "alias": {
+        "map": [["@", "./src"]],
+        "extensions": [".js", ".jsx", ".json"]
+      }
+    }
+  },
+  "plugins": ["@typescript-eslint"],
+
+  "extends": [
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/recommended",
+    "prettier"
+  ],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off"
+  }
+}

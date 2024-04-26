@@ -1,6 +1,7 @@
 import { formatDuration } from '@/lib/utils';
 import { usePlayer } from '@/providers/PlayerProvider';
 import { TrackControls, TrackMetadata } from '@/types/Track';
+import Image from 'next/image';
 import { useEffect } from 'react';
 import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';
 
@@ -20,7 +21,7 @@ export default function MediaPlayer({ metadata, controls, position }: MediaPlaye
     if (currentTrack) {
       dispatch({ type: 'PROGRESS', payload: { position } });
     }
-  }, [position, currentTrack]);
+  }, [position, currentTrack, dispatch]);
 
   const handlePlay = () => {
     dispatch({ type: 'PLAY', payload: { metadata, controls } });
@@ -33,11 +34,10 @@ export default function MediaPlayer({ metadata, controls, position }: MediaPlaye
   return (
     <div data-type={metadata.type} className="w-full rounded-lg p-2 bg-black flex flex-col gap-4">
       <div className="flex gap-4">
-        <img
-          className="w-16 aspect-square rounded-lg shadow-md flex-shrink-0 my-auto"
-          src={metadata.artworkUrl}
-          alt=""
-        />
+        <div className="w-16 aspect-square rounded-lg shadow-md flex-shrink-0 my-auto">
+          <Image src={metadata.artworkUrl} alt="" layout="fill" />
+        </div>
+
         <div className="grow flex flex-col gap-1 text-left pt-2">
           <div className="text-sm font-bold text-white font-inter line-clamp-2">
             {metadata.trackName}

@@ -13,8 +13,8 @@ export default function Feed({ feed }: any) {
   };
 
   const filteredFeed: any = useMemo(
-    () => feed.filter((cast: CastType) => findValidEmbed(cast, filter)),
-    [filter.platform],
+    () => feed.filter((cast: CastType) => findValidEmbed(cast, { platform: filter.platform })),
+    [filter.platform, feed],
   );
 
   return (

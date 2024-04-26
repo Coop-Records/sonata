@@ -11,7 +11,7 @@ const platforms = [
 
 type FilterProps = {
   value: FeedFilter;
-  onChange: (value: { platform: string }) => void;
+  onChange: (filter: FeedFilter) => void;
 };
 
 export default function Filter({ value, onChange }: FilterProps) {
@@ -26,7 +26,7 @@ export default function Filter({ value, onChange }: FilterProps) {
         <RadioGroup value={value?.platform} onValueChange={(platform) => onChange({ platform })}>
           {platforms.map((platform) => {
             return (
-              <div className="flex items-center space-x-2">
+              <div key={`platform-${platform.value}`} className="flex items-center space-x-2">
                 <RadioGroupItem value={platform.value} id={platform.value} />
                 <Label htmlFor={platform.value}>{platform.label}</Label>
               </div>
