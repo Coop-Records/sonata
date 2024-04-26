@@ -1,6 +1,7 @@
 'use server';
 
 export default async function getSpotifyAccessToken() {
+  console.log("PING")
   const response = await fetch('https://accounts.spotify.com/api/token', {
     method: 'POST',
     headers: {
