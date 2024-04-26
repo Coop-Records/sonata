@@ -29,8 +29,8 @@ const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
       <div className="space-y-4 w-full">
         <AuthorDetails pfpUrl={cast.author.pfp_url} displayName={cast.author.display_name} />
         {EmbedComponent && <EmbedComponent trackUrl={url} />}
+        <TipButton verifications={verifications} />
       </div>
-      <TipButton verifications={verifications} />
     </div>
   );
 };
