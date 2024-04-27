@@ -1,5 +1,6 @@
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import Image from 'next/image';
+import { useEffect } from 'react';
 
 const SignInButton = () => {
   const { signIn, signOut, user } = useNeynarProvider();
