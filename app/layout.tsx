@@ -8,8 +8,6 @@ import { Inter } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import GlobalPlayer from '@/components/GlobalPlayer';
 import { Analytics } from '@vercel/analytics/react';
-import { ModalProvider } from '@/hooks/useModal';
-import Modal from '@/components/Modal/modals/Modal';
 
 export const viewport = {
   width: 'device-width',
@@ -26,15 +24,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={cn('font-helvetica', inter.variable)}>
-        <ModalProvider>
-          <Providers>
-            <Header />
-            {children}
-            <ToastContainer />
-            <GlobalPlayer />
-            <Modal />
-          </Providers>{' '}
-        </ModalProvider>
+        <Providers>
+          <Header />
+          {children}
+          <ToastContainer />
+          <GlobalPlayer />
+        </Providers>
         <Analytics />
       </body>
     </html>

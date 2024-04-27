@@ -2180,10 +2180,10 @@
   resolved "https://registry.npmjs.org/@stablelib/wipe/-/wipe-1.0.1.tgz"
   integrity sha512-WfqfX/eXGiAd3RJe4VU2snh/ZPwtSjLG4ynQ/vYzvghTh7dHFcI1wl+nrkWG6lGhukOxOsUHfv8dUXr58D0ayg==
 
-"@stackso/js-core@^0.2.24":
-  version "0.2.24"
-  resolved "https://registry.npmjs.org/@stackso/js-core/-/js-core-0.2.24.tgz"
-  integrity sha512-eVM1HDFkr1tE21pogrWtkaXQbbeK1xcF2KTvmkeRLwvB6J5dRWrKu48SrCO+ZKd4YPWzJvZYIovi8L4BlbsfQQ==
+"@stackso/js-core@^0.2.30":
+  version "0.2.30"
+  resolved "https://registry.npmjs.org/@stackso/js-core/-/js-core-0.2.30.tgz"
+  integrity sha512-T8va1lge2VStgoPHE2T2mO6iTjp7Y/BHfE7kCj9BmMEfpwy0G7pJlTFgniuyVlB5XSgMi+3tPcZsMvz2Ss1ZfQ==
   dependencies:
     axios "^1.6.2"
     viem "^2.7.12"
