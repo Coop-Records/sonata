@@ -13,7 +13,7 @@ const TipButton = ({ verifications }: { verifications: string[] }) => {
   // Simulated available amounts for DEGEN and POINTS
   // TODO: Make this so it is variable
   const [availableAmounts, setAvailableAmounts] = useState<Record<string, number>>({
-    DEGEN: 3000, 
+    DEGEN: 3000,
     POINTS: 7500,
   });
 
