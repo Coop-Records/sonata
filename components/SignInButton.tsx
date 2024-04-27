@@ -7,7 +7,7 @@ const SignInButton = () => {
   return (
     <button
       onClick={user ? signOut : signIn}
-      className="rounded-md bg-farcaster text-white py-2 px-4 flex gap-2 items-center font-light"
+      className="flex items-center gap-2 rounded-md bg-farcaster px-4 py-2 font-light text-white"
     >
       {user ? (
         'Logout'

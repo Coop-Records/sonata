@@ -57,19 +57,19 @@ const TipButton = ({ verifications }: { verifications: string[] }) => {
   }, []);
 
   return verifications && verifications.length > 0 ? (
-    <div className="w-full flex justify-between items-center text-xs relative">
+    <div className="relative flex w-full items-center justify-between text-xs">
       <div className="inline-flex gap-4">
-        <div className="flex items-center justify-center text-xs space-x-2 h-full">
+        <div className="flex h-full items-center justify-center space-x-2 text-xs">
           <span>{availableAmounts.DEGEN}</span>
           <Image src="/images/degenchain.png" width={12} height={12} alt="DEGEN" />
         </div>
-        <div className="flex items-center justify-center text-xs space-x-2 h-full">
+        <div className="flex h-full items-center justify-center space-x-2 text-xs">
           <span>{availableAmounts.POINTS}</span>
           <Image src="/images/notes.jpg" width={16} height={16} alt="POINTS" />
         </div>
       </div>
       <Button
-        className="hover:bg-gray-100 text-black py-0 px-2 border border-gray-300 rounded"
+        className="rounded border border-gray-300 px-2 py-0 text-black hover:bg-gray-100"
         onClick={() => setShowDropdown(!showDropdown)}
       >
         TIP
@@ -77,18 +77,18 @@ const TipButton = ({ verifications }: { verifications: string[] }) => {
       {showDropdown && (
         <div
           ref={dropdownRef}
-          className="absolute right-0 mt-2 py-2 w-48 bg-white shadow-xl rounded z-50"
+          className="absolute right-0 z-50 mt-2 w-48 rounded bg-white py-2 shadow-xl"
         >
-          <div className="flex justify-between items-center px-4 py-2">
+          <div className="flex items-center justify-between px-4 py-2">
             <span>Tip in:</span>
             <button
-              className={`px-2 py-1 rounded ${currency === 'DEGEN' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+              className={`rounded px-2 py-1 ${currency === 'DEGEN' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
               onClick={() => toggleCurrency()}
             >
               DEGEN
             </button>
             <button
-              className={`px-2 py-1 rounded ${currency === 'POINTS' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+              className={`rounded px-2 py-1 ${currency === 'POINTS' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
               onClick={() => toggleCurrency()}
             >
               POINTS
@@ -98,19 +98,19 @@ const TipButton = ({ verifications }: { verifications: string[] }) => {
             {tipAmounts[currency].map((amount) => (
               <li
                 key={amount}
-                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                className="cursor-pointer px-4 py-2 hover:bg-gray-100"
                 onClick={() => handleTip(amount)}
               >
                 Tip {amount} {currency}
               </li>
             ))}
-            <li className="px-4 py-2 flex items-center">
+            <li className="flex items-center px-4 py-2">
               <input
                 type="text"
                 value={customTip}
                 onChange={(e) => setCustomTip(e.target.value)}
                 placeholder="Custom amount"
-                className="border border-gray-300 rounded py-1 px-2 text-sm w-full"
+                className="w-full rounded border border-gray-300 px-2 py-1 text-sm"
               />
               <Button className="ml-2" onClick={() => handleTip(Number(customTip) || 0)}>
                 Tip

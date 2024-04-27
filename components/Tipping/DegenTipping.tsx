@@ -1,26 +1,27 @@
+import { CloseModal } from '@/types/Modal';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-const DegenTipping = ({ closeModal }: { closeModal: Function }) => {
+const DegenTipping = ({ closeModal }: { closeModal: CloseModal }) => {
   const [degenAmount, setDegenAmount] = useState<string>('');
 
   const submitTip = (amount?: number) => {
     const finalAmount = amount ? amount.toString() : degenAmount;
     toast(`You tipped ${finalAmount} DEGEN`);
-    // closeModal();
+    closeModal();
   };
 
   return (
     <div>
       <div className="text-sm">50,000 Available</div>
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <button className="bg-blue-500 text-white rounded" onClick={() => submitTip(10)}>
+      <div className="mb-4 grid grid-cols-2 gap-4">
+        <button className="rounded bg-blue-500 text-white" onClick={() => submitTip(10)}>
           Tip 10 DEGEN
         </button>
-        <button className="bg-blue-500 text-white rounded" onClick={() => submitTip(100)}>
+        <button className="rounded bg-blue-500 text-white" onClick={() => submitTip(100)}>
           Tip 100 DEGEN
         </button>
-        <button className="bg-blue-500 text-white rounded" onClick={() => submitTip(1000)}>
+        <button className="rounded bg-blue-500 text-white" onClick={() => submitTip(1000)}>
           Tip 1000 DEGEN
         </button>
         <div>
@@ -29,10 +30,10 @@ const DegenTipping = ({ closeModal }: { closeModal: Function }) => {
             placeholder="Custom amount"
             value={degenAmount}
             onChange={(e) => setDegenAmount(e.target.value)}
-            className="border-2 border-gray-300 rounded w-full text-sm"
+            className="w-full rounded border-2 border-gray-300 text-sm"
           />
           <button
-            className="bg-blue-500 text-white rounded mt-1 w-full"
+            className="mt-1 w-full rounded bg-blue-500 text-white"
             onClick={() => submitTip()}
           >
             Submit Custom Tip

@@ -18,8 +18,8 @@ export default function Feed({ feed }: any) {
   );
 
   return (
-    <div className="w-full max-w-4xl flex items-start gap-10">
-      <div className="flex-grow space-y-6">
+    <div className="flex w-full max-w-4xl items-start gap-10">
+      <div className="grow space-y-6">
         {filteredFeed.map((cast: CastType) => (
           <Cast key={cast.hash} cast={cast} />
         ))}

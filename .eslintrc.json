@@ -15,12 +15,14 @@
 
   "extends": [
     "next/core-web-vitals",
+    "plugin:tailwindcss/recommended",
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:import/recommended",
     "prettier"
   ],
   "rules": {
+    "no-prototype-builtins": "off",
     "@typescript-eslint/no-explicit-any": "off"
   }
 }

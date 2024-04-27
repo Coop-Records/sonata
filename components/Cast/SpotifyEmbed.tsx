@@ -54,7 +54,7 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
   }
 
   return (
-    <div className="w-full relative z-0">
+    <div className="relative z-0 w-full">
       <MediaPlayer
         metadata={{
           id: track.uri,
@@ -71,7 +71,7 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
         }}
         position={position}
       />
-      <div className="absolute top-0 left-0 opacity-0 -z-10">
+      <div className="absolute left-0 top-0 -z-10 opacity-0">
         <div ref={elementRef} />
       </div>
     </div>

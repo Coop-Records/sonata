@@ -32,7 +32,7 @@ const Upvote = ({ cast }: { cast: Cast }) => {
       <button type="button" onClick={handleClick}>
         <span className={twJoin('text-3xl', upvoted && 'font-bold')}>↑</span>
       </button>
-      <span className="text-xl font-semibold font-inter">{votes}</span>
+      <span className="font-inter text-xl font-semibold">{votes}</span>
     </div>
   );
 };

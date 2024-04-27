@@ -22,7 +22,7 @@ export default function Filter({ value, onChange }: FilterProps) {
         <CardDescription>Filter Casts</CardDescription>
       </CardHeader>
       <CardContent>
-        <h2 className="font-semibold mb-2">Platform</h2>
+        <h2 className="mb-2 font-semibold">Platform</h2>
         <RadioGroup value={value?.platform} onValueChange={(platform) => onChange({ platform })}>
           {platforms.map((platform) => {
             return (

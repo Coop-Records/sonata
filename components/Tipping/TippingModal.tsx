@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import DegenTipping from './DegenTipping';
 import NotesTipping from './NotesTipping';
+import { CloseModal } from '@/types/Modal';
 
-const TippingModal = ({ closeModal }: { closeModal: Function }) => {
+const TippingModal = ({ closeModal }: { closeModal: CloseModal }) => {
   const [activeTab, setActiveTab] = useState<'DEGEN' | 'NOTES'>('DEGEN');
 
   const switchTab = (tab: 'DEGEN' | 'NOTES') => {
@@ -11,22 +12,22 @@ const TippingModal = ({ closeModal }: { closeModal: Function }) => {
 
   return (
     <div className="p-4 text-sm">
-      <div className="border-b-2 flex text-sm">
+      <div className="flex border-b-2 text-sm">
         <button
-          className={`flex-1 p-3 rounded-tl-lg transition-all duration-300 ${
+          className={`flex-1 rounded-tl-lg p-3 transition-all duration-300 ${
             activeTab === 'DEGEN'
-              ? 'bg-blue-100 border-blue-500 text-blue-700 shadow-md'
-              : 'bg-white hover:bg-gray-50 text-gray-500'
+              ? 'border-blue-500 bg-blue-100 text-blue-700 shadow-md'
+              : 'bg-white text-gray-500 hover:bg-gray-50'
           }`}
           onClick={() => switchTab('DEGEN')}
         >
           Tip in $DEGEN
         </button>
         <button
-          className={`flex-1 p-3 rounded-tr-lg transition-all duration-300 ${
+          className={`flex-1 rounded-tr-lg p-3 transition-all duration-300 ${
             activeTab === 'NOTES'
-              ? 'bg-blue-100 border-blue-500 text-blue-700 shadow-md'
-              : 'bg-white hover:bg-gray-50 text-gray-500'
+              ? 'border-blue-500 bg-blue-100 text-blue-700 shadow-md'
+              : 'bg-white text-gray-500 hover:bg-gray-50'
           }`}
           onClick={() => switchTab('NOTES')}
         >
