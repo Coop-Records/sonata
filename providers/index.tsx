@@ -7,6 +7,7 @@ import { SpotifyApiProvider } from './SpotifyApiProvider';
 import { SoundcloudApiProvider } from './SoundcloudApiProvider';
 import PlayerProvider from './PlayerProvider';
 import StackProvider from './StackProvider';
+import SupabaseProvider from './SupabaseProvider';
 
 const authConfig = {
   relay: 'https://relay.farcaster.xyz',
@@ -18,15 +19,17 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <AuthKitProvider config={authConfig}>
       <NeynarProvider>
-        <StackProvider>
-          <FeedProvider>
-            <SpotifyApiProvider>
-              <SoundcloudApiProvider>
-                <PlayerProvider>{children}</PlayerProvider>
-              </SoundcloudApiProvider>
-            </SpotifyApiProvider>
-          </FeedProvider>
-        </StackProvider>
+        <SupabaseProvider>
+          <StackProvider>
+            <FeedProvider>
+              <SpotifyApiProvider>
+                <SoundcloudApiProvider>
+                  <PlayerProvider>{children}</PlayerProvider>
+                </SoundcloudApiProvider>
+              </SpotifyApiProvider>
+            </FeedProvider>
+          </StackProvider>
+        </SupabaseProvider>
       </NeynarProvider>
     </AuthKitProvider>
   );

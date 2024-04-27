@@ -16,7 +16,7 @@ const tabs = [
 export default function Header() {
   const pathname = usePathname();
   const { user } = useNeynarProvider();
-  const { balance } = useStackProvider();
+  const { balance, remainingTipAllocation, dailyTipAllowance } = useStackProvider();
 
   tabs.forEach((tab) => {
     tab.active = tab.href === pathname;
@@ -27,12 +27,15 @@ export default function Header() {
       <Tabs tabs={tabs} />
       <div className="flex items-center gap-2">
         {user ? (
-          <div className="flex flex-col items-center justify-center text-xs h-full">
-            <div className="flex items-center">
-              <span className="text-base">Daily Allowance: 0/1000</span>{' '}
+          <div className="flex flex-col items-center justify-end text-xs h-full">
+            <div className="flex items-center w-full">
+              <span className="text-base">
+                Daily Allowance:{' '}
+                {`${remainingTipAllocation ? formatBigInt(BigInt(remainingTipAllocation)) : '-'} / ${dailyTipAllowance ? formatBigInt(BigInt(dailyTipAllowance)) : '-'}`}
+              </span>{' '}
               <Image src="/images/notes.jpg" width={20} height={20} alt="" />
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center w-full">
               <span className="text-base">
                 Total Balance: {`${balance ? formatBigInt(BigInt(balance)) : '-'}`}
               </span>{' '}
