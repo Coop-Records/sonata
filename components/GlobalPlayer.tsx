@@ -28,9 +28,10 @@ export default function GlobalPlayer() {
           <Image
             src={metadata.artworkUrl}
             alt=""
-            layout="fill"
+            fill
             style={{ objectFit: 'cover', objectPosition: 'center' }}
             className="rounded-lg"
+            unoptimized
           />
         </div>
 

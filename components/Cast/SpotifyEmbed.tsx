@@ -9,6 +9,7 @@ import MediaPlayer from '@/components/MediaPlayer';
 export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
   const trackId = useMemo(() => getSpotifyTrackId(trackUrl), [trackUrl]);
   const [position, setPosition] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [track, setTrack] = useState<SpotifyTrack>();
   const [embedController, setEmbedController] = useState({} as any);
   const elementRef = useRef<HTMLIFrameElement>(null);
@@ -19,6 +20,7 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
       if (!trackId) return;
       const track = await getSpotifyTrack(trackId);
       setTrack(track);
+      setDuration(track.duration_ms);
     };
 
     init();
@@ -39,6 +41,7 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
       embedController.addListener('playback_update', (e: SpotifyPlaybackUpdateEvent) => {
         const data = e.data;
         setPosition(data.position);
+        setDuration(data.duration);
       });
     });
   }, [track?.uri, iframeApi]);
@@ -59,10 +62,10 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
           artistName: track.artists.map((artist: any) => artist.name).join(', '),
           trackName: track.name,
           artworkUrl: track.album.images[0].url,
-          duration: track.duration_ms,
+          duration,
         }}
         controls={{
-          play: () => embedController.play(),
+          play: () => embedController.togglePlay(),
           pause: () => embedController.pause(),
           seek: (time) => embedController.seek(time),
         }}
