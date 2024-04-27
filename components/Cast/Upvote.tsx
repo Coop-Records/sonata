@@ -2,6 +2,7 @@ import createReaction from '@/lib/neynar/createReaction';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { Cast } from '@/types/Cast';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import { twJoin } from 'tailwind-merge';
 
 const Upvote = ({ cast }: { cast: Cast }) => {
@@ -16,6 +17,10 @@ const Upvote = ({ cast }: { cast: Cast }) => {
 
     const { signer_uuid } = signer;
     const response = await createReaction(signer_uuid, cast.hash);
+
+    // TODO: Tip poster 10 points
+    toast('Awarded 10 points');
+
     if (response.success) {
       setUpvoted(true);
       setVotes(votes + 1);
