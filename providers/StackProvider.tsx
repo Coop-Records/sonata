@@ -1,14 +1,13 @@
 import useStack from '@/hooks/useStack';
-import { isNil } from 'lodash';
+import { isEmpty, isNil } from 'lodash';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
 import { useNeynarProvider } from './NeynarProvider';
 import { useSupabaseProvider } from './SupabaseProvider';
 
 const StackContext = createContext<any>(null);
 
 const StackProvider = ({ children }: any) => {
-  const [setupActions, setSetupActions] = useState<string[]>([]);
-  const [copied, setCopied] = useState<boolean>(false);
   const [balance, setBalance] = useState<bigint | undefined>(undefined);
   const [dailyTipAllowance, setDailyTipAllowance] = useState<bigint | undefined>(undefined);
   const { stackClient } = useStack();
@@ -55,10 +54,27 @@ const StackProvider = ({ children }: any) => {
     setBalance(BigInt(currentBalance));
   };
 
-  const tip = (amount: bigint) => {
-    if (isNil(user)) return;
-    // TODO: Call supabase and check what allowanceRemaining is
-    // TODO: If valid balance then
+  const tip = async (amount: bigint) => {
+    if (isNil(user) || isNil(remainingTipAllocation) || isEmpty(user.verifications)) return;
+
+    const res = await fetch('/api/tip', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `${process.env.NEXT_PUBLIC_AIRSTACK_API_KEY}`,
+      },
+      body: JSON.stringify({ walletAddress: user.verifications[0], tipAmount: amount }),
+    });
+    const data = await res.json();
+
+    const message = data.message;
+    const tipRemaining = data.tipRemaining;
+    const totalTipOnPost = data.totalTipOnPost;
+    // TODO: update totalTipOnPost
+
+    // TODO: Update remaining tip alloction
+    setRemainingTipAllocation(BigInt(tipRemaining));
+    toast(message);
   };
 
   return (

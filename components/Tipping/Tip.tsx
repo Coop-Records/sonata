@@ -1,40 +1,27 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Button from '../Button';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useStackProvider } from '@/providers/StackProvider';
 
 const TipButton = ({ verifications }: { verifications: string[] }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [customTip, setCustomTip] = useState('');
+  const { tip } = useStackProvider();
   const [currency, setCurrency] = useState<string>('DEGEN'); // Toggle between 'DEGEN' and 'POINTS'
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  // Simulated available amounts for DEGEN and POINTS
-  // TODO: Make this so it is variable
-  const [availableAmounts, setAvailableAmounts] = useState<Record<string, number>>({
-    DEGEN: 3000, 
-    POINTS: 7500,
-  });
 
   const tipAmounts: Record<string, number[]> = {
     DEGEN: [10, 100, 1000],
     POINTS: [100, 1000, 10000],
   };
 
-  const handleTip = (amount: number) => {
-    if (amount > availableAmounts[currency]) {
-      toast.error(`Not enough ${currency} available`);
-      return;
-    }
+  const handleTip = async (amount: number) => {
+    const response = await tip(amount);
+    // TODO: Update values for post stats
+    // TODO: update values for 
 
-    toast(`Tipped ${amount} ${currency}`);
     setShowDropdown(false);
     setCustomTip('');
-    setAvailableAmounts((prev: { [x: string]: number }) => ({
-      ...prev,
-      [currency]: prev[currency] - amount, // Deduct the tipped amount from the available balance
-    }));
   };
 
   const toggleCurrency = () => {
@@ -60,11 +47,11 @@ const TipButton = ({ verifications }: { verifications: string[] }) => {
     <div className="w-full flex justify-between items-center text-xs relative">
       <div className="inline-flex gap-4">
         <div className="flex items-center justify-center text-xs space-x-2 h-full">
-          <span>{availableAmounts.DEGEN}</span>
+          <span>0</span>
           <Image src="/images/degenchain.png" width={12} height={12} alt="DEGEN" />
         </div>
         <div className="flex items-center justify-center text-xs space-x-2 h-full">
-          <span>{availableAmounts.POINTS}</span>
+          <span>0</span>
           <Image src="/images/notes.jpg" width={16} height={16} alt="POINTS" />
         </div>
       </div>
