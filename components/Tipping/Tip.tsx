@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Button from '../Button';
 import { useStackProvider } from '@/providers/StackProvider';
 
-const TipButton = ({ verifications }: { verifications: string[] }) => {
+const TipButton = ({ verifications, postHash }: { verifications: string[]; postHash: string }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [customTip, setCustomTip] = useState('');
   const { tip } = useStackProvider();
@@ -16,9 +16,9 @@ const TipButton = ({ verifications }: { verifications: string[] }) => {
   };
 
   const handleTip = async (amount: number) => {
-    const response = await tip(amount);
+    const response = await tip(amount, postHash);
     // TODO: Update values for post stats
-    // TODO: update values for 
+    // TODO: update values for
 
     setShowDropdown(false);
     setCustomTip('');

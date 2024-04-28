@@ -54,7 +54,7 @@ const StackProvider = ({ children }: any) => {
     setBalance(BigInt(currentBalance));
   };
 
-  const tip = async (amount: bigint) => {
+  const tip = async (amount: bigint, postHash: string) => {
     if (isNil(user) || isNil(remainingTipAllocation) || isEmpty(user.verifications)) return;
 
     const res = await fetch('/api/tip', {
@@ -63,7 +63,7 @@ const StackProvider = ({ children }: any) => {
         'Content-Type': 'application/json',
         Authorization: `${process.env.NEXT_PUBLIC_AIRSTACK_API_KEY}`,
       },
-      body: JSON.stringify({ walletAddress: user.verifications[0], tipAmount: amount }),
+      body: JSON.stringify({ walletAddress: user.verifications[0], tipAmount: amount, postHash }),
     });
     const data = await res.json();
 

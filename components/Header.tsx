@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { useStackProvider } from '@/providers/StackProvider';
 import { join } from 'path';
 import { formatBigInt } from '@/lib/utils';
+import { isNil } from 'lodash';
 
 const tabs = [
   { label: 'Home', href: '/', active: true },
@@ -31,13 +32,13 @@ export default function Header() {
             <div className="flex items-center w-full">
               <span className="text-base">
                 Daily Allowance:{' '}
-                {`${remainingTipAllocation ? formatBigInt(BigInt(remainingTipAllocation)) : '-'} / ${dailyTipAllowance ? formatBigInt(BigInt(dailyTipAllowance)) : '-'}`}
+                {`${!isNil(remainingTipAllocation) ? formatBigInt(BigInt(remainingTipAllocation)) : '-'} / ${dailyTipAllowance ? formatBigInt(BigInt(dailyTipAllowance)) : '-'}`}
               </span>{' '}
               <Image src="/images/notes.jpg" width={20} height={20} alt="" />
             </div>
             <div className="flex items-center w-full">
               <span className="text-base">
-                Total Balance: {`${balance ? formatBigInt(BigInt(balance)) : '-'}`}
+                Total Balance: {`${!isNil(balance) ? formatBigInt(BigInt(balance)) : '-'}`}
               </span>{' '}
               <Image src="/images/notes.jpg" width={20} height={20} alt="" />
             </div>

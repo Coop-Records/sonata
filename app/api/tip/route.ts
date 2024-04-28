@@ -10,9 +10,11 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const getResponse = async (req: NextRequest): Promise<NextResponse> => {
   const body = await req.json();
-  const { tipAmount, walletAddress } = body;
+  const { tipAmount, walletAddress, postHash } = body;
 
-  console.log(tipAmount, walletAddress);
+  console.log(tipAmount, walletAddress, postHash);
+
+  // TODO: Add tip amount to post hash in post table
 
   return NextResponse.json(
     { message: 'success', tipRemaining: 0, totalTipOnPost: 0 },
