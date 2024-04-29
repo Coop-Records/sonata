@@ -99,7 +99,10 @@ async function callUpdateTips(
 }
 
 export async function POST(req: NextRequest): Promise<Response> {
-  return getResponse(req);
+  getResponse(req).catch((error) => {
+    console.error('Error in background task:', error);
+  });
+  return NextResponse.json({ message: 'success' }, { status: 200 });
 }
 
 export const dynamic = 'force-dynamic';
