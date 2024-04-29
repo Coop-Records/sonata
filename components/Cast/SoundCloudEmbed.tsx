@@ -28,7 +28,7 @@ const SoundCloudEmbed = ({ trackUrl }: any) => {
 
   useEffect(() => {
     const iframe = iframeRef.current;
-    if (!(iframe && iframeSrc && SC)) return;
+    if (!(iframeSrc && SC)) return;
     const widget = SC.Widget(iframe);
 
     widget.bind(SC.Widget.Events.READY, function () {
@@ -52,21 +52,21 @@ const SoundCloudEmbed = ({ trackUrl }: any) => {
         console.error(e);
       }
     };
-  }, [iframeRef.current, iframeSrc, SC]);
-
-  if (!embedData) return <></>;
+  }, [iframeSrc, SC]);
 
   return (
     <>
       <MediaPlayer
-        metadata={{
-          id: trackUrl,
-          type: 'soundcloud',
-          artistName: embedData.author_name || '',
-          trackName: embedData.title.split(' - ')[0].split(' by ')[0],
-          artworkUrl: embedData.thumbnail_url,
-          duration: duration,
-        }}
+        metadata={
+          embedData && {
+            id: trackUrl,
+            type: 'soundcloud',
+            artistName: embedData.author_name || '',
+            trackName: embedData.title.split(' - ')[0].split(' by ')[0],
+            artworkUrl: embedData.thumbnail_url,
+            duration: duration,
+          }
+        }
         controls={{
           play: () => widget.play(),
           pause: () => widget.pause(),

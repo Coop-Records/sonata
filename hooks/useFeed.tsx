@@ -1,3 +1,4 @@
+import getSortedFeeds from '@/lib/neynar/getCombinedFeeds';
 import { useEffect, useState } from 'react';
 import getFeed from '@/lib/neynar/getFeed';
 import { useSupabaseProvider } from '@/providers/SupabaseProvider';
@@ -52,25 +53,13 @@ const useFeed = () => {
 
   useEffect(() => {
     const init = async () => {
-      const [response, soundCloud, soundxyz] = await Promise.all([
-        getFeed('spotify.com/track'),
-        getFeed('soundcloud.com'),
-        getFeed('sound.xyz'),
-      ]);
-
-      const combinedFeeds = [...response.casts, ...soundCloud.casts, ...soundxyz.casts];
-      const sortedFeeds = combinedFeeds.sort(
-        (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
-      );
-
+      const sortedFeeds = await getSortedFeeds();
       const postHashes = sortedFeeds.map((post) => post.hash);
       const pointsMap = await fetchPoints(postHashes);
-
       const feedsWithPoints = sortedFeeds.map((post) => ({
         ...post,
         points: pointsMap[post.hash] || 0,
       }));
-
       setFeed(feedsWithPoints);
     };
     init();

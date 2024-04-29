@@ -12,7 +12,7 @@ const Input = ({ onChange, onEnterPress, placeholder = '' }: any) => {
       onChange={onChange}
       placeholder={placeholder}
       onKeyDown={handleKeyDown}
-      className="min-w-[444px] border border-black focus:border-black focus:outline-black w-[30vw] px-1 py-2 focus:ring-0 rounded"
+      className="w-[30vw] min-w-[444px] rounded border border-black px-1 py-2 focus:border-black focus:outline-black focus:ring-0"
     />
   );
 };

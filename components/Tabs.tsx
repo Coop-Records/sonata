@@ -1,5 +1,5 @@
+import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import { twMerge } from 'tailwind-merge';
 
 type tab = {
   label: string;
@@ -13,7 +13,7 @@ export default function Tabs({ tabs }: { tabs: tab[] }) {
       {tabs.map((tab, index) => {
         return (
           <li
-            className={twMerge('py-2 text-lg font-bold', tab.active && 'border-b-2 border-black')}
+            className={cn('py-2 text-lg font-bold', tab.active && 'border-b-2 border-black')}
             key={index}
           >
             {tab.href ? <Link href={tab.href}>{tab.label} </Link> : tab.label}

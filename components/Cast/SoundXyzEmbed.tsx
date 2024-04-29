@@ -15,39 +15,42 @@ const SoundXyzEmbed = ({ trackUrl }: { trackUrl: string }) => {
       const { mintedRelease } = await getReleaseInfo(artist, trackName);
       if (!mintedRelease) return;
       setReleaseInfo(mintedRelease);
+      console.log(mintedRelease);
     };
     init();
   }, [trackUrl]);
 
+  const audioUrl = releaseInfo?.track?.audio?.audio128k?.url;
   useEffect(() => {
-    if (!releaseInfo?.id) return;
+    if (!audioUrl) return;
 
-    const src = releaseInfo.track.audio.audioOriginal.url;
-    const audio = new Audio(src);
+    const audio = new Audio(audioUrl);
     audio.preload = 'none';
     audio.ontimeupdate = () => setPosition(audio.currentTime * 1000);
     setAudio(audio);
-  }, [releaseInfo?.id]);
-
-  if (!(releaseInfo && audio)) return <></>;
+  }, [audioUrl]);
 
   return (
     <MediaPlayer
-      metadata={{
-        id: releaseInfo.id,
-        type: 'soundxyz',
-        artistName: releaseInfo.artist.name,
-        trackName: releaseInfo.title,
-        artworkUrl: releaseInfo.coverImage.url,
-        duration: releaseInfo.track.duration * 1000,
-      }}
-      controls={{
-        play: () => audio.play(),
-        pause: () => audio.pause(),
-        seek: (time: number) => {
-          audio.currentTime = time / 1000;
-        },
-      }}
+      metadata={
+        releaseInfo?.id && {
+          id: releaseInfo.id,
+          type: 'soundxyz',
+          artistName: releaseInfo.artist.name,
+          trackName: releaseInfo.title,
+          artworkUrl: releaseInfo.coverImage.url,
+          duration: releaseInfo.track.duration * 1000,
+        }
+      }
+      controls={
+        audio && {
+          play: () => audio.play(),
+          pause: () => audio.pause(),
+          seek: (time: number) => {
+            audio.currentTime = time / 1000;
+          },
+        }
+      }
       position={position}
     />
   );

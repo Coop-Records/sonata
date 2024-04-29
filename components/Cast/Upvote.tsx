@@ -5,12 +5,13 @@ import { useStackProvider } from '@/providers/StackProvider';
 import { Cast } from '@/types/Cast';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { twJoin } from 'tailwind-merge';
+import { FaArrowUp } from 'react-icons/fa';
+import { cn } from '@/lib/utils';
 
 const Upvote = ({ cast }: { cast: Cast }) => {
   const { signer } = useNeynarProvider();
   const [upvoted, setUpvoted] = useState<boolean>(
-    Boolean(signer && cast.reactions.likes.some((like: any) => like?.fid === signer?.fid)),
+    Boolean(signer && cast.reactions.likes.some((like) => like?.fid === String(signer?.fid))),
   );
   const [votes, setVotes] = useState<number>(cast.reactions.likes.length);
   const { tip } = useStackProvider();
@@ -32,9 +33,9 @@ const Upvote = ({ cast }: { cast: Cast }) => {
   return (
     <div className="flex flex-col items-center">
       <button type="button" onClick={handleClick}>
-        <span className={twJoin('text-3xl', upvoted && 'font-bold')}>↑</span>
+        <FaArrowUp className={cn('text-2xl text-gray-400', upvoted && 'text-black')} />
       </button>
-      <span className="text-xl font-semibold font-inter">{votes}</span>
+      <span className="font-inter text-xl font-semibold">{votes}</span>
     </div>
   );
 };

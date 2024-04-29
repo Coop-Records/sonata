@@ -11,7 +11,9 @@ export const MINTED_RELEASE_QUERY = `
         duration
         audio {
           audioOriginal {
-            id
+            url
+          }
+          audio128k{
             url
           }
         }

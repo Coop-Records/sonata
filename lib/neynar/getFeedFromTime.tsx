@@ -1,5 +1,3 @@
-import { exit } from 'process';
-
 const getFeedFromTime = async (embedUrl: string, date: Date) => {
   const options = {
     method: 'GET',
@@ -7,7 +5,7 @@ const getFeedFromTime = async (embedUrl: string, date: Date) => {
   } as any;
 
   const entries = [];
-  var hitEndDate = false;
+  let hitEndDate = false;
   try {
     const queryParams = new URLSearchParams({
       feed_type: 'filter',
@@ -21,7 +19,7 @@ const getFeedFromTime = async (embedUrl: string, date: Date) => {
       `https://api.neynar.com/v2/farcaster/feed?${queryParams}`,
       options,
     );
-    var data = await response.json();
+    let data = await response.json();
 
     for (const entry of data.casts) {
       if (new Date(entry.timestamp) > date) {

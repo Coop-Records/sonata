@@ -10,24 +10,25 @@ import SoundXyzEmbed from './SoundXyzEmbed';
 
 const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
   const embed = findValidEmbed(cast);
+  const url = embed?.url;
 
-  if (!embed) return <></>;
   const { author } = cast;
   const { verifications } = author;
 
-  const url = embed.url;
-
   const EmbedComponent = useMemo(() => {
+    if (!url) return null;
     if (url.includes('spotify')) return SpotifyEmbed;
     if (url.includes('soundcloud')) return SoundCloudEmbed;
     if (url.includes('sound.xyz')) return SoundXyzEmbed;
   }, [url]);
 
+  if (!url) return <></>;
+
   return (
-    <div className="flex gap-5 p-2.5 items-center">
+    <div className="flex items-center gap-5 p-2.5">
       <Upvote cast={cast} />
-      <div className="space-y-4 w-full">
-        <AuthorDetails pfpUrl={cast.author.pfp_url} displayName={cast.author.display_name} />
+      <div className="w-full space-y-4">
+        <AuthorDetails author={author} />
         {EmbedComponent && <EmbedComponent trackUrl={url} />}
         <TipButton verifications={verifications} cast={cast} />
       </div>

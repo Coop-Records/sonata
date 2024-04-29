@@ -2,6 +2,9 @@ const getFeed = async (embedUrl: string) => {
   const options = {
     method: 'GET',
     headers: { accept: 'application/json', api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY },
+    next: {
+      revalidate: 60,
+    },
   } as any;
 
   try {
