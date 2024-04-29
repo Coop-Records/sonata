@@ -12,6 +12,7 @@ const tabs = [
   { label: 'Home', href: '/', active: true },
   { label: 'Trending', href: '/trending' },
 ];
+
 export default function Header() {
   const pathname = usePathname();
   const { user } = useNeynarProvider();
@@ -21,6 +22,7 @@ export default function Header() {
     tab.active = tab.href === pathname;
   });
 
+  // TODO: Genesis Airdrop: X CLAIM | Daily Allowance | DEGEN Earned | Total Balance
   return (
     <div className="container flex justify-between items-center py-4">
       <Tabs tabs={tabs} />
