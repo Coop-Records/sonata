@@ -1,4 +1,5 @@
 import useStack from '@/hooks/useStack';
+import executeTip from '@/lib/sonata/executeTip';
 import { isEmpty, isNil } from 'lodash';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -61,7 +62,8 @@ const StackProvider = ({ children }: any) => {
       isNil(remainingTipAllocation) ||
       isEmpty(user.verifications) ||
       isNil(authorWalletAddresses) ||
-      isEmpty(authorWalletAddresses)
+      isEmpty(authorWalletAddresses) ||
+      isNil(signer?.signer_uuid)
     ) {
       return;
     }
@@ -70,7 +72,6 @@ const StackProvider = ({ children }: any) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `${process.env.NEXT_PUBLIC_AIRSTACK_API_KEY}`,
       },
       body: JSON.stringify({
         signer_uuid: signer?.signer_uuid,
@@ -80,7 +81,13 @@ const StackProvider = ({ children }: any) => {
         authorWalletAddress: authorWalletAddresses[0],
       }),
     });
-    const data = await res.json();
+    const data = await executeTip(
+      signer?.signer_uuid,
+      user.verifications[0],
+      amount,
+      postHash,
+      authorWalletAddresses[0],
+    );
 
     const message = data.message;
     const tipRemaining = data.tipRemaining;
