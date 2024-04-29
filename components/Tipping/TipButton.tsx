@@ -2,22 +2,21 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Button from '../Button';
 import { useStackProvider } from '@/providers/StackProvider';
+import { Cast as CastType } from '@/types/Cast';
 
 const TipButton = ({
   verifications,
-  postHash,
-  authorVerifications,
+  cast = {} as CastType,
 }: {
   verifications: string[];
-  postHash: string;
-  authorVerifications: string[];
+  cast: CastType;
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [customTip, setCustomTip] = useState('');
   const { tip } = useStackProvider();
   const [currency, setCurrency] = useState<string>('DEGEN'); // Toggle between 'DEGEN' and 'POINTS'
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [notesTotal, setNotesTotal] = useState(0);
+  const [notesTotal, setNotesTotal] = useState(cast.points);
   const [degenTotal, setDegenTotal] = useState(0);
 
   const tipAmounts: Record<string, number[]> = {
@@ -26,7 +25,7 @@ const TipButton = ({
   };
 
   const handleTip = async (amount: number) => {
-    const response = await tip(amount, postHash, authorVerifications);
+    const response = await tip(amount, cast.hash, cast.author.verifications);
     setShowDropdown(false);
     setCustomTip('');
   };

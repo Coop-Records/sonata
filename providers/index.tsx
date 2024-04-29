@@ -6,8 +6,8 @@ import NeynarProvider from '@/providers/NeynarProvider';
 import { SpotifyApiProvider } from './SpotifyApiProvider';
 import { SoundcloudApiProvider } from './SoundcloudApiProvider';
 import PlayerProvider from './PlayerProvider';
-import StackProvider from './StackProvider';
 import SupabaseProvider from './SupabaseProvider';
+import StackProvider from './StackProvider';
 
 const authConfig = {
   relay: 'https://relay.farcaster.xyz',
