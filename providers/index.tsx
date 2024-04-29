@@ -20,15 +20,15 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     <AuthKitProvider config={authConfig}>
       <NeynarProvider>
         <SupabaseProvider>
-          <StackProvider>
-            <FeedProvider>
+          <FeedProvider>
+            <StackProvider>
               <SpotifyApiProvider>
                 <SoundcloudApiProvider>
                   <PlayerProvider>{children}</PlayerProvider>
                 </SoundcloudApiProvider>
               </SpotifyApiProvider>
-            </FeedProvider>
-          </StackProvider>
+            </StackProvider>
+          </FeedProvider>
         </SupabaseProvider>
       </NeynarProvider>
     </AuthKitProvider>

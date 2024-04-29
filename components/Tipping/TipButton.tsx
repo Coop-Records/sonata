@@ -16,7 +16,7 @@ const TipButton = ({
   const { tip } = useStackProvider();
   const [currency, setCurrency] = useState<string>('DEGEN'); // Toggle between 'DEGEN' and 'POINTS'
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [notesTotal, setNotesTotal] = useState(cast.points);
+  const [notesTotal, setNotesTotal] = useState(0);
   const [degenTotal, setDegenTotal] = useState(0);
 
   const tipAmounts: Record<string, number[]> = {
@@ -24,8 +24,13 @@ const TipButton = ({
     POINTS: [100, 1000, 10000],
   };
 
+  useEffect(() => {
+    setNotesTotal(cast.points);
+  }, [cast.points]);
+
   const handleTip = async (amount: number) => {
     const response = await tip(amount, cast.hash, cast.author.verifications);
+    setNotesTotal(response.totalTipOnPost);
     setShowDropdown(false);
     setCustomTip('');
   };

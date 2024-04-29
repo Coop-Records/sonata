@@ -4,6 +4,7 @@ import { TipResponse } from '@/types/TipResponse';
 import { isEmpty, isNil } from 'lodash';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
+import { useFeedProvider } from './FeedProvider';
 import { useNeynarProvider } from './NeynarProvider';
 import { useSupabaseProvider } from './SupabaseProvider';
 
@@ -15,6 +16,7 @@ const StackProvider = ({ children }: any) => {
   const { stackClient } = useStack();
   const { user, signer } = useNeynarProvider();
   const { supabaseClient } = useSupabaseProvider();
+  const { fetchAndUpdatePoints } = useFeedProvider();
 
   const [remainingTipAllocation, setRemainingTipAllocation] = useState<bigint | undefined>(
     undefined,
@@ -83,8 +85,8 @@ const StackProvider = ({ children }: any) => {
     const message = data.message;
     const tipRemaining = data.tipRemaining;
     const tipUsed = data.usedTip as Number;
-    const totalTipOnPost = data.totalTipOnPost;
-    // TODO: update totalTipOnPost
+
+    await fetchAndUpdatePoints(postHash);
 
     setRemainingTipAllocation(BigInt(tipRemaining));
     if (tipUsed > 0) toast(message);

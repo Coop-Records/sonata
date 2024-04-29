@@ -21,7 +21,7 @@ const Upvote = ({ cast }: { cast: Cast }) => {
     const { signer_uuid } = signer;
     const response = await createReaction(signer_uuid, cast.hash);
 
-    tip(10, cast.hash, cast.author.verifications[0]);
+    await tip(10, cast.hash, cast.author.verifications[0]);
 
     if (response.success) {
       setUpvoted(true);
