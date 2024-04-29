@@ -4,7 +4,6 @@ import SignInButton from './SignInButton';
 import { usePathname } from 'next/navigation';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import Image from 'next/image';
-import { join } from 'path';
 import { formatBigInt } from '@/lib/utils';
 import { isNil } from 'lodash';
 import { useStackProvider } from '@/providers/StackProvider';

@@ -26,6 +26,7 @@ const TipButton = ({
 
   useEffect(() => {
     setNotesTotal(cast.points ?? 0);
+    setDegenTotal(0);
   }, [cast.points]);
 
   const handleTip = async (amount: number) => {

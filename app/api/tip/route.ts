@@ -1,8 +1,6 @@
-import getFeedFromTime from '@/lib/neynar/getFeedFromTime';
 import verifySignerUUID from '@/lib/neynar/verifySigner';
 import { StackClient } from '@stackso/js-core';
 import { createClient } from '@supabase/supabase-js';
-import { isEmpty } from 'lodash';
 import { NextRequest, NextResponse } from 'next/server';
 
 const SUPABASE_URL = process.env.SUPABASE_URL as string;

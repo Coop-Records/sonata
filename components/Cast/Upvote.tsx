@@ -1,10 +1,8 @@
 import createReaction from '@/lib/neynar/createReaction';
-import executeTip from '@/lib/sonata/executeTip';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { useStackProvider } from '@/providers/StackProvider';
 import { Cast } from '@/types/Cast';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import { FaArrowUp } from 'react-icons/fa';
 import { cn } from '@/lib/utils';
 
