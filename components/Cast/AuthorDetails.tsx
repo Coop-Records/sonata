@@ -7,7 +7,7 @@ const AuthorDetails = ({ pfpUrl, displayName }: any) => (
       <AvatarFallback>{displayName}</AvatarFallback>
     </Avatar>
 
-    <span className="text-sm font-light font-inter">{displayName}</span>
+    <span className="font-inter text-sm font-light">{displayName}</span>
   </div>
 );
 

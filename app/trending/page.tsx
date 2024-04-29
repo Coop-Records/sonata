@@ -13,7 +13,7 @@ export default function Trending() {
     });
 
   return (
-    <div className="container pt-10 flex flex-col gap-8 items-center">
+    <div className="container flex flex-col items-center gap-8 pt-10">
       <h1 className="text-3xl">Trending</h1>
       {trendingFeed?.length && <Feed feed={trendingFeed} />}
     </div>

@@ -1,10 +1,9 @@
 import LandingPageHeader from '@/components/LandingPage/LandingPageHeader';
 import { boldFont, regularFont } from '@/lib/fonts';
-import { NextRequest } from 'next/server';
 
 export const runtime = 'edge';
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const [regularFontData, boldFontData] = await Promise.all([regularFont, boldFont]);
 
   const { ImageResponse } = await import('@vercel/og');

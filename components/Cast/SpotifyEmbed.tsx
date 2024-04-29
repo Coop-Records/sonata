@@ -9,6 +9,7 @@ import MediaPlayer from '@/components/MediaPlayer';
 export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
   const trackId = useMemo(() => getSpotifyTrackId(trackUrl), [trackUrl]);
   const [position, setPosition] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [track, setTrack] = useState<SpotifyTrack>();
   const [embedController, setEmbedController] = useState({} as any);
   const elementRef = useRef<HTMLIFrameElement>(null);
@@ -19,13 +20,14 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
       if (!trackId) return;
       const track = await getSpotifyTrack(trackId);
       setTrack(track);
+      setDuration(track.duration_ms);
     };
 
     init();
   }, [trackId]);
 
   useEffect(() => {
-    if (!(elementRef.current && track?.uri && iframeApi)) return;
+    if (!(track?.uri && iframeApi)) return;
 
     const options = {
       height: '10',
@@ -39,9 +41,10 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
       embedController.addListener('playback_update', (e: SpotifyPlaybackUpdateEvent) => {
         const data = e.data;
         setPosition(data.position);
+        setDuration(data.duration);
       });
     });
-  }, [elementRef.current, track?.uri, iframeApi]);
+  }, [track?.uri, iframeApi]);
 
   if (!track) return <></>;
 
@@ -51,7 +54,7 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
   }
 
   return (
-    <div className="w-full relative z-0">
+    <div className="relative z-0 w-full">
       <MediaPlayer
         metadata={{
           id: track.uri,
@@ -59,16 +62,16 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
           artistName: track.artists.map((artist: any) => artist.name).join(', '),
           trackName: track.name,
           artworkUrl: track.album.images[0].url,
-          duration: track.duration_ms,
+          duration,
         }}
         controls={{
-          play: () => embedController.play(),
+          play: () => embedController.togglePlay(),
           pause: () => embedController.pause(),
           seek: (time) => embedController.seek(time),
         }}
         position={position}
       />
-      <div className="absolute top-0 left-0 opacity-0 -z-10">
+      <div className="absolute left-0 top-0 -z-10 opacity-0">
         <div ref={elementRef} />
       </div>
     </div>

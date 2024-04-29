@@ -1,21 +1,21 @@
 import getFeedFromTime from '@/lib/neynar/getFeedFromTime';
 import { createClient } from '@supabase/supabase-js';
 import { isEmpty } from 'lodash';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 const SUPABASE_URL = process.env.SUPABASE_URL as string;
 const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const getResponse = async (req: NextRequest): Promise<NextResponse> => {
-  const { data: tip_query_date, error: blockNumberError } = await supabase
+const getResponse = async (): Promise<NextResponse> => {
+  const { data: tip_query_date } = await supabase
     .from('tip_query_date')
     .select('last_checked')
     .eq('id', 1)
     .single();
   const lastChecked = tip_query_date ? new Date(tip_query_date.last_checked) : new Date();
-  var newLastChecked = lastChecked;
+  let newLastChecked = lastChecked;
 
   const [spotify, soundCloud, soundxyz] = await Promise.all([
     getFeedFromTime('spotify.com/track', lastChecked),
@@ -63,11 +63,9 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
     }
   }
 
-  const { data, error } = await supabase.rpc('update_daily_tip_allocation');
+  await supabase.rpc('update_daily_tip_allocation');
 
-  const { error: update_block_tracker_error } = await supabase
-    .from('tip_query_date')
-    .upsert({ id: 1, last_checked: newLastChecked });
+  await supabase.from('tip_query_date').upsert({ id: 1, last_checked: newLastChecked });
 
   return NextResponse.json({ message: 'success' }, { status: 200 });
 };
@@ -98,8 +96,8 @@ async function callUpdateTips(
   return data;
 }
 
-export async function POST(req: NextRequest): Promise<Response> {
-  getResponse(req).catch((error) => {
+export async function POST(): Promise<Response> {
+  getResponse().catch((error) => {
     console.error('Error in background task:', error);
   });
   return NextResponse.json({ message: 'success' }, { status: 200 });
