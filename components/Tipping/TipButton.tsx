@@ -17,6 +17,8 @@ const TipButton = ({
   const { tip } = useStackProvider();
   const [currency, setCurrency] = useState<string>('DEGEN'); // Toggle between 'DEGEN' and 'POINTS'
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [notesTotal, setNotesTotal] = useState(0);
+  const [degenTotal, setDegenTotal] = useState(0);
 
   const tipAmounts: Record<string, number[]> = {
     DEGEN: [10, 100, 1000],
@@ -25,9 +27,6 @@ const TipButton = ({
 
   const handleTip = async (amount: number) => {
     const response = await tip(amount, postHash, authorVerifications);
-    // TODO: Update values for post stats
-    // TODO: update values for
-
     setShowDropdown(false);
     setCustomTip('');
   };
@@ -55,12 +54,12 @@ const TipButton = ({
     <div className="w-full flex justify-between items-center text-xs relative">
       <div className="inline-flex gap-4">
         <div className="flex items-center justify-center text-xs space-x-2 h-full">
-          <span>0</span>
+          <span>{degenTotal}</span>
           <Image src="/images/degenchain.png" width={12} height={12} alt="DEGEN" />
         </div>
         <div className="flex items-center justify-center text-xs space-x-2 h-full">
-          <span>0</span>
-          <Image src="/images/notes.jpg" width={16} height={16} alt="POINTS" />
+          <span>{notesTotal}</span>
+          <Image src="/images/notes.jpg" width={16} height={16} alt="NOTES" />
         </div>
       </div>
       <Button

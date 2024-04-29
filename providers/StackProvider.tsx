@@ -1,5 +1,6 @@
 import useStack from '@/hooks/useStack';
 import executeTip from '@/lib/sonata/executeTip';
+import { TipResponse } from '@/types/TipResponse';
 import { isEmpty, isNil } from 'lodash';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -55,8 +56,11 @@ const StackProvider = ({ children }: any) => {
     setBalance(BigInt(currentBalance));
   };
 
-  const tip = async (amount: bigint, postHash: string, authorWalletAddresses: string[]) => {
-    console.log('authorWalletAddresses', authorWalletAddresses);
+  const tip = async (
+    amount: bigint,
+    postHash: string,
+    authorWalletAddresses: string[],
+  ): Promise<TipResponse | undefined> => {
     if (
       isNil(user) ||
       isNil(remainingTipAllocation) ||
@@ -68,19 +72,6 @@ const StackProvider = ({ children }: any) => {
       return;
     }
 
-    const res = await fetch('/api/tip', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        signer_uuid: signer?.signer_uuid,
-        walletAddress: user.verifications[0],
-        tipAmount: amount,
-        postHash,
-        authorWalletAddress: authorWalletAddresses[0],
-      }),
-    });
     const data = await executeTip(
       signer?.signer_uuid,
       user.verifications[0],
@@ -97,6 +88,8 @@ const StackProvider = ({ children }: any) => {
 
     setRemainingTipAllocation(BigInt(tipRemaining));
     if (tipUsed > 0) toast(message);
+
+    return data;
   };
 
   return (
