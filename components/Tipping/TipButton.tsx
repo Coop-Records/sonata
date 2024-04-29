@@ -25,12 +25,12 @@ const TipButton = ({
   };
 
   useEffect(() => {
-    setNotesTotal(cast.points);
+    setNotesTotal(cast.points ?? 0);
   }, [cast.points]);
 
   const handleTip = async (amount: number) => {
     const response = await tip(amount, cast.hash, cast.author.verifications);
-    setNotesTotal(response.totalTipOnPost);
+    setNotesTotal(response.totalTipOnPost ?? 0);
     setShowDropdown(false);
     setCustomTip('');
   };
