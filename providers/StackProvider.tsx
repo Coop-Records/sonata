@@ -52,9 +52,8 @@ const StackProvider = ({ children }: any) => {
   }, [user]);
 
   const syncPoints = async () => {
-    if (isNil(user) || user.verifications.length === 0) return;
-
-    const currentBalance = (await stackClient?.getPoints(user.verifications))[0].amount;
+    if (isNil(stackClient) || isNil(user) || user.verifications.length === 0) return;
+    const currentBalance = await stackClient?.getPoints(user.verifications[0]);
     setBalance(BigInt(currentBalance));
   };
 
