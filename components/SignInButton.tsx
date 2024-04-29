@@ -1,3 +1,4 @@
+'use client';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import Image from 'next/image';
 

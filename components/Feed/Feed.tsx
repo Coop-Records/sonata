@@ -1,3 +1,4 @@
+'use client';
 import Cast from '../Cast';
 import { Cast as CastType } from '@/types/Cast';
 import Filter from './Filter';
@@ -18,13 +19,15 @@ export default function Feed({ feed }: any) {
   );
 
   return (
-    <div className="flex w-full max-w-4xl items-start gap-10">
-      <div className="grow space-y-6">
+    <div className="flex w-full max-w-4xl items-start md:gap-10">
+      <div className="max-w-full grow space-y-6">
         {filteredFeed.map((cast: CastType) => (
           <Cast key={cast.hash} cast={cast} />
         ))}
       </div>
-      <Filter onChange={handleFilterChange} value={filter} />
+      <div className="max-md:hidden">
+        <Filter onChange={handleFilterChange} value={filter} />
+      </div>
     </div>
   );
 }

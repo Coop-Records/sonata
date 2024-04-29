@@ -3,7 +3,8 @@ import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { Cast } from '@/types/Cast';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { twJoin } from 'tailwind-merge';
+import { FaArrowUp } from 'react-icons/fa';
+import { cn } from '@/lib/utils';
 
 const Upvote = ({ cast }: { cast: Cast }) => {
   const { signer } = useNeynarProvider();
@@ -30,7 +31,7 @@ const Upvote = ({ cast }: { cast: Cast }) => {
   return (
     <div className="flex flex-col items-center">
       <button type="button" onClick={handleClick}>
-        <span className={twJoin('text-3xl', upvoted && 'font-bold')}>↑</span>
+        <FaArrowUp className={cn('text-2xl text-gray-400', upvoted && 'text-black')} />
       </button>
       <span className="font-inter text-xl font-semibold">{votes}</span>
     </div>

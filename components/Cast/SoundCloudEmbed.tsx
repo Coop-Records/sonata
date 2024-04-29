@@ -54,19 +54,19 @@ const SoundCloudEmbed = ({ trackUrl }: any) => {
     };
   }, [iframeSrc, SC]);
 
-  if (!embedData) return <></>;
-
   return (
     <>
       <MediaPlayer
-        metadata={{
-          id: trackUrl,
-          type: 'soundcloud',
-          artistName: embedData.author_name || '',
-          trackName: embedData.title.split(' - ')[0].split(' by ')[0],
-          artworkUrl: embedData.thumbnail_url,
-          duration: duration,
-        }}
+        metadata={
+          embedData && {
+            id: trackUrl,
+            type: 'soundcloud',
+            artistName: embedData.author_name || '',
+            trackName: embedData.title.split(' - ')[0].split(' by ')[0],
+            artworkUrl: embedData.thumbnail_url,
+            duration: duration,
+          }
+        }
         controls={{
           play: () => widget.play(),
           pause: () => widget.pause(),

@@ -21,7 +21,7 @@ export default function GlobalPlayer() {
   return (
     <div
       data-type={metadata.type}
-      className="fixed bottom-0 left-0 flex w-full flex-col gap-4 bg-black p-2"
+      className="sticky bottom-0 left-0 flex w-full flex-col gap-4 bg-black p-2"
     >
       <div className="flex gap-4">
         <div className="relative my-auto aspect-square w-16 shrink-0 shadow-md">

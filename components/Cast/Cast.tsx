@@ -28,7 +28,7 @@ const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
     <div className="flex items-center gap-5 p-2.5">
       <Upvote cast={cast} />
       <div className="w-full space-y-4">
-        <AuthorDetails pfpUrl={cast.author.pfp_url} displayName={cast.author.display_name} />
+        <AuthorDetails author={author} />
         {EmbedComponent && <EmbedComponent trackUrl={url} />}
         <TipButton verifications={verifications} />
       </div>

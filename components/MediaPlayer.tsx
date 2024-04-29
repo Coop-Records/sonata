@@ -4,18 +4,20 @@ import { TrackControls, TrackMetadata } from '@/types/Track';
 import Image from 'next/image';
 import { useEffect } from 'react';
 import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';
+import { Skeleton } from '@/components/ui/skeleton';
 
 type MediaPlayerProps = {
-  metadata: TrackMetadata;
-  controls: TrackControls;
+  metadata?: TrackMetadata;
+  controls?: TrackControls;
   position: number;
 };
 
 export default function MediaPlayer({ metadata, controls, position }: MediaPlayerProps) {
   const [player, dispatch] = usePlayer();
 
-  const currentTrack = player?.metadata?.id === metadata.id;
+  const currentTrack = player?.metadata?.id === metadata?.id;
   const displayPosition = currentTrack ? player.position : position;
+  const displayDuration = metadata?.duration || 0;
 
   useEffect(() => {
     if (currentTrack) {
@@ -24,6 +26,7 @@ export default function MediaPlayer({ metadata, controls, position }: MediaPlaye
   }, [position, currentTrack, dispatch]);
 
   const handlePlay = () => {
+    if (!metadata || !controls) return;
     dispatch({ type: 'PLAY', payload: { metadata, controls } });
   };
 
@@ -32,48 +35,59 @@ export default function MediaPlayer({ metadata, controls, position }: MediaPlaye
   };
 
   return (
-    <div data-type={metadata.type} className="flex w-full flex-col gap-4 rounded-lg bg-black p-2">
+    <div data-type={metadata?.type} className="flex w-full flex-col gap-4 rounded-lg border p-2">
       <div className="flex gap-4">
-        <div className="relative my-auto aspect-square w-16 shrink-0 shadow-md">
-          <Image
-            src={metadata.artworkUrl}
-            alt=""
-            fill
-            style={{ objectFit: 'cover', objectPosition: 'center' }}
-            className="rounded-lg"
-            unoptimized
-          />
+        <div className="relative my-auto aspect-square w-16 shrink-0 overflow-hidden rounded-lg shadow-md">
+          {metadata?.artworkUrl ? (
+            <Image
+              src={metadata.artworkUrl}
+              alt=""
+              fill
+              style={{ objectFit: 'cover', objectPosition: 'center' }}
+              unoptimized
+            />
+          ) : (
+            <Skeleton className="size-full" />
+          )}
         </div>
 
         <div className="flex grow flex-col gap-1 pt-2 text-left">
-          <div className="line-clamp-2 font-inter text-sm font-bold text-white">
-            {metadata.trackName}
+          <div className="line-clamp-2 font-inter text-sm font-bold">
+            {metadata?.trackName ? (
+              <>{metadata.trackName}</>
+            ) : (
+              <Skeleton className="h-2 w-32 rounded-sm" />
+            )}
           </div>
-          <div className="line-clamp-2 font-inter text-xs font-extralight text-white">
-            {metadata.artistName}
+          <div className="line-clamp-2 font-inter text-xs font-extralight">
+            {metadata?.artistName ? (
+              <>{metadata.artistName}</>
+            ) : (
+              <Skeleton className="h-2 w-12 rounded-sm" />
+            )}
           </div>
         </div>
         <div className="my-auto">
           {currentTrack && player.playing ? (
             <button onClick={handlePause}>
-              <MdPauseCircle className="text-4xl text-white" />
+              <MdPauseCircle className="text-4xl" />
             </button>
           ) : (
             <button onClick={handlePlay}>
-              <MdPlayCircle className="text-4xl text-white" />
+              <MdPlayCircle className="text-4xl" />
             </button>
           )}
         </div>
       </div>
       <div className="flex flex-col gap-1">
-        <div className="flex justify-between font-inter text-xs font-light text-white">
+        <div className="flex justify-between font-inter text-xs font-light">
           <span>{formatDuration(displayPosition)}</span>
-          <span>{formatDuration(metadata.duration)}</span>
+          <span>{formatDuration(displayDuration)}</span>
         </div>
-        <div className="h-1 w-full overflow-hidden rounded-lg bg-gray-600">
+        <div className="h-1 w-full overflow-hidden rounded-lg bg-gray-300">
           <div
-            className="h-1 rounded-lg bg-white"
-            style={{ width: `${(displayPosition / metadata.duration) * 100}%` }}
+            className="h-1 rounded-lg bg-black"
+            style={{ width: `${(displayPosition / displayDuration) * 100}%` }}
           />
         </div>
       </div>
