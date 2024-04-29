@@ -24,7 +24,13 @@ const inter = Inter({
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body className={cn('font-helvetica', inter.variable, 'flex flex-col min-h-screen')}>
+      <body
+        className={cn(
+          'font-helvetica',
+          inter.variable,
+          'flex flex-col min-h-screen w-screen overflow-x-hidden',
+        )}
+      >
         <Providers>
           <Header />
           {children}

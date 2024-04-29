@@ -4,10 +4,10 @@ import Title from './Title';
 export default function Header() {
   return (
     <div>
-      <div className="container flex justify-end py-4">
+      <div className="container flex items-center justify-between py-4">
+        <Title />
         <SignInButton />
       </div>
-      <Title />
     </div>
   );
 }
