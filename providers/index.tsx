@@ -5,17 +5,23 @@ import NeynarProvider from '@/providers/NeynarProvider';
 import { SpotifyApiProvider } from './SpotifyApiProvider';
 import { SoundcloudApiProvider } from './SoundcloudApiProvider';
 import PlayerProvider from './PlayerProvider';
+import SupabaseProvider from './SupabaseProvider';
+import StackProvider from './StackProvider';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <NeynarProvider>
-      <FeedProvider>
-        <SpotifyApiProvider>
-          <SoundcloudApiProvider>
-            <PlayerProvider>{children}</PlayerProvider>
-          </SoundcloudApiProvider>
-        </SpotifyApiProvider>
-      </FeedProvider>
+      <SupabaseProvider>
+        <FeedProvider>
+          <StackProvider>
+            <SpotifyApiProvider>
+              <SoundcloudApiProvider>
+                <PlayerProvider>{children}</PlayerProvider>
+              </SoundcloudApiProvider>
+            </SpotifyApiProvider>
+          </StackProvider>
+        </FeedProvider>
+      </SupabaseProvider>
     </NeynarProvider>
   );
 }

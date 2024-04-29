@@ -13,9 +13,14 @@ export default function Feed({ feed }: any) {
     setFilter((prev) => ({ ...prev, ...change }));
   };
 
+  const feedSignature = useMemo(
+    () => feed.map((cast: CastType) => `${cast.hash}_${cast.points}`).join('|'),
+    [feed],
+  );
+
   const filteredFeed: any = useMemo(
-    () => feed.filter((cast: CastType) => findValidEmbed(cast, { platform: filter.platform })),
-    [filter.platform, feed],
+    () => feed.filter((cast: CastType) => findValidEmbed(cast, filter)),
+    [filter.platform, feedSignature],
   );
 
   return (

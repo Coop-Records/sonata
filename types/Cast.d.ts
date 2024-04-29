@@ -8,4 +8,5 @@ export type Cast = CastType & {
       fid: string;
     }[];
   };
+  points: number;
 };

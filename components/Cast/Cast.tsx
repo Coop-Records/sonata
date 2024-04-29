@@ -2,7 +2,7 @@ import { Cast as CastType } from '@/types/Cast';
 import AuthorDetails from './AuthorDetails';
 import Upvote from './Upvote';
 import findValidEmbed from '@/lib/findValidEmbed';
-import TipButton from '../Tipping/Tip';
+import TipButton from '../Tipping/TipButton';
 import { useMemo } from 'react';
 import SpotifyEmbed from './SpotifyEmbed';
 import SoundCloudEmbed from './SoundCloudEmbed';
@@ -30,7 +30,7 @@ const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
       <div className="w-full space-y-4">
         <AuthorDetails author={author} />
         {EmbedComponent && <EmbedComponent trackUrl={url} />}
-        <TipButton verifications={verifications} />
+        <TipButton verifications={verifications} cast={cast} />
       </div>
     </div>
   );

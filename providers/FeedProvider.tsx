@@ -1,3 +1,4 @@
+'use client';
 import useFeed from '@/hooks/useFeed';
 import { createContext, useContext, useMemo, useState } from 'react';
 
