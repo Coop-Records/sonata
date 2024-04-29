@@ -12,7 +12,6 @@ const tabs = [
   { label: 'Home', href: '/', active: true },
   { label: 'Trending', href: '/trending' },
 ];
-
 export default function Header() {
   const pathname = usePathname();
   const { user } = useNeynarProvider();
