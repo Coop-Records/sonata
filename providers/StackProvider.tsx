@@ -83,7 +83,7 @@ const StackProvider = ({ children }: any) => {
 
     const message = data.message;
     const tipRemaining = data.tipRemaining;
-    const tipUsed = data.usedTip as Number;
+    const tipUsed = data.usedTip as number;
 
     await fetchAndUpdatePoints(postHash);
 
