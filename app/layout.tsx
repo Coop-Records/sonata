@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import GlobalPlayer from '@/components/GlobalPlayer';
 import { Analytics } from '@vercel/analytics/react';
 import { ReactNode } from 'react';
+import MadeBySweets from '@/components/MadeBySweets';
 
 export const viewport = {
   width: 'device-width',
@@ -23,10 +24,11 @@ const inter = Inter({
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body className={cn('font-helvetica', inter.variable)}>
+      <body className={cn('font-helvetica', inter.variable, 'flex flex-col min-h-screen')}>
         <Providers>
           <Header />
           {children}
+          <MadeBySweets />
           <ToastContainer />
           <GlobalPlayer />
         </Providers>

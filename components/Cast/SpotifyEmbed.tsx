@@ -46,9 +46,7 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
     });
   }, [track?.uri, iframeApi]);
 
-  if (!track) return <></>;
-
-  if (track.error) {
+  if (track?.error) {
     console.error(track.error);
     return <></>;
   }
@@ -56,14 +54,16 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
   return (
     <div className="relative z-0 w-full">
       <MediaPlayer
-        metadata={{
-          id: track.uri,
-          type: 'spotify',
-          artistName: track.artists.map((artist: any) => artist.name).join(', '),
-          trackName: track.name,
-          artworkUrl: track.album.images[0].url,
-          duration,
-        }}
+        metadata={
+          track && {
+            id: track.uri,
+            type: 'spotify',
+            artistName: track.artists.map((artist: any) => artist.name).join(', '),
+            trackName: track.name,
+            artworkUrl: track.album.images[0].url,
+            duration,
+          }
+        }
         controls={{
           play: () => embedController.togglePlay(),
           pause: () => embedController.pause(),

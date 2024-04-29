@@ -1,3 +1,4 @@
+'use client';
 import Cast from '../Cast';
 import { Cast as CastType } from '@/types/Cast';
 import Filter from './Filter';

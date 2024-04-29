@@ -1,4 +1,4 @@
-import LandingPageHeader from '@/components/LandingPage/LandingPageHeader';
+import Title from '@/components/Header/Title';
 import { boldFont, regularFont } from '@/lib/fonts';
 
 export const runtime = 'edge';
@@ -26,7 +26,7 @@ export async function GET() {
         }}
         tw="flex gap-3"
       >
-        <LandingPageHeader />
+        <Title />
       </div>
     ),
     {
