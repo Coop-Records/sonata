@@ -6,6 +6,7 @@ const useStack = () => {
 
   useEffect(() => {
     const init = async () => {
+      // TODO: These should not be public
       const stack = new StackClient({
         apiKey: process.env.NEXT_PUBLIC_STACK_API_KEY as string,
         pointSystemId: Number(process.env.NEXT_PUBLIC_STACK_SYSTEM_ID),

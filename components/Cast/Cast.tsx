@@ -2,7 +2,7 @@ import { Cast as CastType } from '@/types/Cast';
 import AuthorDetails from './AuthorDetails';
 import Upvote from './Upvote';
 import findValidEmbed from '@/lib/findValidEmbed';
-import TipButton from '../Tipping/Tip';
+import TipButton from '../Tipping/TipButton';
 import { useMemo } from 'react';
 import SpotifyEmbed from './SpotifyEmbed';
 import SoundCloudEmbed from './SoundCloudEmbed';
@@ -29,7 +29,7 @@ const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
       <div className="space-y-4 w-full">
         <AuthorDetails pfpUrl={cast.author.pfp_url} displayName={cast.author.display_name} />
         {EmbedComponent && <EmbedComponent trackUrl={url} />}
-        <TipButton verifications={verifications} postHash={cast.hash} />
+        <TipButton verifications={verifications} postHash={cast.hash} authorVerifications={cast.author.verifications} />
       </div>
     </div>
   );

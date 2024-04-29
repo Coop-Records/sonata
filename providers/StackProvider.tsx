@@ -11,7 +11,7 @@ const StackProvider = ({ children }: any) => {
   const [balance, setBalance] = useState<bigint | undefined>(undefined);
   const [dailyTipAllowance, setDailyTipAllowance] = useState<bigint | undefined>(undefined);
   const { stackClient } = useStack();
-  const { user } = useNeynarProvider();
+  const { user, signer } = useNeynarProvider();
   const { supabaseClient } = useSupabaseProvider();
 
   const [remainingTipAllocation, setRemainingTipAllocation] = useState<bigint | undefined>(
@@ -54,8 +54,17 @@ const StackProvider = ({ children }: any) => {
     setBalance(BigInt(currentBalance));
   };
 
-  const tip = async (amount: bigint, postHash: string) => {
-    if (isNil(user) || isNil(remainingTipAllocation) || isEmpty(user.verifications)) return;
+  const tip = async (amount: bigint, postHash: string, authorWalletAddresses: string[]) => {
+    console.log('authorWalletAddresses', authorWalletAddresses);
+    if (
+      isNil(user) ||
+      isNil(remainingTipAllocation) ||
+      isEmpty(user.verifications) ||
+      isNil(authorWalletAddresses) ||
+      isEmpty(authorWalletAddresses)
+    ) {
+      return;
+    }
 
     const res = await fetch('/api/tip', {
       method: 'POST',
@@ -63,18 +72,24 @@ const StackProvider = ({ children }: any) => {
         'Content-Type': 'application/json',
         Authorization: `${process.env.NEXT_PUBLIC_AIRSTACK_API_KEY}`,
       },
-      body: JSON.stringify({ walletAddress: user.verifications[0], tipAmount: amount, postHash }),
+      body: JSON.stringify({
+        signer_uuid: signer?.signer_uuid,
+        walletAddress: user.verifications[0],
+        tipAmount: amount,
+        postHash,
+        authorWalletAddress: authorWalletAddresses[0],
+      }),
     });
     const data = await res.json();
 
     const message = data.message;
     const tipRemaining = data.tipRemaining;
+    const tipUsed = data.usedTip as Number;
     const totalTipOnPost = data.totalTipOnPost;
     // TODO: update totalTipOnPost
 
-    // TODO: Update remaining tip alloction
     setRemainingTipAllocation(BigInt(tipRemaining));
-    toast(message);
+    if (tipUsed > 0) toast(message);
   };
 
   return (
