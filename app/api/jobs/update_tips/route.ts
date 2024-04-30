@@ -96,7 +96,7 @@ async function callUpdateTips(
   return data;
 }
 
-export async function POST(): Promise<Response> {
+export async function GET(): Promise<Response> {
   getResponse().catch((error) => {
     console.error('Error in background task:', error);
   });
