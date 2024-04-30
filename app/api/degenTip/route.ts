@@ -35,7 +35,7 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
 
   const totalDegenOnPost = await callAllocateDegenTip(tipAmount, postHash);
 
-  const { success } = await postDegenTipComment(signer_uuid, tipAmount, postHash);
+  await postDegenTipComment(signer_uuid, tipAmount, postHash);
 
   return NextResponse.json(
     {
