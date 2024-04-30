@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Button from '../Button';
-import { useStackProvider } from '@/providers/StackProvider';
+import { useTipProvider } from '@/providers/TipProvider';
 import { Cast as CastType } from '@/types/Cast';
 
 const TipButton = ({
@@ -13,8 +13,8 @@ const TipButton = ({
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [customTip, setCustomTip] = useState('');
-  const { tip } = useStackProvider();
-  const [currency, setCurrency] = useState<string>('DEGEN'); // Toggle between 'DEGEN' and 'POINTS'
+  const { tip, tipDegen } = useTipProvider();
+  const [currency, setCurrency] = useState<'DEGEN' | 'POINTS'>('DEGEN'); // Toggle between 'DEGEN' and 'POINTS'
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [notesTotal, setNotesTotal] = useState(0);
   const [degenTotal, setDegenTotal] = useState(0);
@@ -26,14 +26,21 @@ const TipButton = ({
 
   useEffect(() => {
     setNotesTotal(cast.points ?? 0);
-    setDegenTotal(0);
+    setDegenTotal(cast.degen ?? 0);
   }, [cast.points]);
 
   const handleTip = async (amount: number) => {
-    const response = await tip(amount, cast.hash, cast.author.verifications);
-    setNotesTotal(response.totalTipOnPost ?? 0);
-    setShowDropdown(false);
-    setCustomTip('');
+    if (currency === 'DEGEN') {
+      const response = await tipDegen(amount, cast.hash);
+      setDegenTotal(response.totalTipOnPost ?? 0);
+      setShowDropdown(false);
+      setCustomTip('');
+    } else if (currency === 'POINTS') {
+      const response = await tip(amount, cast.hash, cast.author.verifications);
+      setNotesTotal(response.totalTipOnPost ?? 0);
+      setShowDropdown(false);
+      setCustomTip('');
+    }
   };
 
   const toggleCurrency = () => {
@@ -56,16 +63,14 @@ const TipButton = ({
   }, []);
 
   return verifications && verifications.length > 0 ? (
-    <div className="relative flex w-full items-center justify-between text-xs">
-      <div className="inline-flex gap-4">
-        <div className="flex items-center justify-center text-xs space-x-2 h-full">
-          <span>{degenTotal}</span>
-          <Image src="/images/degenchain.png" width={12} height={12} alt="DEGEN" />
-        </div>
-        <div className="flex items-center justify-center text-xs space-x-2 h-full">
-          <span>{notesTotal}</span>
-          <Image src="/images/notes.jpg" width={16} height={16} alt="NOTES" />
-        </div>
+    <div className="relative flex w-full items-center justify-end gap-4 text-xs">
+      <div className="flex items-center justify-center text-xs space-x-2 h-full">
+        <span>{notesTotal}</span>
+        <Image src="/images/notes.jpg" width={16} height={16} alt="NOTES" />
+      </div>
+      <div className="flex items-center justify-center text-xs space-x-2 h-full">
+        <span>{degenTotal}</span>
+        <Image src="/images/degenchain.png" width={12} height={12} alt="DEGEN" />
       </div>
       <Button
         className="rounded border border-gray-300 px-2 py-0 text-black hover:bg-gray-100"
@@ -103,7 +108,10 @@ const TipButton = ({
                 Tip {amount} {currency}
               </li>
             ))}
-            <li className="flex items-center px-4 py-2">
+            <li className="flex justify-start items-center px-4 py-2">
+              <Button className="ml-0 cursor-pointer hover:bg-gray-100 px-2" onClick={() => handleTip(Number(customTip) || 0)}>
+                Tip
+              </Button>
               <input
                 type="text"
                 value={customTip}
@@ -111,9 +119,6 @@ const TipButton = ({
                 placeholder="Custom amount"
                 className="w-full rounded border border-gray-300 px-2 py-1 text-sm"
               />
-              <Button className="ml-2" onClick={() => handleTip(Number(customTip) || 0)}>
-                Tip
-              </Button>
             </li>
           </ul>
         </div>

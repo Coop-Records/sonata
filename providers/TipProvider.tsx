@@ -1,4 +1,6 @@
 import useStack from '@/hooks/useStack';
+import executeDegenTip from '@/lib/degen/executeDegenTip';
+import getDegenTipsData from '@/lib/degen/getDegenTipsData';
 import executeTip from '@/lib/sonata/executeTip';
 import { TipResponse } from '@/types/TipResponse';
 import { isEmpty, isNil } from 'lodash';
@@ -8,9 +10,9 @@ import { useFeedProvider } from './FeedProvider';
 import { useNeynarProvider } from './NeynarProvider';
 import { useSupabaseProvider } from './SupabaseProvider';
 
-const StackContext = createContext<any>(null);
+const TipContext = createContext<any>(null);
 
-const StackProvider = ({ children }: any) => {
+const TipProvider = ({ children }: any) => {
   const [balance, setBalance] = useState<bigint | undefined>(undefined);
   const [dailyTipAllowance, setDailyTipAllowance] = useState<bigint | undefined>(undefined);
   const { stackClient } = useStack();
@@ -57,6 +59,24 @@ const StackProvider = ({ children }: any) => {
     setBalance(BigInt(currentBalance));
   };
 
+  const tipDegen = async (amount: bigint, postHash: string) => {
+    if (isNil(user) || isEmpty(user.verifications) || isNil(signer?.signer_uuid)) {
+      return;
+    }
+
+    const data = await executeDegenTip(
+      user.verifications[0],
+      signer?.signer_uuid,
+      amount,
+      postHash,
+    );
+    console.log(data);
+    const message = data.message;
+    toast(message);
+
+    return data;
+  };
+
   const tip = async (
     amount: bigint,
     postHash: string,
@@ -83,29 +103,30 @@ const StackProvider = ({ children }: any) => {
 
     const message = data.message;
     const tipRemaining = data.tipRemaining;
-    const tipUsed = data.usedTip as number;
 
     await fetchAndUpdatePoints(postHash);
 
     setRemainingTipAllocation(BigInt(tipRemaining));
-    if (tipUsed > 0) toast(message);
+    toast(message);
 
     return data;
   };
 
   return (
-    <StackContext.Provider value={{ balance, tip, remainingTipAllocation, dailyTipAllowance }}>
+    <TipContext.Provider
+      value={{ balance, tip, tipDegen, remainingTipAllocation, dailyTipAllowance }}
+    >
       {children}
-    </StackContext.Provider>
+    </TipContext.Provider>
   );
 };
 
-export const useStackProvider = () => {
-  const context = useContext(StackContext);
+export const useTipProvider = () => {
+  const context = useContext(TipContext);
   if (!context) {
-    throw new Error('useStackProvider must be used within a FeedProvider');
+    throw new Error('useTipProvider must be used within a FeedProvider');
   }
   return context;
 };
 
-export default StackProvider;
+export default TipProvider;

@@ -14,7 +14,7 @@ export default function Feed({ feed }: any) {
   };
 
   const feedSignature = useMemo(
-    () => feed.map((cast: CastType) => `${cast.hash}_${cast.points}`).join('|'),
+    () => feed.map((cast: CastType) => `${cast.hash}_${cast.points}_${cast.degen}`).join('|'),
     [feed],
   );
 
