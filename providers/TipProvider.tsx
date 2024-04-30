@@ -70,9 +70,9 @@ const TipProvider = ({ children }: any) => {
       amount,
       postHash,
     );
+    console.log(data);
     const message = data.message;
-    const tipUsed = data.usedTip as number;
-    if (tipUsed > 0) toast(message);
+    toast(message);
 
     return data;
   };
@@ -103,12 +103,11 @@ const TipProvider = ({ children }: any) => {
 
     const message = data.message;
     const tipRemaining = data.tipRemaining;
-    const tipUsed = data.usedTip as number;
 
     await fetchAndUpdatePoints(postHash);
 
     setRemainingTipAllocation(BigInt(tipRemaining));
-    if (tipUsed > 0) toast(message);
+    toast(message);
 
     return data;
   };

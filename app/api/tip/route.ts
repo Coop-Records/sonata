@@ -29,11 +29,23 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
     postHash,
   );
 
+  if (used_tip === 0) {
+    return NextResponse.json(
+      {
+        message: `Already reached max NOTES tips`,
+        usedTip: used_tip,
+        tipRemaining: remaining_tip_allocation,
+        totalTipOnPost: total_tip_on_post,
+      },
+      { status: 200 },
+    );
+  }
+
   stack.track(`tip_from_${walletAddress}`, { account: authorWalletAddress, points: tipAmount });
 
   return NextResponse.json(
     {
-      message: `Tipped ${tipAmount} NOTES`,
+      message: `Tipped ${used_tip} NOTES`,
       usedTip: used_tip,
       tipRemaining: remaining_tip_allocation,
       totalTipOnPost: total_tip_on_post,

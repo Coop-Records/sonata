@@ -22,7 +22,7 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
 
   const degenTipData = await getDegenTipsData(walletAddress);
 
-  if (tipAmount > degenTipData.remaining_allowance) {
+  if (tipAmount > Number(degenTipData.remaining_allowance)) {
     return NextResponse.json(
       {
         message: `Already reached max DEGEN tips`,
