@@ -63,16 +63,14 @@ const TipButton = ({
   }, []);
 
   return verifications && verifications.length > 0 ? (
-    <div className="relative flex w-full items-center justify-between text-xs">
-      <div className="inline-flex gap-4">
-        <div className="flex items-center justify-center text-xs space-x-2 h-full">
-          <span>{degenTotal}</span>
-          <Image src="/images/degenchain.png" width={12} height={12} alt="DEGEN" />
-        </div>
-        <div className="flex items-center justify-center text-xs space-x-2 h-full">
-          <span>{notesTotal}</span>
-          <Image src="/images/notes.jpg" width={16} height={16} alt="NOTES" />
-        </div>
+    <div className="relative flex w-full items-center justify-end gap-4 text-xs">
+      <div className="flex items-center justify-center text-xs space-x-2 h-full">
+        <span>{notesTotal}</span>
+        <Image src="/images/notes.jpg" width={16} height={16} alt="NOTES" />
+      </div>
+      <div className="flex items-center justify-center text-xs space-x-2 h-full">
+        <span>{degenTotal}</span>
+        <Image src="/images/degenchain.png" width={12} height={12} alt="DEGEN" />
       </div>
       <Button
         className="rounded border border-gray-300 px-2 py-0 text-black hover:bg-gray-100"
