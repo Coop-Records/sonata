@@ -2,10 +2,10 @@
 import Image from 'next/image';
 import { formatBigInt } from '@/lib/utils';
 import { isNil } from 'lodash';
-import { useStackProvider } from '@/providers/StackProvider';
+import { useTipProvider } from '@/providers/TipProvider';
 
 export default function BalanceInfo() {
-  const { balance, remainingTipAllocation, dailyTipAllowance } = useStackProvider();
+  const { balance, remainingTipAllocation, dailyTipAllowance } = useTipProvider();
 
   return (
     <div className="flex h-full flex-col items-center justify-end text-xs">

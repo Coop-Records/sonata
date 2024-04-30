@@ -9,4 +9,5 @@ export type Cast = CastType & {
     }[];
   };
   points: number;
+  degen: number;
 };
