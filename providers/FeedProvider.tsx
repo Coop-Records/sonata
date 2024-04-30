@@ -1,37 +1,46 @@
-import useFeed from '@/hooks/useFeed';
-import { createContext, useContext, useMemo, useState } from 'react';
+import { FeedFilter } from '@/types/FeedFilter';
+import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 
 const FeedContext = createContext<any>(null);
 
 const FeedProvider = ({ children }: any) => {
   const [setupActions, setSetupActions] = useState<string[]>([]);
+  const [filter, setFilter] = useState<FeedFilter>({});
   const [copied, setCopied] = useState<boolean>(false);
   const [fundsRecipient, setFundsRecipient] = useState<`0x${string}`>();
   const [saleStrategy, setSaleStrategy] = useState<`0x${string}`>();
-  const feed = useFeed();
+
+  const updateFilter = useCallback(
+    (change: FeedFilter) => {
+      setFilter((prev) => ({ ...prev, ...change }));
+    },
+    [setFilter],
+  );
 
   const value = useMemo(
     () => ({
       copied,
       setCopied,
-      ...feed,
       fundsRecipient,
       setFundsRecipient,
       saleStrategy,
       setSaleStrategy,
       setupActions,
       setSetupActions,
+      filter,
+      updateFilter,
     }),
     [
       copied,
       setCopied,
-      feed,
       fundsRecipient,
       setFundsRecipient,
       saleStrategy,
       setSaleStrategy,
       setupActions,
       setSetupActions,
+      filter,
+      updateFilter,
     ],
   );
 

@@ -26,12 +26,5 @@ export default async function Trending() {
     return cast2.reactions.likes.length - cast1.reactions.likes.length;
   });
 
-  return (
-    <main>
-      <meta property="of:accepts:xmtp" content="2024-02-01" />
-      <div className="container flex justify-center py-12 font-helvetica bg-blend-color-burn">
-        {feed?.length > 0 && <Feed feed={feed} />}
-      </div>
-    </main>
-  );
+  return feed?.length > 0 && <Feed feed={feed} />;
 }
