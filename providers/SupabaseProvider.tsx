@@ -1,8 +1,5 @@
-import useStack from '@/hooks/useStack';
 import { createClient } from '@supabase/supabase-js';
-import { isNil } from 'lodash';
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { useNeynarProvider } from './NeynarProvider';
+import { createContext, useContext } from 'react';
 
 const SupabaseContext = createContext<any>(null);
 
