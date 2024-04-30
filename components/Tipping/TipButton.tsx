@@ -108,7 +108,10 @@ const TipButton = ({
                 Tip {amount} {currency}
               </li>
             ))}
-            <li className="flex items-center px-4 py-2">
+            <li className="flex justify-start items-center px-4 py-2">
+              <Button className="ml-0 cursor-pointer hover:bg-gray-100 px-2" onClick={() => handleTip(Number(customTip) || 0)}>
+                Tip
+              </Button>
               <input
                 type="text"
                 value={customTip}
@@ -116,9 +119,6 @@ const TipButton = ({
                 placeholder="Custom amount"
                 className="w-full rounded border border-gray-300 px-2 py-1 text-sm"
               />
-              <Button className="ml-2" onClick={() => handleTip(Number(customTip) || 0)}>
-                Tip
-              </Button>
             </li>
           </ul>
         </div>
