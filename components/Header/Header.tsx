@@ -13,7 +13,9 @@ export default function Header() {
       <Title />
       {user ? (
         <div className="flex gap-2">
-          <BalanceInfo />
+          <div className="max-md:hidden">
+            <BalanceInfo />
+          </div>
           <CreatePostButton />
           <UserMenu />
         </div>
