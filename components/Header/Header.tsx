@@ -4,6 +4,7 @@ import SignInButton from '../SignInButton';
 import Title from './Title';
 import UserMenu from './UserMenu';
 import CreatePostButton from './CreatePostButton';
+import BalanceInfo from './BalanceInfo';
 
 export default function Header() {
   const { user } = useNeynarProvider();
@@ -12,6 +13,7 @@ export default function Header() {
       <Title />
       {user ? (
         <div className="flex gap-2">
+          <BalanceInfo />
           <CreatePostButton />
           <UserMenu />
         </div>

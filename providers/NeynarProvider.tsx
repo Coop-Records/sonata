@@ -54,7 +54,6 @@ const NeynarProvider = ({ children }: any) => {
 
   const signOut = useCallback(() => {
     setSigner(null);
-    setUser(undefined);
     localStorage.removeItem('signer');
   }, []);
 

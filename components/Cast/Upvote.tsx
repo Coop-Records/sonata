@@ -2,7 +2,7 @@ import createReaction from '@/lib/neynar/createReaction';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { useStackProvider } from '@/providers/StackProvider';
 import { Cast } from '@/types/Cast';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaArrowUp } from 'react-icons/fa';
 import { cn } from '@/lib/utils';
 import { useToast } from '../ui/use-toast';
@@ -17,6 +17,10 @@ const Upvote = ({ cast }: { cast: Cast }) => {
   const [votes, setVotes] = useState<number>(cast.reactions.likes.length);
   const [signInModalOpen, setSignInModalOpen] = useState<boolean>(false);
   const { tip } = useStackProvider();
+
+  useEffect(() => {
+    if (signer) setSignInModalOpen(false);
+  }, [signer]);
 
   const handleClick = async () => {
     if (!signer) {
