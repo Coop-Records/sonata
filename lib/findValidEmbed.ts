@@ -1,5 +1,5 @@
 import { Cast } from '@/types/Cast';
-import { FeedFilter } from '@/types/FeedFilter';
+import { FeedFilter } from '@/types/Feed';
 import { EmbedUrl } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 
 export default function findValidEmbed(cast: Cast, filter: FeedFilter = {}) {

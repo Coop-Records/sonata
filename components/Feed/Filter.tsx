@@ -6,6 +6,9 @@ import { usePathname } from 'next/navigation';
 import Tabs from '@/components/Tabs';
 import { Button } from '@/components/ui/button';
 import { useFeedProvider } from '@/providers/FeedProvider';
+import { useMemo } from 'react';
+import filterFeed from '@/lib/filterFeed';
+import { FeedAvailableFilter } from '@/types/Feed';
 
 const platforms = [
   { label: 'Soundcloud', value: 'soundcloud' },
@@ -26,7 +29,7 @@ const channels = [
   { label: '/onchain-music', value: 'onchain-music' },
 ];
 
-const filters = [
+const availableFilters: FeedAvailableFilter[] = [
   {
     name: 'Platform',
     key: 'platform',
@@ -45,18 +48,30 @@ const tabs = [
 ];
 
 export default function Filter() {
-  const { filter: value, updateFilter } = useFeedProvider();
+  const { filter: currentFilter, updateFilter, feed } = useFeedProvider();
   const pathname = usePathname();
 
   tabs.forEach((tab) => {
     tab.active = tab.href === pathname;
   });
 
+  const filters = useMemo(
+    () =>
+      availableFilters.map((filter) => ({
+        ...filter,
+        options: filter.options.filter(
+          (option) => filterFeed(feed, { [filter.key]: option.value }).length > 0,
+        ),
+      })),
+    [feed],
+  );
+
   const handleClear = () =>
     updateFilter({
       platform: '',
       channel: '',
     });
+
   return (
     <Card className="min-w-64">
       <CardHeader className="flex flex-col">
@@ -68,7 +83,7 @@ export default function Filter() {
             <div key={filter.name} className="mb-4">
               <h2 className="mb-2 text-lg font-semibold">{filter.name}</h2>
               <RadioGroup
-                value={value[filter.key]}
+                value={currentFilter[filter.key]}
                 onValueChange={(value) => updateFilter({ [filter.key]: value })}
               >
                 {filter.options.map((option) => {
