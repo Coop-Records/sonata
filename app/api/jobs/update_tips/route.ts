@@ -97,7 +97,7 @@ async function callUpdateTips(
 }
 
 export async function GET(): Promise<Response> {
-  getResponse().catch((error) => {
+  await getResponse().catch((error) => {
     console.error('Error in background task:', error);
   });
   return NextResponse.json({ message: 'success' }, { status: 200 });
