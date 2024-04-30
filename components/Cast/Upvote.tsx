@@ -1,5 +1,6 @@
 import createReaction from '@/lib/neynar/createReaction';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
+import { useStackProvider } from '@/providers/StackProvider';
 import { Cast } from '@/types/Cast';
 import { useState } from 'react';
 import { FaArrowUp } from 'react-icons/fa';
@@ -15,6 +16,8 @@ const Upvote = ({ cast }: { cast: Cast }) => {
   );
   const [votes, setVotes] = useState<number>(cast.reactions.likes.length);
   const [signInModalOpen, setSignInModalOpen] = useState<boolean>(false);
+  const { tip } = useStackProvider();
+
   const handleClick = async () => {
     if (!signer) {
       setSignInModalOpen(true);
@@ -26,6 +29,7 @@ const Upvote = ({ cast }: { cast: Cast }) => {
 
     // TODO: Tip poster 10 points
     toast({ description: 'Awarded 10 points' });
+    await tip(10, cast.hash, cast.author.verifications[0]);
 
     if (response.success) {
       setUpvoted(true);

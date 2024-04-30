@@ -1,40 +1,39 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Button from '../Button';
-import { useToast } from '../ui/use-toast';
+import { useStackProvider } from '@/providers/StackProvider';
+import { Cast as CastType } from '@/types/Cast';
 
-const TipButton = ({ verifications }: { verifications: string[] }) => {
-  const { toast } = useToast();
+const TipButton = ({
+  verifications,
+  cast = {} as CastType,
+}: {
+  verifications: string[];
+  cast: CastType;
+}) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [customTip, setCustomTip] = useState('');
+  const { tip } = useStackProvider();
   const [currency, setCurrency] = useState<string>('DEGEN'); // Toggle between 'DEGEN' and 'POINTS'
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  // Simulated available amounts for DEGEN and POINTS
-  // TODO: Make this so it is variable
-  const [availableAmounts, setAvailableAmounts] = useState<Record<string, number>>({
-    DEGEN: 3000,
-    POINTS: 7500,
-  });
+  const [notesTotal, setNotesTotal] = useState(0);
+  const [degenTotal, setDegenTotal] = useState(0);
 
   const tipAmounts: Record<string, number[]> = {
     DEGEN: [10, 100, 1000],
     POINTS: [100, 1000, 10000],
   };
 
-  const handleTip = (amount: number) => {
-    if (amount > availableAmounts[currency]) {
-      toast({ description: `Not enough ${currency} available`, variant: 'destructive' });
-      return;
-    }
+  useEffect(() => {
+    setNotesTotal(cast.points ?? 0);
+    setDegenTotal(0);
+  }, [cast.points]);
 
-    toast({ description: `Tipped ${amount} ${currency}` });
+  const handleTip = async (amount: number) => {
+    const response = await tip(amount, cast.hash, cast.author.verifications);
+    setNotesTotal(response.totalTipOnPost ?? 0);
     setShowDropdown(false);
     setCustomTip('');
-    setAvailableAmounts((prev: { [x: string]: number }) => ({
-      ...prev,
-      [currency]: prev[currency] - amount, // Deduct the tipped amount from the available balance
-    }));
   };
 
   const toggleCurrency = () => {
@@ -60,12 +59,12 @@ const TipButton = ({ verifications }: { verifications: string[] }) => {
     <div className="relative flex w-full items-center justify-between text-xs">
       <div className="inline-flex gap-4">
         <div className="flex h-full items-center justify-center space-x-2 text-xs">
-          <span>{availableAmounts.DEGEN}</span>
+          <span>{degenTotal}</span>
           <Image src="/images/degenchain.png" width={12} height={12} alt="DEGEN" />
         </div>
         <div className="flex h-full items-center justify-center space-x-2 text-xs">
-          <span>{availableAmounts.POINTS}</span>
-          <Image src="/images/notes.jpg" width={16} height={16} alt="POINTS" />
+          <span>{notesTotal}</span>
+          <Image src="/images/notes.jpg" width={16} height={16} alt="NOTES" />
         </div>
       </div>
       <Button

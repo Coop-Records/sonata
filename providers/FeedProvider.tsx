@@ -1,3 +1,4 @@
+'use client';
 import { FeedFilter } from '@/types/FeedFilter';
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 

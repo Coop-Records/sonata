@@ -8,6 +8,11 @@ import { useFeedProvider } from '@/providers/FeedProvider';
 export default function Feed({ feed }: any) {
   const { filter } = useFeedProvider();
 
+  const feedSignature = useMemo(
+    () => feed.map((cast: CastType) => `${cast.hash}_${cast.points}`).join('|'),
+    [feed],
+  );
+
   const filteredFeed: any = useMemo(
     () =>
       feed.filter((cast: CastType) => {
@@ -20,7 +25,7 @@ export default function Feed({ feed }: any) {
 
         return true;
       }),
-    [filter.platform, filter.channel, feed],
+    [filter.platform, filter.channel, feedSignature],
   );
 
   return (
