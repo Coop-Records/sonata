@@ -1,6 +1,6 @@
 import createReaction from '@/lib/neynar/createReaction';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
-import { useStackProvider } from '@/providers/StackProvider';
+import { useTipProvider } from '@/providers/TipProvider';
 import { Cast } from '@/types/Cast';
 import { useState } from 'react';
 import { FaArrowUp } from 'react-icons/fa';
@@ -12,7 +12,7 @@ const Upvote = ({ cast }: { cast: Cast }) => {
     Boolean(signer && cast.reactions.likes.some((like) => like?.fid === String(signer?.fid))),
   );
   const [votes, setVotes] = useState<number>(cast.reactions.likes.length);
-  const { tip } = useStackProvider();
+  const { tip } = useTipProvider();
 
   const handleClick = async () => {
     if (!signer) return;

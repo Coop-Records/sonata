@@ -11,7 +11,7 @@ const useFeed = () => {
   const fetchAndUpdatePoints = async (postHash: string) => {
     const { data, error } = await supabaseClient
       .from('posts')
-      .select('points')
+      .select('points,degen')
       .eq('post_hash', postHash)
       .single();
 
@@ -24,7 +24,7 @@ const useFeed = () => {
       setFeed((currentFeed) =>
         currentFeed.map((post) => {
           if (post.hash === postHash) {
-            return { ...post, points: data.points };
+            return { ...post, points: data.points, degen: data.degen };
           }
           return post;
         }),
@@ -35,7 +35,7 @@ const useFeed = () => {
   const fetchPoints = async (postHashes: string[]) => {
     const { data, error } = await supabaseClient
       .from('posts')
-      .select('post_hash, points')
+      .select('post_hash, points, degen')
       .in('post_hash', postHashes);
 
     if (error) {
@@ -43,8 +43,11 @@ const useFeed = () => {
       return {};
     }
     return data.reduce(
-      (acc: { [x: string]: any }, item: { post_hash: string | number; points: any }) => {
-        acc[item.post_hash] = item.points;
+      (
+        acc: { [x: string]: any },
+        item: { post_hash: string | number; points: any; degen: any },
+      ) => {
+        acc[item.post_hash] = { points: item.points, degen: item.degen }; // Store both points and degen
         return acc;
       },
       {},
@@ -58,7 +61,8 @@ const useFeed = () => {
       const pointsMap = await fetchPoints(postHashes);
       const feedsWithPoints = sortedFeeds.map((post) => ({
         ...post,
-        points: pointsMap[post.hash] || 0,
+        points: pointsMap[post.hash]?.points || 0, // Safe access to points
+        degen: pointsMap[post.hash]?.degen || 0, // Safe access to degen
       }));
       setFeed(feedsWithPoints);
     };

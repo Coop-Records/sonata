@@ -6,7 +6,7 @@ import { useNeynarProvider } from '@/providers/NeynarProvider';
 import Image from 'next/image';
 import { formatBigInt } from '@/lib/utils';
 import { isNil } from 'lodash';
-import { useStackProvider } from '@/providers/StackProvider';
+import { useTipProvider } from '@/providers/TipProvider';
 
 const tabs = [
   { label: 'Home', href: '/', active: true },
@@ -16,7 +16,7 @@ const tabs = [
 export default function Header() {
   const pathname = usePathname();
   const { user } = useNeynarProvider();
-  const { balance, remainingTipAllocation, dailyTipAllowance } = useStackProvider();
+  const { balance, remainingTipAllocation, dailyTipAllowance } = useTipProvider();
 
   tabs.forEach((tab) => {
     tab.active = tab.href === pathname;

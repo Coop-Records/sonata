@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Button from '../Button';
-import { useStackProvider } from '@/providers/StackProvider';
+import { useTipProvider } from '@/providers/TipProvider';
 import { Cast as CastType } from '@/types/Cast';
 
 const TipButton = ({
@@ -13,8 +13,8 @@ const TipButton = ({
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [customTip, setCustomTip] = useState('');
-  const { tip } = useStackProvider();
-  const [currency, setCurrency] = useState<string>('DEGEN'); // Toggle between 'DEGEN' and 'POINTS'
+  const { tip, tipDegen } = useTipProvider();
+  const [currency, setCurrency] = useState<'DEGEN' | 'POINTS'>('DEGEN'); // Toggle between 'DEGEN' and 'POINTS'
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [notesTotal, setNotesTotal] = useState(0);
   const [degenTotal, setDegenTotal] = useState(0);
@@ -26,14 +26,21 @@ const TipButton = ({
 
   useEffect(() => {
     setNotesTotal(cast.points ?? 0);
-    setDegenTotal(0);
+    setDegenTotal(cast.degen ?? 0);
   }, [cast.points]);
 
   const handleTip = async (amount: number) => {
-    const response = await tip(amount, cast.hash, cast.author.verifications);
-    setNotesTotal(response.totalTipOnPost ?? 0);
-    setShowDropdown(false);
-    setCustomTip('');
+    if (currency === 'DEGEN') {
+      const response = await tipDegen(amount, cast.hash);
+      setDegenTotal(response.totalTipOnPost ?? 0);
+      setShowDropdown(false);
+      setCustomTip('');
+    } else if (currency === 'POINTS') {
+      const response = await tip(amount, cast.hash, cast.author.verifications);
+      setNotesTotal(response.totalTipOnPost ?? 0);
+      setShowDropdown(false);
+      setCustomTip('');
+    }
   };
 
   const toggleCurrency = () => {
