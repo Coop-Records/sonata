@@ -43,7 +43,7 @@ const PlayerContext = createContext<[Player, Dispatch<PlayerAction>]>([initialSt
 
 const playerReducer = (state: Player, action: PlayerAction) => {
   switch (action.type) {
-    case 'PLAY':
+    case 'PLAY': {
       const { metadata, controls } = action.payload;
       if (state?.metadata?.id === metadata.id) {
         state.controls.play();
@@ -54,6 +54,7 @@ const playerReducer = (state: Player, action: PlayerAction) => {
         controls.play();
         return { ...state, playing: true, metadata, controls };
       }
+    }
     case 'PAUSE':
       state.controls.pause();
       return { ...state, playing: false };

@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Button from '../Button';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useToast } from '../ui/use-toast';
 
 const TipButton = ({ verifications }: { verifications: string[] }) => {
+  const { toast } = useToast();
   const [showDropdown, setShowDropdown] = useState(false);
   const [customTip, setCustomTip] = useState('');
   const [currency, setCurrency] = useState<string>('DEGEN'); // Toggle between 'DEGEN' and 'POINTS'
@@ -24,11 +24,11 @@ const TipButton = ({ verifications }: { verifications: string[] }) => {
 
   const handleTip = (amount: number) => {
     if (amount > availableAmounts[currency]) {
-      toast.error(`Not enough ${currency} available`);
+      toast({ description: `Not enough ${currency} available`, variant: 'destructive' });
       return;
     }
 
-    toast(`Tipped ${amount} ${currency}`);
+    toast({ description: `Tipped ${amount} ${currency}` });
     setShowDropdown(false);
     setCustomTip('');
     setAvailableAmounts((prev: { [x: string]: number }) => ({

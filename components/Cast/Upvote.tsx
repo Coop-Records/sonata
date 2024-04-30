@@ -2,11 +2,12 @@ import createReaction from '@/lib/neynar/createReaction';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { Cast } from '@/types/Cast';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import { FaArrowUp } from 'react-icons/fa';
 import { cn } from '@/lib/utils';
+import { useToast } from '../ui/use-toast';
 
 const Upvote = ({ cast }: { cast: Cast }) => {
+  const { toast } = useToast();
   const { signer } = useNeynarProvider();
   const [upvoted, setUpvoted] = useState<boolean>(
     Boolean(signer && cast.reactions.likes.some((like) => like?.fid === String(signer?.fid))),
@@ -20,7 +21,7 @@ const Upvote = ({ cast }: { cast: Cast }) => {
     const response = await createReaction(signer_uuid, cast.hash);
 
     // TODO: Tip poster 10 points
-    toast('Awarded 10 points');
+    toast({ description: 'Awarded 10 points' });
 
     if (response.success) {
       setUpvoted(true);

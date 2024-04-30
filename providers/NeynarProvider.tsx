@@ -59,12 +59,16 @@ const NeynarProvider = ({ children }: any) => {
 
   useEffect(() => {
     const updateUser = async () => {
-      if (!(signer && signer.fid)) return;
-      const user = await getUser(signer.fid);
-      setUser(user);
+      if (!signer?.fid) {
+        setUser(undefined);
+      } else {
+        const user = await getUser(signer.fid);
+        setUser(user);
+      }
     };
     updateUser();
   }, [signer?.fid]);
+
   return (
     <NeynarContext.Provider value={{ signer, signIn, signOut, user }}>
       {children}
