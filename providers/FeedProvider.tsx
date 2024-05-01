@@ -2,6 +2,7 @@
 import { FeedFilter } from '@/types/Feed';
 import { Cast as CastType } from '@/types/Cast';
 import { ReactNode, createContext, useContext, useState } from 'react';
+import useNewCasts from '@/hooks/useNewCasts';
 
 type FeedProviderType = {
   filter: FeedFilter;
@@ -15,6 +16,7 @@ const FeedContext = createContext<FeedProviderType>({} as any);
 const FeedProvider = ({ children }: { children: ReactNode }) => {
   const [filter, setFilter] = useState<FeedFilter>({});
   const [feed, setFeed] = useState<CastType[]>([]);
+  const { newCasts } = useNewCasts();
 
   const updateFilter = (change: FeedFilter) => {
     setFilter((prev) => ({ ...prev, ...change }));
@@ -23,6 +25,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const value = {
     filter,
     updateFilter,
+    newCasts,
     feed,
     setFeed,
   };
