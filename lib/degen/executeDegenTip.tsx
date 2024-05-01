@@ -18,7 +18,7 @@ const executeDegenTip = async (
         signer_uuid,
         tipAmount: amount,
         postHash,
-        walletAddress
+        walletAddress,
       }),
     });
     const data = (await res.json()) as TipResponse;

@@ -1,10 +1,10 @@
-import useStack from '@/hooks/useStack';
 import executeDegenTip from '@/lib/degen/executeDegenTip';
 import executeTip from '@/lib/sonata/executeTip';
+import getCurrentNotes from '@/lib/sonata/getCurrentNotes';
 import { TipResponse } from '@/types/TipResponse';
 import { isEmpty, isNil } from 'lodash';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useFeedProvider } from './FeedProvider';
+import { Address } from 'viem';
 import { useNeynarProvider } from './NeynarProvider';
 import { useSupabaseProvider } from './SupabaseProvider';
 import { useToast } from '@/components/ui/use-toast';
@@ -15,10 +15,8 @@ const TipProvider = ({ children }: any) => {
   const { toast } = useToast();
   const [balance, setBalance] = useState<bigint | undefined>(undefined);
   const [dailyTipAllowance, setDailyTipAllowance] = useState<bigint | undefined>(undefined);
-  const { stackClient } = useStack();
   const { user, signer } = useNeynarProvider();
   const { supabaseClient } = useSupabaseProvider();
-  const { fetchAndUpdatePoints } = useFeedProvider();
 
   const [remainingTipAllocation, setRemainingTipAllocation] = useState<bigint | undefined>(
     undefined,
@@ -54,8 +52,8 @@ const TipProvider = ({ children }: any) => {
   }, [user]);
 
   const syncPoints = async () => {
-    if (isNil(stackClient) || isNil(user) || user.verifications.length === 0) return;
-    const currentBalance = await stackClient?.getPoints(user.verifications[0]);
+    if (isNil(user) || user.verifications.length === 0) return;
+    const currentBalance = await getCurrentNotes(user.verifications[0] as Address);
     setBalance(BigInt(currentBalance));
   };
 
@@ -103,8 +101,6 @@ const TipProvider = ({ children }: any) => {
 
     const message = data.message;
     const tipRemaining = data.tipRemaining;
-
-    await fetchAndUpdatePoints(postHash);
 
     setRemainingTipAllocation(BigInt(tipRemaining));
     toast({ description: message });
