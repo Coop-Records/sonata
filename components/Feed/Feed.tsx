@@ -1,38 +1,24 @@
 'use client';
-import Cast from '../Cast';
 import { Cast as CastType } from '@/types/Cast';
-import Filter from './Filter';
-import { useMemo, useState } from 'react';
-import findValidEmbed from '@/lib/findValidEmbed';
-import { FeedFilter } from '@/types/FeedFilter';
+import { useEffect, useMemo } from 'react';
+import { useFeedProvider } from '@/providers/FeedProvider';
+import Cast from '@/components/Cast';
+import filterFeed from '@/lib/filterFeed';
 
-export default function Feed({ feed }: any) {
-  const [filter, setFilter] = useState<FeedFilter>({});
+export default function Feed({ feed }: { feed: CastType[] }) {
+  const { filter, setFeed } = useFeedProvider();
 
-  const handleFilterChange = (change: any) => {
-    setFilter((prev) => ({ ...prev, ...change }));
-  };
+  useEffect(() => {
+    setFeed(feed);
+  }, [feed, setFeed]);
 
-  const feedSignature = useMemo(
-    () => feed.map((cast: CastType) => `${cast.hash}_${cast.points}_${cast.degen}`).join('|'),
-    [feed],
-  );
-
-  const filteredFeed: any = useMemo(
-    () => feed.filter((cast: CastType) => findValidEmbed(cast, filter)),
-    [filter.platform, feedSignature],
-  );
+  const filteredFeed: any = useMemo(() => filterFeed(feed, filter), [filter, feed]);
 
   return (
-    <div className="flex w-full max-w-4xl items-start md:gap-10">
-      <div className="max-w-full grow space-y-6">
-        {filteredFeed.map((cast: CastType) => (
-          <Cast key={cast.hash} cast={cast} />
-        ))}
-      </div>
-      <div className="max-md:hidden">
-        <Filter onChange={handleFilterChange} value={filter} />
-      </div>
+    <div className="max-w-full grow space-y-6">
+      {filteredFeed.map((cast: CastType) => (
+        <Cast key={cast.hash} cast={cast} />
+      ))}
     </div>
   );
 }

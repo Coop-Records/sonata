@@ -1,24 +1,22 @@
 import executeDegenTip from '@/lib/degen/executeDegenTip';
-import getDegenTipsData from '@/lib/degen/getDegenTipsData';
 import executeTip from '@/lib/sonata/executeTip';
 import getCurrentNotes from '@/lib/sonata/getCurrentNotes';
 import { TipResponse } from '@/types/TipResponse';
 import { isEmpty, isNil } from 'lodash';
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { toast } from 'react-toastify';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { Address } from 'viem';
-import { useFeedProvider } from './FeedProvider';
 import { useNeynarProvider } from './NeynarProvider';
 import { useSupabaseProvider } from './SupabaseProvider';
+import { useToast } from '@/components/ui/use-toast';
 
 const TipContext = createContext<any>(null);
 
 const TipProvider = ({ children }: any) => {
+  const { toast } = useToast();
   const [balance, setBalance] = useState<bigint | undefined>(undefined);
   const [dailyTipAllowance, setDailyTipAllowance] = useState<bigint | undefined>(undefined);
   const { user, signer } = useNeynarProvider();
   const { supabaseClient } = useSupabaseProvider();
-  const { fetchAndUpdatePoints } = useFeedProvider();
 
   const [remainingTipAllocation, setRemainingTipAllocation] = useState<bigint | undefined>(
     undefined,
@@ -72,7 +70,7 @@ const TipProvider = ({ children }: any) => {
     );
     console.log(data);
     const message = data.message;
-    toast(message);
+    toast({ description: message });
 
     return data;
   };
@@ -104,10 +102,8 @@ const TipProvider = ({ children }: any) => {
     const message = data.message;
     const tipRemaining = data.tipRemaining;
 
-    await fetchAndUpdatePoints(postHash);
-
     setRemainingTipAllocation(BigInt(tipRemaining));
-    toast(message);
+    toast({ description: message });
 
     return data;
   };
