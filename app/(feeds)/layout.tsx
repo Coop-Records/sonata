@@ -1,7 +1,9 @@
 'use client';
 import FeedFilter from '@/components/Feed/Filter';
-import FeedProvider from '@/providers/FeedProvider';
 import { ReactNode } from 'react';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import Tabs from '@/components/Tabs';
+import { tabs } from '@/lib/consts';
 
 export default function FeedLayout({ children }: { children: ReactNode }) {
   return (
@@ -9,12 +11,15 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
       <meta property="of:accepts:xmtp" content="2024-02-01" />
       <div className="container flex justify-center py-12 font-helvetica bg-blend-color-burn">
         <div className="flex w-full max-w-4xl items-start md:gap-10">
-          <FeedProvider>
-            <div className="max-w-full grow">{children}</div>
-            <div className="max-md:hidden">
+          <div className="max-w-full grow">{children}</div>
+          <Card className="min-w-64 max-md:hidden">
+            <CardHeader className="flex flex-col">
+              <Tabs tabs={tabs} />
+            </CardHeader>
+            <CardContent>
               <FeedFilter />
-            </div>
-          </FeedProvider>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </main>
