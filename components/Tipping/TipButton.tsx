@@ -26,7 +26,7 @@ const TipButton = ({
     setDegenTotal(cast.degen ?? 0);
   }, [cast]);
 
-  const handleTip = async (amount: number, currency: 'DEGEN' | 'POINTS') => {
+  const handleTip = async (amount: number, currency: 'DEGEN' | 'NOTES') => {
     setShowDegenDropdown(false);
     setShowPointsDropdown(false);
     let response;
@@ -71,7 +71,7 @@ const TipButton = ({
         onClick={() => setShowPointsDropdown(!showPointsDropdown)}
       >
         <span>{notesTotal}</span>
-        <Image src="/images/notes.jpg" width={16} height={16} alt="POINTS" />
+        <Image src="/images/notes.jpg" width={16} height={16} alt="NOTES" />
       </div>
       {showDegenDropdown && (
         <div
@@ -116,9 +116,9 @@ const TipButton = ({
               <li
                 key={amount}
                 className="cursor-pointer px-4 py-2 hover:bg-gray-100"
-                onClick={() => handleTip(amount, 'POINTS')}
+                onClick={() => handleTip(amount, 'NOTES')}
               >
-                Tip {amount} POINTS
+                Tip {amount} NOTES
               </li>
             ))}
             <li className="flex items-center px-4 py-2">
@@ -131,7 +131,7 @@ const TipButton = ({
               />
               <Button
                 className="ml-2"
-                onClick={() => handleTip(Number(customTipPoints) || 0, 'POINTS')}
+                onClick={() => handleTip(Number(customTipPoints) || 0, 'NOTES')}
               >
                 Tip
               </Button>
