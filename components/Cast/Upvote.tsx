@@ -31,7 +31,6 @@ const Upvote = ({ cast }: { cast: Cast }) => {
     const { signer_uuid } = signer;
     const response = await createReaction(signer_uuid, cast.hash);
 
-    // TODO: Tip poster 10 points
     toast({ description: 'Awarded 10 points' });
     await tip(10, cast.hash, cast.author.verifications[0]);
 

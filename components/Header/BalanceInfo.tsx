@@ -9,11 +9,6 @@ export default function BalanceInfo() {
 
   return (
     <div className="flex h-full flex-row flex-wrap items-center justify-end gap-2 text-xs">
-      {/* <div className="flex items-center">
-              <button className="rounded bg-blue-500 text-white" onClick={() => {}}>
-                Claim Airdrop
-              </button>
-            </div> */}
       <div className="flex items-center">
         <span className="whitespace-nowrap">{`Daily Allowance: ${!isNil(remainingTipAllocation) ? formatBigInt(BigInt(remainingTipAllocation)) : '-'} / ${dailyTipAllowance ? formatBigInt(BigInt(dailyTipAllowance)) : '-'}`}</span>{' '}
         <Image src="/images/notes.jpg" width={20} height={20} alt="" />
