@@ -88,6 +88,7 @@ const TipProvider = ({ children }: any) => {
       isEmpty(user.verifications) ||
       isNil(authorWalletAddresses) ||
       isEmpty(authorWalletAddresses) ||
+      isNil(signer) ||
       isNil(signer?.signer_uuid)
     ) {
       return;

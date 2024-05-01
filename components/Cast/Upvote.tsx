@@ -1,10 +1,10 @@
 import createReaction from '@/lib/neynar/createReaction';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
-import { useTipProvider } from '@/providers/TipProvider';
 import { Cast } from '@/types/Cast';
 import { useState } from 'react';
 import { FaArrowUp } from 'react-icons/fa';
 import { cn } from '@/lib/utils';
+import { useTipProvider } from '@/providers/TipProvider';
 
 const Upvote = ({ cast }: { cast: Cast }) => {
   const { signer } = useNeynarProvider();
@@ -20,9 +20,9 @@ const Upvote = ({ cast }: { cast: Cast }) => {
     const { signer_uuid } = signer;
     const response = await createReaction(signer_uuid, cast.hash);
 
-    await tip(10, cast.hash, cast.author.verifications[0]);
-
     if (response.success) {
+      await tip(10, cast.hash, cast.author.verifications[0]);
+
       setUpvoted(true);
       setVotes(votes + 1);
     }
