@@ -1,7 +1,10 @@
+import getCastLikes from '@/lib/neynar/getCastLikes';
 import getFeedFromTime from '@/lib/neynar/getFeedFromTime';
+import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { createClient } from '@supabase/supabase-js';
 import { isEmpty } from 'lodash';
 import { NextResponse } from 'next/server';
+import { Address } from 'viem';
 
 const SUPABASE_URL = process.env.SUPABASE_URL as string;
 const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
@@ -15,29 +18,21 @@ const processEntriesInBatches = async (entries: any[], batchSize = 50) => {
   }
 };
 
-const processSingleEntry = async (cast: {
-  reactions: { likes: string | any[] };
-  author: { verifications: any; fid: any };
-  timestamp: any;
-}) => {
-  const likes = cast.reactions?.likes?.length ?? 0;
+const processSingleEntry = async (cast: Cast) => {
   const address = cast?.author?.verifications ? cast?.author?.verifications : undefined;
-  const timestamp = cast?.timestamp;
-  const fid = cast?.author?.fid;
 
   if (!isEmpty(address)) {
-    await callUpdateTips(address, fid, likes, 1, timestamp);
+    await createCast(cast);
   }
 };
 
 const getResponse = async (): Promise<NextResponse> => {
-  console.log("SWEETS UPDATE CAST IN SUPABASE")
-  const { data: tip_query_date } = await supabase
-    .from('tip_query_date')
+  const { data: cast_query_date } = await supabase
+    .from('cast_query_date')
     .select('last_checked')
     .eq('id', 1)
     .single();
-  const lastChecked = tip_query_date ? new Date(tip_query_date.last_checked) : new Date();
+  const lastChecked = cast_query_date ? new Date(cast_query_date.last_checked) : new Date();
 
   const [spotify, soundCloud, soundxyz] = await Promise.all([
     getFeedFromTime('spotify.com/track', lastChecked),
@@ -56,28 +51,21 @@ const getResponse = async (): Promise<NextResponse> => {
     return current > max ? current : max;
   }, lastChecked);
 
-  await supabase.rpc('update_daily_tip_allocation');
+  await supabase.from('cast_query_date').upsert({ id: 1, last_checked: newLastChecked });
 
-  await supabase.from('tip_query_date').upsert({ id: 1, last_checked: newLastChecked });
-
-  return NextResponse.json({ message: 'success' }, { status: 200 });
+  return NextResponse.json({ message: 'success', allEntries }, { status: 200 });
 };
 
-async function callUpdateTips(
-  walletAddress: string,
-  fid: string,
-  totalLikes: number,
-  numPosts: number,
-  firstPostDate: string,
+async function createCast(
+  cast: Cast
 ) {
-  const firstPostDateISO = new Date(firstPostDate).toISOString();
-
-  const { data, error } = await supabase.rpc('update_tips', {
-    p_wallet_address: walletAddress,
-    p_fid: fid,
-    p_total_likes: totalLikes,
-    p_num_posts: numPosts,
-    p_first_post_date: firstPostDateISO,
+  const likes = await getCastLikes(cast.hash as Address)
+  const { error } = await supabase.from("posts").upsert({
+    post_hash: cast.hash,
+    likes: likes.length,
+    created_at: new Date(cast.timestamp)
+  }, {
+    onConflict: "post_hash"
   });
 
   if (error) {
@@ -85,15 +73,14 @@ async function callUpdateTips(
     return null;
   }
 
-  console.log('Function called successfully, result:', data);
-  return data;
+  return {success: true};
 }
 
 export async function GET(): Promise<Response> {
-  await getResponse().catch((error) => {
+  const response = await getResponse().catch((error) => {
     console.error('Error in background task:', error);
   });
-  return NextResponse.json({ message: 'success' }, { status: 200 });
+  return response as NextResponse
 }
 
 export const dynamic = 'force-dynamic';
