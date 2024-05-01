@@ -60,14 +60,14 @@ const TipButton = ({
   return verifications && verifications.length > 0 ? (
     <div className="relative flex w-full items-center justify-end gap-4 text-xs">
       <div
-        className="flex items-center justify-center text-xs space-x-2 h-full cursor-pointer hover:bg-gray-100 p-1 rounded-sm"
+        className="flex h-full cursor-pointer items-center justify-center space-x-2 rounded-sm p-1 text-xs hover:bg-gray-100"
         onClick={() => setShowDegenDropdown(!showDegenDropdown)}
       >
         <span>{degenTotal}</span>
         <Image src="/images/degenchain.png" width={12} height={12} alt="DEGEN" />
       </div>
       <div
-        className="flex items-center justify-center text-xs space-x-2 h-full cursor-pointer hover:bg-gray-100 p-1 rounded-sm"
+        className="flex h-full cursor-pointer items-center justify-center space-x-2 rounded-sm p-1 text-xs hover:bg-gray-100"
         onClick={() => setShowPointsDropdown(!showPointsDropdown)}
       >
         <span>{notesTotal}</span>

@@ -1,13 +1,14 @@
 import { CloseModal } from '@/types/Modal';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
+import { useToast } from '../ui/use-toast';
 
 const NotesTipping = ({ closeModal }: { closeModal: CloseModal }) => {
+  const { toast } = useToast();
   const [degenAmount, setDegenAmount] = useState<string>('');
 
   const submitTip = (amount?: number) => {
     const finalAmount = amount ? amount.toString() : degenAmount;
-    toast(`You tipped ${finalAmount} NOTES`);
+    toast({ description: `You tipped ${finalAmount} NOTES` });
     closeModal();
   };
 

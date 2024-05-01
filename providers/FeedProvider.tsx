@@ -1,42 +1,33 @@
 'use client';
-import useFeed from '@/hooks/useFeed';
-import { createContext, useContext, useMemo, useState } from 'react';
+import { FeedFilter } from '@/types/Feed';
+import { Cast as CastType } from '@/types/Cast';
+import { ReactNode, createContext, useContext, useState } from 'react';
 
-const FeedContext = createContext<any>(null);
+type FeedProviderType = {
+  filter: FeedFilter;
+  updateFilter: (change: FeedFilter) => void;
+  feed: CastType[];
+  setFeed: (feed: CastType[]) => void;
+};
 
-const FeedProvider = ({ children }: any) => {
-  const [setupActions, setSetupActions] = useState<string[]>([]);
-  const [copied, setCopied] = useState<boolean>(false);
-  const [fundsRecipient, setFundsRecipient] = useState<`0x${string}`>();
-  const [saleStrategy, setSaleStrategy] = useState<`0x${string}`>();
-  const feed = useFeed();
+const FeedContext = createContext<FeedProviderType>({} as any);
 
-  const value = useMemo(
-    () => ({
-      copied,
-      setCopied,
-      ...feed,
-      fundsRecipient,
-      setFundsRecipient,
-      saleStrategy,
-      setSaleStrategy,
-      setupActions,
-      setSetupActions,
-    }),
-    [
-      copied,
-      setCopied,
-      feed,
-      fundsRecipient,
-      setFundsRecipient,
-      saleStrategy,
-      setSaleStrategy,
-      setupActions,
-      setSetupActions,
-    ],
-  );
+const FeedProvider = ({ children }: { children: ReactNode }) => {
+  const [filter, setFilter] = useState<FeedFilter>({});
+  const [feed, setFeed] = useState<CastType[]>([]);
 
-  return <FeedContext.Provider value={value as any}>{children}</FeedContext.Provider>;
+  const updateFilter = (change: FeedFilter) => {
+    setFilter((prev) => ({ ...prev, ...change }));
+  };
+
+  const value = {
+    filter,
+    updateFilter,
+    feed,
+    setFeed,
+  };
+
+  return <FeedContext.Provider value={value}>{children}</FeedContext.Provider>;
 };
 
 export const useFeedProvider = () => {

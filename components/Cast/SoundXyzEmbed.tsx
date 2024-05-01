@@ -15,7 +15,6 @@ const SoundXyzEmbed = ({ trackUrl }: { trackUrl: string }) => {
       const { mintedRelease } = await getReleaseInfo(artist, trackName);
       if (!mintedRelease) return;
       setReleaseInfo(mintedRelease);
-      console.log(mintedRelease);
     };
     init();
   }, [trackUrl]);

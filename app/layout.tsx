@@ -1,14 +1,12 @@
 import Providers from '@/providers';
 import '../styles/globals.css';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import Header from '@/components/Header';
 import { Inter } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import GlobalPlayer from '@/components/GlobalPlayer';
 import { Analytics } from '@vercel/analytics/react';
 import { ReactNode } from 'react';
-import MadeBySweets from '@/components/MadeBySweets';
+import { Toaster } from '@/components/ui/toaster';
 
 export const viewport = {
   width: 'device-width',
@@ -34,9 +32,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Providers>
           <Header />
           {children}
-          <MadeBySweets />
-          <ToastContainer />
           <GlobalPlayer />
+          <Toaster />
         </Providers>
         <Analytics />
       </body>
