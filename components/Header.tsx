@@ -7,7 +7,6 @@ import Image from 'next/image';
 import { formatBigInt } from '@/lib/utils';
 import { isNil } from 'lodash';
 import { useTipProvider } from '@/providers/TipProvider';
-import Button from './Button';
 
 const tabs = [
   { label: 'Home', href: '/', active: true },
@@ -23,7 +22,6 @@ export default function Header() {
     tab.active = tab.href === pathname;
   });
 
-  // TODO: Genesis Airdrop: X CLAIM | Daily Allowance | DEGEN Earned | Total Balance
   return (
     <div className="container flex justify-between items-center py-4">
       <Tabs tabs={tabs} />
