@@ -8,6 +8,28 @@ const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
+const processEntriesInBatches = async (entries: any[], batchSize = 50) => {
+  for (let i = 0; i < entries.length; i += batchSize) {
+    const batch = entries.slice(i, i + batchSize);
+    await Promise.all(batch.map((entry: any) => processSingleEntry(entry)));
+  }
+};
+
+const processSingleEntry = async (cast: {
+  reactions: { likes: string | any[] };
+  author: { verifications: any; fid: any };
+  timestamp: any;
+}) => {
+  const likes = cast.reactions?.likes?.length ?? 0;
+  const address = cast?.author?.verifications ? cast?.author?.verifications : undefined;
+  const timestamp = cast?.timestamp;
+  const fid = cast?.author?.fid;
+
+  if (!isEmpty(address)) {
+    await callUpdateTips(address, fid, likes, 1, timestamp);
+  }
+};
+
 const getResponse = async (): Promise<NextResponse> => {
   const { data: tip_query_date } = await supabase
     .from('tip_query_date')
@@ -15,7 +37,6 @@ const getResponse = async (): Promise<NextResponse> => {
     .eq('id', 1)
     .single();
   const lastChecked = tip_query_date ? new Date(tip_query_date.last_checked) : new Date();
-  let newLastChecked = lastChecked;
 
   const [spotify, soundCloud, soundxyz] = await Promise.all([
     getFeedFromTime('spotify.com/track', lastChecked),
@@ -27,41 +48,12 @@ const getResponse = async (): Promise<NextResponse> => {
 
   allEntries.push(...spotify, ...soundCloud, ...soundxyz);
 
-  const entries: Record<string, { fid: string; likes: number; posts: number; postDate: string }> =
-    {};
+  await processEntriesInBatches(allEntries);
 
-  for (const cast of allEntries) {
-    const likes = cast.reactions?.likes?.length ?? 0;
-    const address = cast?.author?.verifications ? cast?.author?.verifications : undefined;
-    const timestamp = cast?.timestamp;
-    const fid = cast?.author?.fid;
-
-    newLastChecked = newLastChecked < new Date(timestamp) ? new Date(timestamp) : newLastChecked;
-
-    if (!isEmpty(address)) {
-      if (entries[address]) {
-        entries[address].likes += likes;
-        entries[address].posts += 1;
-        entries[address].postDate =
-          new Date(timestamp) < new Date(entries[address].postDate)
-            ? timestamp
-            : entries[address].postDate;
-      } else {
-        entries[address] = { fid, likes, posts: 1, postDate: timestamp };
-      }
-    }
-  }
-
-  const numberOfEntries = Object.keys(entries).length;
-
-  console.log('Number of keys in entries:', numberOfEntries);
-
-  for (const key in entries) {
-    if (entries.hasOwnProperty(key)) {
-      const entry = entries[key];
-      await callUpdateTips(key, entry.fid, entry.likes, entry.posts, entry.postDate);
-    }
-  }
+  const newLastChecked = allEntries.reduce((max, cast) => {
+    const current = new Date(cast.timestamp);
+    return current > max ? current : max;
+  }, lastChecked);
 
   await supabase.rpc('update_daily_tip_allocation');
 
@@ -96,8 +88,8 @@ async function callUpdateTips(
   return data;
 }
 
-export async function POST(): Promise<Response> {
-  getResponse().catch((error) => {
+export async function GET(): Promise<Response> {
+  await getResponse().catch((error) => {
     console.error('Error in background task:', error);
   });
   return NextResponse.json({ message: 'success' }, { status: 200 });
