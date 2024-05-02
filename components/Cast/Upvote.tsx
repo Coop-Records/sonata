@@ -5,11 +5,9 @@ import { Cast } from '@/types/Cast';
 import { useEffect, useState } from 'react';
 import { FaArrowUp } from 'react-icons/fa';
 import { cn } from '@/lib/utils';
-import { useToast } from '../ui/use-toast';
 import SignInDialog from '../SignInDialog';
 
 const Upvote = ({ cast }: { cast: Cast }) => {
-  const { toast } = useToast();
   const { signer } = useNeynarProvider();
   const [upvoted, setUpvoted] = useState<boolean>(
     Boolean(signer && cast.reactions.likes.some((like) => like?.fid === String(signer?.fid))),
