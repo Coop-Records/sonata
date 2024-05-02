@@ -18,7 +18,7 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
 
   if (!(await verifySignerUUID(signer_uuid))) {
     return NextResponse.json(
-      { message: 'Invalid Signer UUID', tipRemaining: 0, totalTipOnPost: 0 },
+      { message: `Invalid Signer UUID ${signer_uuid}`, tipRemaining: 0, totalTipOnPost: 0 },
       { status: 400 },
     );
   }
