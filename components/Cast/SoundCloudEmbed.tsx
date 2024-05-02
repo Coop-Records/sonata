@@ -12,6 +12,11 @@ const SoundCloudEmbed = ({ trackUrl }: any) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const SC = useSoundcloudApi();
 
+  const fullLoadedEmbed =
+    typeof widget.play === 'function' &&
+    typeof widget.pause === 'function' &&
+    typeof widget.seekTo === 'function';
+
   useEffect(() => {
     const init = async () => {
       const oEmbedUrl = `https://soundcloud.com/oembed?format=json&url=${encodeURIComponent(trackUrl)}`;
@@ -56,24 +61,26 @@ const SoundCloudEmbed = ({ trackUrl }: any) => {
 
   return (
     <>
-      <MediaPlayer
-        metadata={
-          embedData && {
-            id: trackUrl,
-            type: 'soundcloud',
-            artistName: embedData.author_name || '',
-            trackName: embedData.title.split(' - ')[0].split(' by ')[0],
-            artworkUrl: embedData.thumbnail_url,
-            duration: duration,
+      {fullLoadedEmbed && (
+        <MediaPlayer
+          metadata={
+            embedData && {
+              id: trackUrl,
+              type: 'soundcloud',
+              artistName: embedData.author_name || '',
+              trackName: embedData.title.split(' - ')[0].split(' by ')[0],
+              artworkUrl: embedData.thumbnail_url,
+              duration: duration,
+            }
           }
-        }
-        controls={{
-          play: () => widget.play(),
-          pause: () => widget.pause(),
-          seek: (time) => widget.seekTo(time),
-        }}
-        position={position}
-      />
+          controls={{
+            play: () => widget.play(),
+            pause: () => widget.pause(),
+            seek: (time) => widget.seekTo(time),
+          }}
+          position={position}
+        />
+      )}
       <iframe
         className="hidden"
         width="100%"
