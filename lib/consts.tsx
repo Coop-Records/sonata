@@ -20,3 +20,7 @@ export const FRAME_INPUT_PLACEHOLDER = '0x... or .eth';
 export const SOUND_FACTORY = '0x0000000000aec84F5BFc2af15EAfb943bf4e3522';
 export const REFERRAL = process.env.NEXT_PUBLIC_REFERRAL || zeroAddress;
 export const AIRSTACK_API_URL = 'https://api.airstack.xyz/graphql';
+export const tabs = [
+  { label: 'Trending', href: '/' },
+  { label: 'Recent', href: '/recent' },
+];

@@ -6,6 +6,7 @@ import { SoundcloudApiProvider } from './SoundcloudApiProvider';
 import PlayerProvider from './PlayerProvider';
 import SupabaseProvider from './SupabaseProvider';
 import TipProvider from './TipProvider';
+import FeedProvider from './FeedProvider';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -14,7 +15,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         <TipProvider>
           <SpotifyApiProvider>
             <SoundcloudApiProvider>
-              <PlayerProvider>{children}</PlayerProvider>
+              <PlayerProvider>
+                <FeedProvider>{children}</FeedProvider>
+              </PlayerProvider>
             </SoundcloudApiProvider>
           </SpotifyApiProvider>
         </TipProvider>
