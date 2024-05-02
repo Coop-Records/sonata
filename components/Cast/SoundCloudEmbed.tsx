@@ -28,6 +28,7 @@ const SoundCloudEmbed = ({ trackUrl }: any) => {
         const src = match ? match[1] : null;
         setIframeSrc(src);
         setEmbedData(data);
+        // eslint-disable-next-line no-empty
       } catch (error) {}
     };
     init();

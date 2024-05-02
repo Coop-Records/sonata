@@ -26,6 +26,7 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
         const track = await getSpotifyTrack(trackId);
         setTrack(track);
         setDuration(track.duration_ms);
+        // eslint-disable-next-line no-empty
       } catch (error) {}
     };
 
