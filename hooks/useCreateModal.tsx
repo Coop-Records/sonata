@@ -15,7 +15,6 @@ const useCreateDialog = () => {
       toast({ description: `Spotify / Sound / Soundcloud only` });
       return;
     }
-    console.log('SWEETS USE NEYNAR TO POST COMMENT');
     callPostApi(signer?.signer_uuid, embedUrl);
     toast({ description: `Posted!!!` });
     setIsPostDialogOpen(false);
