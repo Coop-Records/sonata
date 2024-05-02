@@ -1,13 +1,15 @@
 import createReaction from '@/lib/neynar/createReaction';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
+import { useTipProvider } from '@/providers/TipProvider';
 import { Cast } from '@/types/Cast';
 import { useEffect, useState } from 'react';
 import { FaArrowUp } from 'react-icons/fa';
 import { cn } from '@/lib/utils';
-import { useTipProvider } from '@/providers/TipProvider';
+import { useToast } from '../ui/use-toast';
 import SignInDialog from '../SignInDialog';
 
 const Upvote = ({ cast }: { cast: Cast }) => {
+  const { toast } = useToast();
   const { signer } = useNeynarProvider();
   const [upvoted, setUpvoted] = useState<boolean>(
     Boolean(signer && cast.reactions.likes.some((like) => like?.fid === String(signer?.fid))),
@@ -29,9 +31,10 @@ const Upvote = ({ cast }: { cast: Cast }) => {
     const { signer_uuid } = signer;
     const response = await createReaction(signer_uuid, cast.hash);
 
-    if (response.success) {
-      await tip(10, cast.hash, cast.author.verifications[0]);
+    toast({ description: 'Awarded 10 points' });
+    await tip(10, cast.hash, cast.author.verifications[0]);
 
+    if (response.success) {
       setUpvoted(true);
       setVotes(votes + 1);
     }
