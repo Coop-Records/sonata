@@ -22,9 +22,11 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
   useEffect(() => {
     const init = async () => {
       if (!trackId) return;
-      const track = await getSpotifyTrack(trackId);
-      setTrack(track);
-      setDuration(track.duration_ms);
+      try {
+        const track = await getSpotifyTrack(trackId);
+        setTrack(track);
+        setDuration(track.duration_ms);
+      } catch (error) {}
     };
 
     init();
