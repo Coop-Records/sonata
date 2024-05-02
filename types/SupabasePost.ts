@@ -4,5 +4,5 @@ export type SupabasePost = {
   post_hash: Address;
   likes: number;
   author: any;
-  created_at: Date
+  created_at: Date;
 };

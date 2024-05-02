@@ -57,33 +57,34 @@ const getResponse = async (): Promise<NextResponse> => {
   return NextResponse.json({ message: 'success', allEntries }, { status: 200 });
 };
 
-async function createCast(
-  cast: Cast
-) {
-  const likes = await getCastLikes(cast.hash as Address)
-  const { error } = await supabase.from("posts").upsert({
-    post_hash: cast.hash,
-    likes: likes.length,
-    created_at: new Date(cast.timestamp),
-    embeds: cast.embeds,
-    author: cast.author
-  } as SupabasePost, {
-    onConflict: "post_hash"
-  });
+async function createCast(cast: Cast) {
+  const likes = await getCastLikes(cast.hash as Address);
+  const { error } = await supabase.from('posts').upsert(
+    {
+      post_hash: cast.hash,
+      likes: likes.length,
+      created_at: new Date(cast.timestamp),
+      embeds: cast.embeds,
+      author: cast.author,
+    } as SupabasePost,
+    {
+      onConflict: 'post_hash',
+    },
+  );
 
   if (error) {
     console.error('Error calling function:', error);
     return null;
   }
 
-  return {success: true};
+  return { success: true };
 }
 
 export async function GET(): Promise<Response> {
   const response = await getResponse().catch((error) => {
     console.error('Error in background task:', error);
   });
-  return response as NextResponse
+  return response as NextResponse;
 }
 
 export const dynamic = 'force-dynamic';

@@ -56,26 +56,34 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
 
   return (
     <div className="relative z-0 w-full">
-      {fullLoadedEmbed && (
-        <MediaPlayer
-          metadata={
-            track && {
-              id: track.uri,
-              type: 'spotify',
-              artistName: track.artists.map((artist: any) => artist.name).join(', '),
-              trackName: track.name,
-              artworkUrl: track.album.images[0].url,
-              duration,
-            }
+      <MediaPlayer
+        metadata={
+          track && {
+            id: track.uri,
+            type: 'spotify',
+            artistName: track.artists.map((artist: any) => artist.name).join(', '),
+            trackName: track.name,
+            artworkUrl: track.album.images[0].url,
+            duration,
           }
-          controls={{
-            play: () => embedController?.togglePlay(),
-            pause: () => embedController.pause(),
-            seek: (time) => embedController.seek(time),
-          }}
-          position={position}
-        />
-      )}
+        }
+        controls={
+          fullLoadedEmbed
+            ? {
+                play: () => {
+                  embedController.togglePlay();
+                },
+                pause: () => {
+                  embedController.pause();
+                },
+                seek: (time) => {
+                  embedController.seek(time);
+                },
+              }
+            : null
+        }
+        position={position}
+      />
       <div className="absolute left-0 top-0 -z-10 opacity-0">
         <div ref={elementRef} />
       </div>

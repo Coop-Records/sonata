@@ -30,7 +30,7 @@ const SoundXyzEmbed = ({ trackUrl }: { trackUrl: string }) => {
     setAudio(audio);
   }, [audioUrl]);
 
-    return (
+  return (
     <MediaPlayer
       metadata={
         releaseInfo?.id && {
