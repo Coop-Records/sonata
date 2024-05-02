@@ -1,31 +1,31 @@
 'use client';
-
 import { FeedFilter } from '@/types/Feed';
-import { ReactNode, createContext, useCallback, useContext, useMemo, useState } from 'react';
-import useNewCasts from '@/hooks/useNewCasts';
-import useFeed from '@/hooks/useFeed';
+import { Cast as CastType } from '@/types/Cast';
+import { ReactNode, createContext, useContext, useState } from 'react';
 
-const FeedContext = createContext<any>({} as any);
+type FeedProviderType = {
+  filter: FeedFilter;
+  updateFilter: (change: FeedFilter) => void;
+  feed: CastType[];
+  setFeed: (feed: CastType[]) => void;
+};
+
+const FeedContext = createContext<FeedProviderType>({} as any);
 
 const FeedProvider = ({ children }: { children: ReactNode }) => {
   const [filter, setFilter] = useState<FeedFilter>({});
-  const { newCasts } = useNewCasts();
-  const feed = useFeed();
+  const [feed, setFeed] = useState<CastType[]>([]);
 
-  const updateFilter = useCallback((change: FeedFilter) => {
+  const updateFilter = (change: FeedFilter) => {
     setFilter((prev) => ({ ...prev, ...change }));
-  }, []);
+  };
 
-  const value = useMemo(
-    () =>
-      ({
-        filter,
-        updateFilter,
-        newCasts,
-        ...feed,
-      }) as any,
-    [filter, updateFilter, newCasts, feed],
-  );
+  const value = {
+    filter,
+    updateFilter,
+    feed,
+    setFeed,
+  };
 
   return <FeedContext.Provider value={value}>{children}</FeedContext.Provider>;
 };
