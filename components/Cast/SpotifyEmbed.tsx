@@ -14,6 +14,10 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
   const [embedController, setEmbedController] = useState({} as any);
   const elementRef = useRef<HTMLIFrameElement>(null);
   const iframeApi = useSpotifyApi();
+  const fullLoadedEmbed =
+    typeof embedController.togglePlay === 'function' &&
+    typeof embedController.pause === 'function' &&
+    typeof embedController.seek === 'function';
 
   useEffect(() => {
     const init = async () => {
@@ -47,30 +51,31 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
   }, [track?.uri, iframeApi]);
 
   if (track?.error) {
-    console.error(track.error);
     return <></>;
   }
 
   return (
     <div className="relative z-0 w-full">
-      <MediaPlayer
-        metadata={
-          track && {
-            id: track.uri,
-            type: 'spotify',
-            artistName: track.artists.map((artist: any) => artist.name).join(', '),
-            trackName: track.name,
-            artworkUrl: track.album.images[0].url,
-            duration,
+      {fullLoadedEmbed && (
+        <MediaPlayer
+          metadata={
+            track && {
+              id: track.uri,
+              type: 'spotify',
+              artistName: track.artists.map((artist: any) => artist.name).join(', '),
+              trackName: track.name,
+              artworkUrl: track.album.images[0].url,
+              duration,
+            }
           }
-        }
-        controls={{
-          play: () => embedController.togglePlay(),
-          pause: () => embedController.pause(),
-          seek: (time) => embedController.seek(time),
-        }}
-        position={position}
-      />
+          controls={{
+            play: () => embedController?.togglePlay(),
+            pause: () => embedController.pause(),
+            seek: (time) => embedController.seek(time),
+          }}
+          position={position}
+        />
+      )}
       <div className="absolute left-0 top-0 -z-10 opacity-0">
         <div ref={elementRef} />
       </div>

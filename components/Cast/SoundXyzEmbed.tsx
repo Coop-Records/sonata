@@ -20,6 +20,7 @@ const SoundXyzEmbed = ({ trackUrl }: { trackUrl: string }) => {
   }, [trackUrl]);
 
   const audioUrl = releaseInfo?.track?.audio?.audio128k?.url;
+
   useEffect(() => {
     if (!audioUrl) return;
 
@@ -29,7 +30,7 @@ const SoundXyzEmbed = ({ trackUrl }: { trackUrl: string }) => {
     setAudio(audio);
   }, [audioUrl]);
 
-  return (
+    return (
     <MediaPlayer
       metadata={
         releaseInfo?.id && {
