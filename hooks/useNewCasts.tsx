@@ -6,12 +6,7 @@ const useNewCasts = () => {
 
   useEffect(() => {
     const init = async () => {
-      const newCastResponse = await fetch('/api/getNewCasts', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const newCastResponse = await fetch('/api/getNewCasts');
       const data = await newCastResponse.json();
       setNewCasts(data.allEntries);
     };
