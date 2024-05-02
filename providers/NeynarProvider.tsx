@@ -30,7 +30,6 @@ const NeynarProvider = ({ children }: any) => {
   });
 
   const [user, setUser] = useState<User>();
-
   const signIn = useCallback(() => {
     const authUrl = new URL(loginUrl);
     const authOrigin = new URL(loginUrl).origin;
