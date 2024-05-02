@@ -163,7 +163,7 @@ export default function Media({ trackUrl }: { trackUrl: string }) {
           <div className="h-1 w-full overflow-hidden rounded-lg bg-gray-600">
             <div
               className="h-1 rounded-lg bg-white"
-              style={{ width: `${(position / metadata.duration) * 100}%` }}
+              style={{ width: `${(position / (metadata.duration || duration)) * 100}%` }}
             />
           </div>
         </div>
