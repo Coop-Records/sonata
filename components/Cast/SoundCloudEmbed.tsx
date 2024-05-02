@@ -3,7 +3,7 @@ import { OEmbedData } from '@/types/OEmbedData';
 import { useSoundcloudApi } from '@/providers/SoundcloudApiProvider';
 import MediaPlayer from '@/components/MediaPlayer';
 
-const SoundCloudEmbed = ({ trackUrl }: any) => {
+const SoundCloudEmbed = ({ trackUrl, className = '' }: any) => {
   const [duration, setDuration] = useState(0);
   const [position, setPosition] = useState(0);
   const [embedData, setEmbedData] = useState<OEmbedData>();
@@ -61,26 +61,30 @@ const SoundCloudEmbed = ({ trackUrl }: any) => {
 
   return (
     <>
-      {fullLoadedEmbed && (
-        <MediaPlayer
-          metadata={
-            embedData && {
-              id: trackUrl,
-              type: 'soundcloud',
-              artistName: embedData.author_name || '',
-              trackName: embedData.title.split(' - ')[0].split(' by ')[0],
-              artworkUrl: embedData.thumbnail_url,
-              duration: duration,
-            }
+      <MediaPlayer
+        metadata={
+          embedData && {
+            id: trackUrl,
+            type: 'soundcloud',
+            artistName: embedData.author_name || '',
+            trackName: embedData.title.split(' - ')[0].split(' by ')[0],
+            artworkUrl: embedData.thumbnail_url,
+            duration: duration,
+            url: trackUrl,
           }
-          controls={{
-            play: () => widget.play(),
-            pause: () => widget.pause(),
-            seek: (time) => widget.seekTo(time),
-          }}
-          position={position}
-        />
-      )}
+        }
+        controls={
+          fullLoadedEmbed
+            ? {
+                play: () => widget.play(),
+                pause: () => widget.pause(),
+                seek: (time) => widget.seekTo(time),
+              }
+            : null
+        }
+        position={position}
+        className={className}
+      />
       <iframe
         className="hidden"
         width="100%"

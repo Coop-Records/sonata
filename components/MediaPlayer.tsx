@@ -10,9 +10,15 @@ type MediaPlayerProps = {
   metadata?: TrackMetadata;
   controls?: TrackControls | null;
   position: number;
+  className?: string;
 };
 
-export default function MediaPlayer({ metadata, controls, position }: MediaPlayerProps) {
+export default function MediaPlayer({
+  metadata,
+  controls,
+  position,
+  className = '',
+}: MediaPlayerProps) {
   const [player, dispatch] = usePlayer();
 
   const currentTrack = player?.metadata?.id === metadata?.id;
@@ -20,14 +26,14 @@ export default function MediaPlayer({ metadata, controls, position }: MediaPlaye
   const displayDuration = metadata?.duration || 0;
 
   useEffect(() => {
-    if (currentTrack && controls) {
-      dispatch({ type: 'PROGRESS', payload: { position } });
+    if (controls && player?.status == 'LOADED_METADATA') {
+      dispatch({ type: 'PLAY', payload: { controls } });
     }
-  }, [position, currentTrack, dispatch, controls]);
+  }, [dispatch, controls, player]);
 
   const handlePlay = () => {
     if (!metadata || !controls) return;
-    dispatch({ type: 'PLAY', payload: { metadata, controls } });
+    dispatch({ type: 'PLAY', payload: { controls } });
   };
 
   const handlePause = () => {
@@ -35,7 +41,10 @@ export default function MediaPlayer({ metadata, controls, position }: MediaPlaye
   };
 
   return (
-    <div data-type={metadata?.type} className="flex w-full flex-col gap-4 rounded-lg border p-2">
+    <div
+      data-type={metadata?.type}
+      className={`flex w-full flex-col gap-4 rounded-lg border p-2 ${className}`}
+    >
       <div className="flex gap-4">
         <div className="relative my-auto aspect-square w-16 shrink-0 overflow-hidden rounded-lg shadow-md">
           {metadata?.artworkUrl ? (

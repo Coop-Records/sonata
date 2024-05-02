@@ -3,7 +3,7 @@ import getReleaseInfo from '@/lib/sound/getReleaseInfo';
 import { useEffect, useState } from 'react';
 import MediaPlayer from '@/components/MediaPlayer';
 
-const SoundXyzEmbed = ({ trackUrl }: { trackUrl: string }) => {
+const SoundXyzEmbed = ({ trackUrl, className = '' }: any) => {
   const [releaseInfo, setReleaseInfo] = useState<any>({});
   const [audio, setAudio] = useState<HTMLAudioElement>();
   const [position, setPosition] = useState(0);
@@ -40,6 +40,7 @@ const SoundXyzEmbed = ({ trackUrl }: { trackUrl: string }) => {
           trackName: releaseInfo.title,
           artworkUrl: releaseInfo.coverImage.url,
           duration: releaseInfo.track.duration * 1000,
+          url: trackUrl,
         }
       }
       controls={
@@ -52,6 +53,7 @@ const SoundXyzEmbed = ({ trackUrl }: { trackUrl: string }) => {
         }
       }
       position={position}
+      className={className}
     />
   );
 };

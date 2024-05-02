@@ -6,7 +6,13 @@ import getSpotifyTrack from '@/lib/spotify/getSpotifyTrack';
 import { SpotifyTrack } from '@/types/SpotifyTrack';
 import MediaPlayer from '@/components/MediaPlayer';
 
-export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
+export default function SpotifyEmbed({
+  trackUrl,
+  className = '',
+}: {
+  trackUrl: string;
+  className?: string;
+}) {
   const trackId = useMemo(() => getSpotifyTrackId(trackUrl), [trackUrl]);
   const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -22,9 +28,10 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
   useEffect(() => {
     const init = async () => {
       if (!trackId) return;
-      const track = await getSpotifyTrack(trackId);
-      setTrack(track);
-      setDuration(track.duration_ms);
+      const response = await getSpotifyTrack(trackId);
+      if (response?.error) return;
+      setTrack(response);
+      setDuration(response.duration_ms);
     };
 
     init();
@@ -55,7 +62,7 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
   }
 
   return (
-    <div className="relative z-0 w-full">
+    <>
       <MediaPlayer
         metadata={
           track && {
@@ -65,6 +72,7 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
             trackName: track.name,
             artworkUrl: track.album.images[0].url,
             duration,
+            url: trackUrl,
           }
         }
         controls={
@@ -83,10 +91,11 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
             : null
         }
         position={position}
+        className={className}
       />
       <div className="absolute left-0 top-0 -z-10 opacity-0">
         <div ref={elementRef} />
       </div>
-    </div>
+    </>
   );
 }

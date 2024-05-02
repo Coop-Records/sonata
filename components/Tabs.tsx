@@ -1,7 +1,7 @@
 'use client';
+
 import { cn } from '@/lib/utils';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 type tab = {
   label: string;
@@ -10,6 +10,8 @@ type tab = {
 
 export default function Tabs({ tabs }: { tabs: tab[] }) {
   const pathname = usePathname();
+  const { push } = useRouter();
+
   return (
     <ul className="flex gap-4">
       {tabs.map((tab, index) => {
@@ -21,7 +23,13 @@ export default function Tabs({ tabs }: { tabs: tab[] }) {
             )}
             key={index}
           >
-            {tab.href ? <Link href={tab.href}>{tab.label} </Link> : tab.label}
+            {tab.href ? (
+              <button onClick={() => push(tab.href as any)} type="button">
+                {tab.label}{' '}
+              </button>
+            ) : (
+              tab.label
+            )}
           </li>
         );
       })}

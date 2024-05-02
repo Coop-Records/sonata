@@ -6,13 +6,19 @@ type Player = {
   position: number;
   metadata?: TrackMetadata;
   controls: TrackControls;
+  status?: string;
 };
 
 type PlayerAction =
   | {
-      type: 'PLAY';
+      type: 'LOAD_METADATA';
       payload: {
         metadata: TrackMetadata;
+      };
+    }
+  | {
+      type: 'PLAY';
+      payload: {
         controls: TrackControls;
       };
     }
@@ -37,23 +43,22 @@ const initialState: Player = {
     pause: () => {},
     seek: () => {},
   },
+  status: 'LOADED_METADATA',
 };
 
 const PlayerContext = createContext<[Player, Dispatch<PlayerAction>]>([initialState, () => {}]);
 
 const playerReducer = (state: Player, action: PlayerAction) => {
   switch (action.type) {
+    case 'LOAD_METADATA': {
+      const { metadata } = action.payload;
+      return { ...state, metadata, status: 'LOADED_METADATA' };
+    }
     case 'PLAY': {
-      const { metadata, controls } = action.payload;
-      if (state?.metadata?.id === metadata.id) {
-        state.controls.play();
-        return { ...state, playing: true };
-      } else {
-        state.controls.pause();
-        // state?.onSeek(0);
-        controls.play();
-        return { ...state, playing: true, metadata, controls };
-      }
+      const { controls } = action.payload;
+      state.controls.pause();
+      controls.play();
+      return { ...state, playing: true, controls, status: 'PLAYED' };
     }
     case 'PAUSE':
       state.controls.pause();
