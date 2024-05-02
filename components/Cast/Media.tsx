@@ -11,6 +11,7 @@ export default function Media({ trackUrl }: { trackUrl: string }) {
   const [player] = usePlayer();
   const { position } = player;
   const currentTrack = player?.metadata?.id === metadata?.id;
+  const displayPostion = currentTrack ? position : 0;
 
   if (!metadata) return <></>;
 
@@ -54,13 +55,13 @@ export default function Media({ trackUrl }: { trackUrl: string }) {
         </div>
         <div className="flex flex-col gap-1">
           <div className="flex justify-between font-inter text-xs font-light text-black">
-            <span>{formatDuration(position)}</span>
+            <span>{formatDuration(displayPostion)}</span>
             <span>{formatDuration(metadata.duration || duration)}</span>
           </div>
           <div className="h-1 w-full overflow-hidden rounded-lg bg-gray-600">
             <div
               className="h-1 rounded-lg bg-white"
-              style={{ width: `${(position / (metadata.duration || duration)) * 100}%` }}
+              style={{ width: `${(displayPostion / (metadata.duration || duration)) * 100}%` }}
             />
           </div>
         </div>

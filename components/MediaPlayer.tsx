@@ -20,10 +20,9 @@ export default function MediaPlayer({
   className = '',
 }: MediaPlayerProps) {
   const [player, dispatch] = usePlayer();
-  const meta = player?.metadata || metadata;
+  const meta = metadata || player?.metadata;
 
   const currentTrack = player?.metadata?.id === metadata?.id;
-  const displayPosition = currentTrack ? player.position : position;
   const displayDuration = meta?.duration || 0;
 
   useEffect(() => {
@@ -31,6 +30,10 @@ export default function MediaPlayer({
       dispatch({ type: 'PLAY', payload: { controls } });
     }
   }, [dispatch, controls, player]);
+
+  useEffect(() => {
+    if (position) dispatch({ type: 'PROGRESS', payload: { position } });
+  }, [position]);
 
   const handlePlay = () => {
     if (!metadata || !controls) return;
@@ -91,13 +94,13 @@ export default function MediaPlayer({
       </div>
       <div className="flex flex-col gap-1">
         <div className="flex justify-between font-inter text-xs font-light">
-          <span>{formatDuration(displayPosition)}</span>
+          <span>{formatDuration(position)}</span>
           <span>{formatDuration(displayDuration)}</span>
         </div>
         <div className="h-1 w-full overflow-hidden rounded-lg bg-gray-300">
           <div
             className="h-1 rounded-lg bg-black"
-            style={{ width: `${(displayPosition / displayDuration) * 100}%` }}
+            style={{ width: `${(position / displayDuration) * 100}%` }}
           />
         </div>
       </div>
