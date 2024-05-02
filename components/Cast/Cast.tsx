@@ -13,7 +13,7 @@ const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
   const url = embed?.url;
 
   const { author } = cast;
-  const verifications = author?.verifications;
+  const { verifications } = author;
 
   const EmbedComponent = useMemo(() => {
     if (!url) return null;
