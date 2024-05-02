@@ -8,11 +8,13 @@ import { Address } from 'viem';
 import { useNeynarProvider } from './NeynarProvider';
 import { useSupabaseProvider } from './SupabaseProvider';
 import { useToast } from '@/components/ui/use-toast';
+import claimAirdrop from '@/lib/sonata/claimAirdrop';
 
 const TipContext = createContext<any>(null);
 
 const TipProvider = ({ children }: any) => {
   const { toast } = useToast();
+  const [airdropBalance, setAirdropBalance] = useState<bigint | undefined>(undefined);
   const [balance, setBalance] = useState<bigint | undefined>(undefined);
   const [dailyTipAllowance, setDailyTipAllowance] = useState<bigint | undefined>(undefined);
   const { user, signer } = useNeynarProvider();
@@ -49,6 +51,7 @@ const TipProvider = ({ children }: any) => {
   useEffect(() => {
     if (isNil(user)) return;
     syncPoints();
+    getAirdropBalance();
   }, [user]);
 
   const syncPoints = async () => {
@@ -56,6 +59,19 @@ const TipProvider = ({ children }: any) => {
     const currentBalance = await getCurrentNotes(user.verifications[0] as Address);
     setBalance(BigInt(currentBalance));
   };
+
+  const getAirdropBalance = async() => {
+    if (isNil(user) || user.verifications.length === 0) return;
+
+    const { data } = await supabaseClient
+        .from('airdrop')
+        .select('notes')
+        .ilike('wallet_address', user.verifications[0])
+        .single();
+
+    const currentBalance = data.notes;
+    setAirdropBalance(currentBalance)
+  }
 
   const tipDegen = async (amount: bigint, postHash: string) => {
     if (isNil(user) || isEmpty(user.verifications) || isNil(signer?.signer_uuid)) {
@@ -109,9 +125,24 @@ const TipProvider = ({ children }: any) => {
     return data;
   };
 
+  const refreshBalances = async () => {
+    getAirdropBalance();
+    syncPoints();
+  }
+
+  const handlePost = async () => {
+    if (user?.verifications.length === 0) {
+      toast({description: "Please verify an address on warpcast and try again"})
+    } else if (user?.verifications){
+      const response = await claimAirdrop(signer?.signer_uuid, user?.verifications[0]);
+      toast({ description: `${response.message}` });
+      await refreshBalances();
+    }
+  };
+
   return (
     <TipContext.Provider
-      value={{ balance, tip, tipDegen, remainingTipAllocation, dailyTipAllowance }}
+      value={{ balance, tip, tipDegen, remainingTipAllocation, dailyTipAllowance, airdropBalance, handlePost }}
     >
       {children}
     </TipContext.Provider>
