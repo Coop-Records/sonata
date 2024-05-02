@@ -1,5 +1,6 @@
 import getCastLikes from '@/lib/neynar/getCastLikes';
 import getFeedFromTime from '@/lib/neynar/getFeedFromTime';
+import { SupabasePost } from '@/types/SupabasePost';
 import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { createClient } from '@supabase/supabase-js';
 import { isEmpty } from 'lodash';
@@ -66,7 +67,7 @@ async function createCast(
     created_at: new Date(cast.timestamp),
     embeds: cast.embeds,
     author: cast.author
-  }, {
+  } as SupabasePost, {
     onConflict: "post_hash"
   });
 
