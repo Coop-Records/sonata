@@ -1,15 +1,14 @@
 import createReaction from '@/lib/neynar/createReaction';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
-import { useTipProvider } from '@/providers/TipProvider';
+import { Cast } from '@/types/Cast';
 import { useEffect, useState } from 'react';
 import { FaArrowUp } from 'react-icons/fa';
 import { cn } from '@/lib/utils';
-import { useToast } from '../ui/use-toast';
+import { useTipProvider } from '@/providers/TipProvider';
 import SignInDialog from '../SignInDialog';
 import { SupabasePost } from '@/types/SupabasePost';
 
-const Upvote = ({ cast }: { cast: SupabasePost }) => {
-  const { toast } = useToast();
+const Upvote = ({ cast }: { cast: Cast }) => {
   const { signer } = useNeynarProvider();
   const [upvoted, setUpvoted] = useState<boolean>(false);
   const [signInModalOpen, setSignInModalOpen] = useState<boolean>(false);
@@ -28,10 +27,9 @@ const Upvote = ({ cast }: { cast: SupabasePost }) => {
     const { signer_uuid } = signer;
     const response = await createReaction(signer_uuid, cast.post_hash);
 
-    toast({ description: 'Awarded 10 points' });
-    await tip(10, cast.post_hash, cast.author.verifications[0]);
-
     if (response.success) {
+      await tip(10, cast.hash, cast.author.verifications[0]);
+
       setUpvoted(true);
     }
   };
