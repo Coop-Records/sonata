@@ -79,7 +79,7 @@ const TipButton = ({
           className="absolute right-0 z-50 mt-2 w-48 rounded bg-white py-2 shadow-xl"
         >
           <ul className="text-gray-700">
-            {[10, 100, 1000].map((amount) => (
+            {[10, 50, 100].map((amount) => (
               <li
                 key={amount}
                 className="cursor-pointer px-4 py-2 hover:bg-gray-100"
