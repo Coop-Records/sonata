@@ -2,8 +2,6 @@ import createPost from './createPost';
 
 export default async function postMusicEmbed(signer_uuid: string, url: string) {
   try {
-    console.log('SWEETS postMusicEmbed');
-
     const body = JSON.stringify({
       signer_uuid,
       embeds: [{ url }],

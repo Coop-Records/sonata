@@ -1,24 +1,29 @@
 'use client';
+
 import { Button } from '../ui/button';
 import { PlusIcon } from '@radix-ui/react-icons';
-import { useToast } from '../ui/use-toast';
+import PostDialog from '../CreateButton/PostDialog';
+import useCreateDialog from '@/hooks/useCreateModal';
 
 export default function CreatePostButton() {
-  const { toast } = useToast();
+  const { handlePost, isPostDialogOpen, setIsPostDialogOpen, setEmbedUrl } = useCreateDialog();
+
+  const handleClick = () => {
+    setIsPostDialogOpen(true);
+  };
 
   return (
-    <Button
-      type="button"
-      className="space-x-2"
-      onClick={() =>
-        toast({
-          title: 'Coming soon',
-          description: 'This feature is still under development',
-        })
-      }
-    >
-      <span>New Post</span>
-      <PlusIcon />
-    </Button>
+    <div>
+      <Button type="button" className="space-x-2" onClick={handleClick}>
+        <span>New Post</span>
+        <PlusIcon />
+      </Button>
+      <PostDialog
+        handleTextChange={(e: any) => setEmbedUrl(e.target.value)}
+        onPost={handlePost}
+        isOpen={isPostDialogOpen}
+        setIsOpen={setIsPostDialogOpen}
+      />
+    </div>
   );
 }
