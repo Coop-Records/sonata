@@ -1,21 +1,9 @@
-'use client';
-
 import Feed from '@/components/Feed';
-import { useFeedProvider } from '@/providers/FeedProvider';
-import { useEffect } from 'react';
+import getCombinedFeeds from '@/lib/neynar/getCombinedFeeds';
 
-const Recent = () => {
-  const { feed, sortRecent } = useFeedProvider();
+export default async function Recent() {
+  const feed = await getCombinedFeeds();
+  feed.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
-  useEffect(() => {
-    if (feed.length) {
-      sortRecent(feed);
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [feed]);
-
-  return <Feed />;
-};
-
-export default Recent;
+  return feed?.length > 0 && <Feed feed={feed} />;
+}
