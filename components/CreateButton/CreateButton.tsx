@@ -7,7 +7,6 @@ const CreateButton = () => {
   const { handlePost, isPostDialogOpen, setIsPostDialogOpen, setEmbedUrl } = useCreateDialog();
 
   const handleClick = () => {
-    console.log('sweets clicked');
     setIsPostDialogOpen(true);
   };
 

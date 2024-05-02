@@ -2,8 +2,6 @@ import postMusicEmbed from '@/lib/neynar/postMusicEmbed';
 import { NextRequest, NextResponse } from 'next/server';
 
 const getResponse = async (req: NextRequest): Promise<NextResponse> => {
-  console.log('getResponse sweets!!!')
-
   const body = await req.json();
   const { signer_uuid, url } = body;
 
