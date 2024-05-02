@@ -4,12 +4,12 @@ import Feed from '@/components/Feed';
 import { useFeedProvider } from '@/providers/FeedProvider';
 import { useEffect } from 'react';
 
-const Recent = () => {
-  const { feed, sortRecent } = useFeedProvider();
+const TrendingPage = () => {
+  const { feed, sortTrending } = useFeedProvider();
 
   useEffect(() => {
     if (feed.length) {
-      sortRecent(feed);
+      sortTrending(feed);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -18,4 +18,4 @@ const Recent = () => {
   return <Feed />;
 };
 
-export default Recent;
+export default TrendingPage;
