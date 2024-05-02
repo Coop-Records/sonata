@@ -6,7 +6,6 @@ import { cn } from '@/lib/utils';
 import GlobalPlayer from '@/components/GlobalPlayer';
 import { Analytics } from '@vercel/analytics/react';
 import { ReactNode } from 'react';
-import MadeBySweets from '@/components/MadeBySweets';
 import { Toaster } from '@/components/ui/toaster';
 
 export const viewport = {
@@ -33,7 +32,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Providers>
           <Header />
           {children}
-          <MadeBySweets />
           <GlobalPlayer />
           <Toaster />
         </Providers>
