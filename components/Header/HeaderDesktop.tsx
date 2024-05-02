@@ -12,7 +12,7 @@ export default function HeaderDesktop({ className }: { className?: string }) {
 
   return (
     <div className={cn('w-full flex items-center gap-4 py-4', className)}>
-      <Title className="mr-auto" />
+      <Title />
       {user ? (
         <div className="flex gap-2">
           <div className="max-md:hidden">
