@@ -19,7 +19,7 @@ const callPostApi = async (signer_uuid: string | undefined, url: string): Promis
     return data;
   } catch (error) {
     console.error(error);
-    return { message: 'Tip Failed', usedTip: 0, tipRemaining: 0, totalTipOnPost: 0 };
+    return { message: 'Cast Failed' };
   }
 };
 
