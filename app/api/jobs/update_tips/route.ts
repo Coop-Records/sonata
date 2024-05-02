@@ -21,7 +21,7 @@ const processSingleEntry = async (cast: {
   timestamp: any;
 }) => {
   const likes = cast.reactions?.likes?.length ?? 0;
-  const address = cast?.author?.verifications ? cast?.author?.verifications : undefined;
+  const address = cast?.author?.verifications ? cast?.author?.verifications[0] : undefined;
   const timestamp = cast?.timestamp;
   const fid = cast?.author?.fid;
 
