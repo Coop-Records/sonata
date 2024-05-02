@@ -9,7 +9,12 @@ export default function Feed({ feed }: { feed: CastType[] }) {
   const { filter, setFeed } = useFeedProvider();
 
   useEffect(() => {
+    const init = async () => {
+      await fetch('/api/getNewCasts');
+    };
+
     setFeed(feed);
+    init();
   }, [feed, setFeed]);
 
   const filteredFeed: any = useMemo(() => filterFeed(feed, filter), [filter, feed]);
