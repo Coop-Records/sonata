@@ -26,7 +26,6 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
   const airdropAmount = await callRedeemAirdrop(wallet_address);
 
   if (airdropAmount > 0) {
-    const {data: update} = await supabase.from('airdrop').update('notes')
     await stack.track(`airdrop`, { account: wallet_address, points: airdropAmount });
   }
 
