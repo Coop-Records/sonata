@@ -1,15 +1,10 @@
 import createPost from './createPost';
 
-export default async function postDegenTipComment(
-  signer_uuid: string,
-  degen_amount: number,
-  post_hash: string,
-) {
+export default async function postMusicEmbed(signer_uuid: string, url: string) {
   try {
     const body = JSON.stringify({
       signer_uuid,
-      text: `${degen_amount} $DEGEN`,
-      parent: post_hash,
+      embeds: [{ url }],
     });
     const response = await createPost(body);
     return response;
