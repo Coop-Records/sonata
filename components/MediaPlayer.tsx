@@ -20,10 +20,11 @@ export default function MediaPlayer({
   className = '',
 }: MediaPlayerProps) {
   const [player, dispatch] = usePlayer();
+  const meta = player?.metadata || metadata;
 
   const currentTrack = player?.metadata?.id === metadata?.id;
   const displayPosition = currentTrack ? player.position : position;
-  const displayDuration = metadata?.duration || 0;
+  const displayDuration = meta?.duration || 0;
 
   useEffect(() => {
     if (controls && player?.status == 'LOADED_METADATA') {
@@ -42,14 +43,14 @@ export default function MediaPlayer({
 
   return (
     <div
-      data-type={metadata?.type}
+      data-type={meta?.type}
       className={`flex w-full flex-col gap-4 rounded-lg border p-2 ${className}`}
     >
       <div className="flex gap-4">
         <div className="relative my-auto aspect-square w-16 shrink-0 overflow-hidden rounded-lg shadow-md">
-          {metadata?.artworkUrl ? (
+          {meta?.artworkUrl ? (
             <Image
-              src={metadata.artworkUrl}
+              src={meta.artworkUrl}
               alt=""
               fill
               style={{ objectFit: 'cover', objectPosition: 'center' }}
@@ -62,15 +63,11 @@ export default function MediaPlayer({
 
         <div className="flex grow flex-col gap-1 pt-2 text-left">
           <div className="line-clamp-2 font-inter text-sm font-bold">
-            {metadata?.trackName ? (
-              <>{metadata.trackName}</>
-            ) : (
-              <Skeleton className="h-2 w-32 rounded-sm" />
-            )}
+            {meta?.trackName ? <>{meta.trackName}</> : <Skeleton className="h-2 w-32 rounded-sm" />}
           </div>
           <div className="line-clamp-2 font-inter text-xs font-extralight">
-            {metadata?.artistName ? (
-              <>{metadata.artistName}</>
+            {meta?.artistName ? (
+              <>{meta.artistName}</>
             ) : (
               <Skeleton className="h-2 w-12 rounded-sm" />
             )}
