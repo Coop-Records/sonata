@@ -1,4 +1,5 @@
 import BalanceInfo from './BalanceInfo';
+import ClaimAirdropButton from './ClaimAirdropButton';
 import CreatePostButton from './CreatePostButton';
 import UserMenu from './UserMenu';
 
