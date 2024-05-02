@@ -1,11 +1,9 @@
-'use client';
-
+import { FaArrowUp } from 'react-icons/fa';
 import { Button } from '../ui/button';
-import { PlusIcon } from '@radix-ui/react-icons';
-import PostDialog from '../CreateButton/PostDialog';
 import useCreateDialog from '@/hooks/useCreateModal';
+import PostDialog from './PostDialog';
 
-export default function CreatePostButton() {
+const CreateButton = () => {
   const { handlePost, isPostDialogOpen, setIsPostDialogOpen, setEmbedUrl } = useCreateDialog();
 
   const handleClick = () => {
@@ -14,9 +12,8 @@ export default function CreatePostButton() {
 
   return (
     <div>
-      <Button type="button" className="space-x-2" onClick={handleClick}>
-        <span>New Post</span>
-        <PlusIcon />
+      <Button onClick={handleClick}>
+        <FaArrowUp className="text-2xl text-white" />
       </Button>
       <PostDialog
         handleTextChange={(e: any) => setEmbedUrl(e.target.value)}
@@ -26,4 +23,6 @@ export default function CreatePostButton() {
       />
     </div>
   );
-}
+};
+
+export default CreateButton;
