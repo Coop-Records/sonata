@@ -31,12 +31,10 @@ const Upvote = ({ cast }: { cast: Cast }) => {
     const { signer_uuid } = signer;
     const response = await createReaction(signer_uuid, cast.hash);
 
-    toast({ description: 'Awarded 10 points' });
-    await tip(10, cast.hash, cast.author.verifications[0]);
-
     if (response.success) {
       setUpvoted(true);
       setVotes(votes + 1);
+      await tip(10, cast.hash, cast.author.verifications);
     }
   };
 
