@@ -63,7 +63,9 @@ async function createCast(
   const { error } = await supabase.from("posts").upsert({
     post_hash: cast.hash,
     likes: likes.length,
-    created_at: new Date(cast.timestamp)
+    created_at: new Date(cast.timestamp),
+    embeds: cast.embeds,
+    author: cast.author
   }, {
     onConflict: "post_hash"
   });

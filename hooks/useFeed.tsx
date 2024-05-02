@@ -1,23 +1,25 @@
 import getCombinedFeeds from '@/lib/neynar/getCombinedFeeds';
-import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
+import { SupabasePost } from '@/types/SupabasePost';
 import { useEffect, useState } from 'react';
 
 const useFeed = () => {
-  const [feed, setFeed] = useState<Cast[]>([]);
-  const [sorted, setSorted] = useState<Cast[]>([]);
+  const [feed, setFeed] = useState<SupabasePost[]>([]);
+  const [sorted, setSorted] = useState<SupabasePost[]>([]);
   const [sortOrder, setSortOrder] = useState<'trending' | 'recent'>('trending');
 
   const sortTrending = (originalFeed = [...feed]) => {
-    originalFeed.sort((cast1: any, cast2: any) => {
-      return cast2.reactions.likes.length - cast1.reactions.likes.length;
+    originalFeed.sort((cast1: SupabasePost, cast2: SupabasePost) => {
+      return cast2.likes - cast1.likes;
     });
-    setSorted(originalFeed);
+    setSorted(originalFeed.splice(0, 50));
     setSortOrder('trending');
   };
 
   const sortRecent = (originalFeed = [...feed]) => {
-    originalFeed.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-    setSorted(originalFeed);
+    originalFeed.sort(
+      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+    );
+    setSorted(originalFeed.splice(0, 50));
     setSortOrder('recent');
   };
 

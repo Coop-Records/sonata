@@ -1,12 +1,8 @@
-import getFeed from './getFeed';
 
 export default async function getCombinedFeeds() {
-  const [response, soundCloud, soundxyz] = await Promise.all([
-    getFeed('spotify.com/track'),
-    getFeed('soundcloud.com'),
-    getFeed('sound.xyz'),
-  ]);
+  const response = await fetch("api/getFeed")
+  const {data} = await response.json()
+  console.log("SWEETS UI FEED", data)
 
-  const combinedFeeds = [...response.casts, ...soundCloud.casts, ...soundxyz.casts];
-  return combinedFeeds;
+  return data;
 }
