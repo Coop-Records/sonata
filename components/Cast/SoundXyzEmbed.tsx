@@ -20,6 +20,7 @@ const SoundXyzEmbed = ({ trackUrl }: { trackUrl: string }) => {
   }, [trackUrl]);
 
   const audioUrl = releaseInfo?.track?.audio?.audio128k?.url;
+
   useEffect(() => {
     if (!audioUrl) return;
 

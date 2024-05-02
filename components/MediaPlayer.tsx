@@ -8,7 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 type MediaPlayerProps = {
   metadata?: TrackMetadata;
-  controls?: TrackControls;
+  controls?: TrackControls | null;
   position: number;
 };
 
@@ -20,10 +20,10 @@ export default function MediaPlayer({ metadata, controls, position }: MediaPlaye
   const displayDuration = metadata?.duration || 0;
 
   useEffect(() => {
-    if (currentTrack) {
+    if (currentTrack && controls) {
       dispatch({ type: 'PROGRESS', payload: { position } });
     }
-  }, [position, currentTrack, dispatch]);
+  }, [position, currentTrack, dispatch, controls]);
 
   const handlePlay = () => {
     if (!metadata || !controls) return;
@@ -68,14 +68,18 @@ export default function MediaPlayer({ metadata, controls, position }: MediaPlaye
           </div>
         </div>
         <div className="my-auto">
-          {currentTrack && player.playing ? (
-            <button onClick={handlePause}>
-              <MdPauseCircle className="text-4xl" />
-            </button>
+          {controls ? (
+            currentTrack && player.playing ? (
+              <button onClick={handlePause}>
+                <MdPauseCircle className="text-4xl" />
+              </button>
+            ) : (
+              <button onClick={handlePlay}>
+                <MdPlayCircle className="text-4xl" />
+              </button>
+            )
           ) : (
-            <button onClick={handlePlay}>
-              <MdPlayCircle className="text-4xl" />
-            </button>
+            <Skeleton className="h-8 w-8 rounded-full" />
           )}
         </div>
       </div>
