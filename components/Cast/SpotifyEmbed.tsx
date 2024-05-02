@@ -14,6 +14,10 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
   const [embedController, setEmbedController] = useState({} as any);
   const elementRef = useRef<HTMLIFrameElement>(null);
   const iframeApi = useSpotifyApi();
+  const fullLoadedEmbed =
+    typeof embedController.togglePlay === 'function' &&
+    typeof embedController.pause === 'function' &&
+    typeof embedController.seek === 'function';
 
   useEffect(() => {
     const init = async () => {
@@ -47,7 +51,6 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
   }, [track?.uri, iframeApi]);
 
   if (track?.error) {
-    console.error(track.error);
     return <></>;
   }
 
@@ -64,11 +67,21 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
             duration,
           }
         }
-        controls={{
-          play: () => embedController.togglePlay(),
-          pause: () => embedController.pause(),
-          seek: (time) => embedController.seek(time),
-        }}
+        controls={
+          fullLoadedEmbed
+            ? {
+                play: () => {
+                  embedController.togglePlay();
+                },
+                pause: () => {
+                  embedController.pause();
+                },
+                seek: (time) => {
+                  embedController.seek(time);
+                },
+              }
+            : null
+        }
         position={position}
       />
       <div className="absolute left-0 top-0 -z-10 opacity-0">
