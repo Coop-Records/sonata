@@ -63,7 +63,7 @@ const TipProvider = ({ children }: any) => {
   const getAirdropBalance = async() => {
     if (isNil(user) || user.verifications.length === 0) return;
 
-    const { data, error } = await supabaseClient
+    const { data } = await supabaseClient
         .from('airdrop')
         .select('notes')
         .ilike('wallet_address', user.verifications[0])
