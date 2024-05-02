@@ -15,7 +15,7 @@ const useMedia = ({ trackUrl }: { trackUrl: string }) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const SC = useSoundcloudApi();
   const [duration, setDuration] = useState(0);
-  const [_, dispatch] = usePlayer();
+  const [, dispatch] = usePlayer();
 
   const handlePlay = () => {
     dispatch({
