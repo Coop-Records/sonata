@@ -52,7 +52,7 @@ const playerReducer = (state: Player, action: PlayerAction) => {
   switch (action.type) {
     case 'LOAD_METADATA': {
       const { metadata } = action.payload;
-      return { ...state, metadata, status: 'LOADED_METADATA' };
+      return { metadata, ...initialState };
     }
     case 'PLAY': {
       const { controls } = action.payload;

@@ -10,7 +10,7 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
   return NextResponse.json(
     {
       message: `success`,
-      data
+      data,
     },
     { status: 200 },
   );

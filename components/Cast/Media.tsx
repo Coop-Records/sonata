@@ -144,7 +144,7 @@ export default function Media({ trackUrl }: { trackUrl: string }) {
             </div>
           </div>
           <div className="my-auto">
-            {player.playing ? (
+            {currentTrack && player.playing ? (
               <button onClick={handlePause}>
                 <MdPauseCircle className="text-4xl text-black" />
               </button>

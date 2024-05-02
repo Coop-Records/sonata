@@ -23,6 +23,7 @@ export default function GlobalPlayer() {
     <EmbedComponent
       trackUrl={url}
       className="fixed bottom-0 left-0 w-[calc(100vw-20px)] bg-black p-2 !rounded-none !border-none !text-white"
+      key={player.metadata?.id}
     />
   );
 }
