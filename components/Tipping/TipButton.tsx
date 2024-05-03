@@ -5,7 +5,7 @@ import { useTipProvider } from '@/providers/TipProvider';
 import { Cast as CastType } from '@/types/Cast';
 
 const isValidNumber = (value: string) => {
-  return /^\d*$/.test(value); // Regex to allow only non-negative integers
+  return /^\d+$/.test(value);
 };
 
 const TipButton = ({
@@ -99,7 +99,7 @@ const TipButton = ({
                 value={customTipDegen}
                 onChange={(e) => setCustomTipDegen(e.target.value)}
                 placeholder="Custom amount"
-                className={`mr-2 w-full rounded border px-2 py-1 text-sm ${!isValidNumber(customTipDegen) && 'border-red-500'}`}
+                className={`mr-2 w-full rounded border px-2 py-1 text-sm [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
               />
               <Button
                 className="p-2 hover:bg-gray-100"
@@ -133,7 +133,7 @@ const TipButton = ({
                 value={customTipPoints}
                 onChange={(e) => setCustomTipPoints(e.target.value)}
                 placeholder="Custom amount"
-                className={`mr-2 w-full rounded border px-2 py-1 text-sm ${!isValidNumber(customTipPoints) && 'border-red-500'}`}
+                className={`mr-2 w-full rounded border px-2 py-1 text-sm [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
               />
               <Button
                 className="p-2 hover:bg-gray-100"
