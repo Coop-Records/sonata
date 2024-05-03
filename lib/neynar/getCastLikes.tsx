@@ -1,3 +1,4 @@
+import { ReactionLike } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { Address } from 'viem';
 
 const getCastLikes = async (hash: Address) => {
@@ -18,7 +19,7 @@ const getCastLikes = async (hash: Address) => {
       options,
     );
     const data = await response.json();
-    return data.reactions;
+    return data.reactions as ReactionLike[];
   } catch (error) {
     console.error(error);
     return { error };

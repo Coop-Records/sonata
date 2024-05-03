@@ -2,14 +2,14 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Button from '../Button';
 import { useTipProvider } from '@/providers/TipProvider';
-import { Cast as CastType } from '@/types/Cast';
+import { SupabasePost } from '@/types/SupabasePost';
 
 const TipButton = ({
   verifications,
-  cast = {} as CastType,
+  cast = {} as SupabasePost,
 }: {
   verifications: string[];
-  cast: CastType;
+  cast: SupabasePost;
 }) => {
   const { tip, tipDegen } = useTipProvider();
   const [showDegenDropdown, setShowDegenDropdown] = useState(false);
@@ -31,11 +31,11 @@ const TipButton = ({
     setShowPointsDropdown(false);
     let response;
     if (currency === 'DEGEN') {
-      response = await tipDegen(amount, cast.hash);
+      response = await tipDegen(amount, cast.post_hash);
       setDegenTotal(response.totalTipOnPost ?? 0);
       setCustomTipDegen('');
     } else {
-      response = await tip(amount, cast.hash, cast.author.verifications);
+      response = await tip(amount, cast.post_hash, cast.author.verifications);
       setNotesTotal(response.totalTipOnPost ?? 0);
       setCustomTipPoints('');
     }

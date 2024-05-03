@@ -79,7 +79,7 @@ export default function MediaPlayer({ metadata, controls, position }: MediaPlaye
               </button>
             )
           ) : (
-            <Skeleton className="h-8 w-8 rounded-full" />
+            <Skeleton className="size-8 rounded-full" />
           )}
         </div>
       </div>

@@ -1,4 +1,4 @@
-import Loading from '@/app/loading';
+import Loader from '@/components/Loader';
 import {
   Dialog,
   DialogContent,
@@ -22,12 +22,12 @@ const ClaimAirdropDialog = ({ onPost, isOpen, setIsOpen, isLoading }: any) => {
 
         <div className="flex flex-col items-center justify-center gap-3 text-center">
           <Button onClick={onPost} disabled={isLoading}>
-            {isLoading ? <Loading /> : <span>Claim Airdrop</span>}
+            {isLoading ? <Loader /> : <span>Claim Airdrop</span>}
           </Button>
         </div>
       </DialogContent>
     </Dialog>
   );
-}
+};
 
 export default ClaimAirdropDialog;

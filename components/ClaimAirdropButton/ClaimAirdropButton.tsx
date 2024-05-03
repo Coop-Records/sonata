@@ -2,7 +2,7 @@
 
 import { Button } from '../ui/button';
 import { PlusIcon } from '@radix-ui/react-icons';
-import ClaimAirdropDialog from '../ClaimAirdropButton/ClaimAirdropDialog';
+import ClaimAirdropDialog from './ClaimAirdropDialog';
 import useClaimAirdropModal from '@/hooks/useClaimAirdropModal';
 import { useTipProvider } from '@/providers/TipProvider';
 import { useState } from 'react';
@@ -24,9 +24,9 @@ export default function ClaimAirdropButton() {
       </Button>
       <ClaimAirdropDialog
         onPost={async () => {
-          setIsLoading(true)
+          setIsLoading(true);
           await handlePost();
-          setIsLoading(false)
+          setIsLoading(false);
         }}
         isOpen={isPostDialogOpen}
         setIsOpen={setIsPostDialogOpen}

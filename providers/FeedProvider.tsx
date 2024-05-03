@@ -1,23 +1,49 @@
 'use client';
 import { FeedFilter } from '@/types/Feed';
-import { Cast as CastType } from '@/types/Cast';
-import { ReactNode, createContext, useContext, useState } from 'react';
+import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import { SupabasePost } from '@/types/SupabasePost';
+import { usePathname } from 'next/navigation';
+import getFeed from '@/lib/supabase/getFeed';
 
 type FeedProviderType = {
   filter: FeedFilter;
   updateFilter: (change: FeedFilter) => void;
-  feed: CastType[];
-  setFeed: (feed: CastType[]) => void;
+  feed: SupabasePost[];
+  setFeed: (feed: SupabasePost[]) => void;
+  loading: boolean;
+  fetchMore: () => void;
 };
 
 const FeedContext = createContext<FeedProviderType>({} as any);
 
 const FeedProvider = ({ children }: { children: ReactNode }) => {
   const [filter, setFilter] = useState<FeedFilter>({});
-  const [feed, setFeed] = useState<CastType[]>([]);
+  const [feed, setFeed] = useState<SupabasePost[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const pathname = usePathname();
 
   const updateFilter = (change: FeedFilter) => {
     setFilter((prev) => ({ ...prev, ...change }));
+  };
+
+  useEffect(() => {
+    const updateFeed = async () => {
+      setLoading(true);
+      const newFeed = await getFeed({ start: 0, recent: pathname.includes('/recent'), filter });
+
+      setFeed(newFeed);
+      setLoading(false);
+    };
+    updateFeed();
+  }, [pathname, filter]);
+
+  const fetchMore = async () => {
+    const newFeed = await getFeed({
+      start: feed.length,
+      recent: pathname.includes('/recent'),
+      filter,
+    });
+    setFeed((prev) => [...prev, ...newFeed]);
   };
 
   const value = {
@@ -25,6 +51,8 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     updateFilter,
     feed,
     setFeed,
+    loading,
+    fetchMore,
   };
 
   return <FeedContext.Provider value={value}>{children}</FeedContext.Provider>;

@@ -1,4 +1,3 @@
-import { Cast as CastType } from '@/types/Cast';
 import AuthorDetails from './AuthorDetails';
 import Upvote from './Upvote';
 import findValidEmbed from '@/lib/findValidEmbed';
@@ -7,8 +6,9 @@ import { useMemo } from 'react';
 import SpotifyEmbed from './SpotifyEmbed';
 import SoundCloudEmbed from './SoundCloudEmbed';
 import SoundXyzEmbed from './SoundXyzEmbed';
+import { SupabasePost } from '@/types/SupabasePost';
 
-const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
+const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
   const embed = findValidEmbed(cast);
   const url = embed?.url;
 

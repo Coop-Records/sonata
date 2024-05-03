@@ -1,6 +1,6 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import Filter from '../Feed/Filter';
-import BalanceInfo from './BalanceInfo';
+import Filter from '../Feed/PlatformFilter';
+import BalanceInfo from '../BalanceInfo';
 import SignInButton from '../SignInButton';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';

@@ -1,5 +1,6 @@
 'use server';
 
+import { SpotifyTrack } from '@/types/SpotifyTrack';
 import getSpotifyAccessToken from './getSpotifyAccessToken';
 
 export default async function getSpotifyTrack(trackId: string) {
@@ -9,6 +10,9 @@ export default async function getSpotifyTrack(trackId: string) {
       Authorization: 'Bearer ' + accessToken,
     },
   });
+  if (!response.ok) {
+    return { error: response.statusText };
+  }
   const track = await response.json();
-  return track;
+  return track as SpotifyTrack;
 }
