@@ -12,8 +12,8 @@ const useClaimAirdropModal = () => {
   const handlePost = async () => {
     setIsLoading(true);
     if (user?.verifications.length === 0) {
-      toast({description: "Please verify an address on warpcast and try again"})
-    } else if (user?.verifications){
+      toast({ description: 'Please verify an address on warpcast and try again' });
+    } else if (user?.verifications) {
       const response = await claimAirdrop(signer?.signer_uuid, user?.verifications[0]);
       toast({ description: `${response.message}` });
       setIsPostDialogOpen(false);

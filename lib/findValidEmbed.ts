@@ -8,11 +8,11 @@ export default function findValidEmbed(cast: Cast, filter: FeedFilter = {}) {
   const validEmbed = embeds.find((embed) => {
     if (!('url' in embed)) return false;
     const url = embed.url;
-    const isValid = isValidUrl(url)
+    const isValid = isValidUrl(url);
     if (filter?.platform && !url.includes(filter.platform)) {
       return false;
     }
-    return isValid
+    return isValid;
   });
 
   return validEmbed as EmbedUrl;

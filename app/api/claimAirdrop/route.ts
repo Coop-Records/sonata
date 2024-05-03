@@ -31,27 +31,25 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
 
   return NextResponse.json(
     {
-      message: `Airdropped ${airdropAmount} NOTES`
+      message: `Airdropped ${airdropAmount} NOTES`,
     },
     { status: 200 },
   );
 };
 
-async function callRedeemAirdrop(
-    walletAddressInput: string,
-  ) {
-    const { data, error } = await supabase.rpc('redeem_airdrop', {
-      wallet_address_input: walletAddressInput,
-    });
-  
-    if (error) {
-      console.error('Error calling function:', error);
-      return null;
-    }
-  
-    console.log('Function returned:', data);
-    return data;
+async function callRedeemAirdrop(walletAddressInput: string) {
+  const { data, error } = await supabase.rpc('redeem_airdrop', {
+    wallet_address_input: walletAddressInput,
+  });
+
+  if (error) {
+    console.error('Error calling function:', error);
+    return null;
   }
+
+  console.log('Function returned:', data);
+  return data;
+}
 
 export async function POST(req: NextRequest): Promise<Response> {
   return getResponse(req);

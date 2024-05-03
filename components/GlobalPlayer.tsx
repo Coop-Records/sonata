@@ -3,6 +3,7 @@ import { formatDuration } from '@/lib/utils';
 import { usePlayer } from '@/providers/PlayerProvider';
 import Image from 'next/image';
 import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';
+import ReactSlider from 'react-slider';
 
 export default function GlobalPlayer() {
   const [player, dispatch] = usePlayer();
@@ -60,12 +61,14 @@ export default function GlobalPlayer() {
           <span>{formatDuration(position)}</span>
           <span>{formatDuration(metadata.duration)}</span>
         </div>
-        <div className="h-1 w-full overflow-hidden rounded-lg bg-gray-600">
-          <div
-            className="h-1 rounded-lg bg-white"
-            style={{ width: `${(position / metadata.duration) * 100}%` }}
-          />
-        </div>
+        <ReactSlider
+          className="w-full h-1 bg-gray-600 global-scrub"
+          thumbClassName={`${metadata?.type === 'spotify' ? '' : 'global-scrub-thumb'}`}
+          trackClassName="global-scrub-track"
+          value={(position / metadata.duration) * 100}
+          disabled={metadata?.type === 'spotify'}
+          onChange={(value) => player?.controls?.seek((value / 100) * metadata.duration)}
+        />
       </div>
     </div>
   );

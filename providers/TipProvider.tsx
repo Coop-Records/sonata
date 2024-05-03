@@ -60,18 +60,18 @@ const TipProvider = ({ children }: any) => {
     setBalance(BigInt(currentBalance));
   };
 
-  const getAirdropBalance = async() => {
+  const getAirdropBalance = async () => {
     if (isNil(user) || user.verifications.length === 0) return;
 
     const { data } = await supabaseClient
-        .from('airdrop')
-        .select('notes')
-        .ilike('wallet_address', user.verifications[0])
-        .single();
+      .from('airdrop')
+      .select('notes')
+      .ilike('wallet_address', user.verifications[0])
+      .single();
 
     const currentBalance = data.notes;
-    setAirdropBalance(currentBalance)
-  }
+    setAirdropBalance(currentBalance);
+  };
 
   const tipDegen = async (amount: bigint, postHash: string) => {
     if (isNil(user) || isEmpty(user.verifications) || isNil(signer?.signer_uuid)) {
@@ -128,12 +128,12 @@ const TipProvider = ({ children }: any) => {
   const refreshBalances = async () => {
     getAirdropBalance();
     syncPoints();
-  }
+  };
 
   const handlePost = async () => {
     if (user?.verifications.length === 0) {
-      toast({description: "Please verify an address on warpcast and try again"})
-    } else if (user?.verifications){
+      toast({ description: 'Please verify an address on warpcast and try again' });
+    } else if (user?.verifications) {
       const response = await claimAirdrop(signer?.signer_uuid, user?.verifications[0]);
       toast({ description: `${response.message}` });
       await refreshBalances();
@@ -142,7 +142,15 @@ const TipProvider = ({ children }: any) => {
 
   return (
     <TipContext.Provider
-      value={{ balance, tip, tipDegen, remainingTipAllocation, dailyTipAllowance, airdropBalance, handlePost }}
+      value={{
+        balance,
+        tip,
+        tipDegen,
+        remainingTipAllocation,
+        dailyTipAllowance,
+        airdropBalance,
+        handlePost,
+      }}
     >
       {children}
     </TipContext.Provider>
