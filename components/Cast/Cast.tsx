@@ -7,8 +7,10 @@ import { useMemo } from 'react';
 import SpotifyEmbed from './SpotifyEmbed';
 import SoundCloudEmbed from './SoundCloudEmbed';
 import SoundXyzEmbed from './SoundXyzEmbed';
+import { useFeedProvider } from '@/providers/FeedProvider';
 
 const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
+  const { filter } = useFeedProvider();
   const embed = findValidEmbed(cast);
   const url = embed?.url;
 
@@ -24,12 +26,25 @@ const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
 
   if (!url) return <></>;
 
+  const shouldBeFiltered = useMemo(() => {
+    if (filter.channel) {
+      const parentUrl = cast.parent_url;
+      if (!(parentUrl && parentUrl.includes(filter.channel))) return false;
+    }
+    const validEmbed = findValidEmbed(cast, { platform: filter.platform });
+    if (!validEmbed) return false;
+
+    return true;
+  }, [filter, cast]);
+
   return (
     <div className="flex items-center gap-5 p-2.5">
       <Upvote cast={cast} />
       <div className="w-full space-y-4">
         <AuthorDetails author={author} />
-        {EmbedComponent && <EmbedComponent trackUrl={url} />}
+        <div className={`${shouldBeFiltered ? '' : 'hidden'}`}>
+          {EmbedComponent && <EmbedComponent trackUrl={url} />}
+        </div>
         <TipButton verifications={verifications} cast={cast} />
       </div>
     </div>

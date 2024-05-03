@@ -1,7 +1,7 @@
 import { getFrameMetadata } from '@coinbase/onchainkit';
 import type { Metadata } from 'next';
 import { DEFAULT_FRAME, DESCRIPTION, TITLE, VERCEL_URL } from '@/lib/consts';
-import TrendingComponent from '@/components/Trending/TrendingComponent';
+import Feeds from './feeds';
 
 const frameMetadata = { ...getFrameMetadata(DEFAULT_FRAME), 'of:accepts:xmtp': '2024-02-01' };
 
@@ -19,6 +19,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function Trending() {
-  return <TrendingComponent />;
+export default async function FeedsHome() {
+  return <Feeds />;
 }

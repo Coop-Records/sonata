@@ -19,14 +19,17 @@ const SoundCloudEmbed = ({ trackUrl }: any) => {
 
   useEffect(() => {
     const init = async () => {
-      const oEmbedUrl = `https://soundcloud.com/oembed?format=json&url=${encodeURIComponent(trackUrl)}`;
-      const response = await fetch(oEmbedUrl);
-      const data = await response.json();
-      const srcRegex = /src="([^"]+)"/;
-      const match = data.html.match(srcRegex);
-      const src = match ? match[1] : null;
-      setIframeSrc(src);
-      setEmbedData(data);
+      try {
+        const oEmbedUrl = `https://soundcloud.com/oembed?format=json&url=${encodeURIComponent(trackUrl)}`;
+        const response = await fetch(oEmbedUrl);
+        const data = await response.json();
+        const srcRegex = /src="([^"]+)"/;
+        const match = data.html.match(srcRegex);
+        const src = match ? match[1] : null;
+        setIframeSrc(src);
+        setEmbedData(data);
+        // eslint-disable-next-line no-empty
+      } catch (error) {}
     };
     init();
   }, [trackUrl]);
