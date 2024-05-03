@@ -28,6 +28,6 @@ const ClaimAirdropDialog = ({ onPost, isOpen, setIsOpen, isLoading }: any) => {
       </DialogContent>
     </Dialog>
   );
-}
+};
 
 export default ClaimAirdropDialog;

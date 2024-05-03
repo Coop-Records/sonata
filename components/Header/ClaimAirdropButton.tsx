@@ -24,9 +24,9 @@ export default function ClaimAirdropButton() {
       </Button>
       <ClaimAirdropDialog
         onPost={async () => {
-          setIsLoading(true)
+          setIsLoading(true);
           await handlePost();
-          setIsLoading(false)
+          setIsLoading(false);
         }}
         isOpen={isPostDialogOpen}
         setIsOpen={setIsPostDialogOpen}

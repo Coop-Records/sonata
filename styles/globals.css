@@ -2,9 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+@import './scrub.css';
+
 @font-face {
   font-family: 'HelveticaNeue';
   src: url('/fonts/HelveticaNeue.ttc') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ProximaNova';
+  src: url('/fonts/ProximaNova.otf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
