@@ -91,9 +91,10 @@ export default function MediaPlayer({ metadata, controls, position }: MediaPlaye
         </div>
         <ReactSlider
           className="w-full h-1 bg-gray-300 scrub"
-          thumbClassName="scrub-thumb"
+          thumbClassName={`${metadata?.type === 'spotify' ? '' : 'scrub-thumb'}`}
           trackClassName="scrub-track"
           value={(displayPosition / displayDuration) * 100}
+          disabled={metadata?.type === 'spotify'}
           onChange={(value) => controls?.seek((value / 100) * displayDuration)}
         />
       </div>
