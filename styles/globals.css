@@ -11,6 +11,13 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'ProximaNova';
+  src: url('/fonts/ProximaNova.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

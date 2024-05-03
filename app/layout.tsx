@@ -24,7 +24,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <body
         className={cn(
-          'font-helvetica',
+          'font-proxima',
           inter.variable,
           'flex flex-col min-h-screen w-screen overflow-x-hidden',
         )}
