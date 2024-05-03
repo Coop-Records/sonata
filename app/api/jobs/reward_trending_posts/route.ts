@@ -1,7 +1,6 @@
-import getFeedFromTime from '@/lib/neynar/getFeedFromTime';
 import { StackClient } from '@stackso/js-core';
 import { createClient } from '@supabase/supabase-js';
-import { isEmpty, isNil } from 'lodash';
+import { isNil } from 'lodash';
 import { NextResponse } from 'next/server';
 
 const SUPABASE_URL = process.env.SUPABASE_URL as string;
@@ -20,7 +19,7 @@ const getResponse = async (): Promise<NextResponse> => {
 
   if (isNil(topPosts)) return NextResponse.json({ message: 'No top posts' }, { status: 400 });
 
-  for(var i = 0; i < topPosts.length; i++) {
+  for(let i = 0; i < topPosts.length; i++) {
     const post = topPosts[i];
     const verifications = post.verifications;
     if (!isNil(verifications) && verifications.length > 0) {
