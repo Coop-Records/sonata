@@ -8,10 +8,10 @@ type tab = {
   href?: string;
 };
 
-export default function Tabs({ tabs }: { tabs: tab[] }) {
+export default function Tabs({ tabs, className }: { tabs: tab[]; className: string }) {
   const pathname = usePathname();
   return (
-    <ul className="flex gap-4">
+    <ul className={cn('flex gap-4', className)}>
       {tabs.map((tab, index) => {
         return (
           <li
