@@ -3,6 +3,10 @@
     {
       "path": "/api/jobs/update_tips",
       "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/jobs/reward_trending_posts",
+      "schedule": "0 7 * * *"
     }
   ]
 }
