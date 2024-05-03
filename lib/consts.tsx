@@ -11,7 +11,7 @@ export const DEFAULT_FRAME = {
     },
   ],
   image: {
-    src: `${VERCEL_URL}/images/og.webp`,
+    src: `https://framerusercontent.com/images/UjSwC7tz1DFYsxiMeKvEI6K7eo.png`,
   },
   postUrl: `${VERCEL_URL}/api/frame`,
 } as FrameMetadataType;
