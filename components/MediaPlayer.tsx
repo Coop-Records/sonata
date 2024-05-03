@@ -90,7 +90,7 @@ export default function MediaPlayer({ metadata, controls, position }: MediaPlaye
           <span>{formatDuration(displayDuration)}</span>
         </div>
         <ReactSlider
-          className="w-full h-1 bg-gray-300"
+          className="w-full h-1 bg-gray-300 scrub"
           thumbClassName="scrub-thumb"
           trackClassName="scrub-track"
           value={(displayPosition / displayDuration) * 100}

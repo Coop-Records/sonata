@@ -62,7 +62,7 @@ export default function GlobalPlayer() {
           <span>{formatDuration(metadata.duration)}</span>
         </div>
         <ReactSlider
-          className="w-full h-1 bg-gray-600"
+          className="w-full h-1 bg-gray-600 global-scrub"
           thumbClassName="global-scrub-thumb"
           trackClassName="global-scrub-track"
           value={(position / metadata.duration) * 100}
