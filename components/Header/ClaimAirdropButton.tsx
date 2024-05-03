@@ -18,7 +18,7 @@ export default function ClaimAirdropButton() {
   return (
     <div>
       <Button type="button" className="space-x-2" onClick={handleClick}>
-        <span>Claim Airdrop</span>
+        <span>Claim</span>
       </Button>
       <ClaimAirdropDialog
         onPost={async () => {
