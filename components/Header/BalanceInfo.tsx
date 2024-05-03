@@ -19,14 +19,14 @@ export default function BalanceInfo() {
         <Image src="/images/notes.jpg" width={20} height={20} alt="" />
       </div>
       {airdropBalance > 0 ? (
-      <div className="flex items-center">
-        <span className="whitespace-nowrap">{`Airdrop Balance: ${!isNil(airdropBalance) ? formatBigInt(BigInt(airdropBalance)) : '-'}`}</span>
-        <Image src="/images/notes.jpg" width={20} height={20} alt="" />
-      </div>
-      ): (<></>)}
-      {airdropBalance > 0 ? (
-      <ClaimAirdropButton />
-      ) : (<></>)}
+        <div className="flex items-center">
+          <span className="whitespace-nowrap">{`Airdrop Balance: ${!isNil(airdropBalance) ? formatBigInt(BigInt(airdropBalance)) : '-'}`}</span>
+          <Image src="/images/notes.jpg" width={20} height={20} alt="" />
+        </div>
+      ) : (
+        <></>
+      )}
+      {airdropBalance > 0 ? <ClaimAirdropButton /> : <></>}
     </div>
   );
 }
