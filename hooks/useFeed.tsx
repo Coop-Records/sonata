@@ -1,6 +1,5 @@
 import getSortedFeeds from '@/lib/neynar/getCombinedFeeds';
 import { useEffect, useState } from 'react';
-import getFeed from '@/lib/neynar/getFeed';
 import { useSupabaseProvider } from '@/providers/SupabaseProvider';
 import _ from 'lodash';
 
