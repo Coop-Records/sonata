@@ -97,7 +97,7 @@ const TipButton = ({
                 className="mr-2 w-full rounded border border-gray-300 px-2 py-1 text-sm"
               />
               <Button
-                className="ml-2"
+                className="p-2 hover:bg-gray-100"
                 onClick={() => handleTip(Number(customTipDegen) || 0, 'DEGEN')}
               >
                 Tip
@@ -130,7 +130,7 @@ const TipButton = ({
                 className="mr-2 w-full rounded border border-gray-300 px-2 py-1 text-sm"
               />
               <Button
-                className="ml-2"
+                className="p-2 hover:bg-gray-100"
                 onClick={() => handleTip(Number(customTipPoints) || 0, 'NOTES')}
               >
                 Tip
