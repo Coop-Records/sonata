@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useEffect } from 'react';
 import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';
 import { Skeleton } from '@/components/ui/skeleton';
+import ReactSlider from 'react-slider';
 
 type MediaPlayerProps = {
   metadata?: TrackMetadata;
@@ -88,12 +89,14 @@ export default function MediaPlayer({ metadata, controls, position }: MediaPlaye
           <span>{formatDuration(displayPosition)}</span>
           <span>{formatDuration(displayDuration)}</span>
         </div>
-        <div className="h-1 w-full overflow-hidden rounded-lg bg-gray-300">
-          <div
-            className="h-1 rounded-lg bg-black"
-            style={{ width: `${(displayPosition / displayDuration) * 100}%` }}
-          />
-        </div>
+        <ReactSlider
+          className="w-full h-1 bg-gray-300 scrub"
+          thumbClassName={`${metadata?.type === 'spotify' ? '' : 'scrub-thumb'}`}
+          trackClassName="scrub-track"
+          value={(displayPosition / displayDuration) * 100}
+          disabled={metadata?.type === 'spotify'}
+          onChange={(value) => controls?.seek((value / 100) * displayDuration)}
+        />
       </div>
     </div>
   );
