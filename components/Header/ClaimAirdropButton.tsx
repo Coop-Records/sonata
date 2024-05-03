@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '../ui/button';
-import { PlusIcon } from '@radix-ui/react-icons';
 import ClaimAirdropDialog from '../ClaimAirdropButton/ClaimAirdropDialog';
 import useClaimAirdropModal from '@/hooks/useClaimAirdropModal';
 import { useTipProvider } from '@/providers/TipProvider';
