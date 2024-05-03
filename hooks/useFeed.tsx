@@ -1,7 +1,6 @@
 import getSortedFeeds from '@/lib/neynar/getCombinedFeeds';
 import { useEffect, useState } from 'react';
 import { useSupabaseProvider } from '@/providers/SupabaseProvider';
-import _ from 'lodash';
 
 const useFeed = () => {
   const [feed, setFeed] = useState<any[]>([]);
