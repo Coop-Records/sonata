@@ -24,8 +24,6 @@ const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
     if (url.includes('sound.xyz')) return SoundXyzEmbed;
   }, [url]);
 
-  if (!url) return <></>;
-
   const shouldBeFiltered = useMemo(() => {
     if (filter.channel) {
       const parentUrl = cast.parent_url;
@@ -36,6 +34,8 @@ const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
 
     return true;
   }, [filter, cast]);
+
+  if (!url) return <></>;
 
   return (
     <div className="flex items-center gap-5 p-2.5">
