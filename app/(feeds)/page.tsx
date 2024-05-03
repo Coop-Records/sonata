@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,
-    images: [`${VERCEL_URL}/images/og.webp`],
+    images: [`https://framerusercontent.com/images/UjSwC7tz1DFYsxiMeKvEI6K7eo.png`],
   },
   icons: [`${VERCEL_URL}/images/logo2.png`],
   other: {
