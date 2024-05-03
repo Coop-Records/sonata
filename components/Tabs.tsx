@@ -8,7 +8,7 @@ type tab = {
   href?: string;
 };
 
-export default function Tabs({ tabs, className }: { tabs: tab[]; className: string }) {
+export default function Tabs({ tabs, className }: { tabs: tab[]; className?: string }) {
   const pathname = usePathname();
   return (
     <ul className={cn('flex gap-4', className)}>
