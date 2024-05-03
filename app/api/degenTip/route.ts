@@ -25,7 +25,7 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
   if (tipAmount > Number(degenTipData.remaining_allowance)) {
     return NextResponse.json(
       {
-        message: `Already reached max DEGEN tips`,
+        message: `NOTES allowance exceeded`,
         usedTip: 0,
         totalTipOnPost: 0,
       },

@@ -4,6 +4,10 @@ import Button from '../Button';
 import { useTipProvider } from '@/providers/TipProvider';
 import { Cast as CastType } from '@/types/Cast';
 
+const isValidNumber = (value: string) => {
+  return /^\d+$/.test(value);
+};
+
 const TipButton = ({
   verifications,
   cast = {} as CastType,
@@ -91,14 +95,15 @@ const TipButton = ({
             <li className="flex items-center px-4 py-2">
               <input
                 type="number"
+                min={0}
                 value={customTipDegen}
                 onChange={(e) => setCustomTipDegen(e.target.value)}
                 placeholder="Custom amount"
-                className="mr-2 w-full rounded border border-gray-300 px-2 py-1 text-sm [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                className={`mr-2 w-full rounded border px-2 py-1 text-sm [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
               />
               <Button
                 className="p-2 hover:bg-gray-100"
-                onClick={() => handleTip(Number(customTipDegen) || 0, 'DEGEN')}
+                onClick={() => isValidNumber(customTipDegen) && handleTip(Number(customTipDegen), 'DEGEN')}
               >
                 Tip
               </Button>
@@ -124,14 +129,15 @@ const TipButton = ({
             <li className="flex items-center px-4 py-2">
               <input
                 type="number"
+                min={0}
                 value={customTipPoints}
                 onChange={(e) => setCustomTipPoints(e.target.value)}
                 placeholder="Custom amount"
-                className="mr-2 w-full rounded border border-gray-300 px-2 py-1 text-sm [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                className={`mr-2 w-full rounded border px-2 py-1 text-sm [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
               />
               <Button
                 className="p-2 hover:bg-gray-100"
-                onClick={() => handleTip(Number(customTipPoints) || 0, 'NOTES')}
+                onClick={() => isValidNumber(customTipPoints) && handleTip(Number(customTipPoints), 'NOTES')}
               >
                 Tip
               </Button>
