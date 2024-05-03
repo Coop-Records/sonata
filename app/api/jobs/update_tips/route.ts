@@ -17,16 +17,19 @@ const processEntriesInBatches = async (entries: any[], batchSize = 50) => {
 
 const processSingleEntry = async (cast: {
   reactions: { likes: string | any[] };
-  author: { verifications: any; fid: any };
+  author: {
+    power_badge: any; verifications: any; fid: any 
+};
   timestamp: any;
 }) => {
   const likes = cast.reactions?.likes?.length ?? 0;
   const address = cast?.author?.verifications ? cast?.author?.verifications[0] : undefined;
+  const powerBadge = cast?.author?.power_badge ?? false;
   const timestamp = cast?.timestamp;
   const fid = cast?.author?.fid;
 
   if (!isEmpty(address)) {
-    await callUpdateTips(address, fid, likes, 1, timestamp);
+    await callUpdateTips(address, fid, likes, 1, timestamp, powerBadge);
   }
 };
 
@@ -68,6 +71,7 @@ async function callUpdateTips(
   totalLikes: number,
   numPosts: number,
   firstPostDate: string,
+  power_badge: boolean
 ) {
   const firstPostDateISO = new Date(firstPostDate).toISOString();
 
@@ -77,6 +81,7 @@ async function callUpdateTips(
     p_total_likes: totalLikes,
     p_num_posts: numPosts,
     p_first_post_date: firstPostDateISO,
+    p_power_badge: power_badge
   });
 
   if (error) {

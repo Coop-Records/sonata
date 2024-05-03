@@ -20,7 +20,7 @@ export default function BalanceInfo() {
       </div>
       {airdropBalance > 0 ? (
         <div className="flex items-center">
-          <span className="whitespace-nowrap">{`Airdrop Balance: ${!isNil(airdropBalance) ? formatBigInt(BigInt(airdropBalance)) : '-'}`}</span>
+          <span className="whitespace-nowrap">{`Airdrop: ${!isNil(airdropBalance) ? formatBigInt(BigInt(airdropBalance)) : '-'}`}</span>
           <Image src="/images/notes.jpg" width={20} height={20} alt="" />
         </div>
       ) : (

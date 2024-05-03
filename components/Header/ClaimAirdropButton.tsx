@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '../ui/button';
-import { PlusIcon } from '@radix-ui/react-icons';
 import ClaimAirdropDialog from '../ClaimAirdropButton/ClaimAirdropDialog';
 import useClaimAirdropModal from '@/hooks/useClaimAirdropModal';
 import { useTipProvider } from '@/providers/TipProvider';
@@ -20,7 +19,6 @@ export default function ClaimAirdropButton() {
     <div>
       <Button type="button" className="space-x-2" onClick={handleClick}>
         <span>Claim Airdrop</span>
-        <PlusIcon />
       </Button>
       <ClaimAirdropDialog
         onPost={async () => {
