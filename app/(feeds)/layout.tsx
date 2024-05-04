@@ -3,9 +3,9 @@
 import { ReactNode } from 'react';
 import Tabs from '@/components/Tabs';
 import { tabs } from '@/lib/consts';
-import PlatformFilter from '@/components/Feed/PlatformFilter';
+// import PlatformFilter from '@/components/Feed/PlatformFilter';
 import { Separator } from '@/components/ui/separator';
-import ChannelFilter from '@/components/Feed/ChannelFilter';
+// import ChannelFilter from '@/components/Feed/ChannelFilter';
 import BalanceInfo from '@/components/Header/BalanceInfo';
 
 export default function FeedLayout({ children }: { children: ReactNode }) {
@@ -16,8 +16,8 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
         <div className="flex flex-col gap-8 max-md:hidden">
           <h2 className="text-2xl font-bold">Notes</h2>
           <BalanceInfo />
-          <Separator className="mt-10" />
-          <ChannelFilter />
+          {/* <Separator className="mt-10" /> */}
+          {/* <ChannelFilter /> */}
         </div>
         <Separator orientation="vertical" className="max-md:hidden" />
 
@@ -26,9 +26,7 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
           <div className="w-full grow overflow-hidden">{children}</div>
         </div>
         <Separator orientation="vertical" className="max-md:hidden" />
-        <div className="min-w-48 pt-16 max-md:hidden">
-          <PlatformFilter />
-        </div>
+        <div className="min-w-48 pt-16 max-md:hidden">{/* <PlatformFilter /> */}</div>
       </div>
     </main>
   );
