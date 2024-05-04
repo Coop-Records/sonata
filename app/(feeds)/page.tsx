@@ -1,8 +1,7 @@
 import { getFrameMetadata } from '@coinbase/onchainkit';
 import type { Metadata } from 'next';
 import { DEFAULT_FRAME, DESCRIPTION, TITLE, VERCEL_URL } from '@/lib/consts';
-import getCombinedFeeds from '@/lib/neynar/getCombinedFeeds';
-import Feed from '@/components/Feed';
+import Feeds from './feeds';
 
 const frameMetadata = { ...getFrameMetadata(DEFAULT_FRAME), 'of:accepts:xmtp': '2024-02-01' };
 
@@ -20,12 +19,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function Trending() {
-  const feed = await getCombinedFeeds();
-
-  feed.sort((cast1: any, cast2: any) => {
-    return cast2.reactions.likes.length - cast1.reactions.likes.length;
-  });
-
-  return feed?.length > 0 && <Feed feed={feed} />;
+export default async function FeedsHome() {
+  return <Feeds />;
 }

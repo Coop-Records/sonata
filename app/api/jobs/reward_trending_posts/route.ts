@@ -19,29 +19,30 @@ const getResponse = async (): Promise<NextResponse> => {
 
   if (isNil(topPosts)) return NextResponse.json({ message: 'No top posts' }, { status: 400 });
 
-  for(let i = 0; i < topPosts.length; i++) {
+  for (let i = 0; i < topPosts.length; i++) {
     const post = topPosts[i];
     const verifications = post.verifications;
     if (!isNil(verifications) && verifications.length > 0) {
-        const authorWallet = verifications[0];
-        stack.track(`trending_reward_${authorWallet}`, { account: authorWallet, points: TIP_AWARD_PER });
+      const authorWallet = verifications[0];
+      stack.track(`trending_reward_${authorWallet}`, {
+        account: authorWallet,
+        points: TIP_AWARD_PER,
+      });
     }
   }
 
   return NextResponse.json({ message: 'success' }, { status: 200 });
 };
 
-
-
 async function fetchTopPosts() {
-  const oneDayAgo = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
-  
+  const oneDayAgo = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+
   const { data, error } = await supabase
     .from('posts')
-    .select('*')  // Selects all columns; specify columns if needed e.g. 'id, title, likes'
-    .gt('created_at', oneDayAgo.toISOString())  // Assuming 'created_at' is the column name
-    .order('likes', { ascending: false })  // Orders by 'likes' in descending order
-    .limit(10);  // Limits to top 10
+    .select('*') // Selects all columns; specify columns if needed e.g. 'id, title, likes'
+    .gt('created_at', oneDayAgo.toISOString()) // Assuming 'created_at' is the column name
+    .order('likes', { ascending: false }) // Orders by 'likes' in descending order
+    .limit(10); // Limits to top 10
 
   if (error) {
     console.error('Error fetching posts:', error);
@@ -50,13 +51,12 @@ async function fetchTopPosts() {
 
   return data;
 }
-  
+
 export async function GET(): Promise<Response> {
   await getResponse().catch((error) => {
     console.error('Error in background task:', error);
   });
   return NextResponse.json({ message: 'success' }, { status: 200 });
 }
-  
+
 export const dynamic = 'force-dynamic';
-  

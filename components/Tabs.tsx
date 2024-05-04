@@ -1,15 +1,16 @@
 'use client';
 import { cn } from '@/lib/utils';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useFeedProvider } from '@/providers/FeedProvider';
 
 type tab = {
   label: string;
   href?: string;
+  value: string;
 };
 
 export default function Tabs({ tabs }: { tabs: tab[] }) {
-  const pathname = usePathname();
+  const { feedType, setFeedType } = useFeedProvider();
+
   return (
     <ul className="flex gap-4">
       {tabs.map((tab, index) => {
@@ -17,11 +18,11 @@ export default function Tabs({ tabs }: { tabs: tab[] }) {
           <li
             className={cn(
               'py-2 text-lg font-bold',
-              pathname === tab.href && 'border-b-2 border-black',
+              feedType === tab.value && 'border-b-2 border-black',
             )}
             key={index}
           >
-            {tab.href ? <Link href={tab.href}>{tab.label} </Link> : tab.label}
+            <button onClick={() => setFeedType(tab.value)}>{tab.label} </button>
           </li>
         );
       })}
