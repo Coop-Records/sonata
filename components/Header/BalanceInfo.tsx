@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { formatBigInt } from '@/lib/utils';
 import { isNil } from 'lodash';
 import { useTipProvider } from '@/providers/TipProvider';
-import ClaimAirdropButton from './ClaimAirdropButton';
+import ClaimAirdropButton from '../ClaimAirdropButton/ClaimAirdropButton';
 
 export default function BalanceInfo() {
   const { balance, remainingTipAllocation, dailyTipAllowance, airdropBalance } = useTipProvider();

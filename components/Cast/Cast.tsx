@@ -1,4 +1,3 @@
-import { Cast as CastType } from '@/types/Cast';
 import AuthorDetails from './AuthorDetails';
 import Upvote from './Upvote';
 import findValidEmbed from '@/lib/findValidEmbed';
@@ -8,8 +7,9 @@ import SpotifyEmbed from './SpotifyEmbed';
 import SoundCloudEmbed from './SoundCloudEmbed';
 import SoundXyzEmbed from './SoundXyzEmbed';
 import { useFeedProvider } from '@/providers/FeedProvider';
+import { SupabasePost } from '@/types/SupabasePost';
 
-const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
+const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
   const { filter } = useFeedProvider();
   const embed = findValidEmbed(cast);
   const url = embed?.url;

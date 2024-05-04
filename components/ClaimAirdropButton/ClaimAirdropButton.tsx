@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '../ui/button';
-import ClaimAirdropDialog from '../ClaimAirdropButton/ClaimAirdropDialog';
+import ClaimAirdropDialog from './ClaimAirdropDialog';
 import useClaimAirdropModal from '@/hooks/useClaimAirdropModal';
 import { useTipProvider } from '@/providers/TipProvider';
 import { useState } from 'react';
