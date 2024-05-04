@@ -42,7 +42,6 @@ const TipButton = ({
     setShowDegenDropdown(false);
     setShowPointsDropdown(false);
     if (amount === 0) return;
-    console.log('SWEETS TIP amount', amount);
     let response;
     if (currency === 'DEGEN') {
       response = await tipDegen(amount, cast.post_hash);
