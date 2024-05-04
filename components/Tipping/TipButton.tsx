@@ -41,6 +41,8 @@ const TipButton = ({
   const handleTip = async (amount: number, currency: 'DEGEN' | 'NOTES') => {
     setShowDegenDropdown(false);
     setShowPointsDropdown(false);
+    if (amount === 0) return;
+    console.log('SWEETS TIP amount', amount);
     let response;
     if (currency === 'DEGEN') {
       response = await tipDegen(amount, cast.post_hash);
@@ -79,6 +81,14 @@ const TipButton = ({
     if (!checkLoggedIn()) return;
     if (isSelfPost) return;
     setShowPointsDropdown(!showPointsDropdown);
+  };
+
+  const handleTipDegen = () => {
+    isValidNumber(customTipDegen) && handleTip(Number(customTipDegen), 'DEGEN');
+  };
+
+  const handlePointsTip = () => {
+    isValidNumber(customTipPoints) && handleTip(Number(customTipPoints), 'NOTES');
   };
 
   return verifications && verifications.length > 0 ? (
@@ -121,12 +131,7 @@ const TipButton = ({
                 placeholder="Custom amount"
                 className={`mr-2 w-full rounded border px-2 py-1 text-sm [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
               />
-              <Button
-                className="p-2 hover:bg-gray-100"
-                onClick={() =>
-                  isValidNumber(customTipDegen) && handleTip(Number(customTipDegen), 'DEGEN')
-                }
-              >
+              <Button className="p-2 hover:bg-gray-100" onClick={handleTipDegen}>
                 Tip
               </Button>
             </li>
@@ -157,12 +162,7 @@ const TipButton = ({
                 placeholder="Custom amount"
                 className={`mr-2 w-full rounded border px-2 py-1 text-sm [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
               />
-              <Button
-                className="p-2 hover:bg-gray-100"
-                onClick={() =>
-                  isValidNumber(customTipPoints) && handleTip(Number(customTipPoints), 'NOTES')
-                }
-              >
+              <Button className="p-2 hover:bg-gray-100" onClick={handlePointsTip}>
                 Tip
               </Button>
             </li>
