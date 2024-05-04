@@ -34,8 +34,6 @@ const getResponse = async (): Promise<NextResponse> => {
   ]);
   const allEntries: any[] = [];
   allEntries.push(...spotify.casts, ...soundCloud.casts, ...soundxyz.casts);
-  console.log("SWEETS allEntries", allEntries)
-
   await processEntriesInBatches(allEntries);
   return NextResponse.json({ message: 'success', allEntries }, { status: 200 });
 };
