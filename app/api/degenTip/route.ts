@@ -1,4 +1,3 @@
-import getDegenTipsData from '@/lib/degen/getDegenTipsData';
 import postDegenTipComment from '@/lib/neynar/postDegenTipComment';
 import verifySignerUUID from '@/lib/neynar/verifySigner';
 import { createClient } from '@supabase/supabase-js';
@@ -11,25 +10,12 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const getResponse = async (req: NextRequest): Promise<NextResponse> => {
   const body = await req.json();
-  const { signer_uuid, tipAmount, postHash, walletAddress } = body;
+  const { signer_uuid, tipAmount, postHash } = body;
 
   if (!(await verifySignerUUID(signer_uuid))) {
     return NextResponse.json(
       { message: 'Invalid Signer UUID', tipRemaining: 0, totalTipOnPost: 0 },
       { status: 400 },
-    );
-  }
-
-  const degenTipData = await getDegenTipsData(walletAddress);
-
-  if (tipAmount > Number(degenTipData.remaining_allowance)) {
-    return NextResponse.json(
-      {
-        message: `NOTES allowance exceeded`,
-        usedTip: 0,
-        totalTipOnPost: 0,
-      },
-      { status: 200 },
     );
   }
 
