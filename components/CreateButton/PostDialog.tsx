@@ -13,12 +13,12 @@ const PostDialog = ({ handleTextChange, onPost, isOpen, setIsOpen }: any) => (
     <DialogContent className="max-w-[75vw]">
       <DialogHeader className="flex items-center text-center">
         <DialogTitle>Post Your Content</DialogTitle>
-        <DialogDescription>sound/soundcloud/spotify</DialogDescription>
+        <DialogDescription>We currently support Spotify, Soundcloud and Sound links. More coming soon!</DialogDescription>
       </DialogHeader>
 
       <div className="flex flex-col items-center justify-center gap-3 text-center">
         <Input onChange={handleTextChange} className="w-full max-w-[555px]" />
-        <Button onClick={onPost}>Post</Button>
+        <Button onClick={onPost}>Cast</Button>
       </div>
     </DialogContent>
   </Dialog>

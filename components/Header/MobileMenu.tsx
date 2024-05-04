@@ -18,7 +18,7 @@ export default function MobileMenu({ open, setOpen }: MobileMenuProps) {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetContent side="left" className="flex flex-col gap-6">
         <SheetHeader>
-          <SheetTitle className="text-left text-4xl">Notes</SheetTitle>
+          <SheetTitle className="text-left text-2xl">Notes</SheetTitle>
         </SheetHeader>
 
         <BalanceInfo />
