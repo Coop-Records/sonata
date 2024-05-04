@@ -3,6 +3,8 @@ import Image from 'next/image';
 import Button from '../Button';
 import { useTipProvider } from '@/providers/TipProvider';
 import { SupabasePost } from '@/types/SupabasePost';
+import SignInDialog from '../SignInDialog';
+import useSignInModal from '@/hooks/useSignInModal';
 
 const isValidNumber = (value: string) => {
   return /^\d+$/.test(value);
@@ -24,6 +26,7 @@ const TipButton = ({
   const pointsDropdownRef = useRef<HTMLDivElement>(null);
   const [notesTotal, setNotesTotal] = useState(0);
   const [degenTotal, setDegenTotal] = useState(0);
+  const { isOpen, setIsOpen, checkLoggedIn } = useSignInModal();
 
   useEffect(() => {
     setNotesTotal(cast.points ?? 0);
@@ -61,18 +64,28 @@ const TipButton = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const handleDegenClick = () => {
+    if (!checkLoggedIn()) return;
+    setShowDegenDropdown(!showDegenDropdown);
+  };
+
+  const handlePointsClick = () => {
+    if (!checkLoggedIn()) return;
+    setShowPointsDropdown(!showPointsDropdown);
+  };
+
   return verifications && verifications.length > 0 ? (
     <div className="relative flex w-full items-center justify-end gap-4 text-xs">
       <div
         className="flex h-full cursor-pointer items-center justify-center space-x-2 rounded-sm p-1 text-xs hover:bg-gray-100"
-        onClick={() => setShowDegenDropdown(!showDegenDropdown)}
+        onClick={handleDegenClick}
       >
         <span>{degenTotal}</span>
         <Image src="/images/degenchain.png" width={12} height={12} alt="DEGEN" />
       </div>
       <div
         className="flex h-full cursor-pointer items-center justify-center space-x-2 rounded-sm p-1 text-xs hover:bg-gray-100"
-        onClick={() => setShowPointsDropdown(!showPointsDropdown)}
+        onClick={handlePointsClick}
       >
         <span>{notesTotal}</span>
         <Image src="/images/notes.png" width={16} height={16} alt="NOTES" />
@@ -149,6 +162,7 @@ const TipButton = ({
           </ul>
         </div>
       )}
+      <SignInDialog open={isOpen} setOpen={setIsOpen} />
     </div>
   ) : null;
 };
