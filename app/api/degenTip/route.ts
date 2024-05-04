@@ -20,19 +20,6 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
     );
   }
 
-  const degenTipData = await getDegenTipsData(walletAddress);
-
-  if (tipAmount > Number(degenTipData.remaining_allowance)) {
-    return NextResponse.json(
-      {
-        message: `NOTES allowance exceeded`,
-        usedTip: 0,
-        totalTipOnPost: 0,
-      },
-      { status: 200 },
-    );
-  }
-
   const totalDegenOnPost = await callAllocateDegenTip(tipAmount, postHash);
 
   await postDegenTipComment(signer_uuid, tipAmount, postHash);
