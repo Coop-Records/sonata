@@ -28,7 +28,10 @@ export default function MediaPlayer({ metadata, controls, position }: MediaPlaye
 
   const handlePlay = () => {
     if (!metadata || !controls) return;
-    dispatch({ type: 'PLAY', payload: { metadata, controls } });
+    dispatch({
+      type: 'PLAY',
+      payload: { metadata, controls: currentTrack ? player?.controls : controls },
+    });
   };
 
   const handlePause = () => {
