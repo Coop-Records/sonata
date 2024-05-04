@@ -12,6 +12,7 @@ export default function Feed({ feed }: { feed: SupabasePost[] }) {
 
   useEffect(() => {
     setFeed(feed);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [feed]);
 
   return (

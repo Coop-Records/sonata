@@ -1,7 +1,6 @@
 import createReaction from '@/lib/neynar/createReaction';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { useTipProvider } from '@/providers/TipProvider';
-import { Cast } from '@/types/Cast';
 import { useEffect, useState } from 'react';
 import { FaArrowUp } from 'react-icons/fa';
 import { cn } from '@/lib/utils';

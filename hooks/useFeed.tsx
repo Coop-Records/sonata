@@ -2,10 +2,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { useSupabaseProvider } from '@/providers/SupabaseProvider';
 import { FeedType, useFeedProvider } from '@/providers/FeedProvider';
 
-const useFeed = () => {
+const useFeed = ({ feedType }: { feedType: string }) => {
   const [feed, setFeed] = useState<any[]>([]);
   const { supabaseClient } = useSupabaseProvider();
-  const { feedType, filter } = useFeedProvider();
+  const { filter } = useFeedProvider();
 
   const fetchAndUpdatePoints = async (postHash: string) => {
     const { data, error } = await supabaseClient
@@ -75,6 +75,7 @@ const useFeed = () => {
       degen: pointsMap[post.hash]?.degen || 0, // Safe access to degen
     }));
     setFeed((prev) => [...prev, ...feedsWithPoints]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
