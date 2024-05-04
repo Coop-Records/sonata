@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,
-    images: [`https://framerusercontent.com/images/UjSwC7tz1DFYsxiMeKvEI6K7eo.png`],
+    images: [`https://storage.googleapis.com/papyrus_images/db372b268e4b2198fb3eeefa63d84942.jpg`],
   },
   icons: [`${VERCEL_URL}/images/logo2.png`],
   other: {
