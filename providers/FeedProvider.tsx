@@ -1,13 +1,13 @@
 'use client';
 import { FeedFilter } from '@/types/Feed';
-import { Cast as CastType } from '@/types/Cast';
 import { ReactNode, createContext, useContext, useState } from 'react';
+import { SupabasePost } from '@/types/SupabasePost';
 
 type FeedProviderType = {
   filter: FeedFilter;
   updateFilter: (change: FeedFilter) => void;
-  feed: CastType[];
-  setFeed: (feed: CastType[]) => void;
+  feed: SupabasePost[];
+  setFeed: (feed: SupabasePost[]) => void;
   feedType: string;
   setFeedType: (feedType: string) => void;
 };
@@ -21,7 +21,7 @@ const FeedContext = createContext<FeedProviderType>({} as any);
 
 const FeedProvider = ({ children }: { children: ReactNode }) => {
   const [filter, setFilter] = useState<FeedFilter>({});
-  const [feed, setFeed] = useState<CastType[]>([]);
+  const [feed, setFeed] = useState<SupabasePost[]>([]);
   const [feedType, setFeedType] = useState<string>(FeedType.Trending);
 
   const updateFilter = (change: FeedFilter) => {

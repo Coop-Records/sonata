@@ -23,8 +23,10 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
     const init = async () => {
       if (!trackId) return;
       const track = await getSpotifyTrack(trackId);
-      setTrack(track);
-      setDuration(track.duration_ms);
+      if (!('error' in track)) {
+        setTrack(track);
+        setDuration(track.duration_ms);
+      }
     };
 
     init();

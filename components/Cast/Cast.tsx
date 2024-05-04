@@ -1,4 +1,3 @@
-import { Cast as CastType } from '@/types/Cast';
 import AuthorDetails from './AuthorDetails';
 import Upvote from './Upvote';
 import findValidEmbed from '@/lib/findValidEmbed';
@@ -8,20 +7,23 @@ import SpotifyEmbed from './SpotifyEmbed';
 import SoundCloudEmbed from './SoundCloudEmbed';
 import SoundXyzEmbed from './SoundXyzEmbed';
 import { useFeedProvider } from '@/providers/FeedProvider';
+import { SupabasePost } from '@/types/SupabasePost';
 
-const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
+const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
   const { filter } = useFeedProvider();
   const embed = findValidEmbed(cast);
   const url = embed?.url;
+  const isSpotify = url?.includes('spotify');
 
   const { author } = cast;
   const { verifications } = author;
 
   const EmbedComponent = useMemo(() => {
     if (!url) return null;
-    if (url.includes('spotify')) return SpotifyEmbed;
+    if (isSpotify) return SpotifyEmbed;
     if (url.includes('soundcloud')) return SoundCloudEmbed;
     if (url.includes('sound.xyz')) return SoundXyzEmbed;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url]);
 
   const shouldBeFiltered = useMemo(() => {
@@ -31,6 +33,8 @@ const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
     }
     const validEmbed = findValidEmbed(cast, { platform: filter.platform });
     if (!validEmbed) return false;
+
+    if (isSpotify) return false;
 
     return true;
   }, [filter, cast]);

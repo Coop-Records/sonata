@@ -1,11 +1,12 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import Filter from '../Feed/Filter';
+// import PlatformFilter from '../Feed/PlatformFilter';
 import BalanceInfo from './BalanceInfo';
 import SignInButton from '../SignInButton';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
+// import ChannelFilter from '../Feed/ChannelFilter';
 
 type MobileMenuProps = {
   open: boolean;
@@ -23,8 +24,9 @@ export default function MobileMenu({ open, setOpen }: MobileMenuProps) {
 
         <BalanceInfo />
         <Separator />
-        <Filter />
-        <Separator />
+        {/* <PlatformFilter /> */}
+        {/* <Separator /> */}
+        {/* <ChannelFilter /> */}
 
         <div className="mt-auto space-y-6">
           <Separator />

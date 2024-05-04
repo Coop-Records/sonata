@@ -1,10 +1,11 @@
-import getSortedFeeds from '@/lib/neynar/getCombinedFeeds';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSupabaseProvider } from '@/providers/SupabaseProvider';
+import { FeedType, useFeedProvider } from '@/providers/FeedProvider';
 
-const useFeed = () => {
+const useFeed = ({ feedType }: { feedType: string }) => {
   const [feed, setFeed] = useState<any[]>([]);
   const { supabaseClient } = useSupabaseProvider();
+  const { filter } = useFeedProvider();
 
   const fetchAndUpdatePoints = async (postHash: string) => {
     const { data, error } = await supabaseClient
@@ -30,44 +31,43 @@ const useFeed = () => {
     }
   };
 
-  const fetchPoints = async (postHashes: string[]) => {
-    const { data, error } = await supabaseClient
-      .from('posts')
-      .select('post_hash, points, degen')
-      .in('post_hash', postHashes);
+  const fetchPoints = async (start: number) => {
+    const query = supabaseClient.from('posts').select('*').not('likes', 'is', null);
 
-    if (error) {
-      console.error('Error fetching points:', error);
-      return {};
+    if (filter?.platform) {
+      query.eq('platform', filter.platform);
     }
-    return data.reduce(
-      (
-        acc: { [x: string]: any },
-        item: { post_hash: string | number; points: any; degen: any },
-      ) => {
-        acc[item.post_hash] = { points: item.points, degen: item.degen }; // Store both points and degen
-        return acc;
-      },
-      {},
-    );
+
+    if (filter?.channel) {
+      query.like('parent_url', `%${filter.channel}%`);
+    }
+
+    if (feedType == FeedType.Recent) {
+      query.order('created_at', { ascending: false });
+      query.range(start, start + 5);
+    } else {
+      query.order('likes', { ascending: false });
+      query.range(start, start + 20);
+    }
+
+    const { data: posts } = await query.returns();
+
+    return {
+      posts
+    };
   };
 
-  useEffect(() => {
-    const init = async () => {
-      const sortedFeeds = await getSortedFeeds();
-      const postHashes = sortedFeeds.map((post) => post.hash);
-      const pointsMap = await fetchPoints(postHashes);
-      const feedsWithPoints = sortedFeeds.map((post) => ({
-        ...post,
-        points: pointsMap[post.hash]?.points || 0, // Safe access to points
-        degen: pointsMap[post.hash]?.degen || 0, // Safe access to degen
-      }));
-      setFeed(feedsWithPoints);
-    };
-    init();
+  const getFeed = useCallback(async (start: number) => {
+    const { posts } = await fetchPoints(start);
+    setFeed((prev) => [...prev, ...posts]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return { feed, fetchAndUpdatePoints };
+  useEffect(() => {
+    getFeed(0);
+  }, [getFeed]);
+
+  return { feed, fetchAndUpdatePoints, getFeed };
 };
 
 export default useFeed;

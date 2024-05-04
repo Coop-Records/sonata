@@ -1,20 +1,34 @@
 import createReaction from '@/lib/neynar/createReaction';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { useTipProvider } from '@/providers/TipProvider';
-import { Cast } from '@/types/Cast';
 import { useEffect, useState } from 'react';
 import { FaArrowUp } from 'react-icons/fa';
 import { cn } from '@/lib/utils';
 import SignInDialog from '../SignInDialog';
+import getCastLikes from '@/lib/neynar/getCastLikes';
+import { SupabasePost } from '@/types/SupabasePost';
 
-const Upvote = ({ cast }: { cast: Cast }) => {
+const Upvote = ({ cast }: { cast: SupabasePost }) => {
   const { signer } = useNeynarProvider();
-  const [upvoted, setUpvoted] = useState<boolean>(
-    Boolean(signer && cast.reactions.likes.some((like) => like?.fid === String(signer?.fid))),
-  );
-  const [votes, setVotes] = useState<number>(cast.reactions.likes.length);
+  const [upvoted, setUpvoted] = useState(false);
+  const [votes, setVotes] = useState<number>(cast.likes || 0);
   const [signInModalOpen, setSignInModalOpen] = useState<boolean>(false);
   const { tip } = useTipProvider();
+
+  useEffect(() => {
+    const updateReaction = async () => {
+      const likes = await getCastLikes(cast.post_hash);
+      if ('error' in likes) {
+        return;
+      }
+      if (likes.some((like: any) => like?.fid === signer?.fid)) {
+        setUpvoted(true);
+      }
+    };
+    if (signer?.fid && cast.post_hash) {
+      updateReaction();
+    }
+  }, [cast.post_hash, signer?.fid]);
 
   useEffect(() => {
     if (signer) setSignInModalOpen(false);
@@ -27,12 +41,12 @@ const Upvote = ({ cast }: { cast: Cast }) => {
     }
 
     const { signer_uuid } = signer;
-    const response = await createReaction(signer_uuid, cast.hash);
+    const response = await createReaction(signer_uuid, cast.post_hash);
 
     if (response.success) {
       setUpvoted(true);
       setVotes(votes + 1);
-      await tip(10, cast.hash, cast.author.verifications);
+      await tip(10, cast.post_hash, cast.author.verifications);
     }
   };
 
