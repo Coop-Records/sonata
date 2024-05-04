@@ -1,94 +1,94 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { useSpotifyApi } from '@/providers/SpotifyApiProvider';
+import { useEffect, useRef, useState } from 'react';
 import { SpotifyPlaybackUpdateEvent } from '@/types/SpotifyPlaybackUpdateEvent';
-import getSpotifyTrackId from '@/lib/spotify/getSpotifyTrackId';
-import getSpotifyTrack from '@/lib/spotify/getSpotifyTrack';
-import { SpotifyTrack } from '@/types/SpotifyTrack';
 import MediaPlayer from '@/components/MediaPlayer';
+import { useSpotifyApi } from '@/providers/SpotifyApiProvider';
 
 export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
-  const trackId = useMemo(() => getSpotifyTrackId(trackUrl), [trackUrl]);
-  const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [track, setTrack] = useState<SpotifyTrack>();
-  const [embedController, setEmbedController] = useState({} as any);
+  const [position, setPosition] = useState(0);
+  const [iframeSrc, setIframeSrc] = useState('');
   const elementRef = useRef<HTMLIFrameElement>(null);
-  const iframeApi = useSpotifyApi();
+  const [embedController, setEmbedController] = useState({} as any);
+  const iframeApi = useSpotifyApi(); // Assumed to provide an API similar to the Soundcloud API's Widget
+
+  useEffect(() => {
+    const fetchOEmbedData = async () => {
+      const oEmbedUrl = `https://open.spotify.com/oembed?format=json&url=${encodeURIComponent(trackUrl)}`;
+      const response = await fetch(oEmbedUrl);
+      const data = await response.json();
+      const srcRegex = /src="([^"]+)"/;
+      const match = data.html.match(srcRegex);
+      setIframeSrc(match ? match[1] : '');
+    };
+
+    fetchOEmbedData();
+  }, [trackUrl]);
+
+  useEffect(() => {
+    if (!(iframeSrc && iframeApi)) return;
+    // console.log('SWEETS iframeSrc', iframeSrc);
+    // console.log('SWEETS iframeApi', iframeApi);
+
+    const options = {
+      height: '10',
+      width: '10',
+      uri: trackUrl,
+    };
+
+    const controller = iframeApi.createController(
+      elementRef.current,
+      options,
+      (controller: any) => {
+        controller.addListener('ready', () => {
+          console.log('SWEETS controller', controller);
+          setEmbedController(controller);
+        });
+        controller.addListener('playback_update', (e: SpotifyPlaybackUpdateEvent) => {
+          setPosition(e.data.position);
+          setDuration(e.data.duration);
+        });
+      },
+    );
+
+    setEmbedController(controller);
+  }, [iframeSrc, iframeApi]);
+
   const fullLoadedEmbed =
     typeof embedController.togglePlay === 'function' &&
     typeof embedController.pause === 'function' &&
     typeof embedController.seek === 'function';
 
-  useEffect(() => {
-    const init = async () => {
-      if (!trackId) return;
-      const track = await getSpotifyTrack(trackId);
-      if (!('error' in track)) {
-        setTrack(track);
-        setDuration(track.duration_ms);
-      }
-    };
-
-    init();
-  }, [trackId]);
-
-  useEffect(() => {
-    if (!(track?.uri && iframeApi)) return;
-
-    const options = {
-      height: '10',
-      width: '10',
-      uri: track.uri,
-    };
-    iframeApi.createController(elementRef.current, options, (embedController: any) => {
-      embedController.addListener('ready', () => {
-        setEmbedController(embedController);
-      });
-      embedController.addListener('playback_update', (e: SpotifyPlaybackUpdateEvent) => {
-        const data = e.data;
-        setPosition(data.position);
-        setDuration(data.duration);
-      });
-    });
-  }, [track?.uri, iframeApi]);
-
-  if (track?.error) {
-    return <></>;
-  }
-
   return (
     <div className="relative z-0 w-full">
       <MediaPlayer
-        metadata={
-          track && {
-            id: track.uri,
-            type: 'spotify',
-            artistName: track.artists.map((artist: any) => artist.name).join(', '),
-            trackName: track.name,
-            artworkUrl: track.album.images[0].url,
-            duration,
-          }
-        }
+        metadata={{
+          id: trackUrl,
+          type: 'spotify',
+          artistName: 'Unknown', // Placeholder, update accordingly
+          trackName: 'Unknown', // Placeholder, update accordingly
+          artworkUrl: '', // Placeholder, update accordingly
+          duration,
+        }}
         controls={
           fullLoadedEmbed
             ? {
-                play: () => {
-                  embedController.togglePlay();
-                },
-                pause: () => {
-                  embedController.pause();
-                },
-                seek: (time) => {
-                  embedController.seek(time);
-                },
+                play: () => embedController.togglePlay(),
+                pause: () => embedController.pause(),
+                seek: (time) => embedController.seek(time),
               }
             : null
         }
         position={position}
       />
-      <div className="absolute left-0 top-0 -z-10 opacity-0">
-        <div ref={elementRef} />
-      </div>
+      <iframe
+        className="absolute left-0 top-0 -z-10 opacity-0"
+        ref={elementRef}
+        src={iframeSrc}
+        allow="autoplay; encrypted-media"
+        width="300"
+        height="380"
+        frameBorder="0"
+      ></iframe>
     </div>
   );
 }
