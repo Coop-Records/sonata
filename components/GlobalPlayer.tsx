@@ -22,7 +22,7 @@ export default function GlobalPlayer() {
   return (
     <div
       data-type={metadata.type}
-      className="sticky bottom-0 left-0 flex w-full flex-col gap-4 bg-black p-2"
+      className="sticky bottom-0 left-0 flex w-full flex-col gap-4 bg-white p-2 border-t border-gray-200"
     >
       <div className="flex gap-4">
         <div className="relative my-auto aspect-square w-16 shrink-0 shadow-md">
@@ -37,27 +37,27 @@ export default function GlobalPlayer() {
         </div>
 
         <div className="flex grow flex-col gap-1 pt-2 text-left">
-          <div className="line-clamp-2 font-inter text-sm font-bold text-white">
+          <div className="line-clamp-2 font-inter text-sm font-bold text-black">
             {metadata.trackName}
           </div>
-          <div className="line-clamp-2 font-inter text-xs font-extralight text-white">
+          <div className="line-clamp-2 font-inter text-xs font-extralight text-black">
             {metadata.artistName}
           </div>
         </div>
         <div className="my-auto">
           {player.playing ? (
             <button onClick={handlePause}>
-              <MdPauseCircle className="text-4xl text-white" />
+              <MdPauseCircle className="text-4xl text-black" />
             </button>
           ) : (
             <button onClick={handlePlay}>
-              <MdPlayCircle className="text-4xl text-white" />
+              <MdPlayCircle className="text-4xl text-black" />
             </button>
           )}
         </div>
       </div>
       <div className="flex flex-col gap-1">
-        <div className="flex justify-between font-inter text-xs font-light text-white">
+        <div className="flex justify-between font-inter text-xs font-light text-black">
           <span>{formatDuration(position)}</span>
           <span>{formatDuration(metadata.duration)}</span>
         </div>

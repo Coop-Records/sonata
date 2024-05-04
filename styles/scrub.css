@@ -2,7 +2,7 @@
   cursor: pointer;
   position: absolute;
   z-index: 100;
-  background: black;
+  background: white;
   width: 10px;
   height: 10px;
   top: -3px;
@@ -31,7 +31,7 @@
   cursor: pointer;
   position: absolute;
   z-index: 100;
-  background: white;
+  background: black;
   width: 14px;
   height: 14px;
   top: -4px;
@@ -47,7 +47,7 @@
 }
 
 .global-scrub-track.global-scrub-track-0 {
-  background: white;
+  background: black;
   height: 4px;
   pointer-events: none;
 }
