@@ -5,6 +5,7 @@ import { useTipProvider } from '@/providers/TipProvider';
 import { SupabasePost } from '@/types/SupabasePost';
 import SignInDialog from '../SignInDialog';
 import useSignInModal from '@/hooks/useSignInModal';
+import { useNeynarProvider } from '@/providers/NeynarProvider';
 
 const isValidNumber = (value: string) => {
   return /^\d+$/.test(value);
@@ -17,6 +18,10 @@ const TipButton = ({
   verifications: string[];
   cast: SupabasePost;
 }) => {
+  const { user } = useNeynarProvider();
+  const userFid = user?.fid;
+  const castAuthorFid = cast.author?.fid;
+  const isSelfPost = userFid === castAuthorFid;
   const { tip, tipDegen } = useTipProvider();
   const [showDegenDropdown, setShowDegenDropdown] = useState(false);
   const [showPointsDropdown, setShowPointsDropdown] = useState(false);
@@ -66,11 +71,13 @@ const TipButton = ({
 
   const handleDegenClick = () => {
     if (!checkLoggedIn()) return;
+    if (isSelfPost) return;
     setShowDegenDropdown(!showDegenDropdown);
   };
 
   const handlePointsClick = () => {
     if (!checkLoggedIn()) return;
+    if (isSelfPost) return;
     setShowPointsDropdown(!showPointsDropdown);
   };
 
