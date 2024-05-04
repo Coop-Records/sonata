@@ -16,6 +16,13 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
   const body = await req.json();
   const { signer_uuid, tipAmount, walletAddress, postHash, authorWalletAddress } = body;
 
+  if (walletAddress.toLowerCase() === authorWalletAddress.toLowerCase()) {
+    return NextResponse.json(
+      { message: `Can not tip yourself`, tipRemaining: 0, totalTipOnPost: 0 },
+      { status: 400 },
+    );
+  }
+
   if (!(await verifySignerUUID(signer_uuid))) {
     return NextResponse.json(
       { message: `Invalid Signer UUID`, tipRemaining: 0, totalTipOnPost: 0 },
