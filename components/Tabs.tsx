@@ -8,7 +8,7 @@ type tab = {
   value: string;
 };
 
-export default function Tabs({ tabs, className = '' }: { tabs: tab[]; className: string }) {
+export default function Tabs({ tabs, className = '' }: { tabs: tab[]; className?: string }) {
   const { feedType, setFeedType } = useFeedProvider();
 
   return (
