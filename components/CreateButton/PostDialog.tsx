@@ -10,14 +10,14 @@ import Input from '../Input';
 
 const PostDialog = ({ handleTextChange, onPost, isOpen, setIsOpen }: any) => (
   <Dialog open={isOpen} onOpenChange={setIsOpen}>
-    <DialogContent className="max-w-[75vw]">
+    <DialogContent className="max-w-[75vw] sm:max-w-[33vw]">
       <DialogHeader className="flex items-center text-center">
-        <DialogTitle>Post Your Content</DialogTitle>
-        <DialogDescription>We currently support Spotify, Soundcloud and Sound links. More coming soon!</DialogDescription>
+        <DialogTitle>Share a Song</DialogTitle>
+        <DialogDescription>Enter Soundcloud or Sound links. More coming soon!</DialogDescription>
       </DialogHeader>
 
       <div className="flex flex-col items-center justify-center gap-3 text-center">
-        <Input onChange={handleTextChange} className="w-full max-w-[555px]" />
+        <Input onChange={handleTextChange} className="w-full" />
         <Button onClick={onPost}>Cast</Button>
       </div>
     </DialogContent>
