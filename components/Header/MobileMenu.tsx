@@ -1,5 +1,5 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import PlatformFilter from '../Feed/PlatformFilter';
+// import PlatformFilter from '../Feed/PlatformFilter';
 import BalanceInfo from './BalanceInfo';
 import SignInButton from '../SignInButton';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
