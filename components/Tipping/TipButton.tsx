@@ -75,7 +75,7 @@ const TipButton = ({
         onClick={() => setShowPointsDropdown(!showPointsDropdown)}
       >
         <span>{notesTotal}</span>
-        <Image src="/images/notes.jpg" width={16} height={16} alt="NOTES" />
+        <Image src="/images/notes.png" width={16} height={16} alt="NOTES" />
       </div>
       {showDegenDropdown && (
         <div
