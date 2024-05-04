@@ -11,10 +11,10 @@ const Feeds = () => {
 
   return (
     <>
-      <div className={`${isRecent ? 'hidden' : ''}`}>
+      <div className={`${isRecent ? 'hidden' : ''}`} key="trending">
         <TrendingComponent />
       </div>
-      <div className={`${isTrending ? 'hidden' : ''}`}>
+      <div className={`${isTrending ? 'hidden' : ''}`} key="recent">
         <RecentComponent />
       </div>
     </>
