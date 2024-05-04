@@ -11,7 +11,7 @@ export default function BalanceInfo() {
   return (
     <div className="flex flex-row gap-2 text-xs flex-wrap">
       <div className="flex items-center">
-        <span className="whitespace-nowrap">{`Daily Allowance: ${!isNil(remainingTipAllocation) ? formatBigInt(BigInt(remainingTipAllocation)) : '-'} / ${dailyTipAllowance ? formatBigInt(BigInt(dailyTipAllowance)) : '-'}`}</span>{' '}
+        <span className="whitespace-nowrap">{`Daily Allowance: ${!isNil(remainingTipAllocation) ? formatBigInt(BigInt(remainingTipAllocation)) : '-'}${dailyTipAllowance ? ` / ${formatBigInt(BigInt(dailyTipAllowance))}` : ''}`}</span>{' '}
         <Image src="/images/notes.png" width={20} height={20} alt="" />
       </div>
       <div className="flex items-center">
