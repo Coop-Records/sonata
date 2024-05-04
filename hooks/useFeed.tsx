@@ -53,28 +53,13 @@ const useFeed = ({ feedType }: { feedType: string }) => {
     const { data: posts } = await query.returns();
 
     return {
-      posts,
-      pointsMap: posts?.reduce(
-        (
-          acc: { [x: string]: any },
-          item: { post_hash: string | number; points: any; degen: any },
-        ) => {
-          acc[item.post_hash] = { points: item.points, degen: item.degen }; // Store both points and degen
-          return acc;
-        },
-        {},
-      ),
+      posts
     };
   };
 
   const getFeed = useCallback(async (start: number) => {
-    const { posts, pointsMap } = await fetchPoints(start);
-    const feedsWithPoints = posts.map((post: any) => ({
-      ...post,
-      points: pointsMap[post.hash]?.points || 0, // Safe access to points
-      degen: pointsMap[post.hash]?.degen || 0, // Safe access to degen
-    }));
-    setFeed((prev) => [...prev, ...feedsWithPoints]);
+    const { posts } = await fetchPoints(start);
+    setFeed((prev) => [...prev, ...posts]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
