@@ -44,11 +44,11 @@ const useFeed = ({ feedType }: { feedType: string }) => {
 
     if (feedType == FeedType.Recent) {
       query.order('created_at', { ascending: false });
+      query.range(start, start + 5);
     } else {
       query.order('likes', { ascending: false });
+      query.range(start, start + 20);
     }
-
-    query.range(start, start + 5);
 
     const { data: posts } = await query.returns();
 
