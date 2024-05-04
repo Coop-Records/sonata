@@ -1,26 +1,32 @@
 'use client';
-import FeedFilter from '@/components/Feed/Filter';
+
 import { ReactNode } from 'react';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import Tabs from '@/components/Tabs';
 import { tabs } from '@/lib/consts';
+// import PlatformFilter from '@/components/Feed/PlatformFilter';
+import { Separator } from '@/components/ui/separator';
+// import ChannelFilter from '@/components/Feed/ChannelFilter';
+import BalanceInfo from '@/components/Header/BalanceInfo';
 
 export default function FeedLayout({ children }: { children: ReactNode }) {
   return (
     <main>
       <meta property="of:accepts:xmtp" content="2024-02-01" />
-      <div className="container flex justify-center py-12 font-proxima bg-blend-color-burn">
-        <div className="flex w-full max-w-4xl items-start md:gap-10">
-          <div className="max-w-full grow">{children}</div>
-          <Card className="min-w-64 max-md:hidden">
-            <CardHeader className="flex flex-col">
-              <Tabs tabs={tabs} />
-            </CardHeader>
-            <CardContent>
-              <FeedFilter />
-            </CardContent>
-          </Card>
+      <div className="container flex justify-center font-helvetica bg-blend-color-burn md:gap-6">
+        <div className="flex flex-col gap-8 max-md:hidden">
+          <h2 className="text-2xl font-bold">Notes</h2>
+          <BalanceInfo />
+          {/* <Separator className="mt-10" /> */}
+          {/* <ChannelFilter /> */}
         </div>
+        <Separator orientation="vertical" className="max-md:hidden" />
+
+        <div className="flex max-w-full grow flex-col items-center gap-4">
+          <Tabs tabs={tabs} className="max-md:hidden" />
+          <div className="w-full grow overflow-hidden">{children}</div>
+        </div>
+        <Separator orientation="vertical" className="max-md:hidden" />
+        <div className="min-w-48 pt-16 max-md:hidden">{/* <PlatformFilter /> */}</div>
       </div>
     </main>
   );

@@ -1,10 +1,10 @@
-import { Cast } from '@/types/Cast';
+import { SupabasePost } from '@/types/SupabasePost';
 import { FeedFilter } from '@/types/Feed';
 import { EmbedUrl } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import isValidUrl from './isValidUrl';
 
-export default function findValidEmbed(cast: Cast, filter: FeedFilter = {}) {
-  const embeds = cast.embeds;
+export default function findValidEmbed(cast: SupabasePost, filter: FeedFilter = {}) {
+  const embeds = cast.embeds.map((embed) => JSON.parse(embed));
   const validEmbed = embeds.find((embed) => {
     if (!('url' in embed)) return false;
     const url = embed.url;
