@@ -24,7 +24,7 @@ const getFeed = async (embedUrl: string) => {
     return data;
   } catch (error) {
     console.error(error);
-    return { error };
+    return [];
   }
 };
 

@@ -6,8 +6,11 @@ const useNewCasts = () => {
 
   useEffect(() => {
     const init = async () => {
+      console.log('SWEETS GETTING NEW CASTS');
+
       const newCastResponse = await fetch('/api/getNewCasts');
       const data = await newCastResponse.json();
+      console.log('SWEETS NEW CAST data', data);
       setNewCasts(data.allEntries);
     };
     init();

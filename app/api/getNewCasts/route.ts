@@ -1,5 +1,5 @@
 import getCastLikes from '@/lib/neynar/getCastLikes';
-import getFeedFromTime from '@/lib/neynar/getFeedFromTime';
+import getFeed from '@/lib/neynar/getFeed';
 import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { createClient } from '@supabase/supabase-js';
 import { isEmpty } from 'lodash';
@@ -27,32 +27,16 @@ const processSingleEntry = async (cast: Cast) => {
 };
 
 const getResponse = async (): Promise<NextResponse> => {
-  const { data: cast_query_date } = await supabase
-    .from('cast_query_date')
-    .select('last_checked')
-    .eq('id', 1)
-    .single();
-  const lastChecked = cast_query_date ? new Date(cast_query_date.last_checked) : new Date();
-
   const [spotify, soundCloud, soundxyz] = await Promise.all([
-    getFeedFromTime('spotify.com/track', lastChecked),
-    getFeedFromTime('soundcloud.com', lastChecked),
-    getFeedFromTime('sound.xyz', lastChecked),
+    getFeed('spotify.com/track'),
+    getFeed('soundcloud.com'),
+    getFeed('sound.xyz'),
   ]);
-
   const allEntries: any[] = [];
-
-  allEntries.push(...spotify, ...soundCloud, ...soundxyz);
+  allEntries.push(...spotify.casts, ...soundCloud.casts, ...soundxyz.casts);
+  console.log("SWEETS allEntries", allEntries)
 
   await processEntriesInBatches(allEntries);
-
-  const newLastChecked = allEntries.reduce((max, cast) => {
-    const current = new Date(cast.timestamp);
-    return current > max ? current : max;
-  }, lastChecked);
-
-  await supabase.from('cast_query_date').upsert({ id: 1, last_checked: newLastChecked });
-
   return NextResponse.json({ message: 'success', allEntries }, { status: 200 });
 };
 
