@@ -19,7 +19,7 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
 
   const EmbedComponent = useMemo(() => {
     if (!url) return null;
-    if (url.includes('spotify')) return SpotifyEmbed;
+    // if (url.includes('spotify')) return SpotifyEmbed;
     if (url.includes('soundcloud')) return SoundCloudEmbed;
     if (url.includes('sound.xyz')) return SoundXyzEmbed;
   }, [url]);
