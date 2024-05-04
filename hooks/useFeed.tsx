@@ -67,8 +67,8 @@ const useFeed = ({ feedType }: { feedType: string }) => {
     };
   };
 
-  const getFeed = useCallback(async () => {
-    const { posts, pointsMap } = await fetchPoints(feed.length);
+  const getFeed = useCallback(async (start: number) => {
+    const { posts, pointsMap } = await fetchPoints(start);
     const feedsWithPoints = posts.map((post: any) => ({
       ...post,
       points: pointsMap[post.hash]?.points || 0, // Safe access to points
@@ -79,7 +79,7 @@ const useFeed = ({ feedType }: { feedType: string }) => {
   }, []);
 
   useEffect(() => {
-    getFeed();
+    getFeed(0);
   }, [getFeed]);
 
   return { feed, fetchAndUpdatePoints, getFeed };

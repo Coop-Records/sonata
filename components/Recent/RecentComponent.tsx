@@ -12,7 +12,7 @@ export default function RecentComponent() {
   return feed?.length > 0 ? (
     <InfiniteScroll
       dataLength={feed.length}
-      next={getFeed}
+      next={() => getFeed(feed.length)}
       hasMore={true}
       loader={<Loader className="w-full" />}
       className="!overflow-y-hidden"
