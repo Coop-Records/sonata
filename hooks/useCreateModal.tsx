@@ -12,7 +12,7 @@ const useCreateDialog = () => {
 
   const handlePost = () => {
     if (!isValidUrl(embedUrl)) {
-      toast({ description: `Spotify / Sound / Soundcloud only` });
+      toast({ description: `Sound / Soundcloud only` });
       return;
     }
     callPostApi(signer?.signer_uuid, embedUrl);
