@@ -103,7 +103,9 @@ const TipButton = ({
               />
               <Button
                 className="p-2 hover:bg-gray-100"
-                onClick={() => isValidNumber(customTipDegen) && handleTip(Number(customTipDegen), 'DEGEN')}
+                onClick={() =>
+                  isValidNumber(customTipDegen) && handleTip(Number(customTipDegen), 'DEGEN')
+                }
               >
                 Tip
               </Button>
@@ -137,7 +139,9 @@ const TipButton = ({
               />
               <Button
                 className="p-2 hover:bg-gray-100"
-                onClick={() => isValidNumber(customTipPoints) && handleTip(Number(customTipPoints), 'NOTES')}
+                onClick={() =>
+                  isValidNumber(customTipPoints) && handleTip(Number(customTipPoints), 'NOTES')
+                }
               >
                 Tip
               </Button>

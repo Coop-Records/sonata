@@ -1,7 +1,7 @@
 'use client';
 
-import useFeed from "@/hooks/useFeed";
-import Feed from "../Feed";
+import useFeed from '@/hooks/useFeed';
+import Feed from '../Feed';
 
 export default function TrendingComponent() {
   const { feed } = useFeed();
@@ -11,5 +11,4 @@ export default function TrendingComponent() {
   });
 
   return feed?.length > 0 ? <Feed feed={feed} /> : <></>;
-  }
-  
+}
