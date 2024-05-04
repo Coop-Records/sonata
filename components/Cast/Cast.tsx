@@ -38,13 +38,11 @@ const Cast = ({ cast = {} as CastType }: { cast: CastType }) => {
   if (!url) return <></>;
 
   return (
-    <div className="flex items-center gap-5 p-2.5">
+    <div className={`flex items-center gap-5 p-2.5 ${shouldBeFiltered ? '' : 'hidden'}`}>
       <Upvote cast={cast} />
       <div className="w-full space-y-4">
         <AuthorDetails author={author} />
-        <div className={`${shouldBeFiltered ? '' : 'hidden'}`}>
-          {EmbedComponent && <EmbedComponent trackUrl={url} />}
-        </div>
+        {EmbedComponent && <EmbedComponent trackUrl={url} />}
         <TipButton verifications={verifications} cast={cast} />
       </div>
     </div>
