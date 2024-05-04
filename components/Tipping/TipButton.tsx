@@ -5,6 +5,7 @@ import { useTipProvider } from '@/providers/TipProvider';
 import { SupabasePost } from '@/types/SupabasePost';
 import SignInDialog from '../SignInDialog';
 import useSignInModal from '@/hooks/useSignInModal';
+import { useNeynarProvider } from '@/providers/NeynarProvider';
 
 const isValidNumber = (value: string) => {
   return /^\d+$/.test(value);
@@ -17,6 +18,10 @@ const TipButton = ({
   verifications: string[];
   cast: SupabasePost;
 }) => {
+  const { user } = useNeynarProvider();
+  const userFid = user?.fid;
+  const castAuthorFid = cast.author?.fid;
+  const isSelfPost = userFid === castAuthorFid;
   const { tip, tipDegen } = useTipProvider();
   const [showDegenDropdown, setShowDegenDropdown] = useState(false);
   const [showPointsDropdown, setShowPointsDropdown] = useState(false);
@@ -36,6 +41,7 @@ const TipButton = ({
   const handleTip = async (amount: number, currency: 'DEGEN' | 'NOTES') => {
     setShowDegenDropdown(false);
     setShowPointsDropdown(false);
+    if (amount === 0) return;
     let response;
     if (currency === 'DEGEN') {
       response = await tipDegen(amount, cast.post_hash);
@@ -66,12 +72,22 @@ const TipButton = ({
 
   const handleDegenClick = () => {
     if (!checkLoggedIn()) return;
+    if (isSelfPost) return;
     setShowDegenDropdown(!showDegenDropdown);
   };
 
   const handlePointsClick = () => {
     if (!checkLoggedIn()) return;
+    if (isSelfPost) return;
     setShowPointsDropdown(!showPointsDropdown);
+  };
+
+  const handleTipDegen = () => {
+    isValidNumber(customTipDegen) && handleTip(Number(customTipDegen), 'DEGEN');
+  };
+
+  const handlePointsTip = () => {
+    isValidNumber(customTipPoints) && handleTip(Number(customTipPoints), 'NOTES');
   };
 
   return verifications && verifications.length > 0 ? (
@@ -114,12 +130,7 @@ const TipButton = ({
                 placeholder="Custom amount"
                 className={`mr-2 w-full rounded border px-2 py-1 text-sm [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
               />
-              <Button
-                className="p-2 hover:bg-gray-100"
-                onClick={() =>
-                  isValidNumber(customTipDegen) && handleTip(Number(customTipDegen), 'DEGEN')
-                }
-              >
+              <Button className="p-2 hover:bg-gray-100" onClick={handleTipDegen}>
                 Tip
               </Button>
             </li>
@@ -150,12 +161,7 @@ const TipButton = ({
                 placeholder="Custom amount"
                 className={`mr-2 w-full rounded border px-2 py-1 text-sm [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
               />
-              <Button
-                className="p-2 hover:bg-gray-100"
-                onClick={() =>
-                  isValidNumber(customTipPoints) && handleTip(Number(customTipPoints), 'NOTES')
-                }
-              >
+              <Button className="p-2 hover:bg-gray-100" onClick={handlePointsTip}>
                 Tip
               </Button>
             </li>
