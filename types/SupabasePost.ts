@@ -9,4 +9,5 @@ export type SupabasePost = {
   points?: number;
   degen?: number;
   parent_url?: string;
+  channelId?: string;
 };
