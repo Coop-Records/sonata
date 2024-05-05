@@ -48,12 +48,10 @@ async function createCast(cast: Cast) {
   const parentUrl = cast.parent_url
   let channelId = null;
   if (parentUrl) {
-    // Use a regular expression to extract the channelId from the URL
-    const match = /\/channel\/([^\/]+)$/.exec(parentUrl);
+    const match = /\/channel\/([^/]+)$/.exec(parentUrl);
     if (match) {
       channelId = match[1];
     }
-    console.log("Channel ID extracted from parent URL:", channelId);
   }
 
 
