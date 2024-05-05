@@ -7,30 +7,6 @@ const useFeed = ({ feedType }: { feedType: string }) => {
   const { supabaseClient } = useSupabaseProvider();
   const { filter } = useFeedProvider();
 
-  const fetchAndUpdatePoints = async (postHash: string) => {
-    const { data, error } = await supabaseClient
-      .from('posts')
-      .select('points,degen')
-      .eq('post_hash', postHash)
-      .single();
-
-    if (error) {
-      console.error('Error fetching points for post:', error);
-      return;
-    }
-
-    if (data) {
-      setFeed((currentFeed) =>
-        currentFeed.map((post) => {
-          if (post.hash === postHash) {
-            return { ...post, points: data.points, degen: data.degen };
-          }
-          return post;
-        }),
-      );
-    }
-  };
-
   const fetchPoints = async (start: number) => {
     const query = supabaseClient.from('posts').select('*').not('likes', 'is', null);
 
@@ -55,19 +31,38 @@ const useFeed = ({ feedType }: { feedType: string }) => {
     return {
       posts
     };
-  };
+  }
 
-  const getFeed = useCallback(async (start: number) => {
-    const { posts } = await fetchPoints(start);
-    setFeed((prev) => [...prev, ...posts]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const getFeed = async (start: number) => {    
+    const { posts } = await fetchPoints(start);    
+    setFeed((prev) => {
+      const mergedUnique = mergeArraysUniqueByPostHash(prev, posts);
+      return mergedUnique;
+    });
+  }
+
+  const mergeArraysUniqueByPostHash = (prev: any, posts: any) => {
+    const map = new Map();
+    const addItems = (items: any) => {
+        for (const item of items) {
+            if (!map.has(item.post_hash)) {
+                map.set(item.post_hash, item);
+            }
+        }
+    };
+    addItems(prev);
+    addItems(posts);
+    return Array.from(map.values());
+}
 
   useEffect(() => {
-    getFeed(0);
-  }, [getFeed]);
+    const init = async () => {
+      await getFeed(0);
+    }
+    init()
+  }, []);
 
-  return { feed, fetchAndUpdatePoints, getFeed };
+  return { feed, getFeed };
 };
 
 export default useFeed;

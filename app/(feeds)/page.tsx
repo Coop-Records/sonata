@@ -19,6 +19,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function FeedsHome() {
+export default function FeedsHome() {
   return <Feeds />;
 }
