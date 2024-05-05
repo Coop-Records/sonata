@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSupabaseProvider } from '@/providers/SupabaseProvider';
 import { FeedType, useFeedProvider } from '@/providers/FeedProvider';
 
