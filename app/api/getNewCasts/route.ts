@@ -45,6 +45,18 @@ async function createCast(cast: Cast) {
     return null;
   }
 
+  const parentUrl = cast.parent_url
+  let channelId = null;
+  if (parentUrl) {
+    // Use a regular expression to extract the channelId from the URL
+    const match = /\/channel\/([^\/]+)$/.exec(parentUrl);
+    if (match) {
+      channelId = match[1];
+    }
+    console.log("Channel ID extracted from parent URL:", channelId);
+  }
+
+
   const { error } = await supabase.from('posts').upsert(
     {
       post_hash: cast.hash,
@@ -52,6 +64,7 @@ async function createCast(cast: Cast) {
       created_at: new Date(cast.timestamp),
       embeds: cast.embeds,
       author: cast.author,
+      channelId
     },
     {
       onConflict: 'post_hash',
