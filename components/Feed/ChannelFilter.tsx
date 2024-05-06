@@ -19,24 +19,22 @@ const channels = [
 ];
 
 export default function ChannelFilter() {
-  const { filter: currentFilter, updateFilter, feed } = useFeedProvider();
-  const activeChannels = useMemo(() => {
-    const channelIds = new Set(feed.map((item) => item.channelId));
-    return channels.filter((channel) => channelIds.has(channel.value));
-  }, [feed]);
+  const { filter: currentFilter, updateFilter } = useFeedProvider();
 
-  console.log('SWEETS FEED', feed);
+  const handleClick = (event: any) => {
+    const selected = event.target.value;
+    const isActiveFilter = selected === currentFilter.channel;
+    updateFilter({ channel: isActiveFilter ? '' : selected });
+  };
+
   return (
     <div className="flex flex-col gap-2">
       <h2 className="mb-2 text-lg font-semibold">Channels</h2>
-      <RadioGroup
-        value={currentFilter.channel}
-        onValueChange={(value) => updateFilter({ channel: value })}
-      >
-        {activeChannels.map((option) => {
+      <RadioGroup value={currentFilter.channel}>
+        {channels.map((option) => {
           return (
             <div key={option.value} className="flex items-center space-x-2">
-              <RadioGroupItem value={option.value} id={option.value} />
+              <RadioGroupItem onClick={handleClick} value={option.value} id={option.value} />
               <Label htmlFor={option.value}>{option.label}</Label>
             </div>
           );

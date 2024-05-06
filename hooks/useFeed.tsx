@@ -1,65 +1,42 @@
 import { useEffect, useState } from 'react';
 import { useSupabaseProvider } from '@/providers/SupabaseProvider';
-import { FeedType, useFeedProvider } from '@/providers/FeedProvider';
+import { useFeedProvider } from '@/providers/FeedProvider';
+import fetchPosts from '@/lib/fetchPosts';
 
 const useFeed = ({ feedType }: { feedType: string }) => {
   const [feed, setFeed] = useState<any[]>([]);
   const { supabaseClient } = useSupabaseProvider();
   const { filter } = useFeedProvider();
 
-  const fetchPoints = async (start: number) => {
-    const query = supabaseClient.from('posts').select('*').not('likes', 'is', null);
-
-    if (filter?.platform) {
-      query.eq('platform', filter.platform);
-    }
-
-    if (filter?.channel) {
-      query.like('parent_url', `%${filter.channel}%`);
-    }
-
-    if (feedType == FeedType.Recent) {
-      query.order('created_at', { ascending: false });
-      query.range(start, start + 5);
-    } else {
-      query.order('likes', { ascending: false });
-      query.range(start, start + 20);
-    }
-
-    const { data: posts } = await query.returns();
-
-    return {
-      posts
-    };
-  }
-
-  const getFeed = async (start: number) => {    
-    const { posts } = await fetchPoints(start);    
+  const getFeed = async (start: number) => {
+    console.log('SWEETS GETTING FEED', start);
+    console.log('SWEETS filter', filter);
+    const { posts } = await fetchPosts(supabaseClient, filter, feedType, start);
     setFeed((prev) => {
       const mergedUnique = mergeArraysUniqueByPostHash(prev, posts);
       return mergedUnique;
     });
-  }
+  };
 
   const mergeArraysUniqueByPostHash = (prev: any, posts: any) => {
     const map = new Map();
     const addItems = (items: any) => {
-        for (const item of items) {
-            if (!map.has(item.post_hash)) {
-                map.set(item.post_hash, item);
-            }
+      for (const item of items) {
+        if (!map.has(item.post_hash)) {
+          map.set(item.post_hash, item);
         }
+      }
     };
     addItems(prev);
     addItems(posts);
     return Array.from(map.values());
-}
+  };
 
   useEffect(() => {
     const init = async () => {
       await getFeed(0);
-    }
-    init()
+    };
+    init();
   }, []);
 
   return { feed, getFeed };

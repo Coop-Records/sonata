@@ -29,11 +29,7 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
   const shouldBeFiltered = useMemo(() => {
     const channelId = cast.channelId;
 
-    if (channelId) console.log('SWEETS channelId', channelId);
     if (filter.channel) {
-      console.log('SWEETS filter.channel', filter.channel);
-      console.log('SWEETS cast', cast);
-
       if (!(channelId && channelId.includes(filter.channel))) return false;
     }
     const validEmbed = findValidEmbed(cast, { platform: filter.platform });
