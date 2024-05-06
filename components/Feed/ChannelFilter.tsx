@@ -1,8 +1,8 @@
 'use client';
+
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { useFeedProvider } from '@/providers/FeedProvider';
-import { useMemo } from 'react';
 
 const channels = [
   { label: '/sonata', value: 'sonata' },
