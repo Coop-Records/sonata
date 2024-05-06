@@ -13,7 +13,7 @@ const getFeed = async (embedUrl: string) => {
       filter_type: 'embed_url',
       embed_url: embedUrl,
       with_recasts: 'true',
-      limit: '100',
+      limit: '22',
     });
 
     const response = await fetch(
