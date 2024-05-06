@@ -38,7 +38,6 @@ const getResponse = async (): Promise<NextResponse> => {
 
 async function createCast(cast: Cast) {
   const likes = (cast as any).reactions.likes_count
-  console.log("SWEETS CAST INCLUDES LIKES?", likes)
   const parentUrl = cast.parent_url
   let channelId = null;
   if (parentUrl) {
