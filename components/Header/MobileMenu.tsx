@@ -17,9 +17,9 @@ export default function MobileMenu({ open, setOpen }: MobileMenuProps) {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetContent side="left" className="flex flex-col gap-6">
+      <SheetContent side="left" className="flex flex-col">
         <SheetHeader>
-          <SheetTitle className="text-left text-2xl">Notes</SheetTitle>
+          <SheetTitle className="text-left text-xl">Notes</SheetTitle>
         </SheetHeader>
 
         <BalanceInfo />
@@ -28,12 +28,12 @@ export default function MobileMenu({ open, setOpen }: MobileMenuProps) {
         {/* <Separator /> */}
         <ChannelFilter />
 
-        <div className="mt-auto space-y-6">
+        <div className="mt-0 space-y-2">
           <Separator />
           {user ? (
             <>
               <div className="flex items-center gap-2">
-                <Avatar className="cursor-pointer">
+                <Avatar className="size-[25px] cursor-pointer">
                   <AvatarImage src={user.pfp_url} />
                   <AvatarFallback>{user.display_name[0]}</AvatarFallback>
                 </Avatar>
