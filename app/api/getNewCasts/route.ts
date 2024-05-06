@@ -39,12 +39,8 @@ const getResponse = async (): Promise<NextResponse> => {
 };
 
 async function createCast(cast: Cast) {
-  const likes = await getCastLikes(cast.hash as Address);
-  if ('error' in likes) {
-    console.error('Error calling function:', likes.error);
-    return null;
-  }
-
+  const likes = (cast as any).reactions.likes_count
+  console.log("SWEETS CAST INCLUDES LIKES?", likes)
   const parentUrl = cast.parent_url
   let channelId = null;
   if (parentUrl) {
@@ -58,7 +54,7 @@ async function createCast(cast: Cast) {
   const { error } = await supabase.from('posts').upsert(
     {
       post_hash: cast.hash,
-      likes: likes.length,
+      likes,
       created_at: new Date(cast.timestamp),
       embeds: cast.embeds,
       author: cast.author,
