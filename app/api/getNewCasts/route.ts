@@ -1,10 +1,8 @@
-import getCastLikes from '@/lib/neynar/getCastLikes';
 import getFeed from '@/lib/neynar/getFeed';
 import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { createClient } from '@supabase/supabase-js';
 import { isEmpty } from 'lodash';
 import { NextResponse } from 'next/server';
-import { Address } from 'viem';
 
 const SUPABASE_URL = process.env.SUPABASE_URL as string;
 const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
