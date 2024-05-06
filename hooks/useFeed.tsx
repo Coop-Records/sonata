@@ -3,6 +3,7 @@ import { useSupabaseProvider } from '@/providers/SupabaseProvider';
 import { useFeedProvider } from '@/providers/FeedProvider';
 import fetchPosts from '@/lib/fetchPosts';
 import getSortedFeed from '@/lib/getSortedFeed';
+import mergeArraysUniqueByPostHash from '@/lib/mergeArraysUniqueByPostHash';
 
 const useFeed = ({ feedType }: { feedType: string }) => {
   const [feed, setFeed] = useState<any[]>([]);
@@ -17,24 +18,8 @@ const useFeed = ({ feedType }: { feedType: string }) => {
         : prev;
       const mergedUnique = mergeArraysUniqueByPostHash(filteredPrev, posts);
       const sortedFeed = getSortedFeed(mergedUnique, feedType);
-      console.log('SWEETS merged', mergedUnique);
-      console.log('SWEETS sortedFeed', sortedFeed);
       return sortedFeed;
     });
-  };
-
-  const mergeArraysUniqueByPostHash = (prev: any, posts: any) => {
-    const map = new Map();
-    const addItems = (items: any) => {
-      for (const item of items) {
-        if (!map.has(item.post_hash)) {
-          map.set(item.post_hash, item);
-        }
-      }
-    };
-    addItems(prev);
-    addItems(posts);
-    return Array.from(map.values());
   };
 
   useEffect(() => {
@@ -52,7 +37,6 @@ const useFeed = ({ feedType }: { feedType: string }) => {
     }
   }, [filter.channel]);
 
-  // TODO: sort this feed based on feedType
   return { feed, getFeed };
 };
 

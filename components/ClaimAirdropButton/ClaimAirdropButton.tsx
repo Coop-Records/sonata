@@ -17,7 +17,7 @@ export default function ClaimAirdropButton() {
 
   return (
     <div>
-      <Button type="button" className="sm:space-x-2" onClick={handleClick}>
+      <Button type="button" className="space-x-2" onClick={handleClick}>
         <span>Claim</span>
       </Button>
       <ClaimAirdropDialog

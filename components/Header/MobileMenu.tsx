@@ -28,7 +28,7 @@ export default function MobileMenu({ open, setOpen }: MobileMenuProps) {
         {/* <Separator /> */}
         <ChannelFilter />
 
-        <div className="mt-0 space-y-2">
+        <div className="space-y-2">
           <Separator />
           {user ? (
             <>
