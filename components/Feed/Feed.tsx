@@ -1,7 +1,6 @@
 'use client';
 
 import Cast from '@/components/Cast';
-import useNewCasts from '@/hooks/useNewCasts';
 import { useEffect } from 'react';
 import { useFeedProvider } from '@/providers/FeedProvider';
 import { SupabasePost } from '@/types/SupabasePost';
