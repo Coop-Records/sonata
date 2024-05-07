@@ -41,7 +41,9 @@ const getFeedFromTime = async (embedUrl: string, date: Date) => {
 
       for (const entry of data.casts) {
         if (new Date(entry.timestamp) > date) {
-          entries.push(entry);
+          if (entry.author.power_badge) {
+            entries.push(entry);
+          }
         } else {
           hitEndDate = true;
           break;
