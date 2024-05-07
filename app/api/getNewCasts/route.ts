@@ -1,10 +1,8 @@
-import getCastLikes from '@/lib/neynar/getCastLikes';
 import getFeed from '@/lib/neynar/getFeed';
 import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { createClient } from '@supabase/supabase-js';
 import { isEmpty } from 'lodash';
 import { NextResponse } from 'next/server';
-import { Address } from 'viem';
 
 const SUPABASE_URL = process.env.SUPABASE_URL as string;
 const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
@@ -39,12 +37,7 @@ const getResponse = async (): Promise<NextResponse> => {
 };
 
 async function createCast(cast: Cast) {
-  const likes = await getCastLikes(cast.hash as Address);
-  if ('error' in likes) {
-    console.error('Error calling function:', likes.error);
-    return null;
-  }
-
+  const likes = (cast as any).reactions.likes_count
   const parentUrl = cast.parent_url
   let channelId = null;
   if (parentUrl) {
@@ -58,7 +51,7 @@ async function createCast(cast: Cast) {
   const { error } = await supabase.from('posts').upsert(
     {
       post_hash: cast.hash,
-      likes: likes.length,
+      likes,
       created_at: new Date(cast.timestamp),
       embeds: cast.embeds,
       author: cast.author,
