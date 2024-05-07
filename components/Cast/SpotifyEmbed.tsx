@@ -64,7 +64,7 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
       />
       {metadata?.id === trackUrl && (
         <iframe
-          // className="hidden"
+          className="hidden"
           width="100%"
           height="166"
           scrolling="no"
