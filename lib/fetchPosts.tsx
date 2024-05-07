@@ -1,8 +1,20 @@
 import { FeedType } from '@/providers/FeedProvider';
 import { SupabaseClient } from '@supabase/supabase-js';
 
-const fetchPosts = async (supabaseClient: SupabaseClient, feedType: string, start: number) => {
+const fetchPosts = async (
+  supabaseClient: SupabaseClient,
+  filter: any,
+  feedType: string,
+  start: number,
+) => {
   const query = supabaseClient.from('posts').select('*').not('likes', 'is', null);
+  if (filter?.platform) {
+    query.eq('platform', filter.platform);
+  }
+
+  if (filter?.channel) {
+    query.eq('channelId', filter.channel);
+  }
 
   if (feedType == FeedType.Recent) {
     query.order('created_at', { ascending: false });
