@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import MediaPlayer from '@/components/MediaPlayer';
 import { OEmbedData } from '@/types/OEmbedData';
+import { usePlayer } from '@/providers/PlayerProvider';
 
 export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
   const [iframeSrc, setIframeSrc] = useState();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [embedData, setEmbedData] = useState<OEmbedData>();
+  const [player] = usePlayer();
+  const metadata = player?.metadata;
 
   const togglePlay = () => {
     if (!iframeRef?.current) return;
@@ -30,6 +33,13 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
     init();
   }, [trackUrl]);
 
+  useEffect(() => {
+    if (!iframeRef.current || !iframeSrc) return;
+    iframeRef.current.addEventListener('load', () => {
+      togglePlay();
+    });
+  }, [iframeRef?.current, iframeSrc]);
+
   if (!embedData) return <></>;
 
   return (
@@ -52,17 +62,19 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
         }}
         position={0}
       />
-      <iframe
-        className="hidden"
-        width="100%"
-        height="166"
-        scrolling="no"
-        frameBorder="no"
-        allow="autoplay"
-        src={iframeSrc}
-        ref={iframeRef}
-        id={trackUrl}
-      />
+      {metadata?.id === trackUrl && (
+        <iframe
+          // className="hidden"
+          width="100%"
+          height="166"
+          scrolling="no"
+          frameBorder="no"
+          allow="autoplay"
+          src={iframeSrc}
+          ref={iframeRef}
+          id={trackUrl}
+        />
+      )}
     </div>
   );
 }
