@@ -3,13 +3,15 @@ import MediaPlayer from '@/components/MediaPlayer';
 import { OEmbedData } from '@/types/OEmbedData';
 import { usePlayer } from '@/providers/PlayerProvider';
 import { SupabasePost } from '@/types/SupabasePost';
+import { useFeedProvider } from '@/providers/FeedProvider';
 
-export default function SpotifyEmbed({ trackUrl, cast }: { trackUrl: string, cast: SupabasePost }) {
+export default function SpotifyEmbed({ trackUrl, cast }: { trackUrl: string; cast: SupabasePost }) {
   const [iframeSrc, setIframeSrc] = useState();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [embedData, setEmbedData] = useState<OEmbedData>();
   const [player] = usePlayer();
   const metadata = player?.metadata;
+  const { setActiveFeed } = useFeedProvider();
 
   const togglePlay = () => {
     if (!iframeRef?.current) return;
@@ -37,6 +39,7 @@ export default function SpotifyEmbed({ trackUrl, cast }: { trackUrl: string, cas
   useEffect(() => {
     if (!iframeRef.current || !iframeSrc) return;
     iframeRef.current.addEventListener('load', () => {
+      setActiveFeed(cast);
       togglePlay();
     });
   }, [iframeRef?.current, iframeSrc]);
