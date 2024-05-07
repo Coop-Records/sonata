@@ -1,94 +1,80 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { useSpotifyApi } from '@/providers/SpotifyApiProvider';
-import { SpotifyPlaybackUpdateEvent } from '@/types/SpotifyPlaybackUpdateEvent';
-import getSpotifyTrackId from '@/lib/spotify/getSpotifyTrackId';
-import getSpotifyTrack from '@/lib/spotify/getSpotifyTrack';
-import { SpotifyTrack } from '@/types/SpotifyTrack';
+import { useEffect, useRef, useState } from 'react';
 import MediaPlayer from '@/components/MediaPlayer';
+import { OEmbedData } from '@/types/OEmbedData';
+import { usePlayer } from '@/providers/PlayerProvider';
 
 export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
-  const trackId = useMemo(() => getSpotifyTrackId(trackUrl), [trackUrl]);
-  const [position, setPosition] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [track, setTrack] = useState<SpotifyTrack>();
-  const [embedController, setEmbedController] = useState({} as any);
-  const elementRef = useRef<HTMLIFrameElement>(null);
-  const iframeApi = useSpotifyApi();
-  const fullLoadedEmbed =
-    typeof embedController.togglePlay === 'function' &&
-    typeof embedController.pause === 'function' &&
-    typeof embedController.seek === 'function';
+  const [iframeSrc, setIframeSrc] = useState();
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [embedData, setEmbedData] = useState<OEmbedData>();
+  const [player] = usePlayer();
+  const metadata = player?.metadata;
+
+  const togglePlay = () => {
+    if (!iframeRef?.current) return;
+    const spotifyEmbedWindow = iframeRef.current.contentWindow as any;
+    spotifyEmbedWindow.postMessage({ command: 'toggle' }, '*');
+  };
 
   useEffect(() => {
     const init = async () => {
-      if (!trackId) return;
-      const track = await getSpotifyTrack(trackId);
-      if (!('error' in track)) {
-        setTrack(track);
-        setDuration(track.duration_ms);
-      }
+      try {
+        const oEmbedUrl = `https://open.spotify.com/oembed?url=${encodeURIComponent(trackUrl)}`;
+        const response = await fetch(oEmbedUrl);
+        const data = await response.json();
+        const srcRegex = /src="([^"]+)"/;
+        const match = data.html.match(srcRegex);
+        const src = match ? match[1] : null;
+        setIframeSrc(src);
+        setEmbedData(data);
+        // eslint-disable-next-line no-empty
+      } catch (error) {}
     };
-
     init();
-  }, [trackId]);
+  }, [trackUrl]);
 
   useEffect(() => {
-    if (!(track?.uri && iframeApi)) return;
-
-    const options = {
-      height: '10',
-      width: '10',
-      uri: track.uri,
-    };
-    iframeApi.createController(elementRef.current, options, (embedController: any) => {
-      embedController.addListener('ready', () => {
-        setEmbedController(embedController);
-      });
-      embedController.addListener('playback_update', (e: SpotifyPlaybackUpdateEvent) => {
-        const data = e.data;
-        setPosition(data.position);
-        setDuration(data.duration);
-      });
+    if (!iframeRef.current || !iframeSrc) return;
+    iframeRef.current.addEventListener('load', () => {
+      togglePlay();
     });
-  }, [track?.uri, iframeApi]);
+  }, [iframeRef?.current, iframeSrc]);
 
-  if (track?.error) {
-    return <></>;
-  }
+  if (!embedData) return <></>;
 
   return (
     <div className="relative z-0 w-full">
       <MediaPlayer
         metadata={
-          track && {
-            id: track.uri,
+          embedData && {
+            id: trackUrl,
             type: 'spotify',
-            artistName: track.artists.map((artist: any) => artist.name).join(', '),
-            trackName: track.name,
-            artworkUrl: track.album.images[0].url,
-            duration,
+            artistName: '',
+            trackName: embedData.title,
+            artworkUrl: embedData.thumbnail_url,
+            duration: 0,
           }
         }
-        controls={
-          fullLoadedEmbed
-            ? {
-                play: () => {
-                  embedController.togglePlay();
-                },
-                pause: () => {
-                  embedController.pause();
-                },
-                seek: (time) => {
-                  embedController.seek(time);
-                },
-              }
-            : null
-        }
-        position={position}
+        controls={{
+          play: togglePlay,
+          pause: togglePlay,
+          seek: () => {},
+        }}
+        position={0}
       />
-      <div className="absolute left-0 top-0 -z-10 opacity-0">
-        <div ref={elementRef} />
-      </div>
+      {metadata?.id === trackUrl && (
+        <iframe
+          className="hidden"
+          width="100%"
+          height="166"
+          scrolling="no"
+          frameBorder="no"
+          allow="autoplay"
+          src={iframeSrc}
+          ref={iframeRef}
+          id={trackUrl}
+        />
+      )}
     </div>
   );
 }

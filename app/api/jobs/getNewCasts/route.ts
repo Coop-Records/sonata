@@ -54,8 +54,8 @@ const getResponse = async (): Promise<NextResponse> => {
 };
 
 async function createCast(cast: Cast) {
-  const likes = (cast as any).reactions.likes_count
-  const parentUrl = cast.parent_url
+  const likes = (cast as any).reactions.likes_count;
+  const parentUrl = cast.parent_url;
   let channelId = null;
   if (parentUrl) {
     const match = /\/channel\/([^/]+)$/.exec(parentUrl);
@@ -64,7 +64,6 @@ async function createCast(cast: Cast) {
     }
   }
 
-
   const { error } = await supabase.from('posts').upsert(
     {
       post_hash: cast.hash,
@@ -72,7 +71,7 @@ async function createCast(cast: Cast) {
       created_at: new Date(cast.timestamp),
       embeds: cast.embeds,
       author: cast.author,
-      channelId
+      channelId,
     },
     {
       onConflict: 'post_hash',

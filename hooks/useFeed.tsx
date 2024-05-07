@@ -29,37 +29,37 @@ const useFeed = ({ feedType }: { feedType: string }) => {
     const { data: posts } = await query.returns();
 
     return {
-      posts
+      posts,
     };
-  }
+  };
 
-  const getFeed = async (start: number) => {    
-    const { posts } = await fetchPoints(start);    
+  const getFeed = async (start: number) => {
+    const { posts } = await fetchPoints(start);
     setFeed((prev) => {
       const mergedUnique = mergeArraysUniqueByPostHash(prev, posts);
       return mergedUnique;
     });
-  }
+  };
 
   const mergeArraysUniqueByPostHash = (prev: any, posts: any) => {
     const map = new Map();
     const addItems = (items: any) => {
-        for (const item of items) {
-            if (!map.has(item.post_hash)) {
-                map.set(item.post_hash, item);
-            }
+      for (const item of items) {
+        if (!map.has(item.post_hash)) {
+          map.set(item.post_hash, item);
         }
+      }
     };
     addItems(prev);
     addItems(posts);
     return Array.from(map.values());
-}
+  };
 
   useEffect(() => {
     const init = async () => {
       await getFeed(0);
-    }
-    init()
+    };
+    init();
   }, []);
 
   return { feed, getFeed };
