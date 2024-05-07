@@ -37,12 +37,13 @@ export default function SpotifyEmbed({ trackUrl, cast }: { trackUrl: string; cas
   }, [trackUrl]);
 
   useEffect(() => {
-    if (!iframeRef.current || !iframeSrc) return;
+    if (!iframeRef.current || !iframeSrc || !cast) return;
     iframeRef.current.addEventListener('load', () => {
       setActiveFeed(cast);
       togglePlay();
     });
-  }, [iframeRef?.current, iframeSrc]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [iframeRef?.current, iframeSrc, cast]);
 
   if (!embedData) return <></>;
 
