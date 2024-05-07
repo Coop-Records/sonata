@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useSupabaseProvider } from '@/providers/SupabaseProvider';
 import { useFeedProvider } from '@/providers/FeedProvider';
@@ -29,6 +28,7 @@ const useFeed = ({ feedType }: { feedType: string }) => {
       await getFeed(0);
     };
     init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -37,6 +37,7 @@ const useFeed = ({ feedType }: { feedType: string }) => {
     } else {
       getFeed(feed.length);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter.channel]);
 
   return { feed, getFeed };
