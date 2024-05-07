@@ -11,7 +11,7 @@ const getFeedFromTime = async (embedUrl: string, date: Date) => {
       feed_type: 'filter',
       filter_type: 'embed_url',
       embed_url: embedUrl,
-      with_recasts: 'true',
+      with_recasts: 'false',
       limit: '100',
     });
 
@@ -41,7 +41,9 @@ const getFeedFromTime = async (embedUrl: string, date: Date) => {
 
       for (const entry of data.casts) {
         if (new Date(entry.timestamp) > date) {
-          entries.push(entry);
+          if (entry.author.power_badge) {
+            entries.push(entry);
+          }
         } else {
           hitEndDate = true;
           break;

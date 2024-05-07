@@ -1,14 +1,12 @@
 'use client';
 
 import Cast from '@/components/Cast';
-import useNewCasts from '@/hooks/useNewCasts';
 import { useEffect } from 'react';
 import { useFeedProvider } from '@/providers/FeedProvider';
 import { SupabasePost } from '@/types/SupabasePost';
 
 export default function Feed({ feed }: { feed: SupabasePost[] }) {
   const { setFeed } = useFeedProvider();
-  useNewCasts();
 
   useEffect(() => {
     setFeed(feed);
