@@ -10,6 +10,8 @@ type FeedProviderType = {
   setFeed: (feed: SupabasePost[]) => void;
   feedType: string;
   setFeedType: (feedType: string) => void;
+  activeFeed: SupabasePost | null;
+  setActiveFeed: (activeFeed: SupabasePost) => void;
 };
 
 export enum FeedType {
@@ -23,6 +25,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const [filter, setFilter] = useState<FeedFilter>({});
   const [feed, setFeed] = useState<SupabasePost[]>([]);
   const [feedType, setFeedType] = useState<string>(FeedType.Trending);
+  const [activeFeed, setActiveFeed] = useState<SupabasePost | null>(null);
 
   const updateFilter = (change: FeedFilter) => {
     setFilter((prev) => ({ ...prev, ...change }));
@@ -35,6 +38,8 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     setFeed,
     feedType,
     setFeedType,
+    activeFeed,
+    setActiveFeed,
   };
 
   return <FeedContext.Provider value={value}>{children}</FeedContext.Provider>;
