@@ -48,7 +48,6 @@ const getResponse = async (): Promise<NextResponse> => {
     const current = new Date(cast.timestamp);
     return current > max ? current : max;
   }, lastChecked);
-  console.log(newLastChecked);
 
   await supabase.from('cast_query_date').upsert({ id: 1, last_checked: newLastChecked });
   return NextResponse.json({ message: 'success', allEntries }, { status: 200 });
