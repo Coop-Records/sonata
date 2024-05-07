@@ -25,11 +25,12 @@ export default function MediaPlayer({ metadata, controls, position, cast }: Medi
   const displayDuration = metadata?.duration || 0;
 
   useEffect(() => {
-    if (currentTrack && controls) {
+    if (currentTrack && controls && cast) {
       setActiveFeed(cast);
       dispatch({ type: 'PROGRESS', payload: { position } });
     }
-  }, [position, currentTrack, dispatch, controls]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [position, currentTrack, dispatch, controls, cast]);
 
   const handlePlay = () => {
     if (!metadata || !controls) return;
