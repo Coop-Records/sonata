@@ -20,7 +20,6 @@ const processSingleEntry = async (cast: Cast) => {
   const address = cast?.author?.verifications ? cast?.author?.verifications : undefined;
 
   if (!isEmpty(address)) {
-    await createCast(cast);
   }
 };
 
@@ -44,7 +43,7 @@ const getResponse = async (): Promise<NextResponse> => {
   }
 
   const newLastChecked = allEntries.reduce((max, cast) => {
-    const current = new Date(cast.timestamp);
+    const current = new Date(cast.timestamp as string);
     return current > max ? current : max;
   }, lastChecked);
 
