@@ -35,8 +35,6 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
     const validEmbed = findValidEmbed(cast, { platform: filter.platform });
     if (!validEmbed) return false;
 
-    if (isSpotify) return false;
-
     return true;
   }, [filter, cast]);
 
