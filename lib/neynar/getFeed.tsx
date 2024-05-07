@@ -12,7 +12,7 @@ const getFeed = async (embedUrl: string) => {
       feed_type: 'filter',
       filter_type: 'embed_url',
       embed_url: embedUrl,
-      with_recasts: 'true',
+      with_recasts: 'false',
       limit: '22',
     });
 

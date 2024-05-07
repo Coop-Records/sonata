@@ -8,7 +8,6 @@ import { SupabasePost } from '@/types/SupabasePost';
 
 export default function Feed({ feed }: { feed: SupabasePost[] }) {
   const { setFeed } = useFeedProvider();
-  useNewCasts();
 
   useEffect(() => {
     setFeed(feed);

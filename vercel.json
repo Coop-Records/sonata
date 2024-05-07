@@ -7,6 +7,10 @@
     {
       "path": "/api/jobs/reward_trending_posts",
       "schedule": "0 7 * * *"
+    },
+    {
+      "path": "/api/jobs/getNewCasts",
+      "schedule": "*/5 * * * *"
     }
   ]
 }
