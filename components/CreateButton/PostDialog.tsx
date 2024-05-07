@@ -13,7 +13,9 @@ const PostDialog = ({ handleTextChange, onPost, isOpen, setIsOpen }: any) => (
     <DialogContent className="max-w-[75vw] sm:max-w-[33vw]">
       <DialogHeader className="flex items-center text-center">
         <DialogTitle>Share a Song</DialogTitle>
-        <DialogDescription>Enter Soundcloud or Sound links. More coming soon!</DialogDescription>
+        <DialogDescription>
+          Enter Soundcloud, Sound or Spotify links. More coming soon!
+        </DialogDescription>
       </DialogHeader>
 
       <div className="flex flex-col items-center justify-center gap-3 text-center">
