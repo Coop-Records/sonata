@@ -20,6 +20,7 @@ const processSingleEntry = async (cast: Cast) => {
   const address = cast?.author?.verifications ? cast?.author?.verifications : undefined;
 
   if (!isEmpty(address)) {
+    await createCast(cast);
   }
 };
 
