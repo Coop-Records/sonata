@@ -32,6 +32,7 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
     if (filter.channel) {
       if (!(channelId && channelId.includes(filter.channel))) return false;
     }
+
     const validEmbed = findValidEmbed(cast, { platform: filter.platform });
     if (!validEmbed) return false;
 
@@ -43,11 +44,14 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
   if (!url) return <></>;
 
   return (
-    <div className={`flex items-center gap-5 p-2.5 ${shouldBeFiltered ? '' : 'hidden'}`}>
+    <div
+      className={`flex items-center gap-5 p-2.5 ${shouldBeFiltered ? '' : 'hidden'}`}
+      key={cast.post_hash}
+    >
       <Upvote cast={cast} />
       <div className="w-full space-y-4">
         <AuthorDetails author={author} />
-        {EmbedComponent && <EmbedComponent trackUrl={url} />}
+        {EmbedComponent && <EmbedComponent trackUrl={url} cast={cast} />}
         <TipButton verifications={verifications} cast={cast} />
       </div>
     </div>

@@ -6,15 +6,19 @@ import { useEffect } from 'react';
 import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';
 import { Skeleton } from '@/components/ui/skeleton';
 import ReactSlider from 'react-slider';
+import { useFeedProvider } from '@/providers/FeedProvider';
+import { SupabasePost } from '@/types/SupabasePost';
 
 type MediaPlayerProps = {
   metadata?: TrackMetadata;
   controls?: TrackControls | null;
   position: number;
+  cast: SupabasePost;
 };
 
-export default function MediaPlayer({ metadata, controls, position }: MediaPlayerProps) {
+export default function MediaPlayer({ metadata, controls, position, cast }: MediaPlayerProps) {
   const [player, dispatch] = usePlayer();
+  const { setActiveFeed } = useFeedProvider();
 
   const currentTrack = player?.metadata?.id === metadata?.id;
   const displayPosition = currentTrack ? player.position : position;
@@ -22,12 +26,14 @@ export default function MediaPlayer({ metadata, controls, position }: MediaPlaye
 
   useEffect(() => {
     if (currentTrack && controls) {
+      setActiveFeed(cast);
       dispatch({ type: 'PROGRESS', payload: { position } });
     }
   }, [position, currentTrack, dispatch, controls]);
 
   const handlePlay = () => {
     if (!metadata || !controls) return;
+
     dispatch({
       type: 'PLAY',
       payload: { metadata, controls: currentTrack ? player?.controls : controls },

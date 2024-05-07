@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useSupabaseProvider } from '@/providers/SupabaseProvider';
 import { useFeedProvider } from '@/providers/FeedProvider';
@@ -8,14 +9,15 @@ import mergeArraysUniqueByPostHash from '@/lib/mergeArraysUniqueByPostHash';
 const useFeed = ({ feedType }: { feedType: string }) => {
   const [feed, setFeed] = useState<any[]>([]);
   const { supabaseClient } = useSupabaseProvider();
-  const { filter } = useFeedProvider();
+  const { filter, activeFeed } = useFeedProvider();
 
   const getFeed = async (start: number) => {
-    const { posts } = await fetchPosts(supabaseClient, filter, feedType, start);
+    const { posts } = (await fetchPosts(supabaseClient, filter, feedType, start)) as any;
     setFeed((prev) => {
       const filteredPrev = filter.channel
         ? prev.filter((item) => item.channelId === filter.channel)
         : prev;
+      if (activeFeed) filteredPrev.push(activeFeed);
       const mergedUnique = mergeArraysUniqueByPostHash(filteredPrev, posts);
       const sortedFeed = getSortedFeed(mergedUnique, feedType);
       return sortedFeed;

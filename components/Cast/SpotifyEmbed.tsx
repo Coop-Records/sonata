@@ -5,8 +5,9 @@ import getSpotifyTrackId from '@/lib/spotify/getSpotifyTrackId';
 import getSpotifyTrack from '@/lib/spotify/getSpotifyTrack';
 import { SpotifyTrack } from '@/types/SpotifyTrack';
 import MediaPlayer from '@/components/MediaPlayer';
+import { SupabasePost } from '@/types/SupabasePost';
 
-export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
+export default function SpotifyEmbed({ trackUrl, cast }: { trackUrl: string; cast: SupabasePost }) {
   const trackId = useMemo(() => getSpotifyTrackId(trackUrl), [trackUrl]);
   const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -85,6 +86,7 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
             : null
         }
         position={position}
+        cast={cast}
       />
       <div className="absolute left-0 top-0 -z-10 opacity-0">
         <div ref={elementRef} />
