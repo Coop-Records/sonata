@@ -6,7 +6,6 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
   const [iframeSrc, setIframeSrc] = useState();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [embedData, setEmbedData] = useState<OEmbedData>();
-  const [fullLoaded, setFullLoaded] = useState(false);
 
   const togglePlay = () => {
     if (!iframeRef?.current) return;
@@ -31,13 +30,6 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
     init();
   }, [trackUrl]);
 
-  useEffect(() => {
-    if (!iframeRef?.current || !iframeSrc) return;
-    iframeRef.current.addEventListener('load', () => {
-      setFullLoaded(true);
-    });
-  }, [iframeRef, iframeSrc]);
-
   if (!embedData) return <></>;
 
   return (
@@ -53,15 +45,11 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
             duration: 0,
           }
         }
-        controls={
-          fullLoaded
-            ? {
-                play: togglePlay,
-                pause: togglePlay,
-                seek: () => {},
-              }
-            : null
-        }
+        controls={{
+          play: togglePlay,
+          pause: togglePlay,
+          seek: () => {},
+        }}
         position={0}
       />
       <iframe
@@ -73,6 +61,7 @@ export default function SpotifyEmbed({ trackUrl }: { trackUrl: string }) {
         allow="autoplay"
         src={iframeSrc}
         ref={iframeRef}
+        id={trackUrl}
       />
     </div>
   );
