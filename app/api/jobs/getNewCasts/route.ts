@@ -34,12 +34,12 @@ const processSingleEntry = async (cast: Cast) => {
 const getResponse = async (): Promise<NextResponse> => {
   const { data: cast_query_date } = await supabase
     .from('cast_query_date')
-    .select('last_checked')
+    .select('lastcheck')
     .eq('id', 1)
     .single();
-  console.log('jobs::getNewCasts', `Starting Job from ${cast_query_date?.last_checked}`);
+  console.log('jobs::getNewCasts', `Starting Job from ${cast_query_date?.lastcheck}`);
 
-  const lastChecked = cast_query_date ? cast_query_date.last_checked : '';
+  const lastChecked = cast_query_date ? cast_query_date.lastcheck : '';
 
   const formattedLastChecked = new Date(`${lastChecked}`);
 
@@ -63,7 +63,7 @@ const getResponse = async (): Promise<NextResponse> => {
 
   console.log('jobs::getNewCasts', `About to set cast_query_date to ${newLastChecked}`);
 
-  await supabase.from('cast_query_date').upsert({ id: 1, last_checked: newLastChecked });
+  await supabase.from('cast_query_date').upsert({ id: 1, lastcheck: newLastChecked });
   return NextResponse.json({ message: 'success', allEntries }, { status: 200 });
 };
 
