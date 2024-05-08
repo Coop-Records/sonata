@@ -10,7 +10,7 @@
     },
     {
       "path": "/api/jobs/getNewCasts",
-      "schedule": "*/5 * * * *"
+      "schedule": "*/1 * * * *"
     }
   ]
 }
