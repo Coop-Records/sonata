@@ -22,7 +22,7 @@ export default function GlobalPlayer() {
   return (
     <div
       data-type={metadata.type}
-      className="sticky bottom-0 left-0 flex w-full flex-col gap-4 bg-white p-2 border-t border-gray-200"
+      className="sticky bottom-0 left-0 mt-auto flex w-full flex-col gap-4 border-t border-gray-200 bg-white p-2"
     >
       <div className="flex gap-4">
         <div className="relative my-auto aspect-square w-16 shrink-0 shadow-md">
@@ -62,7 +62,7 @@ export default function GlobalPlayer() {
           <span>{formatDuration(metadata.duration)}</span>
         </div>
         <ReactSlider
-          className="w-full h-1 bg-gray-600 global-scrub"
+          className="global-scrub h-1 w-full bg-gray-600"
           thumbClassName={`${metadata?.type === 'spotify' ? '' : 'global-scrub-thumb'}`}
           trackClassName="global-scrub-track"
           value={(position / metadata.duration) * 100}
