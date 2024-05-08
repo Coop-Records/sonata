@@ -33,7 +33,7 @@ const getResponse = async (): Promise<NextResponse> => {
     .single();
   console.log('jobs::getNewCasts', `Starting Job from ${cast_query_date?.last_checked}`);
 
-  const lastChecked = cast_query_date ? new Date(`${cast_query_date.last_checked}Z`) : new Date();
+  const lastChecked = cast_query_date ? new Date(`${cast_query_date.last_checked}`) : new Date();
 
   const [spotify, soundCloud, soundxyz] = await Promise.all([
     getFeedFromTime('spotify.com/track', lastChecked),
