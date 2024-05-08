@@ -23,10 +23,6 @@ const getFeedFromTime = async (embedUrl: string, date: Date) => {
     let data = await response.json();
 
     for (const entry of data.casts) {
-      console.log(
-        'neynar::getFeedFromTime',
-        `post timestamp: ${new Date(entry.timestamp)} compared to ${date}`,
-      );
       if (new Date(entry.timestamp) > date) {
         if (entry.author.power_badge === true) {
           entries.push(entry);
@@ -46,10 +42,6 @@ const getFeedFromTime = async (embedUrl: string, date: Date) => {
       );
       data = await response.json();
       for (const entry of data.casts) {
-        console.log(
-          'neynar::getFeedFromTime',
-          `post timestamp: ${new Date(entry.timestamp)} compared to ${date}`,
-          );
         if (new Date(entry.timestamp) > date) {
           if (entry.author.power_badge === true) {
             entries.push(entry);
