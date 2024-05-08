@@ -15,7 +15,6 @@ const callPostApi = async (signer_uuid: string | undefined, url: string): Promis
       },
       body: stringifiedBody,
     });
-    await fetch('/api/jobs/getNewCasts');
     const data = await res.json();
     return data;
   } catch (error) {
