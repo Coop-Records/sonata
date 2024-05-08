@@ -30,7 +30,7 @@ const getResponse = async (): Promise<NextResponse> => {
     .select('last_checked')
     .eq('id', 1)
     .single();
-  const lastChecked = cast_query_date ? new Date(cast_query_date.last_checked) : new Date();
+  const lastChecked = cast_query_date ? new Date(`${cast_query_date.last_checked}Z`) : new Date();
 
   const [spotify, soundCloud, soundxyz] = await Promise.all([
     getFeedFromTime('spotify.com/track', lastChecked),
