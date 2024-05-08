@@ -56,10 +56,10 @@ const getResponse = async (): Promise<NextResponse> => {
     await processEntriesInBatches(allEntries);
   }
 
-  const newLastChecked = allEntries.reduce((max, cast) => {
+  const newLastChecked: string = allEntries.reduce((max, cast) => {
     const current = new Date(cast.timestamp as string);
     return current > new Date(max) ? cast.timestamp : max;
-  }, formattedLastChecked);
+  }, lastChecked);
 
   console.log('jobs::getNewCasts', `About to set cast_query_date to ${newLastChecked}`);
 
