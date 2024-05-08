@@ -10,6 +10,7 @@ const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const processEntriesInBatches = async (entries: any[], batchSize = 50) => {
+  console.log("jobs::getNewCasts", `${entries.length} new entries being added`);
   for (let i = 0; i < entries.length; i += batchSize) {
     const batch = entries.slice(i, i + batchSize);
     await Promise.all(batch.map((entry: any) => processSingleEntry(entry)));
@@ -39,6 +40,8 @@ const getResponse = async (): Promise<NextResponse> => {
   ]);
   const allEntries: any[] = [];
   allEntries.push(...spotify, ...soundCloud, ...soundxyz);
+
+  console.log("jobs::getNewCasts", `${allEntries.length} new entries`);
   if (allEntries.length > 0) {
     await processEntriesInBatches(allEntries);
   }
@@ -47,6 +50,8 @@ const getResponse = async (): Promise<NextResponse> => {
     const current = new Date(cast.timestamp as string);
     return current > max ? current : max;
   }, lastChecked);
+
+  console.log("jobs::getNewCasts", `About to set cast_query_date to ${newLastChecked}`);
 
   await supabase.from('cast_query_date').upsert({ id: 1, last_checked: newLastChecked });
   return NextResponse.json({ message: 'success', allEntries }, { status: 200 });
@@ -76,6 +81,8 @@ async function createCast(cast: Cast) {
       onConflict: 'post_hash',
     },
   );
+
+  console.log("jobs::getNewCasts", `Successfully created/updated ${cast.hash}`);
 
   if (error) {
     console.error('Error calling function:', error);

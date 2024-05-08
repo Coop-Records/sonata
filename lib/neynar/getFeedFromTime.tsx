@@ -24,7 +24,7 @@ const getFeedFromTime = async (embedUrl: string, date: Date) => {
 
     for (const entry of data.casts) {
       if (new Date(entry.timestamp) > date) {
-        if (entry.author.power_badge) {
+        if (entry.author.power_badge === true) {
           entries.push(entry);
         }
       } else {
@@ -44,7 +44,7 @@ const getFeedFromTime = async (embedUrl: string, date: Date) => {
 
       for (const entry of data.casts) {
         if (new Date(entry.timestamp) > date) {
-          if (entry.author.power_badge) {
+          if (entry.author.power_badge === true) {
             entries.push(entry);
           }
         } else {
