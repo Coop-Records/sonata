@@ -31,7 +31,7 @@ const getResponse = async (): Promise<NextResponse> => {
     .select('last_checked')
     .eq('id', 1)
     .single();
-  console.log('jobs::getNewCasts', `Starting Job from ${cast_query_date}`);
+  console.log('jobs::getNewCasts', `Starting Job from ${cast_query_date?.last_checked}`);
 
   const lastChecked = cast_query_date ? new Date(`${cast_query_date.last_checked}Z`) : new Date();
 
