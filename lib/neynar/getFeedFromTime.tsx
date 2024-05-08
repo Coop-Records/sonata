@@ -1,7 +1,7 @@
 const getFeedFromTime = async (embedUrl: string, date: Date) => {
   const options = {
     method: 'GET',
-    headers: { accept: 'application/json', api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY },
+    headers: { accept: 'application/json', api_key: process.env.NEYNAR_API_KEY },
   } as any;
 
   const entries = [];
@@ -13,10 +13,11 @@ const getFeedFromTime = async (embedUrl: string, date: Date) => {
       embed_url: embedUrl,
       with_recasts: 'false',
       limit: '100',
+      cachebust: `${new Date().getTime()}`, // Adding a cache busting parameter
     });
 
     const response = await fetch(
-      `https://api.neynar.com/v2/farcaster/feed?${queryParams}`,
+      `https://api.neynar.com/v2/farcaster/feed?${queryParams.toString()}`,
       options,
     );
     let data = await response.json();
