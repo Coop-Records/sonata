@@ -63,7 +63,11 @@ const getResponse = async (): Promise<NextResponse> => {
 
   console.log('jobs::getNewCasts', `About to set cast_query_date to ${newLastChecked}`);
 
-  await supabase.from('cast_query_date').upsert({ id: 1, lastcheck: newLastChecked });
+  const { data, error } = await supabase
+    .from('cast_query_date')
+    .upsert({ id: 1, last_checked: newLastChecked, lastcheck: newLastChecked });
+
+  console.log(data, error);
   return NextResponse.json({ message: 'success', allEntries }, { status: 200 });
 };
 
