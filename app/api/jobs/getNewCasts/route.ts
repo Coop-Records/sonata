@@ -7,7 +7,13 @@ import { NextResponse } from 'next/server';
 const SUPABASE_URL = process.env.SUPABASE_URL as string;
 const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false,
+    detectSessionInUrl: false,
+  },
+});
 
 const processEntriesInBatches = async (entries: any[], batchSize = 50) => {
   console.log('jobs::getNewCasts', `${entries.length} new entries being added`);
