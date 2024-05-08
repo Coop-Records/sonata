@@ -33,12 +33,14 @@ const getResponse = async (): Promise<NextResponse> => {
     .single();
   console.log('jobs::getNewCasts', `Starting Job from ${cast_query_date?.last_checked}`);
 
-  const lastChecked = cast_query_date ? new Date(`${cast_query_date.last_checked}`) : new Date();
+  const lastChecked = cast_query_date ? cast_query_date.last_checked : '';
+
+  const formattedLastChecked = new Date(`${lastChecked}`);
 
   const [spotify, soundCloud, soundxyz] = await Promise.all([
-    getFeedFromTime('spotify.com/track', lastChecked),
-    getFeedFromTime('soundcloud.com', lastChecked),
-    getFeedFromTime('sound.xyz', lastChecked),
+    getFeedFromTime('spotify.com/track', formattedLastChecked),
+    getFeedFromTime('soundcloud.com', formattedLastChecked),
+    getFeedFromTime('sound.xyz', formattedLastChecked),
   ]);
   const allEntries: any[] = [];
   allEntries.push(...spotify, ...soundCloud, ...soundxyz);
@@ -50,8 +52,8 @@ const getResponse = async (): Promise<NextResponse> => {
 
   const newLastChecked = allEntries.reduce((max, cast) => {
     const current = new Date(cast.timestamp as string);
-    return current > max ? cast.timestamp : max;
-  }, cast_query_date?.last_checked);
+    return current > new Date(max) ? cast.timestamp : max;
+  }, formattedLastChecked);
 
   console.log('jobs::getNewCasts', `About to set cast_query_date to ${newLastChecked}`);
 
