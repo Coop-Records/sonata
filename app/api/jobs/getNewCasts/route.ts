@@ -51,7 +51,7 @@ const getResponse = async (): Promise<NextResponse> => {
   const newLastChecked = allEntries.reduce((max, cast) => {
     const current = new Date(cast.timestamp as string);
     return current > max ? cast.timestamp : max;
-  }, lastChecked);
+  }, cast_query_date?.last_checked);
 
   console.log('jobs::getNewCasts', `About to set cast_query_date to ${newLastChecked}`);
 
