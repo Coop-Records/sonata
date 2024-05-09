@@ -115,3 +115,4 @@ export async function GET(): Promise<Response> {
 }
 
 export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
