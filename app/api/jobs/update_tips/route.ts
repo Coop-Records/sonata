@@ -41,7 +41,7 @@ const getResponse = async (): Promise<NextResponse> => {
     .select('last_checked')
     .eq('id', 1)
     .single();
-  const lastChecked = tip_query_date ? new Date(tip_query_date.last_checked) : new Date();
+  const lastChecked = tip_query_date ? new Date(`${tip_query_date.last_checked}`) : new Date();
 
   const [spotify, soundCloud, soundxyz] = await Promise.all([
     getFeedFromTime('spotify.com/track', lastChecked),
@@ -56,8 +56,8 @@ const getResponse = async (): Promise<NextResponse> => {
   await processEntriesInBatches(allEntries);
 
   const newLastChecked = allEntries.reduce((max, cast) => {
-    const current = new Date(cast.timestamp);
-    return current > max ? current : max;
+    const current = new Date(cast.timestamp as string);
+    return current > max ? cast.timestamp : max;
   }, lastChecked);
 
   await supabase.rpc('update_daily_tip_allocation');
