@@ -97,7 +97,7 @@ export default function MediaPlayer({ metadata, controls, position, cast }: Medi
       <div className="flex flex-col gap-1">
         <div className="flex justify-between font-inter text-xs font-light">
           <span>{formatDuration(displayPosition)}</span>
-          <span>{formatDuration(displayDuration)}</span>
+          <span>{formatDuration(displayDuration || 30000)}</span>
         </div>
         <ReactSlider
           className="w-full h-1 bg-gray-300 scrub"
