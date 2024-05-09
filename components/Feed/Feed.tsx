@@ -48,6 +48,7 @@ export default function Feed() {
       ))}
       <div ref={observerElem} className="w-full h-4" />
       {hasNextPage && <Loader />}
+      
     </div>
   );
 }
