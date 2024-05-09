@@ -9,9 +9,11 @@ const useFeed = ({ feedType }: { feedType: string }) => {
   const [feed, setFeed] = useState<any[]>([]);
   const { supabaseClient } = useSupabaseProvider();
   const { filter, activeFeed } = useFeedProvider();
+  const [hasNextPage, setHasNextPage] = useState(true);
 
   const getFeed = async (start: number) => {
     const { posts } = (await fetchPosts(supabaseClient, filter, feedType, start)) as any;
+    setHasNextPage(posts.length > 0);
     setFeed((prev) => {
       const filteredPrev = filter.channel
         ? prev.filter((item) => item.channelId === filter.channel)
@@ -40,7 +42,7 @@ const useFeed = ({ feedType }: { feedType: string }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter.channel]);
 
-  return { feed, getFeed };
+  return { feed, getFeed, hasNextPage };
 };
 
 export default useFeed;

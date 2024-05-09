@@ -21,7 +21,7 @@ const fetchPosts = async (
     query.range(start, start + 5);
   } else {
     query.order('likes', { ascending: false });
-    query.range(start, start + 20);
+    query.range(start, start + 10);
   }
 
   const { data: posts } = await query.returns();
