@@ -5,7 +5,7 @@ const fetchSoundGraphQL = async (query: any, variables = {}) => {
   } as any;
 
   try {
-    const response = await fetch(endpoint, {
+    const response = await fetch('/api/sound/fetchSoundGraphQL', {
       method: 'POST',
       headers: headers,
       body: JSON.stringify({
