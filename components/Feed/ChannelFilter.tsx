@@ -6,14 +6,14 @@ import { useFeedProvider } from '@/providers/FeedProvider';
 
 const channels = [
   { label: '/sonata', value: 'sonata' },
-  { label: '/music', value: 'music' },
+  // { label: '/music', value: 'music' },
   { label: '/soundscapes', value: 'soundscapes' },
   { label: '/albumoftheday', value: 'albumoftheday' },
   { label: '/djs', value: 'djs' },
   { label: '/soundxyz', value: 'soundxyz' },
   { label: '/coop-recs', value: 'coop-recs' },
   { label: '/bangers', value: 'bangers' },
-  { label: '/tropicalhouse', value: 'tropicalhouse' },
+  // { label: '/tropicalhouse', value: 'tropicalhouse' },
 ];
 
 export default function ChannelFilter() {

@@ -96,14 +96,12 @@ const TipProvider = ({ children }: any) => {
   const tip = async (
     amount: bigint,
     postHash: string,
-    authorWalletAddresses: string[],
+    recipientFid: number,
   ): Promise<TipResponse | undefined> => {
     if (
       isNil(user) ||
       isNil(remainingTipAllocation) ||
       isEmpty(user.verifications) ||
-      isNil(authorWalletAddresses) ||
-      isEmpty(authorWalletAddresses) ||
       isNil(signer) ||
       isNil(signer?.signer_uuid)
     ) {
@@ -112,10 +110,9 @@ const TipProvider = ({ children }: any) => {
 
     const data = await executeTip(
       signer?.signer_uuid,
-      user.verifications[0],
       amount,
       postHash,
-      authorWalletAddresses[0],
+      recipientFid,
     );
 
     const message = data.message;
