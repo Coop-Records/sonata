@@ -48,7 +48,7 @@ const TipButton = ({
       setDegenTotal(response.totalTipOnPost ?? 0);
       setCustomTipDegen('');
     } else {
-      response = await tip(amount, cast.post_hash, cast.author.verifications);
+      response = await tip(amount, cast.post_hash, cast.author.fid);
       setNotesTotal(response.totalTipOnPost ?? 0);
       setCustomTipPoints('');
     }
