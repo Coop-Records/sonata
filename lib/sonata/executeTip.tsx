@@ -3,10 +3,9 @@ import { isNil } from 'lodash';
 
 const executeTip = async (
   signer_uuid: string | undefined,
-  walletAddress: string,
   amount: bigint,
   postHash: string,
-  authorWalletAddress: string,
+  recipientFid: number,
 ): Promise<TipResponse> => {
   try {
     if (isNil(signer_uuid)) throw Error('Invalid Signer');
@@ -17,10 +16,9 @@ const executeTip = async (
       },
       body: JSON.stringify({
         signer_uuid,
-        walletAddress,
         tipAmount: amount,
         postHash,
-        authorWalletAddress,
+        recipientFid,
       }),
     });
     const data = (await res.json()) as TipResponse;
