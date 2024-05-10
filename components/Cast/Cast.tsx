@@ -8,11 +8,12 @@ import SoundCloudEmbed from './SoundCloudEmbed';
 import SoundXyzEmbed from './SoundXyzEmbed';
 import { useFeedProvider } from '@/providers/FeedProvider';
 import { SupabasePost } from '@/types/SupabasePost';
+import extractUrl from '@/lib/extractUrl';
 
 const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
   const { filter } = useFeedProvider();
   const embed = findValidEmbed(cast);
-  const url = embed?.url;
+  const url = extractUrl(embed?.url);
   const isSpotify = url?.includes('spotify');
 
   const { author } = cast;
