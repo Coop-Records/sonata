@@ -5,7 +5,6 @@ const createReaction = async (signer: string, target: Address) => {
     method: 'POST',
     headers: {
       accept: 'application/json',
-      api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY,
       'content-type': 'application/json',
     },
     body: JSON.stringify({
@@ -16,7 +15,7 @@ const createReaction = async (signer: string, target: Address) => {
   } as any;
 
   try {
-    const response = await fetch(`https://api.neynar.com/v2/farcaster/reaction?`, options);
+    const response = await fetch(`/api/neynar/createReaction`, options);
     const data = await response.json();
     return data;
   } catch (error) {
