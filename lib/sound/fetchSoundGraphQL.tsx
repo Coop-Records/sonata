@@ -1,9 +1,7 @@
 const fetchSoundGraphQL = async (query: any, variables = {}) => {
-  const endpoint = 'https://api.sound.xyz/graphql';
   const headers = {
     'Content-Type': 'application/json',
     Accept: 'application/json',
-    'X-Sound-Client-Key': process.env.NEXT_PUBLIC_SOUND_API_KEY,
   } as any;
 
   try {
