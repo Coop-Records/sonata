@@ -1,7 +1,7 @@
 const getFeed = async (embedUrl: string) => {
   const options = {
     method: 'GET',
-    headers: { accept: 'application/json', api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY },
+    headers: { accept: 'application/json' },
     next: {
       revalidate: 60,
     },
@@ -9,17 +9,10 @@ const getFeed = async (embedUrl: string) => {
 
   try {
     const queryParams = new URLSearchParams({
-      feed_type: 'filter',
-      filter_type: 'embed_url',
       embed_url: embedUrl,
-      with_recasts: 'false',
-      limit: '22',
     });
 
-    const response = await fetch(
-      `https://api.neynar.com/v2/farcaster/feed?${queryParams}`,
-      options,
-    );
+    const response = await fetch(`/api/neynar/getFeed?${queryParams}`, options);
     const data = await response.json();
     return data;
   } catch (error) {
