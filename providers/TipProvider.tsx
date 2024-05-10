@@ -108,12 +108,7 @@ const TipProvider = ({ children }: any) => {
       return;
     }
 
-    const data = await executeTip(
-      signer?.signer_uuid,
-      amount,
-      postHash,
-      recipientFid,
-    );
+    const data = await executeTip(signer?.signer_uuid, amount, postHash, recipientFid);
 
     const message = data.message;
     const tipRemaining = data.tipRemaining;
