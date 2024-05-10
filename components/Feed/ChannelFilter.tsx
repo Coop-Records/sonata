@@ -27,7 +27,7 @@ export default function ChannelFilter() {
 
   return (
     <div className="flex flex-col sm:gap-2">
-      <h2 className="sm:mb-2 text-lg font-semibold">Channels</h2>
+      <h2 className="text-lg font-semibold sm:mb-2">Channels</h2>
       <RadioGroup value={currentFilter.channel}>
         {channels.map((option) => {
           return (
