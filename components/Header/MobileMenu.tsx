@@ -6,7 +6,7 @@ import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
-// import ChannelFilter from '../Feed/ChannelFilter';
+import ChannelFilter from '../Feed/ChannelFilter';
 
 type MobileMenuProps = {
   open: boolean;
@@ -17,23 +17,23 @@ export default function MobileMenu({ open, setOpen }: MobileMenuProps) {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetContent side="left" className="flex flex-col gap-6">
+      <SheetContent side="left" className="flex flex-col">
         <SheetHeader>
-          <SheetTitle className="text-left text-2xl">Notes</SheetTitle>
+          <SheetTitle className="text-left text-xl">Notes</SheetTitle>
         </SheetHeader>
 
         <BalanceInfo />
         <Separator />
         {/* <PlatformFilter /> */}
         {/* <Separator /> */}
-        {/* <ChannelFilter /> */}
+        <ChannelFilter />
 
-        <div className="mt-auto space-y-6">
+        <div className="space-y-2">
           <Separator />
           {user ? (
             <>
               <div className="flex items-center gap-2">
-                <Avatar className="cursor-pointer">
+                <Avatar className="size-[25px] cursor-pointer">
                   <AvatarImage src={user.pfp_url} />
                   <AvatarFallback>{user.display_name[0]}</AvatarFallback>
                 </Avatar>

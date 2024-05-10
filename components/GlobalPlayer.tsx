@@ -12,17 +12,21 @@ export default function GlobalPlayer() {
   if (!metadata) return <></>;
 
   const handlePlay = () => {
-    dispatch({ type: 'RESUME' });
+    dispatch({ type: 'PLAY' });
   };
 
   const handlePause = () => {
     dispatch({ type: 'PAUSE' });
   };
 
+  const handleSeek = (value: number) => {
+    dispatch({ type: 'SEEK', payload: { position: value } });
+  };
+
   return (
     <div
       data-type={metadata.type}
-      className="sticky bottom-0 left-0 flex w-full flex-col gap-4 bg-white p-2 border-t border-gray-200"
+      className="sticky bottom-0 left-0 mt-auto flex w-full flex-col gap-4 border-t border-gray-200 bg-white p-2"
     >
       <div className="flex gap-4">
         <div className="relative my-auto aspect-square w-16 shrink-0 shadow-md">
@@ -59,15 +63,15 @@ export default function GlobalPlayer() {
       <div className="flex flex-col gap-1">
         <div className="flex justify-between font-inter text-xs font-light text-black">
           <span>{formatDuration(position)}</span>
-          <span>{formatDuration(metadata.duration)}</span>
+          <span>{formatDuration(player.duration)}</span>
         </div>
         <ReactSlider
-          className="w-full h-1 bg-gray-600 global-scrub"
+          className="global-scrub h-1 w-full bg-gray-600"
           thumbClassName={`${metadata?.type === 'spotify' ? '' : 'global-scrub-thumb'}`}
           trackClassName="global-scrub-track"
-          value={(position / metadata.duration) * 100}
-          disabled={metadata?.type === 'spotify'}
-          onChange={(value) => player?.controls?.seek((value / 100) * metadata.duration)}
+          value={position && player.duration ? (position / player.duration) * 100 : 0}
+          // disabled={metadata?.type === 'spotify'}
+          onChange={(value) => handleSeek((value / 100) * player.duration)}
         />
       </div>
     </div>

@@ -46,12 +46,14 @@ const TipProvider = ({ children }: any) => {
     };
 
     fetchTipAllocation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]); // Refetch if fid changes
 
   useEffect(() => {
     if (isNil(user)) return;
     syncPoints();
     getAirdropBalance();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const syncPoints = async () => {
@@ -94,14 +96,12 @@ const TipProvider = ({ children }: any) => {
   const tip = async (
     amount: bigint,
     postHash: string,
-    authorWalletAddresses: string[],
+    recipientFid: number,
   ): Promise<TipResponse | undefined> => {
     if (
       isNil(user) ||
       isNil(remainingTipAllocation) ||
       isEmpty(user.verifications) ||
-      isNil(authorWalletAddresses) ||
-      isEmpty(authorWalletAddresses) ||
       isNil(signer) ||
       isNil(signer?.signer_uuid)
     ) {
@@ -110,10 +110,9 @@ const TipProvider = ({ children }: any) => {
 
     const data = await executeTip(
       signer?.signer_uuid,
-      user.verifications[0],
       amount,
       postHash,
-      authorWalletAddresses[0],
+      recipientFid,
     );
 
     const message = data.message;

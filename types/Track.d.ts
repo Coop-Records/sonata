@@ -4,7 +4,8 @@ export type TrackMetadata = {
   artistName: string;
   trackName: string;
   artworkUrl: string;
-  duration: number;
+  iframeSrc?: string;
+  audioSrc?: string;
 };
 
 export type TrackControls = {

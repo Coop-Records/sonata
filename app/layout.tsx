@@ -26,14 +26,17 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         className={cn(
           'font-proxima',
           inter.variable,
-          'flex flex-col min-h-screen w-screen overflow-x-hidden',
+          'min-h-screen w-screen overflow-x-hidden flex flex-col',
         )}
       >
         <Providers>
-          <Header />
-          {children}
-          <GlobalPlayer />
-          <Toaster />
+          <div className="flex grow flex-col bg-white">
+            <Header />
+            {children}
+            <GlobalPlayer />
+            <Toaster />
+          </div>
+          <div id="player-portal" className="fixed left-0 top-0 -z-10" />
         </Providers>
         <Analytics />
       </body>

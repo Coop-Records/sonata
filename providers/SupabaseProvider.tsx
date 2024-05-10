@@ -1,7 +1,10 @@
-import { createClient } from '@supabase/supabase-js';
+import { SupabaseClient, createClient } from '@supabase/supabase-js';
 import { createContext, useContext } from 'react';
 
-const SupabaseContext = createContext<any>(null);
+type SupabaseContextType = {
+  supabaseClient: SupabaseClient;
+};
+const SupabaseContext = createContext<SupabaseContextType>({} as any);
 
 const SupabaseProvider = ({ children }: any) => {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
