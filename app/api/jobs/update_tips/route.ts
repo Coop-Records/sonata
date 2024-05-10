@@ -36,17 +36,21 @@ const processSingleEntry = async (cast: {
 };
 
 const getResponse = async (): Promise<NextResponse> => {
+  'use server';
   const { data: tip_query_date } = await supabase
     .from('tip_query_date')
     .select('last_checked')
     .eq('id', 1)
     .single();
-  const lastChecked = tip_query_date ? new Date(`${tip_query_date.last_checked}`) : new Date();
+  console.log('jobs::update_tips', `Starting Job from ${tip_query_date?.last_checked}`);
+
+  const lastChecked = tip_query_date ? tip_query_date.last_checked : '';
+  const formattedLastChecked = new Date(`${lastChecked}`);
 
   const [spotify, soundCloud, soundxyz] = await Promise.all([
-    getFeedFromTime('spotify.com/track', lastChecked),
-    getFeedFromTime('soundcloud.com', lastChecked),
-    getFeedFromTime('sound.xyz', lastChecked),
+    getFeedFromTime('spotify.com/track', formattedLastChecked),
+    getFeedFromTime('soundcloud.com', formattedLastChecked),
+    getFeedFromTime('sound.xyz', formattedLastChecked),
   ]);
 
   const allEntries: any[] = [];
@@ -55,13 +59,15 @@ const getResponse = async (): Promise<NextResponse> => {
 
   await processEntriesInBatches(allEntries);
 
-  const newLastChecked = allEntries.reduce((max, cast) => {
+  const newLastChecked: string = allEntries.reduce((max, cast) => {
     const current = new Date(cast.timestamp as string);
-    return current > max ? cast.timestamp : max;
+    return current > new Date(max) ? cast.timestamp : max;
   }, lastChecked);
 
+  console.log('jobs::update_tips', `About to call update_daily_tip_allocation`);
   await supabase.rpc('update_daily_tip_allocation');
 
+  console.log('jobs::update_tips', `About to set last_checked to ${newLastChecked}`);
   await supabase.from('tip_query_date').upsert({ id: 1, last_checked: newLastChecked });
 
   return NextResponse.json({ message: 'success' }, { status: 200 });
@@ -103,3 +109,5 @@ export async function GET(): Promise<Response> {
 }
 
 export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+export const revalidate = 0;
