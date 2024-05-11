@@ -13,13 +13,9 @@ export default function SpotifyEmbed({ trackUrl, cast }: { trackUrl: string; cas
   const isTrackSelected = metadata?.id === trackUrl;
 
   const togglePlay = () => {
-    console.log('SWEETS TRYING TO PLAY SPOTIFY');
     if (!iframeRef?.current) return;
-    console.log('SWEETS IFRAME EXISTS');
     const spotifyEmbedWindow = iframeRef.current.contentWindow as any;
-    console.log('SWEETS spotifyEmbedWindow', spotifyEmbedWindow);
-    const response = spotifyEmbedWindow.postMessage({ command: 'toggle' }, '*');
-    console.log('SWEETS TOGGLE POSTED', response);
+    spotifyEmbedWindow.postMessage({ command: 'toggle' }, '*');
   };
 
   useEffect(() => {
