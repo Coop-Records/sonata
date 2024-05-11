@@ -1,4 +1,3 @@
-import fetchSoundGraphQL from './fetchSoundGraphQL';
 import { MINTED_RELEASE_QUERY } from './queries';
 
 const getReleaseInfo = async (
@@ -9,8 +8,18 @@ const getReleaseInfo = async (
     releaseSlug,
     soundHandle,
   };
-  const response = await fetchSoundGraphQL(MINTED_RELEASE_QUERY, VARIABLES);
-  return response;
+  const response = await fetch('/api/sound/fetchSoundGraphQL', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: MINTED_RELEASE_QUERY,
+      variables: VARIABLES,
+    }),
+  });
+  const { data } = await response.json();
+  return data.mintedRelease;
 };
 
 export default getReleaseInfo;

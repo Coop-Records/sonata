@@ -8,25 +8,41 @@ const fetchPosts = async (
   feedType: string,
   start: number,
 ) => {
-  const query = supabaseClient.from('posts').select('*').not('likes', 'is', null);
-  if (filter?.platform) {
-    query.eq('platform', filter.platform);
-  }
+  if (feedType === FeedType.Recent) {
+    const query = supabaseClient.from('posts').select('*').not('likes', 'is', null);
 
-  if (filter?.channel) {
-    query.eq('channelId', filter.channel);
-  }
+    if (filter?.platform) {
+      query.eq('platform', filter.platform);
+    }
 
-  if (feedType == FeedType.Recent) {
+    if (filter?.channel) {
+      query.eq('channelId', filter.channel);
+    }
+
     query.order('created_at', { ascending: false });
-    query.range(start, start + 5);
-  } else {
-    query.order('likes', { ascending: false });
     query.range(start, start + 20);
-  }
 
-  const { data: posts } = await query.returns<SupabasePost[]>();
-  return posts || [];
+    const { data: posts } = await query.returns<SupabasePost[]>();
+
+    return {
+      posts,
+    };
+  } else {
+    const query = supabaseClient.from('trending_posts').select('*');
+
+    if (filter?.platform) {
+      query.eq('platform', filter.platform);
+    }
+
+    if (filter?.channel) {
+      query.eq('channelId', filter.channel);
+    }
+
+    query.order('score', { ascending: false });
+    query.range(start, start + 20);
+    const { data: posts } = await query.returns<SupabasePost[]>();
+    return { posts };
+  }
 };
 
 export default fetchPosts;

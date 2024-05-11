@@ -35,7 +35,7 @@ export default async function fetchMetadata(url: string) {
     };
   } else if (url.includes('sound.xyz')) {
     const { artist, trackName } = extractSoundArtistAndTrack(url);
-    const { mintedRelease: releaseInfo } = await getReleaseInfo(artist, trackName);
+    const releaseInfo = await getReleaseInfo(artist, trackName);
 
     metadata = {
       id: releaseInfo.id,
