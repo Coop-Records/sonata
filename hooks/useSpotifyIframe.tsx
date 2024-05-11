@@ -1,4 +1,3 @@
-import { useSoundcloudApi } from '@/providers/SoundcloudApiProvider';
 import { OEmbedData } from '@/types/OEmbedData';
 import { useEffect, useRef, useState } from 'react';
 
@@ -6,9 +5,7 @@ const useSpotifyIframe = (trackUrl: string) => {
   const [iframeSrc, setIframeSrc] = useState();
   const [embedData, setEmbedData] = useState<OEmbedData>();
   const [isReady, setIsReady] = useState<boolean>(false);
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [embedController, setEmbedController] = useState<any>(null);
   const [soundcloudUrl, setSoundcloudUrl] = useState<string | null>(null);
 
   useEffect(() => {
@@ -22,11 +19,15 @@ const useSpotifyIframe = (trackUrl: string) => {
   }, [trackUrl]);
 
   const pauseMusic = () => {
-    embedController.pause();
+    if (!(isReady || iframeRef?.current)) return;
+    const spotifyEmbedWindow = iframeRef?.current?.contentWindow as any;
+    spotifyEmbedWindow.postMessage({ command: 'pause' }, '*');
   };
 
   const playMusic = () => {
-    embedController.play();
+    if (!(isReady || iframeRef?.current)) return;
+    const spotifyEmbedWindow = iframeRef?.current?.contentWindow as any;
+    spotifyEmbedWindow.postMessage({ command: 'resume' }, '*');
   };
 
   useEffect(() => {
@@ -58,10 +59,6 @@ const useSpotifyIframe = (trackUrl: string) => {
           setIsReady(true);
           return;
         }
-        if (type === 'playback_update') {
-          const { isPaused: response } = event.data.payload;
-          setIsPlaying(!response);
-        }
       }
     };
     window.addEventListener('message', handleMessage);
@@ -71,12 +68,17 @@ const useSpotifyIframe = (trackUrl: string) => {
     };
   }, [iframeRef]);
 
+  useEffect(() => {
+    if (isReady) {
+      playMusic();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isReady]);
+
   return {
-    embedController,
     embedData,
     iframeRef,
     iframeSrc,
-    togglePlay,
     pauseMusic,
     playMusic,
     soundcloudUrl,
