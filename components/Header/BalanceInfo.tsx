@@ -9,7 +9,7 @@ export default function BalanceInfo() {
   const { balance, remainingTipAllocation, dailyTipAllowance, airdropBalance } = useTipProvider();
 
   return (
-    <div className="flex flex-row gap-2 text-xs flex-wrap">
+    <div className="flex flex-row sm:gap-2 text-xs flex-wrap">
       <div className="flex items-center">
         <span className="whitespace-nowrap">{`Daily Allowance: ${!isNil(remainingTipAllocation) ? formatBigInt(BigInt(remainingTipAllocation)) : '-'}${dailyTipAllowance ? ` / ${formatBigInt(BigInt(dailyTipAllowance))}` : ''}`}</span>{' '}
         <Image src="/images/notes.png" width={20} height={20} alt="" />

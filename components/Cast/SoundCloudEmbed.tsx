@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { OEmbedData } from '@/types/OEmbedData';
 import { useSoundcloudApi } from '@/providers/SoundcloudApiProvider';
 import MediaPlayer from '@/components/MediaPlayer';
+import { SupabasePost } from '@/types/SupabasePost';
 
-const SoundCloudEmbed = ({ trackUrl }: any) => {
+const SoundCloudEmbed = ({ trackUrl, cast }: { trackUrl: string; cast: SupabasePost }) => {
   const [duration, setDuration] = useState(0);
   const [position, setPosition] = useState(0);
   const [embedData, setEmbedData] = useState<OEmbedData>();
@@ -82,6 +83,7 @@ const SoundCloudEmbed = ({ trackUrl }: any) => {
             seek: (time) => widget.seekTo(time),
           }}
           position={position}
+          cast={cast}
         />
       )}
       <iframe
