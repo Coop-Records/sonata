@@ -14,9 +14,7 @@ const useSpotifyIframe = (trackUrl: string) => {
   useEffect(() => {
     const init = async () => {
       console.log('SWEETS SONG LINK for trackUrl', trackUrl);
-      const response = await fetch(
-        `https://api.song.link/v1-alpha.1/links?url=${trackUrl}&userCountry=US&songIfSingle=true`,
-      );
+      const response = await fetch(`/api/songLink/fetchSoundcloudUrl?trackUrl=${trackUrl}`);
       const data = await response.json();
       const responseUrl = data?.linksByPlatform?.soundcloud?.url;
       console.log('SWEETS SONG LINK', responseUrl);
