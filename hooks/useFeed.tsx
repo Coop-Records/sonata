@@ -32,7 +32,7 @@ const useFeed = ({ feedType }: { feedType: string }) => {
         .from('trending_posts')
         .select('*')
         .order('score', { ascending: false })
-        .range(start, start + 20); // Adjust limit as needed
+        .range(start, start + 20); 
       console.log(posts);
       return { posts };
     }
