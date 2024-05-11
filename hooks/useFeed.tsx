@@ -33,7 +33,6 @@ const useFeed = ({ feedType }: { feedType: string }) => {
         .select('*')
         .order('score', { ascending: false })
         .range(start, start + 20); 
-      console.log(posts);
       return { posts };
     }
   };
