@@ -8,29 +8,34 @@ const useFeed = ({ feedType }: { feedType: string }) => {
   const { filter } = useFeedProvider();
 
   const fetchPoints = async (start: number) => {
-    const query = supabaseClient.from('posts').select('*').not('likes', 'is', null);
-
-    if (filter?.platform) {
-      query.eq('platform', filter.platform);
-    }
-
-    if (filter?.channel) {
-      query.like('parent_url', `%${filter.channel}%`);
-    }
-
     if (feedType == FeedType.Recent) {
+      const query = supabaseClient.from('posts').select('*').not('likes', 'is', null);
+
+      if (filter?.platform) {
+        query.eq('platform', filter.platform);
+      }
+
+      if (filter?.channel) {
+        query.like('parent_url', `%${filter.channel}%`);
+      }
+
       query.order('created_at', { ascending: false });
       query.range(start, start + 5);
+
+      const { data: posts } = await query.returns();
+
+      return {
+        posts,
+      };
     } else {
-      query.order('likes', { ascending: false });
-      query.range(start, start + 20);
+      const { data: posts } = await supabaseClient
+        .from('trending_posts')
+        .select('*')
+        .order('score', { ascending: false })
+        .range(start, start + 20); // Adjust limit as needed
+      console.log(posts);
+      return { posts };
     }
-
-    const { data: posts } = await query.returns();
-
-    return {
-      posts,
-    };
   };
 
   const getFeed = async (start: number) => {
@@ -44,6 +49,7 @@ const useFeed = ({ feedType }: { feedType: string }) => {
   const mergeArraysUniqueByPostHash = (prev: any, posts: any) => {
     const map = new Map();
     const addItems = (items: any) => {
+      console.log('items', items);
       for (const item of items) {
         if (!map.has(item.post_hash)) {
           map.set(item.post_hash, item);
