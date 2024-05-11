@@ -1,7 +1,6 @@
 'use client';
 
 import NeynarProvider from '@/providers/NeynarProvider';
-import { SpotifyApiProvider } from './SpotifyApiProvider';
 import { SoundcloudApiProvider } from './SoundcloudApiProvider';
 import PlayerProvider from './PlayerProvider';
 import SupabaseProvider from './SupabaseProvider';
@@ -13,13 +12,11 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     <NeynarProvider>
       <SupabaseProvider>
         <TipProvider>
-          <SpotifyApiProvider>
-            <SoundcloudApiProvider>
-              <PlayerProvider>
-                <FeedProvider>{children}</FeedProvider>
-              </PlayerProvider>
-            </SoundcloudApiProvider>
-          </SpotifyApiProvider>
+          <SoundcloudApiProvider>
+            <PlayerProvider>
+              <FeedProvider>{children}</FeedProvider>
+            </PlayerProvider>
+          </SoundcloudApiProvider>
         </TipProvider>
       </SupabaseProvider>
     </NeynarProvider>
