@@ -1,4 +1,4 @@
-import getFeedFromTime from '@/lib/neynar/getFeedFromTime';
+import getTipAllocationFeedFromTime from '@/lib/neynar/getTipAllocationFeedFromTime';
 import { createClient } from '@supabase/supabase-js';
 import { isEmpty } from 'lodash';
 import { NextResponse } from 'next/server';
@@ -48,14 +48,15 @@ const getResponse = async (): Promise<NextResponse> => {
   const formattedLastChecked = new Date(`${lastChecked}`);
 
   const [spotify, soundCloud, soundxyz] = await Promise.all([
-    getFeedFromTime('spotify.com/track', formattedLastChecked),
-    getFeedFromTime('soundcloud.com', formattedLastChecked),
-    getFeedFromTime('sound.xyz', formattedLastChecked),
+    getTipAllocationFeedFromTime('spotify.com/track', formattedLastChecked),
+    getTipAllocationFeedFromTime('soundcloud.com', formattedLastChecked),
+    getTipAllocationFeedFromTime('sound.xyz', formattedLastChecked),
   ]);
 
   const allEntries: any[] = [];
 
   allEntries.push(...spotify, ...soundCloud, ...soundxyz);
+  console.log('jobs::update_tips', `New entries:`, allEntries.length);
 
   await processEntriesInBatches(allEntries);
 
