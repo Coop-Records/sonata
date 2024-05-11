@@ -68,13 +68,6 @@ const useSpotifyIframe = (trackUrl: string) => {
     };
   }, [iframeRef]);
 
-  useEffect(() => {
-    if (isReady) {
-      playMusic();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isReady]);
-
   return {
     embedData,
     iframeRef,
@@ -82,6 +75,7 @@ const useSpotifyIframe = (trackUrl: string) => {
     pauseMusic,
     playMusic,
     soundcloudUrl,
+    isReady,
   };
 };
 
