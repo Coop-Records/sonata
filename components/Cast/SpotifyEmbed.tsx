@@ -4,7 +4,7 @@ import useSpotifyIframe from '@/hooks/useSpotifyIframe';
 import SoundCloudEmbed from './SoundCloudEmbed';
 
 export default function SpotifyEmbed({ trackUrl, cast }: { trackUrl: string; cast: SupabasePost }) {
-  const { soundcloudUrl, embedController, playMusic, embedData, iframeSrc, iframeRef, pauseMusic } =
+  const { soundcloudUrl, playMusic, embedData, iframeSrc, iframeRef, pauseMusic } =
     useSpotifyIframe(trackUrl);
 
   if (!embedData) return <></>;
