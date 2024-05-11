@@ -3,7 +3,6 @@ import MediaPlayer from '@/components/MediaPlayer';
 import { OEmbedData } from '@/types/OEmbedData';
 import { usePlayer } from '@/providers/PlayerProvider';
 import { SupabasePost } from '@/types/SupabasePost';
-import { useFeedProvider } from '@/providers/FeedProvider';
 
 export default function SpotifyEmbed({ trackUrl, cast }: { trackUrl: string; cast: SupabasePost }) {
   const [iframeSrc, setIframeSrc] = useState();
@@ -11,12 +10,16 @@ export default function SpotifyEmbed({ trackUrl, cast }: { trackUrl: string; cas
   const [embedData, setEmbedData] = useState<OEmbedData>();
   const [player] = usePlayer();
   const metadata = player?.metadata;
-  const { setActiveFeed } = useFeedProvider();
+  const isTrackSelected = metadata?.id === trackUrl;
 
   const togglePlay = () => {
+    console.log('SWEETS TRYING TO PLAY SPOTIFY');
     if (!iframeRef?.current) return;
+    console.log('SWEETS IFRAME EXISTS');
     const spotifyEmbedWindow = iframeRef.current.contentWindow as any;
-    spotifyEmbedWindow.postMessage({ command: 'toggle' }, '*');
+    console.log('SWEETS spotifyEmbedWindow', spotifyEmbedWindow);
+    const response = spotifyEmbedWindow.postMessage({ command: 'toggle' }, '*');
+    console.log('SWEETS TOGGLE POSTED', response);
   };
 
   useEffect(() => {
@@ -37,13 +40,25 @@ export default function SpotifyEmbed({ trackUrl, cast }: { trackUrl: string; cas
   }, [trackUrl]);
 
   useEffect(() => {
-    if (!iframeRef.current || !iframeSrc || !cast) return;
-    iframeRef.current.addEventListener('load', () => {
-      setActiveFeed(cast);
-      togglePlay();
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [iframeRef?.current, iframeSrc, cast]);
+    const handleMessage = (event: any) => {
+      if (
+        event.origin === 'https://open.spotify.com' &&
+        iframeRef.current &&
+        event.source === iframeRef.current.contentWindow
+      ) {
+        const { type } = event.data;
+        if (type === 'ready') {
+          togglePlay();
+        }
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, [iframeRef]);
 
   if (!embedData) return <></>;
 
@@ -68,13 +83,11 @@ export default function SpotifyEmbed({ trackUrl, cast }: { trackUrl: string; cas
         position={0}
         cast={cast}
       />
-      {metadata?.id === trackUrl && (
+      {isTrackSelected && (
         <iframe
           className="hidden"
           width="100%"
           height="166"
-          scrolling="no"
-          frameBorder="no"
           allow="autoplay"
           src={iframeSrc}
           ref={iframeRef}
