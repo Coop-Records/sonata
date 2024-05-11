@@ -11,7 +11,7 @@ const channels = [
   { label: '/albumoftheday', value: 'albumoftheday' },
   { label: '/djs', value: 'djs' },
   { label: '/soundxyz', value: 'soundxyz' },
-  { label: '/coop-recs', value: 'coop-recs' },
+  // { label: '/coop-recs', value: 'coop-recs' },
   { label: '/bangers', value: 'bangers' },
   // { label: '/tropicalhouse', value: 'tropicalhouse' },
 ];
