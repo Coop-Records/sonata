@@ -35,8 +35,6 @@ const getResponse = async (): Promise<NextResponse> => {
 };
 
 async function fetchTopPosts() {
-  const oneDayAgo = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
-
   const { data, error } = await supabase
     .from('trending_posts')
     .select('*')
