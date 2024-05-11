@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const getResponse = async (req: NextRequest): Promise<NextResponse> => {
   const url = req.nextUrl; 
-  const fallback = "https://open.spotify.com/track/6HhFgEBHu25b8gy8Bl4eG0?si=g5nJh-F7RxqpxdvGhwhj1w&context=spotify%3Aalbum%3A1J60iwLlrXqJokziB4h19U"
-  const trackUrl = url.searchParams.get('trackUrl') || fallback;
+  const trackUrl = url.searchParams.get('trackUrl');
+  if (!trackUrl) return NextResponse.json({ errors: 'Missing trackUrl' }, { status: 422 })
   const endpoint = `https://api.song.link/v1-alpha.1/links?url=${trackUrl}&userCountry=US&songIfSingle=true`;
   const headers = {
     'Content-Type': 'application/json',
