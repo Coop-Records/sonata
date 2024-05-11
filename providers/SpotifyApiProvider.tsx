@@ -1,20 +1,29 @@
+import useSpotifyController from '@/hooks/useSpotifyController';
 import Script from 'next/script';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 
 const spotifyApiContext = createContext(null);
 
 export function SpotifyApiProvider({ children }: { children: React.ReactNode }) {
-  const [spotifyApi, setSpotifyApi] = useState(null);
-
-  useEffect(() => {
-    (window as any).onSpotifyIframeApiReady = setSpotifyApi;
-  }, []);
+  const { embedController, iframeRef } = useSpotifyController();
+  // useEffect(() => {
+  //   (window as any).onSpotifyIframeApiReady = (IFrameAPI: any) => {
+  //     console.log('SWEETS API to CONTROLLER', IFrameAPI);
+  //   };
+  // }, []);
+  const value = useMemo(
+    () =>
+      ({
+        iframeRef,
+      }) as any,
+    [iframeRef],
+  );
   return (
-    <spotifyApiContext.Provider value={spotifyApi}>
+    <spotifyApiContext.Provider value={value as any}>
       <Script src="https://open.spotify.com/embed/iframe-api/v1" async />
       {children}
     </spotifyApiContext.Provider>
   );
 }
 
-export const useSpotifyApi = () => useContext(spotifyApiContext) as any;
+export const useSpotifyProvider = () => useContext(spotifyApiContext) as any;
