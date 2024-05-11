@@ -46,12 +46,14 @@ const TipProvider = ({ children }: any) => {
     };
 
     fetchTipAllocation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]); // Refetch if fid changes
 
   useEffect(() => {
     if (isNil(user)) return;
     syncPoints();
     getAirdropBalance();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const syncPoints = async () => {

@@ -2,8 +2,9 @@ import extractSoundArtistAndTrack from '@/lib/sound/extractSoundArtistAndTrack';
 import getReleaseInfo from '@/lib/sound/getReleaseInfo';
 import { useEffect, useState } from 'react';
 import MediaPlayer from '@/components/MediaPlayer';
+import { SupabasePost } from '@/types/SupabasePost';
 
-const SoundXyzEmbed = ({ trackUrl }: { trackUrl: string }) => {
+const SoundXyzEmbed = ({ trackUrl, cast }: { trackUrl: string; cast: SupabasePost }) => {
   const [releaseInfo, setReleaseInfo] = useState<any>({});
   const [audio, setAudio] = useState<HTMLAudioElement>();
   const [position, setPosition] = useState(0);
@@ -52,6 +53,7 @@ const SoundXyzEmbed = ({ trackUrl }: { trackUrl: string }) => {
         }
       }
       position={position}
+      cast={cast}
     />
   );
 };

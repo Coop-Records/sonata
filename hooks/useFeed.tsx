@@ -1,58 +1,26 @@
 import { useEffect, useState } from 'react';
 import { useSupabaseProvider } from '@/providers/SupabaseProvider';
-import { FeedType, useFeedProvider } from '@/providers/FeedProvider';
+import { useFeedProvider } from '@/providers/FeedProvider';
+import fetchPosts from '@/lib/fetchPosts';
+import getSortedFeed from '@/lib/getSortedFeed';
+import mergeArraysUniqueByPostHash from '@/lib/mergeArraysUniqueByPostHash';
 
 const useFeed = ({ feedType }: { feedType: string }) => {
   const [feed, setFeed] = useState<any[]>([]);
   const { supabaseClient } = useSupabaseProvider();
-  const { filter } = useFeedProvider();
-
-  const fetchPoints = async (start: number) => {
-    const query = supabaseClient.from('posts').select('*').not('likes', 'is', null);
-
-    if (filter?.platform) {
-      query.eq('platform', filter.platform);
-    }
-
-    if (filter?.channel) {
-      query.like('parent_url', `%${filter.channel}%`);
-    }
-
-    if (feedType == FeedType.Recent) {
-      query.order('created_at', { ascending: false });
-      query.range(start, start + 5);
-    } else {
-      query.order('likes', { ascending: false });
-      query.range(start, start + 20);
-    }
-
-    const { data: posts } = await query.returns();
-
-    return {
-      posts,
-    };
-  };
+  const { filter, activeFeed } = useFeedProvider();
 
   const getFeed = async (start: number) => {
-    const { posts } = await fetchPoints(start);
+    const { posts } = (await fetchPosts(supabaseClient, filter, feedType, start)) as any;
     setFeed((prev) => {
-      const mergedUnique = mergeArraysUniqueByPostHash(prev, posts);
-      return mergedUnique;
+      const filteredPrev = filter.channel
+        ? prev.filter((item) => item.channelId === filter.channel)
+        : prev;
+      if (activeFeed) filteredPrev.push(activeFeed);
+      const mergedUnique = mergeArraysUniqueByPostHash(filteredPrev, posts);
+      const sortedFeed = getSortedFeed(mergedUnique, feedType);
+      return sortedFeed;
     });
-  };
-
-  const mergeArraysUniqueByPostHash = (prev: any, posts: any) => {
-    const map = new Map();
-    const addItems = (items: any) => {
-      for (const item of items) {
-        if (!map.has(item.post_hash)) {
-          map.set(item.post_hash, item);
-        }
-      }
-    };
-    addItems(prev);
-    addItems(posts);
-    return Array.from(map.values());
   };
 
   useEffect(() => {
@@ -60,7 +28,17 @@ const useFeed = ({ feedType }: { feedType: string }) => {
       await getFeed(0);
     };
     init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (filter.channel) {
+      getFeed(0);
+    } else {
+      getFeed(feed.length);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter.channel]);
 
   return { feed, getFeed };
 };
