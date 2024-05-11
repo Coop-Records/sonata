@@ -49,7 +49,6 @@ const useFeed = ({ feedType }: { feedType: string }) => {
   const mergeArraysUniqueByPostHash = (prev: any, posts: any) => {
     const map = new Map();
     const addItems = (items: any) => {
-      console.log('items', items);
       for (const item of items) {
         if (!map.has(item.post_hash)) {
           map.set(item.post_hash, item);
