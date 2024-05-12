@@ -67,10 +67,9 @@ export default function GlobalPlayer() {
         </div>
         <ReactSlider
           className="global-scrub h-1 w-full bg-gray-600"
-          thumbClassName={`${metadata?.type === 'spotify' ? '' : 'global-scrub-thumb'}`}
+          thumbClassName="global-scrub-thumb"
           trackClassName="global-scrub-track"
           value={position && player.duration ? (position / player.duration) * 100 : 0}
-          // disabled={metadata?.type === 'spotify'}
           onChange={(value) => handleSeek((value / 100) * player.duration)}
         />
       </div>
