@@ -1,43 +1,27 @@
-import { formatDuration } from '@/lib/utils';
+import { cn, formatDuration } from '@/lib/utils';
 import { usePlayer } from '@/providers/PlayerProvider';
-import { TrackControls, TrackMetadata } from '@/types/Track';
+import { TrackMetadata } from '@/types/Track';
 import Image from 'next/image';
-import { useEffect } from 'react';
 import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';
 import { Skeleton } from '@/components/ui/skeleton';
 import ReactSlider from 'react-slider';
-import { useFeedProvider } from '@/providers/FeedProvider';
-import { SupabasePost } from '@/types/SupabasePost';
 
 type MediaPlayerProps = {
   metadata?: TrackMetadata;
-  controls?: TrackControls | null;
-  position: number;
-  cast: SupabasePost;
 };
 
-export default function MediaPlayer({ metadata, controls, position, cast }: MediaPlayerProps) {
+export default function MediaPlayer({ metadata }: MediaPlayerProps) {
   const [player, dispatch] = usePlayer();
-  const { setActiveFeed } = useFeedProvider();
 
   const currentTrack = player?.metadata?.id === metadata?.id;
-  const displayPosition = currentTrack ? player.position : position;
-  const displayDuration = metadata?.duration || 0;
-
-  useEffect(() => {
-    if (currentTrack && controls && cast) {
-      setActiveFeed(cast);
-      dispatch({ type: 'PROGRESS', payload: { position } });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [position, currentTrack, dispatch, controls, cast]);
+  const displayPosition = currentTrack ? player.position : 0;
+  const displayDuration = player?.duration || 0;
 
   const handlePlay = () => {
-    if (!metadata || !controls) return;
-
+    if (!metadata) return;
     dispatch({
       type: 'PLAY',
-      payload: { metadata, controls: currentTrack ? player?.controls : controls },
+      payload: { metadata },
     });
   };
 
@@ -45,8 +29,18 @@ export default function MediaPlayer({ metadata, controls, position, cast }: Medi
     dispatch({ type: 'PAUSE' });
   };
 
+  const handleSeek = (value: number) => {
+    dispatch({ type: 'SEEK', payload: { position: value } });
+  };
+
   return (
-    <div data-type={metadata?.type} className="flex w-full flex-col gap-4 rounded-lg border p-2">
+    <div
+      data-type={metadata?.type}
+      className={cn(
+        'flex w-full flex-col gap-4 rounded-lg border bg-white p-2',
+        currentTrack && player.loading && 'animate-pulse',
+      )}
+    >
       <div className="flex gap-4">
         <div className="relative my-auto aspect-square w-16 shrink-0 overflow-hidden rounded-lg shadow-md">
           {metadata?.artworkUrl ? (
@@ -79,35 +73,35 @@ export default function MediaPlayer({ metadata, controls, position, cast }: Medi
           </div>
         </div>
         <div className="my-auto">
-          {controls ? (
-            currentTrack && player.playing ? (
-              <button onClick={handlePause}>
-                <MdPauseCircle className="text-4xl" />
-              </button>
-            ) : (
-              <button onClick={handlePlay}>
-                <MdPlayCircle className="text-4xl" />
-              </button>
-            )
+          {currentTrack && player.playing ? (
+            <button onClick={handlePause}>
+              <MdPauseCircle className="text-4xl" />
+            </button>
           ) : (
-            <Skeleton className="h-8 w-8 rounded-full" />
+            <button onClick={handlePlay}>
+              <MdPlayCircle className="text-4xl" />
+            </button>
           )}
         </div>
       </div>
-      <div className="flex flex-col gap-1">
-        <div className="flex justify-between font-inter text-xs font-light">
-          <span>{formatDuration(displayPosition)}</span>
-          <span>{formatDuration(displayDuration)}</span>
+      {currentTrack && !player.loading && (
+        <div className="flex flex-col gap-1">
+          <div className="flex justify-between font-inter text-xs font-light">
+            <span>{formatDuration(displayPosition)}</span>
+            <span>{formatDuration(displayDuration)}</span>
+          </div>
+          <ReactSlider
+            className="scrub h-1 w-full bg-gray-300"
+            thumbClassName={`${metadata?.type === 'spotify' ? '' : 'scrub-thumb'}`}
+            trackClassName="scrub-track"
+            value={
+              displayPosition && displayDuration ? (displayPosition / displayDuration) * 100 : 0
+            }
+            disabled={metadata?.type === 'spotify'}
+            onChange={(value) => handleSeek((value / 100) * displayDuration)}
+          />
         </div>
-        <ReactSlider
-          className="w-full h-1 bg-gray-300 scrub"
-          thumbClassName={`${metadata?.type === 'spotify' ? '' : 'scrub-thumb'}`}
-          trackClassName="scrub-track"
-          value={(displayPosition / displayDuration) * 100}
-          disabled={metadata?.type === 'spotify'}
-          onChange={(value) => controls?.seek((value / 100) * displayDuration)}
-        />
-      </div>
+      )}
     </div>
   );
 }
