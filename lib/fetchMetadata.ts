@@ -16,22 +16,26 @@ export default async function fetchMetadata(url: string) {
       artistName: '',
       trackName: embedData.title,
       artworkUrl: embedData.thumbnail_url,
+      url: `spotify:track:${trackId}`,
     };
   } else if (url.includes('soundcloud')) {
     const oEmbedUrl = `https://soundcloud.com/oembed?format=json&url=${encodeURIComponent(url)}`;
     const response = await fetch(oEmbedUrl);
     const embedData = await response.json();
-    const srcRegex = /src="([^"]+)"/;
-    const match = embedData.html.match(srcRegex);
-    const src = match ? match[1] : null;
+    const iframeSrc = embedData.html.match(/src="([^"]+)"/)[1];
+    const iframeUrl = new URL(iframeSrc).searchParams.get('url');
+
+    if (!iframeUrl) {
+      throw new Error('Could not find iframe url');
+    }
 
     metadata = {
-      id: url,
+      id: iframeUrl,
       type: 'soundcloud',
       artistName: embedData.author_name || '',
       trackName: embedData.title.split(' - ')[0].split(' by ')[0],
       artworkUrl: embedData.thumbnail_url,
-      iframeSrc: src,
+      url: iframeUrl,
     };
   } else if (url.includes('sound.xyz')) {
     const { artist, trackName } = extractSoundArtistAndTrack(url);
@@ -43,7 +47,7 @@ export default async function fetchMetadata(url: string) {
       artistName: releaseInfo.artist.name,
       trackName: releaseInfo.title,
       artworkUrl: releaseInfo.coverImage.url,
-      audioSrc: releaseInfo?.track?.audio?.audio128k?.url,
+      url: releaseInfo?.track?.audio?.audio128k?.url,
     };
   }
   return metadata;

@@ -7,6 +7,7 @@ import PlayerProvider from './PlayerProvider';
 import SupabaseProvider from './SupabaseProvider';
 import TipProvider from './TipProvider';
 import FeedProvider from './FeedProvider';
+import { SoundContextProvider } from './SoundContextProvider';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -15,9 +16,11 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         <TipProvider>
           <SpotifyControllerProvider>
             <SoundcloudWidgetProvider>
-              <PlayerProvider>
-                <FeedProvider>{children}</FeedProvider>
-              </PlayerProvider>
+              <SoundContextProvider>
+                <PlayerProvider>
+                  <FeedProvider>{children}</FeedProvider>
+                </PlayerProvider>
+              </SoundContextProvider>
             </SoundcloudWidgetProvider>
           </SpotifyControllerProvider>
         </TipProvider>

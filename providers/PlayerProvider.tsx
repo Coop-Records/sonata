@@ -1,15 +1,8 @@
-import {
-  Dispatch,
-  ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useReducer,
-  useState,
-} from 'react';
+import { Dispatch, ReactNode, createContext, useContext, useEffect, useReducer } from 'react';
 import { useSoundcloudWidget } from './SoundcloudWidgetProvider';
 import { useSpotifyController } from './SpotifyControllerProvider';
 import { TrackMetadata } from '@/types/Track';
+import { useSoundContext } from './SoundContextProvider';
 
 type Player = {
   playing: boolean;
@@ -94,47 +87,32 @@ const playerReducer = (state: Player, action: PlayerAction) => {
 export default function PlayerProvider({ children }: { children: ReactNode }) {
   const [player, dispatch] = useReducer(playerReducer, initialState);
   const { metadata } = player;
-
   const { scWidget, scLoad } = useSoundcloudWidget(dispatch);
-
-  const [audio, setAudio] = useState<HTMLAudioElement>();
-
+  const { audio } = useSoundContext(dispatch);
   const spotifyController = useSpotifyController(dispatch);
 
   useEffect(() => {
     if (!metadata) return;
-    if (metadata.type === 'soundcloud' && metadata.iframeSrc) {
-      scLoad(metadata.iframeSrc);
+    if (metadata.type === 'soundcloud' && metadata.url) {
+      scLoad(metadata.url);
 
       return () => {
-        try {
-          scWidget?.pause();
-          scLoad(null);
-        } catch (e) {
-          console.log(e);
-        }
+        scWidget.pause();
       };
-    } else if (metadata.type === 'soundxyz') {
-      if (!metadata.audioSrc) return;
-      const audio = new Audio(metadata.audioSrc);
-      audio.preload = 'none';
-      audio.ontimeupdate = () =>
-        dispatch({ type: 'PROGRESS', payload: { position: audio.currentTime * 1000 } });
-      setAudio(audio);
-      dispatch({ type: 'SET_LOADING', payload: { loading: false } });
+    } else if (metadata.type === 'soundxyz' && metadata.url) {
+      audio.src = metadata.url;
 
       return () => {
         audio.pause();
       };
-    } else if (metadata.type === 'spotify') {
-      if (!spotifyController) return;
-      spotifyController.loadUri(`spotify:track:${metadata.id}`);
+    } else if (metadata.type === 'spotify' && spotifyController) {
+      spotifyController.loadUri(metadata.url);
 
       return () => {
         spotifyController.pause();
       };
     }
-  }, [metadata, scWidget, spotifyController, scLoad]);
+  }, [metadata, scWidget, spotifyController, audio, scLoad]);
 
   useEffect(() => {
     if (player.loading) return;
