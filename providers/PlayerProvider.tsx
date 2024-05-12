@@ -93,19 +93,19 @@ export default function PlayerProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!metadata) return;
-    if (metadata.type === 'soundcloud' && metadata.url) {
+    if (metadata.type === 'soundcloud') {
       scLoad(metadata.url);
 
       return () => {
         scWidget.pause();
       };
-    } else if (metadata.type === 'soundxyz' && metadata.url) {
+    } else if (metadata.type === 'soundxyz') {
       audio.src = metadata.url;
 
       return () => {
         audio.pause();
       };
-    } else if (metadata.type === 'spotify' && spotifyController) {
+    } else if (metadata.type === 'spotify') {
       spotifyController.loadUri(metadata.url);
 
       return () => {
@@ -116,30 +116,30 @@ export default function PlayerProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (player.loading) return;
-    if (metadata?.type === 'soundcloud' && scWidget) {
+    if (metadata?.type === 'soundcloud') {
       if (player.playing) {
         scWidget.play();
       } else {
         scWidget.pause();
       }
-    } else if (metadata?.type === 'soundxyz' && audio) {
+    } else if (metadata?.type === 'soundxyz') {
       if (player.playing) {
         audio.play();
       } else {
         audio.pause();
       }
-    } else if (metadata?.type === 'spotify' && spotifyController) {
+    } else if (metadata?.type === 'spotify') {
       spotifyController.togglePlay();
     }
   }, [player.loading, metadata?.type, player.playing, scWidget, audio, spotifyController]);
 
   useEffect(() => {
     if (typeof player.seekTo === 'undefined') return;
-    if (metadata?.type === 'soundcloud' && scWidget) {
+    if (metadata?.type === 'soundcloud') {
       scWidget.seekTo(player.seekTo);
-    } else if (metadata?.type === 'soundxyz' && audio) {
+    } else if (metadata?.type === 'soundxyz') {
       audio.currentTime = player.seekTo / 1000;
-    } else if (metadata?.type === 'spotify' && spotifyController) {
+    } else if (metadata?.type === 'spotify') {
       spotifyController.seek(player.seekTo / 1000);
     }
   }, [player.seekTo, metadata?.type, scWidget, audio, spotifyController]);
