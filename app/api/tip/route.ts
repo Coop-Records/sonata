@@ -1,4 +1,4 @@
-import getUser from '@/lib/neynar/getUser';
+import getUser from '@/lib/neynar/getNeynarUser';
 import verifySignerUUID from '@/lib/neynar/verifySigner';
 import { StackClient } from '@stackso/js-core';
 import { createClient } from '@supabase/supabase-js';
@@ -59,7 +59,7 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
 
   if (isNil(recipientWalletAddress)) {
     return NextResponse.json(
-      { message: `You don't `, tipRemaining: 0, totalTipOnPost: 0 },
+      { message: `Invalid recipient`, tipRemaining: 0, totalTipOnPost: 0 },
       { status: 400 },
     );
   }

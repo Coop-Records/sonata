@@ -1,6 +1,6 @@
 import { createContext, useContext, useCallback, useState, useEffect } from 'react';
 import { Signer, User } from '@neynar/nodejs-sdk/build/neynar-api/v2';
-import getUser from '@/lib/neynar/getUser';
+import getUser from '@/lib/sonata/getUser';
 
 const clientId = process.env.NEXT_PUBLIC_NEYNAR_CLIENT_ID;
 const loginUrl = 'https://app.neynar.com/login';

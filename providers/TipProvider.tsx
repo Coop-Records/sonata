@@ -71,7 +71,7 @@ const TipProvider = ({ children }: any) => {
       .ilike('wallet_address', user.verifications[0])
       .single();
 
-    const currentBalance = data.notes;
+    const currentBalance = data?.notes;
     setAirdropBalance(currentBalance);
   };
 

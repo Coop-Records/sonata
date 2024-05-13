@@ -1,5 +1,3 @@
-'use client';
-
 import Cast from '@/components/Cast';
 import { useEffect } from 'react';
 import { FeedType, useFeedProvider } from '@/providers/FeedProvider';

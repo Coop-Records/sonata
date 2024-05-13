@@ -35,14 +35,11 @@ const getResponse = async (): Promise<NextResponse> => {
 };
 
 async function fetchTopPosts() {
-  const oneDayAgo = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
-
   const { data, error } = await supabase
-    .from('posts')
-    .select('*') // Selects all columns; specify columns if needed e.g. 'id, title, likes'
-    .gt('created_at', oneDayAgo.toISOString()) // Assuming 'created_at' is the column name
-    .order('likes', { ascending: false }) // Orders by 'likes' in descending order
-    .limit(10); // Limits to top 10
+    .from('trending_posts')
+    .select('*')
+    .order('score', { ascending: false })
+    .limit(10);
 
   if (error) {
     console.error('Error fetching posts:', error);
