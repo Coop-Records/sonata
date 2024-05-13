@@ -36,7 +36,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <GlobalPlayer />
             <Toaster />
           </div>
-          <div id="player-portal" className="fixed left-0 top-0 -z-10" />
+          <div id="player-portal" className="fixed left-0 top-0 -z-10 opacity-0" />
         </Providers>
         <Analytics />
       </body>
