@@ -59,7 +59,7 @@ const playerReducer = (state: Player, action: PlayerAction) => {
       state.controls.pause();
       return { ...state, playing: false };
     case 'PROGRESS':
-      return { ...state, position: action.payload.position };
+      return { ...state, position: action.payload.position || state.position };
     case 'RESUME':
       state.controls.play();
       return { ...state, playing: true };
