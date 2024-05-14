@@ -1,4 +1,5 @@
 import { FeedType } from '@/providers/FeedProvider';
+import { SupabasePost } from '@/types/SupabasePost';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 const fetchPosts = async (
@@ -19,9 +20,9 @@ const fetchPosts = async (
     }
 
     query.order('created_at', { ascending: false });
-    query.range(start, start + 5);
+    query.range(start, start + 20);
 
-    const { data: posts } = await query.returns();
+    const { data: posts } = await query.returns<SupabasePost[]>();
 
     return {
       posts,
@@ -39,7 +40,7 @@ const fetchPosts = async (
 
     query.order('score', { ascending: false });
     query.range(start, start + 20);
-    const { data: posts } = await query.returns();
+    const { data: posts } = await query.returns<SupabasePost[]>();
     return { posts };
   }
 };

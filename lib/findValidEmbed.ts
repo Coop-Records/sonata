@@ -4,9 +4,19 @@ import { EmbedUrl } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import isValidUrl from './isValidUrl';
 
 export default function findValidEmbed(cast: SupabasePost, filter: FeedFilter = {}) {
-  const embeds = cast.embeds.map((embed) => JSON.parse(embed));
+  if (!cast || !cast.embeds) return null;
+
+  const embeds = cast.embeds.map((embed) => {
+    try {
+      return JSON.parse(embed);
+    } catch (error) {
+      console.error('Invalid JSON in embed:', embed, error);
+      return null;
+    }
+  }).filter(embed => embed !== null);
+
   const validEmbed = embeds.find((embed) => {
-    if (!('url' in embed)) return false;
+    if (!embed || !('url' in embed)) return false;
     const url = embed.url;
     const isValid = isValidUrl(url);
     if (filter?.platform && !url.includes(filter.platform)) {
