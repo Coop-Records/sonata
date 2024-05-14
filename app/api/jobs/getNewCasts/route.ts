@@ -40,7 +40,9 @@ const getResponse = async (): Promise<NextResponse> => {
     .single();
   console.log('jobs::getNewCasts', `Starting Job from ${cast_query_date?.lastcheck}`);
 
-  const lastChecked = cast_query_date ? cast_query_date.lastcheck : '';
+  const twoMinutesAgo = new Date(new Date().getTime() - 2 * 60 * 1000).toISOString();
+
+  const lastChecked = cast_query_date ? cast_query_date.lastcheck : twoMinutesAgo;
 
   const formattedLastChecked = new Date(`${lastChecked}`);
 
@@ -57,12 +59,16 @@ const getResponse = async (): Promise<NextResponse> => {
     await processEntriesInBatches(allEntries);
   }
 
-  const newLastChecked: string = allEntries.reduce((max, cast) => {
+  let newLastChecked: string = allEntries.reduce((max, cast) => {
     const current = new Date(cast.timestamp as string);
     return current > new Date(max) ? cast.timestamp : max;
   }, lastChecked);
 
   console.log('jobs::getNewCasts', `About to set cast_query_date to ${newLastChecked}`);
+
+  if (isEmpty(newLastChecked)) {
+    newLastChecked = twoMinutesAgo;
+  }
 
   const { data, error } = await supabase
     .from('cast_query_date')
