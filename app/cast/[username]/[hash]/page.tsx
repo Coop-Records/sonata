@@ -1,10 +1,6 @@
 import { getFrameMetadata } from '@coinbase/onchainkit';
 import type { Metadata } from 'next';
 import { DEFAULT_FRAME, DESCRIPTION, TITLE, VERCEL_URL } from '@/lib/consts';
-import Feeds from '../../../(feeds)/feeds';
-import getCastHash from '@/lib/neynar/getCastHash';
-import { useSupabaseProvider } from '@/providers/SupabaseProvider';
-import Cast from '@/components/Cast';
 import SingleFeed from './SingleFeed';
 
 const frameMetadata = { ...getFrameMetadata(DEFAULT_FRAME), 'of:accepts:xmtp': '2024-02-01' };
