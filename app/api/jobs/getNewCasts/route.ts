@@ -1,3 +1,4 @@
+import createPostReply from '@/lib/neynar/createPostReply';
 import getFeedFromTime from '@/lib/neynar/getFeedFromTime';
 import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { createClient } from '@supabase/supabase-js';
@@ -6,6 +7,7 @@ import { NextResponse } from 'next/server';
 
 const SUPABASE_URL = process.env.SUPABASE_URL as string;
 const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
+const BOT_SIGNER_UUID = process.env.BOT_SIGNER_UUID as string;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
   auth: {
@@ -28,6 +30,7 @@ const processSingleEntry = async (cast: Cast) => {
 
   if (!isEmpty(address)) {
     await createCast(cast);
+    await sendBotCast(cast);
   }
 };
 
@@ -109,6 +112,16 @@ async function createCast(cast: Cast) {
     console.error('Error calling function:', error);
     return null;
   }
+
+  return { success: true };
+}
+
+async function sendBotCast(cast: Cast) {
+  await createPostReply(
+    BOT_SIGNER_UUID,
+    cast.hash,
+    `Heads up! This song is now available on @sonatatips where you earn NOTES when people tip you.\n\nSee you over there!\n\nhttps://sonata.tips/cast/${cast.author.username}/${cast.hash.substring(0, 8)}`,
+  );
 
   return { success: true };
 }
