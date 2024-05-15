@@ -19,7 +19,7 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
           <div className="w-full grow overflow-hidden">{children}</div>
         </div>
         <Separator orientation="vertical" className="max-md:hidden" />
-        <div className="min-w-48 pt-16 max-md:hidden">{/* <PlatformFilter /> */}</div>
+        <div className="min-w-48 pt-16 max-md:hidden"/>
       </div>
     </main>
   );
