@@ -2,7 +2,6 @@
 
 import { ReactNode } from 'react';
 import { Separator } from '@/components/ui/separator';
-import ChannelFilter from '@/components/Feed/ChannelFilter';
 
 export default function FeedLayout({ children }: { children: ReactNode }) {
   return (
