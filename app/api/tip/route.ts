@@ -38,6 +38,7 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
     `${tipperFid}`,
     tipAmount,
     postHash,
+    `${recipientFid}`,
   );
 
   if (used_tip === 0) {
@@ -81,11 +82,17 @@ export async function POST(req: NextRequest): Promise<Response> {
   return getResponse(req);
 }
 
-async function callAllocateTip(fidInput: string, tipAmount: number, postHashInput: string) {
+async function callAllocateTip(
+  fidInput: string,
+  tipAmount: number,
+  postHashInput: string,
+  recipientFid: string,
+) {
   const { data, error } = await supabase.rpc('allocate_tip_with_fid', {
     fid_input: fidInput,
     tip_amount: tipAmount,
     post_hash_input: postHashInput,
+    reciever_fid: recipientFid,
   });
 
   if (error) {
