@@ -88,11 +88,11 @@ async function callAllocateTip(
   postHashInput: string,
   recipientFid: string,
 ) {
-  const { data, error } = await supabase.rpc('allocate_tip_with_fid', {
+  const { data, error } = await supabase.rpc('allocate_tip_with_fid_recipient', {
     fid_input: fidInput,
     tip_amount: tipAmount,
     post_hash_input: postHashInput,
-    reciever_fid: recipientFid,
+    receiver_fid: recipientFid,
   });
 
   if (error) {
