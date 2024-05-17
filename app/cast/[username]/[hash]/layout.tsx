@@ -13,7 +13,7 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
         <Separator orientation="vertical" className="max-md:hidden" />
 
         <div className="flex max-w-full grow flex-col items-center gap-4">
-          <div className="w-full grow overflow-hidden">{children}</div>
+          <div className="w-full grow">{children}</div>
         </div>
         <Separator orientation="vertical" className="max-md:hidden" />
         <div className="min-w-48 pt-16 max-md:hidden" />
