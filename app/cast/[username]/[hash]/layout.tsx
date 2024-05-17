@@ -7,7 +7,7 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
   return (
     <main>
       <meta property="of:accepts:xmtp" content="2024-02-01" />
-      <div className="container flex justify-center font-helvetica bg-blend-color-burn md:gap-6 grow">
+      <div className="container flex justify-center font-helvetica bg-blend-color-burn md:gap-6">
         <div className="min-w-48 pt-16 max-md:hidden" />
 
         <Separator orientation="vertical" className="max-md:hidden" />
