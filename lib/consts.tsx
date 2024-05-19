@@ -19,4 +19,5 @@ export const AIRSTACK_API_URL = 'https://api.airstack.xyz/graphql';
 export const tabs = [
   { label: 'Trending', href: '/', value: FeedType.Trending },
   { label: 'Recent', href: '/recent', value: FeedType.Recent },
+  { label: 'Following', href: '/following', value: FeedType.Following },
 ];

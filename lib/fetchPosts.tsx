@@ -1,14 +1,17 @@
 import { FeedType } from '@/providers/FeedProvider';
 import { SupabasePost } from '@/types/SupabasePost';
 import { SupabaseClient } from '@supabase/supabase-js';
+import getFollowing from './pinata/getFollowing';
 
 const fetchPosts = async (
   supabaseClient: SupabaseClient,
   filter: any,
   feedType: string,
   start: number,
+  fid?: number,
 ) => {
-  if (feedType === FeedType.Recent) {
+  const isFollowing = feedType === FeedType.Following;
+  if (feedType === FeedType.Recent || isFollowing) {
     const query = supabaseClient.from('posts').select('*').not('likes', 'is', null);
 
     if (filter?.platform) {
@@ -20,29 +23,41 @@ const fetchPosts = async (
     }
 
     query.order('created_at', { ascending: false });
-    query.range(start, start + 20);
+    const size = isFollowing ? 333 : 20;
+    query.range(start, start + size);
 
-    const { data: posts } = await query.returns<SupabasePost[]>();
+    let { data: posts } = await query.returns<SupabasePost[]>();
 
+    if (isFollowing) {
+      console.log('SWEETS GET FOLLOWING LIST FROM PINATA', fid);
+      const following = await getFollowing(fid);
+      const followingFids = following.users.map((user: { fid: number }) => user.fid);
+      console.log('SWEETS followingFids', followingFids);
+      posts = posts?.filter((post: SupabasePost) =>
+        followingFids.includes(post.author.fid),
+      ) as SupabasePost[];
+    }
+
+    console.log('SWEETS posts', posts);
     return {
       posts,
     };
-  } else {
-    const query = supabaseClient.from('trending_posts').select('*');
-
-    if (filter?.platform) {
-      query.eq('platform', filter.platform);
-    }
-
-    if (filter?.channel) {
-      query.eq('channelId', filter.channel);
-    }
-
-    query.order('score', { ascending: false });
-    query.range(start, start + 20);
-    const { data: posts } = await query.returns<SupabasePost[]>();
-    return { posts };
   }
+
+  const query = supabaseClient.from('trending_posts').select('*');
+
+  if (filter?.platform) {
+    query.eq('platform', filter.platform);
+  }
+
+  if (filter?.channel) {
+    query.eq('channelId', filter.channel);
+  }
+
+  query.order('score', { ascending: false });
+  query.range(start, start + 20);
+  const { data: posts } = await query.returns<SupabasePost[]>();
+  return { posts };
 };
 
 export default fetchPosts;

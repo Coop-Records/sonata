@@ -14,6 +14,7 @@ import { useSupabaseProvider } from './SupabaseProvider';
 import findValidEmbed from '@/lib/findValidEmbed';
 import fetchPosts from '@/lib/fetchPosts';
 import mergeArraysUniqueByPostHash from '@/lib/mergeArraysUniqueByPostHash';
+import { useNeynarProvider } from './NeynarProvider';
 
 type FeedProviderType = {
   filter: FeedFilter;
@@ -28,6 +29,7 @@ type FeedProviderType = {
 export enum FeedType {
   Trending = 'Trending',
   Recent = 'Recent',
+  Following = 'Following',
 }
 
 const FeedContext = createContext<FeedProviderType>({} as any);
@@ -38,6 +40,8 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const [feedType, setFeedType] = useState<string>(FeedType.Trending);
   const { supabaseClient } = useSupabaseProvider();
   const [hasMore, setHasMore] = useState(true);
+  const { user } = useNeynarProvider();
+  const fid = user?.fid;
 
   const updateFilter = (change: FeedFilter) => {
     setFilter((prev) => ({ ...prev, ...change }));
@@ -46,7 +50,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const fetchMore = useCallback(
     async (start: number) => {
       setHasMore(true);
-      const { posts } = await fetchPosts(supabaseClient, filter, feedType, start);
+      const { posts } = await fetchPosts(supabaseClient, filter, feedType, start, fid);
       if (!(posts && posts.length)) {
         setHasMore(false);
       }
@@ -55,7 +59,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
         return mergedUnique;
       });
     },
-    [feedType, filter, supabaseClient],
+    [feedType, filter, supabaseClient, fid],
   );
 
   useEffect(() => {
