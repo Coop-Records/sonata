@@ -1,6 +1,7 @@
 'use client';
 import { cn } from '@/lib/utils';
-import { useFeedProvider } from '@/providers/FeedProvider';
+import { FeedType, useFeedProvider } from '@/providers/FeedProvider';
+import { useNeynarProvider } from '@/providers/NeynarProvider';
 
 type tab = {
   label: string;
@@ -10,10 +11,16 @@ type tab = {
 
 export default function Tabs({ tabs, className = '' }: { tabs: tab[]; className?: string }) {
   const { feedType, setFeedType } = useFeedProvider();
+  const { user } = useNeynarProvider();
+  console.log('SWEETS user', user);
 
   return (
     <ul className={`flex gap-4 ${className}`}>
       {tabs.map((tab, index) => {
+        console.log('SWEETS TAB', tab, feedType);
+        const isDisabled = tab.value === FeedType.Following && !user;
+        console.log('SWEETS isDisabled', isDisabled);
+        if (isDisabled) return <></>;
         return (
           <li
             className={cn(

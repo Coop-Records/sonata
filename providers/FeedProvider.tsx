@@ -50,6 +50,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const fetchMore = useCallback(
     async (start: number) => {
       setHasMore(true);
+      console.log('SWEETS FETCH MORE', start);
       const { posts } = await fetchPosts(supabaseClient, filter, feedType, start, fid);
       if (!(posts && posts.length)) {
         setHasMore(false);
