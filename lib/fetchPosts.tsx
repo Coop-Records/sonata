@@ -29,16 +29,12 @@ const fetchPosts = async (
     let { data: posts } = await query.returns<SupabasePost[]>();
 
     if (isFollowing) {
-      console.log('SWEETS GET FOLLOWING LIST FROM PINATA', fid);
       const following = await getFollowing(fid);
       const followingFids = following.users.map((user: { fid: number }) => user.fid);
-      console.log('SWEETS followingFids', followingFids);
       posts = posts?.filter((post: SupabasePost) =>
         followingFids.includes(post.author.fid),
       ) as SupabasePost[];
     }
-
-    console.log('SWEETS posts', posts);
     return {
       posts,
     };
