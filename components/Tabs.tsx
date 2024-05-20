@@ -1,7 +1,8 @@
 'use client';
 import { cn } from '@/lib/utils';
-import { FeedType, useFeedProvider } from '@/providers/FeedProvider';
+import { useFeedProvider } from '@/providers/FeedProvider';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
+import { FeedType } from '@/types/Feed';
 
 type tab = {
   label: string;
@@ -15,21 +16,24 @@ export default function Tabs({ tabs, className = '' }: { tabs: tab[]; className?
 
   return (
     <ul className={`flex gap-4 ${className}`}>
-      {tabs.map((tab, index) => {
-        const isDisabled = tab.value === FeedType.Following && !user;
-        if (isDisabled) return <></>;
-        return (
-          <li
-            className={cn(
-              'py-2 text-lg font-bold',
-              feedType === tab.value && 'border-b-2 border-black',
-            )}
-            key={index}
-          >
-            <button onClick={() => setFeedType(tab.value)}>{tab.label} </button>
-          </li>
-        );
-      })}
+      {tabs
+        .filter((tab) => {
+          const isDisabled = tab.value === FeedType.Following && !user;
+          return !isDisabled;
+        })
+        .map((tab, index) => {
+          return (
+            <li
+              className={cn(
+                'py-2 text-lg font-bold',
+                feedType === tab.value && 'border-b-2 border-black',
+              )}
+              key={index}
+            >
+              <button onClick={() => setFeedType(tab.value)}>{tab.label} </button>
+            </li>
+          );
+        })}
     </ul>
   );
 }

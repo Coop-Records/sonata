@@ -1,5 +1,5 @@
 'use client';
-import { FeedFilter } from '@/types/Feed';
+import { FeedFilter, FeedType } from '@/types/Feed';
 import {
   ReactNode,
   createContext,
@@ -15,6 +15,7 @@ import findValidEmbed from '@/lib/findValidEmbed';
 import fetchPosts from '@/lib/fetchPosts';
 import mergeArraysUniqueByPostHash from '@/lib/mergeArraysUniqueByPostHash';
 import { useNeynarProvider } from './NeynarProvider';
+import { fetchPostsLimit } from '@/lib/consts';
 
 type FeedProviderType = {
   filter: FeedFilter;
@@ -25,12 +26,6 @@ type FeedProviderType = {
   fetchMore: (start: number) => void;
   hasMore: boolean;
 };
-
-export enum FeedType {
-  Trending = 'Trending',
-  Recent = 'Recent',
-  Following = 'Following',
-}
 
 const FeedContext = createContext<FeedProviderType>({} as any);
 
@@ -51,7 +46,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     async (start: number) => {
       setHasMore(true);
       const { posts } = await fetchPosts(supabaseClient, filter, feedType, start, fid);
-      if (!(posts && posts.length)) {
+      if (!(posts && posts.length === fetchPostsLimit)) {
         setHasMore(false);
       }
       setFeed((prev) => {

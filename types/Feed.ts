@@ -9,3 +9,9 @@ export type FeedAvailableFilter = {
   key: FeedFilterField;
   options: { label: string; value: string }[];
 };
+
+export enum FeedType {
+  Trending = 'Trending',
+  Recent = 'Recent',
+  Following = 'Following',
+}

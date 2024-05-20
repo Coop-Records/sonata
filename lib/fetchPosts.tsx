@@ -1,7 +1,8 @@
-import { FeedType } from '@/providers/FeedProvider';
 import { SupabasePost } from '@/types/SupabasePost';
 import { SupabaseClient } from '@supabase/supabase-js';
 import getFollowing from './pinata/getFollowing';
+import { fetchPostsLimit } from './consts';
+import { FeedType } from '@/types/Feed';
 
 const fetchPosts = async (
   supabaseClient: SupabaseClient,
@@ -36,7 +37,7 @@ const fetchPosts = async (
     query.eq('channelId', filter.channel);
   }
 
-  query.range(start, start + 20);
+  query.range(start, start + fetchPostsLimit - 1);
   const { data: posts } = await query.returns<SupabasePost[]>();
   return { posts: posts || [] };
 };

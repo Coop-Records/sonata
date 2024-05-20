@@ -1,4 +1,4 @@
-import { FeedType } from '@/providers/FeedProvider';
+import { FeedType } from '@/types/Feed';
 import { FrameMetadataType } from '@coinbase/onchainkit';
 import { zeroAddress } from 'viem';
 export const TITLE = 'Sonata';
@@ -21,3 +21,5 @@ export const tabs = [
   { label: 'Recent', href: '/recent', value: FeedType.Recent },
   { label: 'Following', href: '/following', value: FeedType.Following },
 ];
+
+export const fetchPostsLimit = 20;
