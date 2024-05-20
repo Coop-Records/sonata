@@ -67,6 +67,10 @@ module.exports = {
         helvetica: ['HelveticaNeue', 'sans-serif'],
         proxima: ['ProximaNova', 'sans-serif'],
         inter: ['var(--font-inter)', 'sans-serif'],
+        sora: ['Sora Regular', 'sans-serif'],
+        sora_medium: ['Sora Medium', 'sans-serif'],
+        sora_semibold: ['Sora SemiBold', 'sans-serif'],
+        sora_bold: ['Sora Bold', 'sans-serif'],
       },
       keyframes: {
         'accordion-down': {

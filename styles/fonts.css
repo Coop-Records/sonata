@@ -1,0 +1,41 @@
+@font-face {
+    font-family: 'HelveticaNeue';
+    src: url('/fonts/HelveticaNeue.ttc') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+  
+@font-face {
+    font-family: 'ProximaNova';
+    src: url('/fonts/ProximaNova.otf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Sora Regular';
+    src: url('/fonts/Sora/Sora-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Sora Medium';
+    src: url('/fonts/Sora/Sora-Medium.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Sora SemiBold';
+    src: url('/fonts/Sora/Sora-SemiBold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Sora Bold';
+    src: url('/fonts/Sora/Sora-Bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
