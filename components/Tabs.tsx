@@ -12,20 +12,22 @@ export default function Tabs({ tabs, className = '' }: { tabs: tab[]; className?
   const { feedType, setFeedType } = useFeedProvider();
 
   return (
-    <ul className={`flex gap-4 ${className}`}>
-      {tabs.map((tab, index) => {
-        return (
-          <li
-            className={cn(
-              'py-2 text-lg font-bold',
-              feedType === tab.value && 'border-b-2 border-black',
-            )}
-            key={index}
-          >
-            <button onClick={() => setFeedType(tab.value)}>{tab.label} </button>
-          </li>
-        );
-      })}
-    </ul>
+    <section className="border-b border-tab w-full flex justify-center">
+      <ul className={`flex gap-12 ${className}`}>
+        {tabs.map((tab, index) => {
+          return (
+            <li
+              className={cn(
+                'pb-4 text-lg font-sora_semibold',
+                feedType === tab.value && 'border-b-2 border-black',
+              )}
+              key={index}
+            >
+              <button onClick={() => setFeedType(tab.value)}>{tab.label} </button>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
   );
 }
