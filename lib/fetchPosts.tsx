@@ -1,6 +1,6 @@
 import { SupabasePost } from '@/types/SupabasePost';
 import { SupabaseClient } from '@supabase/supabase-js';
-import getFollowing from './pinata/getFollowing';
+import getFollowing from './neynar/getFollowing';
 import { fetchPostsLimit } from './consts';
 import { FeedType } from '@/types/Feed';
 
