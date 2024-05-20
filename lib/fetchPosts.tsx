@@ -24,6 +24,7 @@ const fetchPosts = async (
     const followingFids = following.users.map((user: { fid: number }) => user.fid);
     followingFids.push(fid);
     query.in('author->fid', followingFids);
+    query.order('created_at', { ascending: false });
   }
 
   if (!query) {
