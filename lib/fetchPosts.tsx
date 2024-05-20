@@ -10,37 +10,23 @@ const fetchPosts = async (
   start: number,
   fid?: number,
 ) => {
-  const isFollowing = feedType === FeedType.Following;
-  if (feedType === FeedType.Recent || isFollowing) {
-    const query = supabaseClient.from('posts').select('*').not('likes', 'is', null);
-
-    if (filter?.platform) {
-      query.eq('platform', filter.platform);
-    }
-
-    if (filter?.channel) {
-      query.eq('channelId', filter.channel);
-    }
-
+  let query;
+  if (feedType === FeedType.Recent) {
+    query = supabaseClient.from('posts').select('*').not('likes', 'is', null);
     query.order('created_at', { ascending: false });
-    const size = isFollowing ? 333 : 20;
-    query.range(start, start + size);
-
-    let { data: posts } = await query.returns<SupabasePost[]>();
-
-    if (isFollowing) {
-      const following = await getFollowing(fid);
-      const followingFids = following.users.map((user: { fid: number }) => user.fid);
-      posts = posts?.filter((post: SupabasePost) =>
-        followingFids.includes(post.author.fid),
-      ) as SupabasePost[];
-    }
-    return {
-      posts,
-    };
+  } else if (feedType === FeedType.Trending) {
+    query = supabaseClient.from('trending_posts').select('*');
+    query.order('score', { ascending: false });
+  } else if (feedType === FeedType.Following) {
+    query = supabaseClient.from('posts').select('*').not('likes', 'is', null);
+    const following = await getFollowing(fid);
+    const followingFids = following.users.map((user: { fid: number }) => user.fid);
+    query.in('author->fid', followingFids);
   }
 
-  const query = supabaseClient.from('trending_posts').select('*');
+  if (!query) {
+    return { posts: [] };
+  }
 
   if (filter?.platform) {
     query.eq('platform', filter.platform);
@@ -50,10 +36,9 @@ const fetchPosts = async (
     query.eq('channelId', filter.channel);
   }
 
-  query.order('score', { ascending: false });
   query.range(start, start + 20);
   const { data: posts } = await query.returns<SupabasePost[]>();
-  return { posts };
+  return { posts: posts || [] };
 };
 
 export default fetchPosts;
