@@ -21,7 +21,7 @@ export default function UserMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="cursor-pointer">
-          <AvatarImage src={user.pfp_url} />
+          <AvatarImage src={user.pfp_url} className="w-9 h-9" />
           <AvatarFallback>{user.display_name}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
