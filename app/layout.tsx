@@ -7,6 +7,7 @@ import GlobalPlayer from '@/components/GlobalPlayer';
 import { Analytics } from '@vercel/analytics/react';
 import { ReactNode } from 'react';
 import { Toaster } from '@/components/ui/toaster';
+import Sidebar from '@/components/Sidebar';
 
 export const viewport = {
   width: 'device-width',
@@ -30,9 +31,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         )}
       >
         <Providers>
-          <div className="flex grow flex-col bg-white">
-            <Header />
-            {children}
+          <div className="flex bg-white">
+            {/* <Header /> */}
+            <Sidebar />
+            <div className='grow'>
+              {children}
+            </div>
             <GlobalPlayer />
             <Toaster />
           </div>
