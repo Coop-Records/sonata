@@ -22,6 +22,7 @@ const fetchPosts = async (
     query = supabaseClient.from('posts').select('*').not('likes', 'is', null);
     const following = await getFollowing(fid);
     const followingFids = following.users.map((user: { fid: number }) => user.fid);
+    followingFids.push(fid);
     query.in('author->fid', followingFids);
   }
 
