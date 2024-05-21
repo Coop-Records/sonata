@@ -1,5 +1,5 @@
 'use client';
-import { FeedFilter } from '@/types/Feed';
+import { FeedFilter, FeedType } from '@/types/Feed';
 import {
   ReactNode,
   createContext,
@@ -12,8 +12,10 @@ import {
 import { SupabasePost } from '@/types/SupabasePost';
 import { useSupabaseProvider } from './SupabaseProvider';
 import findValidEmbed from '@/lib/findValidEmbed';
-import fetchPosts from '@/lib/fetchPosts';
+import fetchPosts from '@/lib/supabase/fetchPosts';
 import mergeArraysUniqueByPostHash from '@/lib/mergeArraysUniqueByPostHash';
+import { useNeynarProvider } from './NeynarProvider';
+import { fetchPostsLimit } from '@/lib/consts';
 
 type FeedProviderType = {
   filter: FeedFilter;
@@ -25,11 +27,6 @@ type FeedProviderType = {
   hasMore: boolean;
 };
 
-export enum FeedType {
-  Trending = 'Trending',
-  Recent = 'Recent',
-}
-
 const FeedContext = createContext<FeedProviderType>({} as any);
 
 const FeedProvider = ({ children }: { children: ReactNode }) => {
@@ -38,6 +35,8 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const [feedType, setFeedType] = useState<string>(FeedType.Trending);
   const { supabaseClient } = useSupabaseProvider();
   const [hasMore, setHasMore] = useState(true);
+  const { user } = useNeynarProvider();
+  const fid = user?.fid;
 
   const updateFilter = (change: FeedFilter) => {
     setFilter((prev) => ({ ...prev, ...change }));
@@ -46,8 +45,8 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const fetchMore = useCallback(
     async (start: number) => {
       setHasMore(true);
-      const { posts } = await fetchPosts(supabaseClient, filter, feedType, start);
-      if (!(posts && posts.length)) {
+      const { posts } = await fetchPosts(supabaseClient, filter, feedType, start, fid);
+      if (!(posts && posts.length === fetchPostsLimit)) {
         setHasMore(false);
       }
       setFeed((prev) => {
@@ -55,7 +54,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
         return mergedUnique;
       });
     },
-    [feedType, filter, supabaseClient],
+    [feedType, filter, supabaseClient, fid],
   );
 
   useEffect(() => {
