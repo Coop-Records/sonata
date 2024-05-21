@@ -3,7 +3,6 @@ import { NextRequest } from 'next/server';
 export async function GET(req: NextRequest): Promise<Response> {
   const { searchParams } = new URL(req.url);
   const fid = searchParams.get('fid') as string;
-  console.log({ fid });
   let first = true,
     cursor = null;
 
