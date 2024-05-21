@@ -1,4 +1,4 @@
-import { FeedType } from '@/providers/FeedProvider';
+import { FeedType } from '@/types/Feed';
 import { FrameMetadataType } from '@coinbase/onchainkit';
 import { zeroAddress } from 'viem';
 export const TITLE = 'Sonata';
@@ -19,4 +19,7 @@ export const AIRSTACK_API_URL = 'https://api.airstack.xyz/graphql';
 export const tabs = [
   { label: 'Trending', href: '/', value: FeedType.Trending },
   { label: 'Recent', href: '/recent', value: FeedType.Recent },
+  { label: 'Following', href: '/following', value: FeedType.Following },
 ];
+
+export const fetchPostsLimit = 20;

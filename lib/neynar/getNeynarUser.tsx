@@ -13,6 +13,5 @@ export default async function getUser(fid: number) {
     options,
   );
   const { users } = await response.json();
-  console.log('USERS', users);
   return users[0];
 }
