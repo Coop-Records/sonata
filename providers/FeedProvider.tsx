@@ -12,7 +12,7 @@ import {
 import { SupabasePost } from '@/types/SupabasePost';
 import { useSupabaseProvider } from './SupabaseProvider';
 import findValidEmbed from '@/lib/findValidEmbed';
-import fetchPosts from '@/lib/fetchPosts';
+import fetchPosts from '@/lib/supabase/fetchPosts';
 import mergeArraysUniqueByPostHash from '@/lib/mergeArraysUniqueByPostHash';
 import { useNeynarProvider } from './NeynarProvider';
 import { fetchPostsLimit } from '@/lib/consts';
