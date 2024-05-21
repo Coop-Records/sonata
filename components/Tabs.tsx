@@ -15,7 +15,7 @@ export default function Tabs({ tabs, className = '' }: { tabs: tab[]; className?
   const { user } = useNeynarProvider();
 
   return (
-    <ul className={`flex gap-4 ${className}`}>
+    <ul className={cn('flex gap-4', className)}>
       {tabs
         .filter((tab) => {
           const isDisabled = tab.value === FeedType.Following && !user;
@@ -25,7 +25,7 @@ export default function Tabs({ tabs, className = '' }: { tabs: tab[]; className?
           return (
             <li
               className={cn(
-                'py-2 text-lg font-bold',
+                'py-2 text-sm md:text-lg font-bold',
                 feedType === tab.value && 'border-b-2 border-black',
               )}
               key={index}
