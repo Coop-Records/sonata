@@ -72,7 +72,7 @@ async function createCast(cast: Cast) {
     }
   }
 
-  const { data: existingPosts, error: fetchError } = await supabase
+  const { data: existingPosts } = await supabase
     .from('posts')
     .select()
     .eq('post_hash', cast.hash)
