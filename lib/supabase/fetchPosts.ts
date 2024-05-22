@@ -25,7 +25,9 @@ const fetchPosts = async (
     return { posts: [] };
   }
 
-  query.filter('author', 'cs', '{"power_badge": true}');
+  if (feedType !== FeedType.Following) {
+    query.filter('author', 'cs', '{"power_badge": true}');
+  }
 
   if (filter?.platform) {
     query.eq('platform', filter.platform);
