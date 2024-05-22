@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';
 import { Skeleton } from '@/components/ui/skeleton';
 import ReactSlider from 'react-slider';
+import { Button } from '@/components/ui/button';
 
 type MediaPlayerProps = {
   metadata?: TrackMetadata;
@@ -37,7 +38,7 @@ export default function MediaPlayer({ metadata }: MediaPlayerProps) {
     <div
       data-type={metadata?.type}
       className={cn(
-        'flex w-full flex-col gap-4 rounded-lg border bg-white p-2',
+        'flex w-full flex-col gap-4 bg-white py-2',
         currentTrack && player.loading && 'animate-pulse',
       )}
     >
@@ -56,15 +57,15 @@ export default function MediaPlayer({ metadata }: MediaPlayerProps) {
           )}
         </div>
 
-        <div className="flex grow flex-col gap-1 pt-2 text-left">
-          <div className="line-clamp-2 font-inter text-sm font-bold">
+        <div className="flex grow flex-col gap-1 text-left">
+          <div className="line-clamp-2 text-lg font-semibold leading-none">
             {metadata?.trackName ? (
               <>{metadata.trackName}</>
             ) : (
               <Skeleton className="h-2 w-32 rounded-sm" />
             )}
           </div>
-          <div className="line-clamp-2 font-inter text-xs font-extralight">
+          <div className="line-clamp-2 text-sm font-extralight">
             {metadata?.artistName ? (
               <>{metadata.artistName}</>
             ) : (
@@ -73,20 +74,22 @@ export default function MediaPlayer({ metadata }: MediaPlayerProps) {
           </div>
         </div>
         <div className="my-auto">
-          {currentTrack && player.playing ? (
-            <button onClick={handlePause}>
+          <Button
+            onClick={currentTrack && player.playing ? handlePause : handlePlay}
+            variant="ghost"
+            className="rounded-full p-0"
+          >
+            {currentTrack && player.playing ? (
               <MdPauseCircle className="text-4xl" />
-            </button>
-          ) : (
-            <button onClick={handlePlay}>
+            ) : (
               <MdPlayCircle className="text-4xl" />
-            </button>
-          )}
+            )}
+          </Button>
         </div>
       </div>
       {currentTrack && !player.loading && (
         <div className="flex flex-col gap-1">
-          <div className="flex justify-between font-inter text-xs font-light">
+          <div className="flex justify-between text-xs font-light">
             <span>{formatDuration(displayPosition)}</span>
             <span>{formatDuration(displayDuration)}</span>
           </div>

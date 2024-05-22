@@ -1,0 +1,47 @@
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useUi } from '@/providers/UiProvider';
+
+export default function PostDialog({ handleTextChange, onPost, isOpen, setIsOpen }: any) {
+  const { isMobile } = useUi();
+  return (
+    <>
+      <Dialog open={!isMobile && isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="flex flex-col items-center gap-8 ">
+          <DialogHeader>
+            <DialogTitle>Share a Song</DialogTitle>
+          </DialogHeader>
+
+          <Input
+            onChange={handleTextChange}
+            className="w-full border-none bg-muted outline-none"
+            placeholder="https://www.sound.xyz/10120.eth/post/224a5b1c-de2d"
+          />
+          <Button className="h-auto rounded-full px-4" onClick={onPost}>
+            Cast this
+          </Button>
+        </DialogContent>
+      </Dialog>
+
+      <Drawer open={isMobile && isOpen} onOpenChange={setIsOpen}>
+        <DrawerContent>
+          <div className="flex flex-col gap-6 p-6">
+            <DrawerHeader className="p-0">
+              <DrawerTitle className="text-center text-xl">Share a Song</DrawerTitle>
+            </DrawerHeader>
+            <Input
+              onChange={handleTextChange}
+              className="w-full border-none bg-muted outline-none"
+              placeholder="https://www.sound.xyz/10120.eth/post/224a5b1c-de2d"
+            />
+            <Button className="h-auto rounded-full p-3" onClick={onPost}>
+              Cast this
+            </Button>
+          </div>
+        </DrawerContent>
+      </Drawer>
+    </>
+  );
+}

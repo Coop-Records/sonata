@@ -1,9 +1,6 @@
 import Providers from '@/providers';
+import { Sora } from 'next/font/google';
 import '../styles/globals.css';
-import Header from '@/components/Header';
-import { Inter } from 'next/font/google';
-import { cn } from '@/lib/utils';
-import GlobalPlayer from '@/components/GlobalPlayer';
 import { Analytics } from '@vercel/analytics/react';
 import { ReactNode } from 'react';
 import { Toaster } from '@/components/ui/toaster';
@@ -13,27 +10,19 @@ export const viewport = {
   initialScale: 1.0,
 };
 
-const inter = Inter({
+const sora = Sora({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-inter',
+  variable: '--font-sora',
 });
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
-      <body
-        className={cn(
-          'font-proxima',
-          inter.variable,
-          'min-h-screen w-screen overflow-x-hidden flex flex-col',
-        )}
-      >
+    <html lang="en" className={sora.variable}>
+      <body className="min-h-screen w-screen overflow-x-hidden font-sora">
         <Providers>
-          <div className="flex grow flex-col bg-white">
-            <Header />
+          <div className="bg-white">
             {children}
-            <GlobalPlayer />
             <Toaster />
           </div>
           <div id="player-portal" className="fixed left-0 top-0 -z-10 opacity-0" />

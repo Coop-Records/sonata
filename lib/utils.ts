@@ -19,3 +19,7 @@ export const formatBigInt = (balance: bigint | string): string => {
   });
   return formatter.format(BigInt(balance)); // Convert and format
 };
+
+export const isValidNumber = (value: string) => {
+  return /^\d+$/.test(value);
+};
