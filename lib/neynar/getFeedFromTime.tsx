@@ -29,9 +29,7 @@ const getFeedFromTime = async (embedUrl: string, date: Date) => {
         `post timestamp: ${new Date(entry.timestamp)} compared to ${date}`,
       );
       if (new Date(entry.timestamp) > date) {
-        if (entry.author.power_badge === true) {
-          entries.push(entry);
-        }
+        entries.push(entry);
       } else {
         hitEndDate = true;
         break;
@@ -53,9 +51,7 @@ const getFeedFromTime = async (embedUrl: string, date: Date) => {
           `post timestamp: ${new Date(entry.timestamp)} compared to ${date}`,
         );
         if (new Date(entry.timestamp) > date) {
-          if (entry.author.power_badge === true) {
-            entries.push(entry);
-          }
+          entries.push(entry);
         } else {
           hitEndDate = true;
           break;
