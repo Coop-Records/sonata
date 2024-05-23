@@ -1,61 +1,43 @@
 'use client';
 
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 import { useFeedProvider } from '@/providers/FeedProvider';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import Image from 'next/image';
 
 const channels = [
-  {
-    label: '/sonata',
-    value: 'sonata',
-    icon: 'https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/4e85acaa-4f1d-444b-1e35-dd06d43d0800/rectcrop3',
-  },
-  { label: '/soundscapes', value: 'soundscapes', icon: 'https://i.imgur.com/TUtJ82Q.jpg' },
-  { label: '/albumoftheday', value: 'albumoftheday', icon: 'https://i.imgur.com/RZQbasU.gif' },
-  { label: '/djs', value: 'djs', icon: 'https://i.imgur.com/EQ7kMoE.jpg' },
-  { label: '/soundxyz', value: 'soundxyz', icon: 'https://i.imgur.com/BbvrNR2.jpg' },
-  { label: '/bangers', value: 'bangers', icon: 'https://i.imgur.com/URBvewb.png' },
+  { label: '/sonata', value: 'sonata' },
+  // { label: '/music', value: 'music' },
+  { label: '/soundscapes', value: 'soundscapes' },
+  { label: '/albumoftheday', value: 'albumoftheday' },
+  { label: '/djs', value: 'djs' },
+  { label: '/soundxyz', value: 'soundxyz' },
+  // { label: '/coop-recs', value: 'coop-recs' },
+  { label: '/bangers', value: 'bangers' },
+  // { label: '/tropicalhouse', value: 'tropicalhouse' },
 ];
 
 export default function ChannelFilter() {
   const { filter: currentFilter, updateFilter } = useFeedProvider();
 
-  const handleClick = (value: string) => {
-    const isActiveFilter = value === currentFilter.channel;
-    updateFilter({ channel: isActiveFilter ? '' : value });
+  const handleClick = (event: any) => {
+    const selected = event.target.value;
+    const isActiveFilter = selected === currentFilter.channel;
+    updateFilter({ channel: isActiveFilter ? '' : selected });
   };
 
   return (
     <div className="flex flex-col sm:gap-2">
-      <h2 className="font-semibold sm:mb-2">Channels</h2>
-      <div>
+      <h2 className="text-lg font-semibold sm:mb-2">Channels</h2>
+      <RadioGroup value={currentFilter.channel}>
         {channels.map((option) => {
-          const active = currentFilter.channel === option.value;
           return (
-            <Button
-              onClick={() => handleClick(option.value)}
-              key={option.value}
-              variant="ghost"
-              className={cn(
-                'flex px-3 py-2 justify-start items-center space-x-2 w-full font-semibold',
-                active && 'bg-muted',
-              )}
-            >
-              <div className="relative size-6 overflow-hidden rounded-full">
-                <Image
-                  src={option.icon}
-                  fill
-                  alt=""
-                  style={{ objectFit: 'cover', objectPosition: 'center' }}
-                />
-              </div>
-
-              <span>{option.label}</span>
-            </Button>
+            <div key={option.value} className="flex items-center space-x-2">
+              <RadioGroupItem onClick={handleClick} value={option.value} id={option.value} />
+              <Label htmlFor={option.value}>{option.label}</Label>
+            </div>
           );
         })}
-      </div>
+      </RadioGroup>
     </div>
   );
 }

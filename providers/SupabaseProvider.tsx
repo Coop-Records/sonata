@@ -1,5 +1,5 @@
 import { SupabaseClient, createClient } from '@supabase/supabase-js';
-import { createContext, useContext, useMemo } from 'react';
+import { createContext, useContext } from 'react';
 
 type SupabaseContextType = {
   supabaseClient: SupabaseClient;
@@ -9,10 +9,7 @@ const SupabaseContext = createContext<SupabaseContextType>({} as any);
 const SupabaseProvider = ({ children }: any) => {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
   const supabaseKey = process.env.NEXT_PUBLIC_ANON_KEY as string;
-  const supabaseClient = useMemo(
-    () => createClient(supabaseUrl, supabaseKey),
-    [supabaseUrl, supabaseKey],
-  );
+  const supabaseClient = createClient(supabaseUrl, supabaseKey);
 
   return <SupabaseContext.Provider value={{ supabaseClient }}>{children}</SupabaseContext.Provider>;
 };

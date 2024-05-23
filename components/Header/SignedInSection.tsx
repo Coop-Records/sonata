@@ -1,0 +1,15 @@
+import BalanceInfo from './BalanceInfo';
+import CreatePostButton from './CreatePostButton';
+import UserMenu from './UserMenu';
+
+const SignedInSection = () => (
+  <div className="flex gap-2">
+    <div className="max-md:hidden">
+      <BalanceInfo />
+    </div>
+    <CreatePostButton />
+    <UserMenu />
+  </div>
+);
+
+export default SignedInSection;
