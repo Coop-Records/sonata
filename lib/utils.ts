@@ -1,5 +1,8 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -13,9 +16,17 @@ export function formatDuration(duration: number) {
 }
 
 export const formatBigInt = (balance: bigint | string): string => {
-  // Create an instance of Intl.NumberFormat for 'en-US' locale to ensure comma separators
   const formatter = new Intl.NumberFormat('en-US', {
-    maximumFractionDigits: 0, // Ensure no fractional part is shown
+    maximumFractionDigits: 1,
+    notation: 'compact',
   });
-  return formatter.format(BigInt(balance)); // Convert and format
+  return formatter.format(BigInt(balance));
 };
+
+export const isValidNumber = (value: string) => {
+  return /^\d+$/.test(value);
+};
+
+export function timeFromNow(date: Date | string) {
+  return dayjs(date).fromNow();
+}
