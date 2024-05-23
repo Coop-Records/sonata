@@ -11,7 +11,7 @@ export default function Share({ cast }: { cast: SupabasePost }) {
     if (!embed) return;
     try {
       await navigator.clipboard.writeText(
-        `${window.location.origin}/cast/${cast.author.username}/${cast.post_hash}`,
+        `${window.location.origin}/cast/${cast.author.username}/${cast.post_hash.slice(0, 10)}`,
       );
       toast({ title: 'Copied!', description: 'URL copied to clipboard.' });
     } catch (error) {
