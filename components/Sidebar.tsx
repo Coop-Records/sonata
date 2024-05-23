@@ -6,10 +6,11 @@ import { Separator } from './ui/separator';
 import ChannelFilter from './Feed/ChannelFilter';
 import Image from 'next/image';
 import UserDetails from './UserDetails';
-import { ExitIcon } from '@radix-ui/react-icons';
+import { useUi } from '@/providers/UiProvider';
 
 export default function MobileMenu() {
   const { user, signOut } = useNeynarProvider();
+  const { isMobile } = useUi();
 
   return (
     <div className="flex h-full flex-col gap-4 md:px-16 md:py-6">
@@ -33,27 +34,22 @@ export default function MobileMenu() {
 
       <ChannelFilter />
 
-      <div className="mt-auto">
-        <p className="mb-2">Follow Sonata</p>
-        <a href="https://warpcast.com/~/channel/sonata">
-          <Image src="/images/warpcast.png" alt="warpcast" width={32} height={32} />
-        </a>
-      </div>
+      <a
+        href="https://warpcast.com/~/channel/sonata"
+        className="mt-auto flex items-center gap-2 self-start"
+      >
+        <span>Follow Sonata</span>
+        <Image src="/images/warpcast.png" alt="warpcast" width={18} height={18} />
+      </a>
 
-      <div className="space-y-2 md:hidden">
-        {user ? (
-          <Button
-            onClick={signOut}
-            className="flex w-full items-center justify-between"
-            variant="secondary"
-          >
-            <span>Logout</span>
-            <ExitIcon className="size-6" />
+      {isMobile &&
+        (user ? (
+          <Button onClick={signOut} variant="secondary" className="w-full">
+            Logout
           </Button>
         ) : (
           <SignInButton />
-        )}
-      </div>
+        ))}
     </div>
   );
 }
