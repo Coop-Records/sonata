@@ -47,13 +47,10 @@
 }
 
 .global-scrub-track.global-scrub-track-0 {
-  @apply bg-black h-1 pointer-events-none;
+  background: black;
+  height: 4px;
+  pointer-events: none;
 }
-
-.global-scrub-track.global-scrub-track-1 {
-  @apply bg-muted h-1 pointer-events-none;
-}
-
 .global-scrub-track {
   background: rgb(75 85 99 / var(--tw-bg-opacity));
   height: 4px;

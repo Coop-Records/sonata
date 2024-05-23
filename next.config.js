@@ -15,12 +15,6 @@ const nextConfig = {
       {
         hostname: 'soundcloud.com',
       },
-      {
-        hostname: 'imagedelivery.net',
-      },
-      {
-        hostname: 'i.imgur.com',
-      },
     ],
   },
 };

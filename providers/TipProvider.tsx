@@ -77,11 +77,6 @@ const TipProvider = ({ children }: any) => {
 
   const tipDegen = async (amount: bigint, postHash: string) => {
     if (isNil(user) || isEmpty(user.verifications) || isNil(signer?.signer_uuid)) {
-      toast({
-        title: 'Unable to Tip',
-        description: 'Something went wrong',
-        variant: 'destructive',
-      });
       return;
     }
 
@@ -91,6 +86,7 @@ const TipProvider = ({ children }: any) => {
       amount,
       postHash,
     );
+    console.log(data);
     const message = data.message;
     toast({ description: message });
 
@@ -109,15 +105,11 @@ const TipProvider = ({ children }: any) => {
       isNil(signer) ||
       isNil(signer?.signer_uuid)
     ) {
-      toast({
-        title: 'Unable to Tip',
-        description: 'Something went wrong',
-        variant: 'destructive',
-      });
       return;
     }
 
     const data = await executeTip(signer?.signer_uuid, amount, postHash, recipientFid);
+
     const message = data.message;
     const tipRemaining = data.tipRemaining;
 

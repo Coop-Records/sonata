@@ -24,7 +24,7 @@ const useCreateDialog = () => {
     setIsPostDialogOpen(true);
   };
 
-  return { handleClick, handlePost, isPostDialogOpen, setIsPostDialogOpen, embedUrl, setEmbedUrl };
+  return { handleClick, handlePost, isPostDialogOpen, setIsPostDialogOpen, setEmbedUrl };
 };
 
 export default useCreateDialog;

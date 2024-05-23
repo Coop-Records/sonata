@@ -1,53 +1,30 @@
 'use client';
 
 import { ReactNode } from 'react';
-import Sidebar from '@/components/Sidebar';
-import { Sheet, SheetContent } from '@/components/ui/sheet';
-import { useUi } from '@/providers/UiProvider';
-import Header from '@/components/Header';
+import Tabs from '@/components/Tabs';
+import { tabs } from '@/lib/consts';
+// import PlatformFilter from '@/components/Feed/PlatformFilter';
 import { Separator } from '@/components/ui/separator';
-import GlobalPlayer from '@/components/GlobalPlayer';
-import CreatePost from '@/components/CreatePost';
-import { useNeynarProvider } from '@/providers/NeynarProvider';
+import ChannelFilter from '@/components/Feed/ChannelFilter';
 
 export default function FeedLayout({ children }: { children: ReactNode }) {
-  const { menuOpen, setMenuOpen } = useUi();
-  const { user } = useNeynarProvider();
-
   return (
-    <div className="flex grow flex-col">
+    <main>
       <meta property="of:accepts:xmtp" content="2024-02-01" />
-      <div className="flex grow">
-        <nav className="md:hidden">
-          <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
-            <SheetContent side="left">
-              <Sidebar />
-            </SheetContent>
-          </Sheet>
-        </nav>
+      <div className="container flex justify-center font-helvetica bg-blend-color-burn md:gap-6">
+        <div className="min-w-48 pt-16 max-md:hidden">
+          <ChannelFilter />
+        </div>
 
-        <nav className="shadow-xl max-md:hidden">
-          <Sidebar />
-        </nav>
+        <Separator orientation="vertical" className="max-md:hidden" />
 
-        <main className="flex grow flex-col">
-          <Header />
-          <Separator className="bg-muted" />
-          <div className="relative grow">
-            <div
-              className="absolute left-0 top-0 size-full overflow-scroll pt-4"
-              id="feed-container"
-            >
-              <div className="container mx-auto max-w-3xl space-y-6">
-                {user && <CreatePost />}
-                {children}
-              </div>
-            </div>
-          </div>
-        </main>
+        <div className="flex max-w-full grow flex-col items-center gap-4">
+          <Tabs tabs={tabs} className="max-md:hidden" />
+          <div className="w-full grow overflow-hidden">{children}</div>
+        </div>
+        <Separator orientation="vertical" className="max-md:hidden" />
+        <div className="min-w-48 pt-16 max-md:hidden">{/* <PlatformFilter /> */}</div>
       </div>
-
-      <GlobalPlayer />
-    </div>
+    </main>
   );
 }

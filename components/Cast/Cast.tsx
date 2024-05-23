@@ -1,15 +1,12 @@
-import UserDetails from '@/components/UserDetails';
+import AuthorDetails from './AuthorDetails';
+import Upvote from './Upvote';
 import findValidEmbed from '@/lib/findValidEmbed';
-import TipButton from '@/components/TipButton';
+import TipButton from '../Tipping/TipButton';
 import { SupabasePost } from '@/types/SupabasePost';
 import fetchMetadata from '@/lib/fetchMetadata';
 import MediaPlayer from '../MediaPlayer';
 import { useEffect, useState } from 'react';
 import { TrackMetadata } from '@/types/Track';
-import Like from './Like';
-import Share from './Share';
-import { Separator } from '@/components/ui/separator';
-import { timeFromNow } from '@/lib/utils';
 
 const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
   const embed = findValidEmbed(cast);
@@ -36,23 +33,13 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
 
   if (!metadata) return <></>;
   return (
-    <div className="w-full space-y-4">
-      <div className="flex gap-2">
-        <UserDetails user={author} />
-        <span className="text-sm leading-none text-muted-foreground">
-          {'• '}
-          {timeFromNow(cast.created_at)}
-        </span>
+    <div className="flex items-center gap-5 p-2.5">
+      <Upvote cast={cast} />
+      <div className="w-full space-y-4">
+        <AuthorDetails author={author} />
+        <MediaPlayer metadata={metadata} />
+        <TipButton verifications={verifications} cast={cast} />
       </div>
-
-      <MediaPlayer metadata={metadata} />
-      <div className="flex gap-2">
-        <TipButton verifications={verifications} cast={cast} currency="NOTES" />
-        <TipButton verifications={verifications} cast={cast} currency="DEGEN" className="ml-auto" />
-        <Like cast={cast} />
-        <Share cast={cast} />
-      </div>
-      <Separator className="bg-muted" />
     </div>
   );
 };

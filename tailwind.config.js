@@ -1,4 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
+const { fontFamily } = require('tailwindcss/defaultTheme');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ['class'],
@@ -61,7 +63,10 @@ module.exports = {
         sm: 'calc(var(--radius) - 4px)',
       },
       fontFamily: {
-        sora: ['var(--font-sora)', 'sans-serif'],
+        sans: ['var(--font-sans)', ...fontFamily.sans],
+        helvetica: ['HelveticaNeue', 'sans-serif'],
+        proxima: ['ProximaNova', 'sans-serif'],
+        inter: ['var(--font-inter)', 'sans-serif'],
       },
       keyframes: {
         'accordion-down': {

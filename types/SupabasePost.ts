@@ -1,10 +1,9 @@
-import { User } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { Address } from 'viem';
 
 export type SupabasePost = {
   post_hash: Address;
   likes?: number;
-  author: User;
+  author: any;
   created_at: Date;
   embeds: string[];
   points?: number;
