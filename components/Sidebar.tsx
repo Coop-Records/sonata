@@ -27,7 +27,7 @@ export default function MobileMenu() {
         target="_blank"
       >
         <Image src="/images/notes.png" width={20} height={20} alt="" />
-        <span className="font-semibold">Notes Leaderboard</span>
+        <span className="font-semibold">View Leaderboard</span>
       </a>
       <Separator />
 

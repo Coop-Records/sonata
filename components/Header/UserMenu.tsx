@@ -22,7 +22,7 @@ export default function UserMenu() {
       <DropdownMenuTrigger asChild>
         <Avatar className="size-9 cursor-pointer">
           <AvatarImage src={user.pfp_url} />
-          <AvatarFallback>{user.display_name}</AvatarFallback>
+          <AvatarFallback>{user.display_name[0]}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="mr-2 min-w-52" alignOffset={100}>

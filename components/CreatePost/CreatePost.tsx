@@ -23,19 +23,17 @@ export default function CreatePost() {
     setIsPostDialogOpen(true);
   };
 
-  if (!user) return <></>;
-
   return (
     <div className="flex items-center gap-2">
       <Avatar className="size-12 max-md:hidden">
-        <AvatarImage src={user.pfp_url} />
-        <AvatarFallback>{user.display_name[0]}</AvatarFallback>
+        <AvatarImage src={user?.pfp_url} />
+        <AvatarFallback>{user?.display_name?.[0]}</AvatarFallback>
       </Avatar>
 
       <div className="flex grow items-center justify-between rounded-2xl bg-muted p-3">
         <Input
           className="border-none bg-transparent text-muted-foreground focus-visible:ring-0 focus-visible:ring-offset-0"
-          placeholder="What are you listening to?"
+          placeholder="Share SoundCloud, Sound or Spotify links here!"
           onChange={(e) => setEmbedUrl(e.target.value)}
         />
         <Button

@@ -90,7 +90,7 @@ export default function TipButton({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="flex w-48 flex-col gap-2">
-        <h3 className="mb-2 text-xs font-semibold">Tip the song</h3>
+        <h3 className="mb-2 text-xs font-semibold">Tip</h3>
 
         <ul className="flex flex-wrap gap-2">
           {defualtTips[currency].map((amount) => (

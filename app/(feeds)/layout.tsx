@@ -8,9 +8,11 @@ import Header from '@/components/Header';
 import { Separator } from '@/components/ui/separator';
 import GlobalPlayer from '@/components/GlobalPlayer';
 import CreatePost from '@/components/CreatePost';
+import { useNeynarProvider } from '@/providers/NeynarProvider';
 
 export default function FeedLayout({ children }: { children: ReactNode }) {
   const { menuOpen, setMenuOpen } = useUi();
+  const { user } = useNeynarProvider();
 
   return (
     <div className="flex grow flex-col">
@@ -37,7 +39,7 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
               id="feed-container"
             >
               <div className="container mx-auto max-w-3xl space-y-6">
-                <CreatePost />
+                {user && <CreatePost />}
                 {children}
               </div>
             </div>

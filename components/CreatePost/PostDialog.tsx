@@ -32,7 +32,7 @@ export default function PostDialog({ handleTextChange, onPost, isOpen, setIsOpen
           <Input
             onChange={handleTextChange}
             className="w-full border-none bg-muted outline-none"
-            placeholder="https://www.sound.xyz/10120.eth/post/224a5b1c-de2d"
+            placeholder="https://www.sound.xyz/xcelencia/cancun-ft-tarot"
           />
           <Button className="h-auto rounded-full px-8" onClick={onPost}>
             Cast
@@ -52,7 +52,7 @@ export default function PostDialog({ handleTextChange, onPost, isOpen, setIsOpen
             <Input
               onChange={handleTextChange}
               className="w-full border-none bg-muted outline-none"
-              placeholder="https://www.sound.xyz/10120.eth/post/224a5b1c-de2d"
+              placeholder="https://www.sound.xyz/xcelencia/cancun-ft-tarot"
             />
             <Button className="h-auto rounded-full p-3" onClick={onPost}>
               Cast

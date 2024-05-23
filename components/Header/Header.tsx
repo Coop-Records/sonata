@@ -1,12 +1,13 @@
 'use client';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import UserMenu from './UserMenu';
-import SignInButton from '../SignInButton';
-import Tabs from '../Tabs';
+import SignInButton from '@/components/SignInButton';
+import Tabs from '@/components/Tabs';
 import { tabs } from '@/lib/consts';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { useUi } from '@/providers/UiProvider';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const Header = () => {
   const { user, loading: userLoading } = useNeynarProvider();
@@ -18,7 +19,13 @@ const Header = () => {
         <Button variant="link" className="p-0 text-5xl md:hidden">
           <HamburgerMenuIcon onClick={() => setMenuOpen(!menuOpen)} className="size-6" />
         </Button>
-        {userLoading ? <></> : user ? <UserMenu /> : <SignInButton />}
+        {userLoading ? (
+          <Skeleton className="size-9 rounded-full" />
+        ) : user ? (
+          <UserMenu />
+        ) : (
+          <SignInButton />
+        )}
       </div>
       <div className="flex justify-center">
         <Tabs tabs={tabs} />
