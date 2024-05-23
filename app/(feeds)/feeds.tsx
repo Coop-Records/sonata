@@ -16,6 +16,7 @@ const Feeds = () => {
       loader={<Loader className="w-full" />}
       endMessage={<p className="py-4 text-center text-sm">{`That's All!`}</p>}
       className="!overflow-y-hidden"
+      scrollableTarget="feed-container"
     >
       <Feed feed={feed} />
     </InfiniteScroll>

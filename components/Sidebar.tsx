@@ -1,0 +1,55 @@
+import BalanceInfo from '@/components/BalanceInfo';
+import SignInButton from './SignInButton';
+import { useNeynarProvider } from '@/providers/NeynarProvider';
+import { Button } from './ui/button';
+import { Separator } from './ui/separator';
+import ChannelFilter from './Feed/ChannelFilter';
+import Image from 'next/image';
+import UserDetails from './UserDetails';
+import { useUi } from '@/providers/UiProvider';
+
+export default function MobileMenu() {
+  const { user, signOut } = useNeynarProvider();
+  const { isMobile } = useUi();
+
+  return (
+    <div className="flex h-full flex-col gap-4 md:px-16 md:py-6">
+      <div className="mb-8 flex items-center gap-2 max-md:hidden">
+        <Image src="/images/notes.png" width={20} height={20} alt="" />
+        <span className="font-semibold">Sonata</span>
+      </div>
+      {user && <UserDetails className="mb-8 md:hidden" user={user} />}
+
+      <BalanceInfo />
+
+      <a
+        className="flex items-center gap-2"
+        href="https://www.stack.so/leaderboard/sonata"
+        target="_blank"
+      >
+        <Image src="/images/notes.png" width={20} height={20} alt="" />
+        <span className="font-semibold">View Leaderboard</span>
+      </a>
+      <Separator />
+
+      <ChannelFilter />
+
+      <a
+        href="https://warpcast.com/~/channel/sonata"
+        className="mt-auto flex items-center gap-2 self-start"
+      >
+        <span>Follow Sonata</span>
+        <Image src="/images/warpcast.png" alt="warpcast" width={18} height={18} />
+      </a>
+
+      {isMobile &&
+        (user ? (
+          <Button onClick={signOut} variant="secondary" className="w-full">
+            Logout
+          </Button>
+        ) : (
+          <SignInButton />
+        ))}
+    </div>
+  );
+}
