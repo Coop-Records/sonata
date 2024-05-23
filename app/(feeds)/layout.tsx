@@ -13,7 +13,7 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
   const { menuOpen, setMenuOpen } = useUi();
 
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex grow flex-col">
       <meta property="of:accepts:xmtp" content="2024-02-01" />
       <div className="flex grow">
         <nav className="md:hidden">
@@ -29,9 +29,7 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
         </nav>
 
         <main className="flex grow flex-col">
-          <div className="container">
-            <Header />
-          </div>
+          <Header />
           <Separator className="bg-muted" />
           <div className="relative grow">
             <div

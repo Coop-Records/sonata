@@ -37,15 +37,20 @@ export default function Like({ cast }: { cast: SupabasePost }) {
 
   const handleClick = async () => {
     if (!checkLoggedIn()) return;
+    const currentVotes = votes;
+    setUpvoted(true);
+    setVotes(votes + 1);
 
     const { signer_uuid } = signer as Signer;
     const response = await createReaction(signer_uuid, cast.post_hash);
 
     if (response.success) {
-      setUpvoted(true);
-      setVotes(votes + 1);
       if (isSelfPost) return;
-      await tip(10, cast.post_hash, cast.author.verifications);
+      const data = await tip(10, cast.post_hash, cast.author.fid);
+      if (!data) {
+        setUpvoted(false);
+        setVotes(currentVotes);
+      }
     }
   };
 
@@ -55,7 +60,7 @@ export default function Like({ cast }: { cast: SupabasePost }) {
       onClick={handleClick}
       className={cn(
         'h-auto rounded-full bg-muted px-4 py-1 font-semibold space-x-1 text-base',
-        upvoted && 'bg-red-50 text-red-600',
+        upvoted && 'bg-red-50 text-red-600 hover:text-red-600 hover:bg-red-50',
       )}
     >
       {upvoted ? <FaHeart /> : <FaRegHeart />}

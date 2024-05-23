@@ -8,10 +8,17 @@ import { Popover, PopoverContent } from '@/components/ui/popover';
 import { cn, isValidNumber } from '@/lib/utils';
 import { PopoverTrigger } from '@radix-ui/react-popover';
 import { useUi } from '@/providers/UiProvider';
+import { Badge } from './ui/badge';
+import { Input } from './ui/input';
 
 const defualtTips = {
   DEGEN: [10, 50, 100],
   NOTES: [100, 1000, 10000],
+};
+
+const logos = {
+  DEGEN: '/images/degenchain.png',
+  NOTES: '/images/notes.png',
 };
 
 export default function TipButton({
@@ -63,10 +70,6 @@ export default function TipButton({
     setShowDropdown(!showDropdown);
   };
 
-  let iconSrc = '';
-  if (currency === 'DEGEN') iconSrc = '/images/degenchain.png';
-  else if (currency === 'NOTES') iconSrc = '/images/notes.png';
-
   let iconSize = 14;
   if (currency === 'NOTES') iconSize = 24;
 
@@ -83,34 +86,39 @@ export default function TipButton({
           onClick={handleClick}
         >
           <span>{total}</span>
-          <Image src={iconSrc} width={iconSize} height={iconSize} alt="" />
+          <Image src={logos[currency]} width={iconSize} height={iconSize} alt="" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent>
-        <ul className="text-gray-700">
+      <PopoverContent className="flex w-48 flex-col gap-2">
+        <h3 className="mb-2 text-xs font-semibold">Tip the song</h3>
+
+        <ul className="flex flex-wrap gap-2">
           {defualtTips[currency].map((amount) => (
-            <li
-              key={amount}
-              className="cursor-pointer px-4 py-2 hover:bg-gray-100"
-              onClick={() => handleTip(amount)}
-            >
-              Tip {amount} {currency}
+            <li key={amount}>
+              <Badge
+                variant="secondary"
+                className="flex cursor-pointer gap-1"
+                onClick={() => handleTip(amount)}
+              >
+                {amount} <Image src={logos[currency]} width={14} height={14} alt="" />
+              </Badge>
             </li>
           ))}
-          <li className="flex items-center px-4 py-2">
-            <input
-              type="number"
-              min={0}
-              value={customTip}
-              onChange={(e) => setCustomTip(e.target.value)}
-              placeholder="Custom amount"
-              className={`mr-2 w-full rounded border px-2 py-1 text-sm [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
-            />
-            <Button className="px-4 py-2 hover:bg-gray-100" onClick={handleCustomTip}>
-              Tip
-            </Button>
-          </li>
         </ul>
+
+        <div className="flex items-center rounded-2xl bg-muted px-4 py-2">
+          <Input
+            type="number"
+            min={0}
+            value={customTip}
+            onChange={(e) => setCustomTip(e.target.value)}
+            placeholder="Custom Amount"
+            className="h-auto grow border-none bg-transparent p-0 text-xs outline-none [appearance:textfield] focus-visible:ring-0 focus-visible:ring-offset-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+          />
+          <Button variant="ghost" onClick={handleCustomTip} className="h-auto p-0">
+            <Image src={logos[currency]} width={16} height={16} alt="" />
+          </Button>
+        </div>
       </PopoverContent>
     </Popover>
   );

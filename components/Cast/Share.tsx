@@ -10,7 +10,9 @@ export default function Share({ cast }: { cast: SupabasePost }) {
     const embed = findValidEmbed(cast);
     if (!embed) return;
     try {
-      await navigator.clipboard.writeText(embed.url);
+      await navigator.clipboard.writeText(
+        `${window.location.origin}/cast/${cast.author.username}/${cast.post_hash}`,
+      );
       toast({ title: 'Copied!', description: 'URL copied to clipboard.' });
     } catch (error) {
       console.error('Failed to copy URL to clipboard:', error);

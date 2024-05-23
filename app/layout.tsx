@@ -19,13 +19,11 @@ const sora = Sora({
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={sora.variable}>
-      <body className="min-h-screen w-screen overflow-x-hidden font-sora">
+      <body className="flex min-h-screen w-screen flex-col overflow-x-hidden bg-white font-sora">
         <Providers>
-          <div className="bg-white">
-            {children}
-            <Toaster />
-          </div>
-          <div id="player-portal" className="fixed left-0 top-0 -z-10 opacity-0" />
+          <div id="player-portal" className="pointer-events-none fixed left-0 top-0 opacity-0" />
+          {children}
+          <Toaster />
         </Providers>
         <Analytics />
       </body>

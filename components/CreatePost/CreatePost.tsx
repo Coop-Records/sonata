@@ -1,19 +1,25 @@
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 import useCreateDialog from '@/hooks/useCreateModal';
 import PostDialog from './PostDialog';
 import { useUi } from '@/providers/UiProvider';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
-import { Avatar } from '../ui/avatar';
+import { Avatar } from '@/components/ui/avatar';
 import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import { ChevronRight } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 
 export default function CreatePost() {
   const { user } = useNeynarProvider();
   const { checkLoggedIn } = useUi();
-  const { handlePost, isPostDialogOpen, setIsPostDialogOpen, setEmbedUrl } = useCreateDialog();
+  const { handlePost, isPostDialogOpen, setIsPostDialogOpen, setEmbedUrl, embedUrl } =
+    useCreateDialog();
 
   const handleClick = () => {
     if (!checkLoggedIn()) return;
+    if (embedUrl) {
+      handlePost();
+      return;
+    }
     setIsPostDialogOpen(true);
   };
 
@@ -27,12 +33,16 @@ export default function CreatePost() {
       </Avatar>
 
       <div className="flex grow items-center justify-between rounded-2xl bg-muted p-3">
-        <p className="text-muted-foreground">What are you listening?</p>
+        <Input
+          className="border-none bg-transparent text-muted-foreground focus-visible:ring-0 focus-visible:ring-offset-0"
+          placeholder="What are you listening to?"
+          onChange={(e) => setEmbedUrl(e.target.value)}
+        />
         <Button
           onClick={handleClick}
           className="flex h-auto items-center gap-2 rounded-full bg-gray-500 px-4 py-1.5 text-white"
         >
-          List
+          Cast
           <ChevronRight size={16} />
         </Button>
       </div>

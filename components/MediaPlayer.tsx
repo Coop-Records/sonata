@@ -38,73 +38,69 @@ export default function MediaPlayer({ metadata }: MediaPlayerProps) {
     <div
       data-type={metadata?.type}
       className={cn(
-        'flex w-full flex-col gap-4 bg-white py-2',
+        'flex w-full gap-4 bg-white py-2',
         currentTrack && player.loading && 'animate-pulse',
       )}
     >
-      <div className="flex gap-4">
-        <div className="relative my-auto aspect-square w-16 shrink-0 overflow-hidden rounded-lg shadow-md">
-          {metadata?.artworkUrl ? (
-            <Image
-              src={metadata.artworkUrl}
-              alt=""
-              fill
-              style={{ objectFit: 'cover', objectPosition: 'center' }}
-              unoptimized
-            />
+      <div className="relative my-auto aspect-square w-16 shrink-0 overflow-hidden rounded-lg shadow-md">
+        {metadata?.artworkUrl ? (
+          <Image
+            src={metadata.artworkUrl}
+            alt=""
+            fill
+            style={{ objectFit: 'cover', objectPosition: 'center' }}
+            unoptimized
+          />
+        ) : (
+          <Skeleton className="size-full" />
+        )}
+      </div>
+
+      <div className="flex grow flex-col gap-1 text-left">
+        <div className="line-clamp-2 text-lg font-semibold leading-none">
+          {metadata?.trackName ? (
+            <>{metadata.trackName}</>
           ) : (
-            <Skeleton className="size-full" />
+            <Skeleton className="h-2 w-32 rounded-sm" />
           )}
         </div>
-
-        <div className="flex grow flex-col gap-1 text-left">
-          <div className="line-clamp-2 text-lg font-semibold leading-none">
-            {metadata?.trackName ? (
-              <>{metadata.trackName}</>
-            ) : (
-              <Skeleton className="h-2 w-32 rounded-sm" />
-            )}
-          </div>
-          <div className="line-clamp-2 text-sm font-extralight">
-            {metadata?.artistName ? (
-              <>{metadata.artistName}</>
-            ) : (
-              <Skeleton className="h-2 w-12 rounded-sm" />
-            )}
-          </div>
+        <div className="line-clamp-2 text-sm font-extralight">
+          {metadata?.artistName ? (
+            <>{metadata.artistName}</>
+          ) : (
+            <Skeleton className="h-2 w-12 rounded-sm" />
+          )}
         </div>
-        <div className="my-auto">
-          <Button
-            onClick={currentTrack && player.playing ? handlePause : handlePlay}
-            variant="ghost"
-            className="rounded-full p-0"
-          >
-            {currentTrack && player.playing ? (
-              <MdPauseCircle className="text-4xl" />
-            ) : (
-              <MdPlayCircle className="text-4xl" />
-            )}
-          </Button>
-        </div>
-      </div>
-      {currentTrack && !player.loading && (
-        <div className="flex flex-col gap-1">
-          <div className="flex justify-between text-xs font-light">
+        {currentTrack && !player.loading && (
+          <div className="mt-auto flex items-center gap-2 text-xs font-light">
             <span>{formatDuration(displayPosition)}</span>
+            <ReactSlider
+              className="scrub h-1 w-full bg-gray-300"
+              thumbClassName={`${metadata?.type === 'spotify' ? '' : 'scrub-thumb'}`}
+              trackClassName="scrub-track"
+              value={
+                displayPosition && displayDuration ? (displayPosition / displayDuration) * 100 : 0
+              }
+              disabled={metadata?.type === 'spotify'}
+              onChange={(value) => handleSeek((value / 100) * displayDuration)}
+            />
             <span>{formatDuration(displayDuration)}</span>
           </div>
-          <ReactSlider
-            className="scrub h-1 w-full bg-gray-300"
-            thumbClassName={`${metadata?.type === 'spotify' ? '' : 'scrub-thumb'}`}
-            trackClassName="scrub-track"
-            value={
-              displayPosition && displayDuration ? (displayPosition / displayDuration) * 100 : 0
-            }
-            disabled={metadata?.type === 'spotify'}
-            onChange={(value) => handleSeek((value / 100) * displayDuration)}
-          />
-        </div>
-      )}
+        )}
+      </div>
+      <div className="my-auto">
+        <Button
+          onClick={currentTrack && player.playing ? handlePause : handlePlay}
+          variant="ghost"
+          className="rounded-full p-0"
+        >
+          {currentTrack && player.playing ? (
+            <MdPauseCircle className="text-4xl" />
+          ) : (
+            <MdPlayCircle className="text-4xl" />
+          )}
+        </Button>
+      </div>
     </div>
   );
 }

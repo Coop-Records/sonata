@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { formatBigInt } from '@/lib/utils';
 import { isNil } from 'lodash';
 import { useTipProvider } from '@/providers/TipProvider';
-import ClaimAirdropButton from '../ClaimAirdropButton/ClaimAirdropButton';
+import ClaimAirdropButton from '@/components/ClaimAirdropButton/ClaimAirdropButton';
 
 export default function BalanceInfo() {
   const { balance, remainingTipAllocation, dailyTipAllowance, airdropBalance } = useTipProvider();
@@ -13,7 +13,7 @@ export default function BalanceInfo() {
       <h2 className="font-semibold">NOTES</h2>
 
       <div className="flex items-center">
-        <span className="whitespace-nowrap">{`Daily Allowance: ${!isNil(remainingTipAllocation) ? formatBigInt(BigInt(remainingTipAllocation)) : '-'}${dailyTipAllowance ? ` / ${formatBigInt(BigInt(dailyTipAllowance))}` : ''}`}</span>{' '}
+        <span className="whitespace-nowrap">{`Daily Allowance: ${!isNil(remainingTipAllocation) ? formatBigInt(BigInt(remainingTipAllocation)) : '-'}${dailyTipAllowance ? ` / ${formatBigInt(BigInt(dailyTipAllowance))}` : ''}`}</span>
         <Image src="/images/notes.png" width={20} height={20} alt="" />
       </div>
       <div className="flex items-center">

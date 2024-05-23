@@ -13,7 +13,7 @@ const Header = () => {
   const { menuOpen, setMenuOpen } = useUi();
 
   return (
-    <header className="w-full pt-2 sm:pt-4">
+    <header className="container w-full pt-2 md:pt-6">
       <div className="flex items-center justify-between md:justify-end">
         <Button variant="link" className="p-0 text-5xl md:hidden">
           <HamburgerMenuIcon onClick={() => setMenuOpen(!menuOpen)} className="size-6" />
