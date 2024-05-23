@@ -4,6 +4,7 @@ import { usePlayer } from '@/providers/PlayerProvider';
 import Image from 'next/image';
 import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';
 import ReactSlider from 'react-slider';
+import { Button } from '@/components/ui/button';
 
 export default function GlobalPlayer() {
   const [player, dispatch] = usePlayer();
@@ -26,52 +27,51 @@ export default function GlobalPlayer() {
   return (
     <div
       data-type={metadata.type}
-      className="sticky bottom-0 left-0 mt-auto flex w-full flex-col gap-4 border-t border-gray-200 bg-white p-2"
+      className="sticky bottom-0 left-0 mt-auto w-screen bg-white shadow-2xl shadow-black"
     >
-      <div className="flex gap-4">
-        <div className="relative my-auto aspect-square w-16 shrink-0 shadow-md">
+      <div className="container flex gap-3 py-3">
+        <div className="relative my-auto size-16 overflow-hidden rounded-lg shadow-md">
           <Image
             src={metadata.artworkUrl}
             alt=""
             fill
             style={{ objectFit: 'cover', objectPosition: 'center' }}
-            className="rounded-lg"
             unoptimized
           />
         </div>
 
-        <div className="flex grow flex-col gap-1 pt-2 text-left">
-          <div className="line-clamp-2 font-inter text-sm font-bold text-black">
-            {metadata.trackName}
-          </div>
-          <div className="line-clamp-2 font-inter text-xs font-extralight text-black">
+        <div className="space-y-0.5 self-center">
+          <div className="line-clamp-2 text-sm font-bold">{metadata.trackName}</div>
+          <div className="line-clamp-2 text-xs font-extralight text-muted-foreground">
             {metadata.artistName}
           </div>
         </div>
-        <div className="my-auto">
-          {player.playing ? (
-            <button onClick={handlePause}>
-              <MdPauseCircle className="text-4xl text-black" />
-            </button>
-          ) : (
-            <button onClick={handlePlay}>
-              <MdPlayCircle className="text-4xl text-black" />
-            </button>
-          )}
+
+        <div className="ml-6 flex max-w-2xl grow flex-col items-center gap-1">
+          <Button
+            onClick={player.playing ? handlePause : handlePlay}
+            variant="ghost"
+            className="rounded-full p-0"
+          >
+            {player.playing ? (
+              <MdPauseCircle className="text-4xl" />
+            ) : (
+              <MdPlayCircle className="text-4xl" />
+            )}
+          </Button>
+
+          <div className="flex w-full items-center gap-2 text-xs font-light text-muted-foreground">
+            <span>{formatDuration(position)}</span>
+            <ReactSlider
+              className="global-scrub h-1 w-full"
+              thumbClassName="global-scrub-thumb"
+              trackClassName="global-scrub-track"
+              value={position && player.duration ? (position / player.duration) * 100 : 0}
+              onChange={(value) => handleSeek((value / 100) * player.duration)}
+            />
+            <span>{formatDuration(player.duration)}</span>
+          </div>
         </div>
-      </div>
-      <div className="flex flex-col gap-1">
-        <div className="flex justify-between font-inter text-xs font-light text-black">
-          <span>{formatDuration(position)}</span>
-          <span>{formatDuration(player.duration)}</span>
-        </div>
-        <ReactSlider
-          className="global-scrub h-1 w-full bg-gray-600"
-          thumbClassName="global-scrub-thumb"
-          trackClassName="global-scrub-track"
-          value={position && player.duration ? (position / player.duration) * 100 : 0}
-          onChange={(value) => handleSeek((value / 100) * player.duration)}
-        />
       </div>
     </div>
   );
