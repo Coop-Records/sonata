@@ -44,7 +44,9 @@ export const useSpotifyController = (dispatch: Dispatch<PlayerAction>) => {
     });
 
     spotifyController.addListener('ready', () => {
-      dispatch({ type: 'SET_LOADING', payload: { loading: false } });
+      setTimeout(() => {
+        dispatch({ type: 'LOADED', payload: { type: 'spotify' } });
+      }, 4000);
     });
   }, [spotifyController, dispatch]);
   return spotifyController;

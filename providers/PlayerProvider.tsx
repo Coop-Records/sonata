@@ -1,7 +1,7 @@
 import { Dispatch, ReactNode, createContext, useContext, useEffect, useReducer } from 'react';
 import { useSoundcloudWidget } from './SoundcloudWidgetProvider';
 import { useSpotifyController } from './SpotifyControllerProvider';
-import { TrackMetadata } from '@/types/Track';
+import { TrackMetadata, TrackType } from '@/types/Track';
 import { useSoundContext } from './SoundContextProvider';
 
 type Player = {
@@ -16,12 +16,21 @@ type Player = {
 export type PlayerAction =
   | {
       type: 'PLAY';
-      payload?: {
+      payload: {
         metadata: TrackMetadata;
       };
     }
   | {
+      type: 'RESUME';
+      payload: {
+        id: string;
+      };
+    }
+  | {
       type: 'PAUSE';
+      payload: {
+        id: string;
+      };
     }
   | {
       type: 'SEEK';
@@ -42,9 +51,9 @@ export type PlayerAction =
       };
     }
   | {
-      type: 'SET_LOADING';
+      type: 'LOADED';
       payload: {
-        loading: boolean;
+        type: TrackType;
       };
     };
 
@@ -61,14 +70,18 @@ const playerReducer = (state: Player, action: PlayerAction) => {
   switch (action.type) {
     case 'PLAY': {
       const metadata = action?.payload?.metadata;
-      if (!metadata || state?.metadata?.id === metadata.id) {
-        return { ...state, playing: true };
-      } else {
-        return { ...state, playing: true, metadata, position: 0, loading: true };
-      }
+      return { ...state, playing: true, metadata, position: 0, loading: true };
     }
-    case 'PAUSE':
+    case 'RESUME': {
+      const { id } = action.payload;
+      if (state.metadata?.id !== id) return state;
+      return { ...state, playing: true };
+    }
+    case 'PAUSE': {
+      const { id } = action.payload;
+      if (state.metadata?.id !== id) return state;
       return { ...state, playing: false };
+    }
     case 'SEEK':
       return { ...state, seekTo: action.payload.position };
     case 'PROGRESS': {
@@ -77,8 +90,12 @@ const playerReducer = (state: Player, action: PlayerAction) => {
     }
     case 'SET_DURATION':
       return { ...state, duration: action.payload.duration };
-    case 'SET_LOADING':
-      return { ...state, loading: action.payload.loading };
+    case 'LOADED': {
+      const { type } = action.payload;
+      if (state.metadata?.type !== type) return state;
+      return { ...state, loading: false };
+    }
+
     default:
       return state;
   }
@@ -101,7 +118,7 @@ export default function PlayerProvider({ children }: { children: ReactNode }) {
       };
     } else if (metadata.type === 'soundxyz') {
       audio.src = metadata.url;
-
+      audio.load();
       return () => {
         audio.pause();
       };

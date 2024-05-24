@@ -20,6 +20,10 @@ export default function MediaPlayer({ metadata }: MediaPlayerProps) {
 
   const handlePlay = () => {
     if (!metadata) return;
+    if (currentTrack) {
+      dispatch({ type: 'RESUME', payload: { id: metadata.id } });
+      return;
+    }
     dispatch({
       type: 'PLAY',
       payload: { metadata },
@@ -27,7 +31,8 @@ export default function MediaPlayer({ metadata }: MediaPlayerProps) {
   };
 
   const handlePause = () => {
-    dispatch({ type: 'PAUSE' });
+    if (!metadata) return;
+    dispatch({ type: 'PAUSE', payload: { id: metadata.id } });
   };
 
   const handleSeek = (value: number) => {

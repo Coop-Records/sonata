@@ -6,11 +6,9 @@ import { Separator } from './ui/separator';
 import ChannelFilter from './Feed/ChannelFilter';
 import Image from 'next/image';
 import UserDetails from './UserDetails';
-import { useUi } from '@/providers/UiProvider';
 
 export default function MobileMenu() {
   const { user, signOut } = useNeynarProvider();
-  const { isMobile } = useUi();
 
   return (
     <div className="flex h-full flex-col gap-4 md:px-16 md:py-6">
@@ -42,14 +40,15 @@ export default function MobileMenu() {
         <Image src="/images/warpcast.png" alt="warpcast" width={18} height={18} />
       </a>
 
-      {isMobile &&
-        (user ? (
+      <div className="md:hidden">
+        {user ? (
           <Button onClick={signOut} variant="secondary" className="w-full">
             Logout
           </Button>
         ) : (
           <SignInButton />
-        ))}
+        )}
+      </div>
     </div>
   );
 }
