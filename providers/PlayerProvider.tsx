@@ -120,7 +120,6 @@ export default function PlayerProvider({ children }: { children: ReactNode }) {
     } else if (metadata.type === 'spotify') {
       spotifyController.loadUri(metadata.url);
       return () => {
-        console.log('spotify cleanup');
         spotifyController.pause();
       };
     }
