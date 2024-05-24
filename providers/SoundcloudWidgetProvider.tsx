@@ -59,9 +59,17 @@ export const useSoundcloudWidget = (dispatch: Dispatch<PlayerAction>) => {
 
   useEffect(() => {
     if (!soundcloudWidget) return;
-    soundcloudWidget.bind(soundcloudApi.Widget.Events.READY, function () {
+    soundcloudWidget.bind(soundcloudApi.Widget.Events.READY, () => {
       soundcloudWidget.bind(soundcloudApi.Widget.Events.PLAY_PROGRESS, (position: any) => {
         dispatch({ type: 'PROGRESS', payload: { position: position.currentPosition } });
+      });
+
+      soundcloudWidget.bind(soundcloudApi.Widget.Events.ERROR, (e: any) => {
+        console.error('error', e);
+      });
+
+      soundcloudWidget.bind(soundcloudApi.Widget.Events.PAUSE, (e: any) => {
+        dispatch({ type: 'PAUSE', payload: { id: String(e.soundId) } });
       });
     });
   }, [soundcloudWidget, soundcloudApi, dispatch]);
@@ -73,7 +81,7 @@ export const useSoundcloudWidget = (dispatch: Dispatch<PlayerAction>) => {
           soundcloudWidget.getDuration((duration: number) => {
             dispatch({ type: 'SET_DURATION', payload: { duration } });
           });
-          dispatch({ type: 'SET_LOADING', payload: { loading: false } });
+          dispatch({ type: 'LOADED', payload: { type: 'soundcloud' } });
         },
       });
     },

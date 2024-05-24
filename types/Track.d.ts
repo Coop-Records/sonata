@@ -1,6 +1,8 @@
+export type TrackType = 'spotify' | 'soundcloud' | 'soundxyz';
+
 export type TrackMetadata = {
   id: string;
-  type: 'spotify' | 'soundcloud' | 'soundxyz';
+  type: TrackType;
   artistName: string;
   trackName: string;
   artworkUrl: string;

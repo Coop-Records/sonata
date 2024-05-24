@@ -28,9 +28,10 @@ export default async function fetchMetadata(url: string) {
     if (!iframeUrl) {
       throw new Error('Could not find iframe url');
     }
+    const soundId = String(iframeUrl.split('/').pop());
 
     metadata = {
-      id: iframeUrl,
+      id: soundId,
       type: 'soundcloud',
       artistName: embedData.author_name || '',
       trackName: embedData.title.split(' - ')[0].split(' by ')[0],
