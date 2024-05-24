@@ -19,7 +19,7 @@ export function SpotifyControllerProvider({ children }: { children: React.ReactN
     if (!spotifyApi) return;
     spotifyApi.createController(
       spotifyElRef.current,
-      { height: '100px', width: '100px' },
+      { height: '100px', width: '300px', uri: 'spotify:track:51H2y6YrNNXcy3dfc3qSbA' },
       setSpotifyController,
     );
   }, [spotifyApi]);
@@ -39,14 +39,26 @@ export const useSpotifyController = (dispatch: Dispatch<PlayerAction>) => {
   useEffect(() => {
     if (!spotifyController) return;
     spotifyController.addListener('playback_update', (e: any) => {
-      dispatch({ type: 'PROGRESS', payload: { position: e.data.position } });
+      const {
+        data: { isPaused, isBuffering, position },
+      } = e;
+      const loading = spotifyController.loading;
+      const currentSrc = spotifyController.iframeElement.src;
+      const trackId = currentSrc.split('?')[0].split('/').pop();
+
+      if (!isBuffering && !loading) {
+        if (isPaused) {
+          dispatch({ type: 'PAUSE', payload: { id: trackId } });
+        } else {
+          dispatch({ type: 'RESUME', payload: { id: trackId } });
+        }
+      }
+      dispatch({ type: 'PROGRESS', payload: { position } });
       dispatch({ type: 'SET_DURATION', payload: { duration: 30 * 1000 } });
     });
 
     spotifyController.addListener('ready', () => {
-      setTimeout(() => {
-        dispatch({ type: 'LOADED', payload: { type: 'spotify' } });
-      }, 4000);
+      dispatch({ type: 'LOADED', payload: { type: 'spotify' } });
     });
   }, [spotifyController, dispatch]);
   return spotifyController;

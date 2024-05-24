@@ -112,20 +112,15 @@ export default function PlayerProvider({ children }: { children: ReactNode }) {
     if (!metadata) return;
     if (metadata.type === 'soundcloud') {
       scLoad(metadata.url);
-
-      return () => {
-        scWidget.pause();
-      };
+      return () => scWidget.pause();
     } else if (metadata.type === 'soundxyz') {
       audio.src = metadata.url;
       audio.load();
-      return () => {
-        audio.pause();
-      };
+      return () => audio.pause();
     } else if (metadata.type === 'spotify') {
       spotifyController.loadUri(metadata.url);
-
       return () => {
+        console.log('spotify cleanup');
         spotifyController.pause();
       };
     }
@@ -146,7 +141,11 @@ export default function PlayerProvider({ children }: { children: ReactNode }) {
         audio.pause();
       }
     } else if (metadata?.type === 'spotify') {
-      spotifyController.togglePlay();
+      if (player.playing) {
+        spotifyController.resume();
+      } else {
+        spotifyController.pause();
+      }
     }
   }, [player.loading, metadata?.type, player.playing, scWidget, audio, spotifyController]);
 
