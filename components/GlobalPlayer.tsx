@@ -13,11 +13,11 @@ export default function GlobalPlayer() {
   if (!metadata) return <></>;
 
   const handlePlay = () => {
-    dispatch({ type: 'PLAY' });
+    dispatch({ type: 'RESUME', payload: { id: metadata.id } });
   };
 
   const handlePause = () => {
-    dispatch({ type: 'PAUSE' });
+    dispatch({ type: 'PAUSE', payload: { id: metadata.id } });
   };
 
   const handleSeek = (value: number) => {

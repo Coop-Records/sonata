@@ -8,9 +8,11 @@ import { Button } from '@/components/ui/button';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { useUi } from '@/providers/UiProvider';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useFeedProvider } from '@/providers/FeedProvider';
 
 const Header = () => {
   const { user, loading: userLoading } = useNeynarProvider();
+  const { feedType } = useFeedProvider();
   const { menuOpen, setMenuOpen } = useUi();
 
   return (
@@ -27,9 +29,11 @@ const Header = () => {
           <SignInButton />
         )}
       </div>
-      <div className="flex justify-center">
-        <Tabs tabs={tabs} />
-      </div>
+      {feedType && (
+        <div className="flex justify-center">
+          <Tabs tabs={tabs} />
+        </div>
+      )}
     </header>
   );
 };

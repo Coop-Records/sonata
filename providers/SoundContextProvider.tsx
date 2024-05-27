@@ -22,7 +22,7 @@ export const useSoundContext = (dispatch: Dispatch<PlayerAction>) => {
       dispatch({ type: 'PROGRESS', payload: { position: audio.currentTime * 1000 } });
     };
     audio.oncanplay = () => {
-      dispatch({ type: 'SET_LOADING', payload: { loading: false } });
+      dispatch({ type: 'LOADED', payload: { type: 'soundxyz' } });
       dispatch({ type: 'SET_DURATION', payload: { duration: audio.duration * 1000 } });
     };
   }, [audio, dispatch]);
