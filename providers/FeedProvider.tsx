@@ -21,7 +21,7 @@ type FeedProviderType = {
   filter: FeedFilter;
   updateFilter: (change: FeedFilter) => void;
   feed: SupabasePost[];
-  feedType: string;
+  feedType?: string;
   setFeedType: (feedType: string) => void;
   fetchMore: (start: number) => void;
   hasMore: boolean;
@@ -32,11 +32,20 @@ const FeedContext = createContext<FeedProviderType>({} as any);
 const FeedProvider = ({ children }: { children: ReactNode }) => {
   const [filter, setFilter] = useState<FeedFilter>({});
   const [feed, setFeed] = useState<SupabasePost[]>([]);
-  const [feedType, setFeedType] = useState<string>(FeedType.Trending);
+  const [feedType, setFeedType] = useState<string>();
   const { supabaseClient } = useSupabaseProvider();
   const [hasMore, setHasMore] = useState(true);
-  const { user } = useNeynarProvider();
+  const { user, loading: userLoading } = useNeynarProvider();
   const fid = user?.fid;
+
+  useEffect(() => {
+    if (userLoading) return;
+    if (user) {
+      setFeedType(FeedType.Following);
+    } else {
+      setFeedType(FeedType.Trending);
+    }
+  }, [userLoading, user]);
 
   const updateFilter = (change: FeedFilter) => {
     setFilter((prev) => ({ ...prev, ...change }));
@@ -44,6 +53,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
 
   const fetchMore = useCallback(
     async (start: number) => {
+      if (!feedType) return;
       setHasMore(true);
       const { posts } = await fetchPosts(supabaseClient, filter, feedType, start, fid);
       if (!(posts && posts.length === fetchPostsLimit)) {
