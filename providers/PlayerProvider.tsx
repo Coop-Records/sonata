@@ -129,9 +129,17 @@ export default function PlayerProvider({ children }: { children: ReactNode }) {
     if (player.loading) return;
     if (metadata?.type === 'soundcloud') {
       if (player.playing) {
-        scWidget.play();
+        try {
+          scWidget.play();
+        } catch (e) {
+          console.error(e);
+        }
       } else {
-        scWidget.pause();
+        try {
+          scWidget.pause();
+        } catch (e) {
+          console.error(e);
+        }
       }
     } else if (metadata?.type === 'soundxyz') {
       if (player.playing) {
