@@ -17,9 +17,9 @@ export const SOUND_FACTORY = '0x0000000000aec84F5BFc2af15EAfb943bf4e3522';
 export const REFERRAL = process.env.NEXT_PUBLIC_REFERRAL || zeroAddress;
 export const AIRSTACK_API_URL = 'https://api.airstack.xyz/graphql';
 export const tabs = [
+  { label: 'Following', href: '/following', value: FeedType.Following },
   { label: 'Trending', href: '/', value: FeedType.Trending },
   { label: 'Recent', href: '/recent', value: FeedType.Recent },
-  { label: 'Following', href: '/following', value: FeedType.Following },
 ];
 
 export const fetchPostsLimit = 20;
