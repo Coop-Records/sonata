@@ -1,4 +1,5 @@
 const getFeedFromTime = async (embedUrl: string, date: Date) => {
+  console.log('SWEETS GETTING FEED');
   const options = {
     method: 'GET',
     headers: { accept: 'application/json', api_key: process.env.NEYNAR_API_KEY },

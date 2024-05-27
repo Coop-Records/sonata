@@ -9,6 +9,7 @@ import TipProvider from './TipProvider';
 import FeedProvider from './FeedProvider';
 import { SoundContextProvider } from './SoundContextProvider';
 import UiProvider from './UiProvider';
+import { YouTubePlayerProvider } from './YoutubeControllerProvider';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -19,9 +20,11 @@ export default function Providers({ children }: { children: React.ReactNode }) {
             <SpotifyControllerProvider>
               <SoundcloudWidgetProvider>
                 <SoundContextProvider>
-                  <PlayerProvider>
-                    <FeedProvider>{children}</FeedProvider>
-                  </PlayerProvider>
+                  <YouTubePlayerProvider>
+                    <PlayerProvider>
+                      <FeedProvider>{children}</FeedProvider>
+                    </PlayerProvider>
+                  </YouTubePlayerProvider>
                 </SoundContextProvider>
               </SoundcloudWidgetProvider>
             </SpotifyControllerProvider>

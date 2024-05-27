@@ -9,7 +9,7 @@ const getFeed = async (embedUrl: string) => {
 
   try {
     const queryParams = new URLSearchParams({
-      embed_url: embedUrl,
+      embedUrl,
     });
 
     const response = await fetch(`/api/neynar/getFeed?${queryParams}`, options);

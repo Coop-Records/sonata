@@ -24,6 +24,7 @@ export default function MediaPlayer({ metadata }: MediaPlayerProps) {
       dispatch({ type: 'RESUME', payload: { id: metadata.id } });
       return;
     }
+    console.log('SWEETS METADATA EXAMPLE', metadata);
     dispatch({
       type: 'PLAY',
       payload: { metadata },

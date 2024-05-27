@@ -3,6 +3,7 @@ import { useSoundcloudWidget } from './SoundcloudWidgetProvider';
 import { useSpotifyController } from './SpotifyControllerProvider';
 import { TrackMetadata, TrackType } from '@/types/Track';
 import { useSoundContext } from './SoundContextProvider';
+import { useYouTubePlayer } from './YoutubeControllerProvider';
 
 type Player = {
   playing: boolean;
@@ -105,6 +106,7 @@ export default function PlayerProvider({ children }: { children: ReactNode }) {
   const [player, dispatch] = useReducer(playerReducer, initialState);
   const { metadata } = player;
   const { scWidget, scLoad } = useSoundcloudWidget(dispatch);
+  const { ytPlayer, ytLoad } = useYouTubePlayer(dispatch);
   const { audio } = useSoundContext(dispatch);
   const spotifyController = useSpotifyController(dispatch);
 
@@ -122,8 +124,11 @@ export default function PlayerProvider({ children }: { children: ReactNode }) {
       return () => {
         spotifyController.pause();
       };
+    } else if (metadata.type === 'youtube') {
+      ytLoad(metadata.id);
+      return () => ytPlayer.pauseVideo();
     }
-  }, [metadata, scWidget, spotifyController, audio, scLoad]);
+  }, [metadata, scWidget, spotifyController, audio, scLoad, ytLoad, ytPlayer]);
 
   useEffect(() => {
     if (player.loading) return;
@@ -145,8 +150,22 @@ export default function PlayerProvider({ children }: { children: ReactNode }) {
       } else {
         spotifyController.pause();
       }
+    } else if (metadata?.type === 'youtube') {
+      if (player.playing) {
+        ytPlayer.playVideo();
+      } else {
+        ytPlayer.pauseVideo();
+      }
     }
-  }, [player.loading, metadata?.type, player.playing, scWidget, audio, spotifyController]);
+  }, [
+    player.loading,
+    metadata?.type,
+    player.playing,
+    scWidget,
+    audio,
+    spotifyController,
+    ytPlayer,
+  ]);
 
   useEffect(() => {
     if (typeof player.seekTo === 'undefined') return;
