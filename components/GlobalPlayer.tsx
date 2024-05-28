@@ -1,14 +1,13 @@
 'use client';
-import { formatDuration } from '@/lib/utils';
 import { usePlayer } from '@/providers/PlayerProvider';
 import Image from 'next/image';
 import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';
-import ReactSlider from 'react-slider';
 import { Button } from '@/components/ui/button';
+import Scrubber from '@/components/Scrubber';
 
 export default function GlobalPlayer() {
   const [player, dispatch] = usePlayer();
-  const { metadata, position } = player;
+  const { metadata } = player;
 
   if (!metadata) return <></>;
 
@@ -20,16 +19,12 @@ export default function GlobalPlayer() {
     dispatch({ type: 'PAUSE', payload: { id: metadata.id } });
   };
 
-  const handleSeek = (value: number) => {
-    dispatch({ type: 'SEEK', payload: { position: value } });
-  };
-
   return (
     <div
       data-type={metadata.type}
-      className="sticky bottom-0 left-0 mt-auto w-screen bg-white shadow-2xl shadow-black"
+      className="sticky bottom-0 left-0 mt-auto w-screen space-y-6 bg-white py-3 shadow-2xl shadow-black"
     >
-      <div className="container flex gap-3 py-3">
+      <div className="container flex items-center gap-3">
         <div className="relative my-auto size-16 overflow-hidden rounded-lg shadow-md">
           <Image
             src={metadata.artworkUrl}
@@ -59,20 +54,11 @@ export default function GlobalPlayer() {
               <MdPlayCircle className="text-4xl" />
             )}
           </Button>
-
-          <div className="flex w-full items-center gap-2 text-xs font-light text-muted-foreground">
-            <span>{formatDuration(position)}</span>
-            <ReactSlider
-              className="global-scrub h-1 w-full"
-              thumbClassName="global-scrub-thumb"
-              trackClassName="global-scrub-track"
-              value={position && player.duration ? (position / player.duration) * 100 : 0}
-              onChange={(value) => handleSeek((value / 100) * player.duration)}
-            />
-            <span>{formatDuration(player.duration)}</span>
-          </div>
+          <Scrubber className="w-full max-md:hidden" />
         </div>
       </div>
+
+      <Scrubber className="container md:hidden" />
     </div>
   );
 }

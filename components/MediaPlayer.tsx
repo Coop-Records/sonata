@@ -1,11 +1,11 @@
-import { cn, formatDuration } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { usePlayer } from '@/providers/PlayerProvider';
 import { TrackMetadata } from '@/types/Track';
 import Image from 'next/image';
 import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';
 import { Skeleton } from '@/components/ui/skeleton';
-import ReactSlider from 'react-slider';
 import { Button } from '@/components/ui/button';
+import Scrubber from '@/components/Scrubber';
 
 type MediaPlayerProps = {
   metadata?: TrackMetadata;
@@ -13,10 +13,7 @@ type MediaPlayerProps = {
 
 export default function MediaPlayer({ metadata }: MediaPlayerProps) {
   const [player, dispatch] = usePlayer();
-
   const currentTrack = player?.metadata?.id === metadata?.id;
-  const displayPosition = currentTrack ? player.position : 0;
-  const displayDuration = player?.duration || 0;
 
   const handlePlay = () => {
     if (!metadata) return;
@@ -33,10 +30,6 @@ export default function MediaPlayer({ metadata }: MediaPlayerProps) {
   const handlePause = () => {
     if (!metadata) return;
     dispatch({ type: 'PAUSE', payload: { id: metadata.id } });
-  };
-
-  const handleSeek = (value: number) => {
-    dispatch({ type: 'SEEK', payload: { position: value } });
   };
 
   return (
@@ -76,22 +69,7 @@ export default function MediaPlayer({ metadata }: MediaPlayerProps) {
             <Skeleton className="h-2 w-12 rounded-sm" />
           )}
         </div>
-        {currentTrack && !player.loading && (
-          <div className="mt-auto flex items-center gap-2 text-xs font-light">
-            <span>{formatDuration(displayPosition)}</span>
-            <ReactSlider
-              className="scrub h-1 w-full bg-gray-300"
-              thumbClassName={`${metadata?.type === 'spotify' ? '' : 'scrub-thumb'}`}
-              trackClassName="scrub-track"
-              value={
-                displayPosition && displayDuration ? (displayPosition / displayDuration) * 100 : 0
-              }
-              disabled={metadata?.type === 'spotify'}
-              onChange={(value) => handleSeek((value / 100) * displayDuration)}
-            />
-            <span>{formatDuration(displayDuration)}</span>
-          </div>
-        )}
+        {currentTrack && !player.loading && <Scrubber className="mt-auto max-md:hidden" />}
       </div>
       <div className="my-auto">
         <Button
