@@ -54,7 +54,9 @@ export const useSpotifyController = (dispatch: Dispatch<PlayerAction>) => {
         }
       }
       dispatch({ type: 'PROGRESS', payload: { position } });
-      dispatch({ type: 'SET_DURATION', payload: { duration: 30 * 1000 } });
+      if (position === 0) {
+        dispatch({ type: 'SET_DURATION', payload: { duration: 30 * 1000 } });
+      }
     });
 
     spotifyController.addListener('ready', () => {

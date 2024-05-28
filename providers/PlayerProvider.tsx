@@ -10,7 +10,7 @@ type Player = {
   duration: number;
   metadata?: TrackMetadata;
   loading: boolean;
-  seekTo?: number;
+  seekTo: number | null;
 };
 
 export type PlayerAction =
@@ -39,6 +39,9 @@ export type PlayerAction =
       };
     }
   | {
+      type: 'SEEKED';
+    }
+  | {
       type: 'PROGRESS';
       payload: {
         position: number;
@@ -62,6 +65,7 @@ const initialState: Player = {
   position: 0,
   duration: 0,
   loading: false,
+  seekTo: null,
 };
 
 const PlayerContext = createContext<[Player, Dispatch<PlayerAction>]>([initialState, () => {}]);
@@ -84,6 +88,8 @@ const playerReducer = (state: Player, action: PlayerAction) => {
     }
     case 'SEEK':
       return { ...state, seekTo: action.payload.position };
+    case 'SEEKED':
+      return { ...state, seekTo: null };
     case 'PROGRESS': {
       if (state.loading) return state;
       return { ...state, position: action.payload.position };
@@ -157,7 +163,7 @@ export default function PlayerProvider({ children }: { children: ReactNode }) {
   }, [player.loading, metadata?.type, player.playing, scWidget, audio, spotifyController]);
 
   useEffect(() => {
-    if (typeof player.seekTo === 'undefined') return;
+    if (player.seekTo === null) return;
     if (metadata?.type === 'soundcloud') {
       scWidget.seekTo(player.seekTo);
     } else if (metadata?.type === 'soundxyz') {
@@ -165,6 +171,7 @@ export default function PlayerProvider({ children }: { children: ReactNode }) {
     } else if (metadata?.type === 'spotify') {
       spotifyController.seek(player.seekTo / 1000);
     }
+    dispatch({ type: 'SEEKED' });
   }, [player.seekTo, metadata?.type, scWidget, audio, spotifyController]);
 
   return <PlayerContext.Provider value={[player, dispatch]}>{children}</PlayerContext.Provider>;
