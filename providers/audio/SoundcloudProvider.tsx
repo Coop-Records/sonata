@@ -5,40 +5,42 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
 import { PlayerAction } from './PlayerProvider';
+import { AudioController } from '@/types/AudioController';
 
-const soundcloudWidgetContext = createContext<any>(null);
+const soundcloudContext = createContext<any>(null);
 const dummySrc = 'https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/293';
 
-export function SoundcloudWidgetProvider({ children }: { children: React.ReactNode }) {
+export function SoundcloudProvider({ children }: { children: React.ReactNode }) {
   const portalEl = typeof document !== 'undefined' && document.getElementById('player-portal');
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  const [soundcloudApi, setSoundcloudApi] = useState<any>(null);
-  const [soundcloudWidget, setSoundcloudWidget] = useState<any>(null);
+  const [api, setApi] = useState<any>(null);
+  const [widget, setWidget] = useState<any>(null);
 
   useEffect(() => {
-    if (!soundcloudApi) return;
+    if (!api) return;
     const iframe = iframeRef.current;
-    const widget = soundcloudApi.Widget(iframe);
-    setSoundcloudWidget(widget);
-  }, [soundcloudApi]);
+    const widget = api.Widget(iframe);
+    setWidget(widget);
+  }, [api]);
 
   return (
-    <soundcloudWidgetContext.Provider value={{ soundcloudWidget, soundcloudApi }}>
+    <soundcloudContext.Provider value={{ widget, api }}>
       <Script
         src="https://w.soundcloud.com/player/api.js"
         async
         onLoad={() => {
-          setSoundcloudApi((window as any).SC);
+          setApi((window as any).SC);
         }}
       />
       {children}
-      {soundcloudApi &&
+      {api &&
         portalEl &&
         createPortal(
           <iframe
@@ -50,43 +52,50 @@ export function SoundcloudWidgetProvider({ children }: { children: React.ReactNo
           />,
           portalEl,
         )}
-    </soundcloudWidgetContext.Provider>
+    </soundcloudContext.Provider>
   );
 }
 
-export const useSoundcloudWidget = (dispatch: Dispatch<PlayerAction>) => {
-  const { soundcloudApi, soundcloudWidget }: any = useContext(soundcloudWidgetContext);
+export const useSoundcloud = (dispatch: Dispatch<PlayerAction>) => {
+  const { api, widget }: any = useContext(soundcloudContext);
 
   useEffect(() => {
-    if (!soundcloudWidget) return;
-    soundcloudWidget.bind(soundcloudApi.Widget.Events.READY, () => {
-      soundcloudWidget.bind(soundcloudApi.Widget.Events.PLAY_PROGRESS, (position: any) => {
+    if (!widget) return;
+    widget.bind(api.Widget.Events.READY, () => {
+      widget.bind(api.Widget.Events.PLAY_PROGRESS, (position: any) => {
         dispatch({ type: 'PROGRESS', payload: { position: position.currentPosition } });
       });
 
-      soundcloudWidget.bind(soundcloudApi.Widget.Events.ERROR, (e: any) => {
+      widget.bind(api.Widget.Events.ERROR, (e: any) => {
         console.error('error', e);
       });
 
-      soundcloudWidget.bind(soundcloudApi.Widget.Events.PAUSE, (e: any) => {
+      widget.bind(api.Widget.Events.PAUSE, (e: any) => {
         dispatch({ type: 'PAUSE', payload: { id: String(e.soundId) } });
       });
     });
-  }, [soundcloudWidget, soundcloudApi, dispatch]);
+  }, [widget, api, dispatch]);
 
-  const soundcloudLoad = useCallback(
+  const load = useCallback(
     (src: string) => {
-      soundcloudWidget.load(src, {
+      widget.load(src, {
         callback() {
-          soundcloudWidget.getDuration((duration: number) => {
+          widget.getDuration((duration: number) => {
             dispatch({ type: 'SET_DURATION', payload: { duration } });
           });
           dispatch({ type: 'LOADED', payload: { type: 'soundcloud' } });
         },
       });
     },
-    [dispatch, soundcloudWidget],
+    [dispatch, widget],
   );
 
-  return { scWidget: soundcloudWidget, scLoad: soundcloudLoad };
+  const play = useCallback(() => widget.play(), [widget]);
+  const pause = useCallback(() => widget.pause(), [widget]);
+  const seek = useCallback((time: number) => widget.seekTo(time), [widget]);
+  const controller: AudioController = useMemo(
+    () => ({ play, pause, load, seek }),
+    [play, pause, load, seek],
+  );
+  return controller;
 };

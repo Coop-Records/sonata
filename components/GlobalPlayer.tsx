@@ -1,5 +1,5 @@
 'use client';
-import { usePlayer } from '@/providers/PlayerProvider';
+import { usePlayer } from '@/providers/audio/PlayerProvider';
 import Image from 'next/image';
 import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';
 import { Button } from '@/components/ui/button';

@@ -1,8 +1,16 @@
-import { Dispatch, ReactNode, createContext, useContext, useEffect, useReducer } from 'react';
-import { useSoundcloudWidget } from './SoundcloudWidgetProvider';
-import { useSpotifyController } from './SpotifyControllerProvider';
+import {
+  Dispatch,
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+} from 'react';
+import { useSoundcloud } from './SoundcloudProvider';
+import { useSpotify } from './SpotifyProvider';
 import { TrackMetadata, TrackType } from '@/types/Track';
-import { useSoundContext } from './SoundContextProvider';
+import { useSound } from './SoundProvider';
 
 type Player = {
   playing: boolean;
@@ -110,69 +118,38 @@ const playerReducer = (state: Player, action: PlayerAction) => {
 export default function PlayerProvider({ children }: { children: ReactNode }) {
   const [player, dispatch] = useReducer(playerReducer, initialState);
   const { metadata } = player;
-  const { scWidget, scLoad } = useSoundcloudWidget(dispatch);
-  const { audio } = useSoundContext(dispatch);
-  const spotifyController = useSpotifyController(dispatch);
+  const scController = useSoundcloud(dispatch);
+  const soundController = useSound(dispatch);
+  const spotifyController = useSpotify(dispatch);
+
+  const currentController = useMemo(() => {
+    console.log('metadata?.type', metadata?.type);
+    if (metadata?.type === 'soundcloud') return scController;
+    if (metadata?.type === 'soundxyz') return soundController;
+    if (metadata?.type === 'spotify') return spotifyController;
+    return null;
+  }, [metadata?.type, scController, soundController, spotifyController]);
 
   useEffect(() => {
-    if (!metadata) return;
-    if (metadata.type === 'soundcloud') {
-      scLoad(metadata.url);
-      return () => scWidget.pause();
-    } else if (metadata.type === 'soundxyz') {
-      audio.src = metadata.url;
-      audio.load();
-      return () => audio.pause();
-    } else if (metadata.type === 'spotify') {
-      spotifyController.loadUri(metadata.url);
-      return () => {
-        spotifyController.pause();
-      };
-    }
-  }, [metadata, scWidget, spotifyController, audio, scLoad]);
+    if (!metadata || !currentController) return;
+    currentController.load(metadata.url);
+    return () => currentController.pause();
+  }, [metadata, currentController]);
 
   useEffect(() => {
-    if (player.loading) return;
-    if (metadata?.type === 'soundcloud') {
-      if (player.playing) {
-        try {
-          scWidget.play();
-        } catch (e) {
-          console.error(e);
-        }
-      } else {
-        try {
-          scWidget.pause();
-        } catch (e) {
-          console.error(e);
-        }
-      }
-    } else if (metadata?.type === 'soundxyz') {
-      if (player.playing) {
-        audio.play();
-      } else {
-        audio.pause();
-      }
-    } else if (metadata?.type === 'spotify') {
-      if (player.playing) {
-        spotifyController.resume();
-      } else {
-        spotifyController.pause();
-      }
+    if (player.loading || !currentController) return;
+    if (player.playing) {
+      currentController.play();
+    } else {
+      currentController.pause();
     }
-  }, [player.loading, metadata?.type, player.playing, scWidget, audio, spotifyController]);
+  }, [player.loading, player.playing, currentController]);
 
   useEffect(() => {
-    if (player.seekTo === null) return;
-    if (metadata?.type === 'soundcloud') {
-      scWidget.seekTo(player.seekTo);
-    } else if (metadata?.type === 'soundxyz') {
-      audio.currentTime = player.seekTo / 1000;
-    } else if (metadata?.type === 'spotify') {
-      spotifyController.seek(player.seekTo / 1000);
-    }
+    if (player.seekTo === null || !currentController) return;
+    currentController.seek(player.seekTo);
     dispatch({ type: 'SEEKED' });
-  }, [player.seekTo, metadata?.type, scWidget, audio, spotifyController]);
+  }, [player.seekTo, currentController]);
 
   return <PlayerContext.Provider value={[player, dispatch]}>{children}</PlayerContext.Provider>;
 }
