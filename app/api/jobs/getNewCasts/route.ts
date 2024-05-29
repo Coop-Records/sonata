@@ -1,4 +1,6 @@
+import { CHANNELS } from '@/lib/consts';
 import createPostReply from '@/lib/neynar/createPostReply';
+import getChannelIdFromCast from '@/lib/neynar/getChannelIdFromCast';
 import getFeedFromTime from '@/lib/neynar/getFeedFromTime';
 import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { createClient } from '@supabase/supabase-js';
@@ -49,13 +51,21 @@ const getResponse = async (): Promise<NextResponse> => {
 
   const formattedLastChecked = new Date(`${lastChecked}`);
 
+  const allEntries: any[] = [];
+
   const [spotify, soundCloud, soundxyz] = await Promise.all([
     getFeedFromTime('spotify.com/track', formattedLastChecked),
     getFeedFromTime('soundcloud.com', formattedLastChecked),
     getFeedFromTime('sound.xyz', formattedLastChecked),
   ]);
-  const allEntries: any[] = [];
   allEntries.push(...spotify, ...soundCloud, ...soundxyz);
+
+  let youtube = await getFeedFromTime('youtube.com/watch', formattedLastChecked);
+  youtube = youtube.filter((entry) => {
+    const channelId = getChannelIdFromCast(entry);
+    return channelId && CHANNELS.find((channel) => channel.value === channelId);
+  });
+  allEntries.push(...youtube);
 
   console.log('jobs::getNewCasts', `${allEntries.length} new entries`);
   if (allEntries.length > 0) {
@@ -83,14 +93,7 @@ const getResponse = async (): Promise<NextResponse> => {
 
 async function createCast(cast: Cast) {
   const likes = (cast as any).reactions.likes_count;
-  const parentUrl = cast.parent_url;
-  let channelId = null;
-  if (parentUrl) {
-    const match = /\/channel\/([^/]+)$/.exec(parentUrl);
-    if (match) {
-      channelId = match[1];
-    }
-  }
+  const channelId = getChannelIdFromCast(cast);
 
   const { error } = await supabase.from('posts').upsert(
     {
