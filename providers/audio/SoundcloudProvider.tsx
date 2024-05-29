@@ -6,27 +6,33 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
-import { createPortal } from 'react-dom';
 import { PlayerAction } from './PlayerProvider';
 import { AudioController } from '@/types/AudioController';
 
-const soundcloudContext = createContext<any>(null);
 const dummySrc = 'https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/293';
+const soundcloudContext = createContext<any>(null);
 
 export function SoundcloudProvider({ children }: { children: React.ReactNode }) {
-  const portalEl = typeof document !== 'undefined' && document.getElementById('player-portal');
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-
   const [api, setApi] = useState<any>(null);
   const [widget, setWidget] = useState<any>(null);
 
   useEffect(() => {
     if (!api) return;
-    const iframe = iframeRef.current;
-    const widget = api.Widget(iframe);
+
+    let iframe: any = document.getElementById('sc-iframe');
+    if (!iframe) {
+      const playerPortal = document.getElementById('player-portal');
+      if (!playerPortal) return;
+
+      iframe = document.createElement('iframe');
+      iframe.id = 'sc-iframe';
+      iframe.allow = 'autoplay';
+      iframe.src = dummySrc;
+      playerPortal.appendChild(iframe);
+    }
+    const widget = api.Widget('sc-iframe');
     setWidget(widget);
   }, [api]);
 
@@ -40,18 +46,6 @@ export function SoundcloudProvider({ children }: { children: React.ReactNode }) 
         }}
       />
       {children}
-      {api &&
-        portalEl &&
-        createPortal(
-          <iframe
-            scrolling="no"
-            frameBorder="no"
-            allow="autoplay"
-            ref={iframeRef}
-            src={dummySrc}
-          />,
-          portalEl,
-        )}
     </soundcloudContext.Provider>
   );
 }
@@ -83,7 +77,7 @@ export const useSoundcloud = (dispatch: Dispatch<PlayerAction>) => {
           widget.getDuration((duration: number) => {
             dispatch({ type: 'SET_DURATION', payload: { duration } });
           });
-          dispatch({ type: 'LOADED', payload: { type: 'soundcloud' } });
+          dispatch({ type: 'LOADED' });
         },
       });
     },

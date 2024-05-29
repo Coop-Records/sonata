@@ -6,39 +6,43 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
-import { createPortal } from 'react-dom';
 import { PlayerAction } from './PlayerProvider';
 import { AudioController } from '@/types/AudioController';
 
 const spotifyContext = createContext<any>(null);
 
 export function SpotifyProvider({ children }: { children: React.ReactNode }) {
-  const portalEl = typeof document !== 'undefined' && document.getElementById('player-portal');
-  const spotifyElRef = useRef<HTMLDivElement>(null);
   const [api, setApi] = useState<any>(null);
-  const [embedController, setEmbedController] = useState(null);
+  const [embedController, setEmbedController] = useState<any>(null);
 
   useEffect(() => {
     (window as any).onSpotifyIframeApiReady = setApi;
   }, []);
 
   useEffect(() => {
-    if (!api) return;
+    if (!api || embedController) return;
+    const playerPortal = document.getElementById('player-portal');
+    if (!playerPortal) return;
+    const playerContainer = document.createElement('div');
+    playerContainer.id = 'spotify-placeholder';
+    playerPortal.appendChild(playerContainer);
     api.createController(
-      spotifyElRef.current,
+      playerContainer,
       { height: '100px', width: '300px', uri: 'spotify:track:51H2y6YrNNXcy3dfc3qSbA' },
       setEmbedController,
     );
-  }, [api]);
+
+    return () => {
+      embedController?.destroy();
+    };
+  }, [api, embedController]);
 
   return (
     <spotifyContext.Provider value={{ embedController }}>
       <Script src="https://open.spotify.com/embed/iframe-api/v1" async />
       {children}
-      {api && portalEl && createPortal(<div ref={spotifyElRef} />, portalEl)}
     </spotifyContext.Provider>
   );
 }
@@ -70,7 +74,7 @@ export const useSpotify = (dispatch: Dispatch<PlayerAction>) => {
     });
 
     embedController.addListener('ready', () => {
-      dispatch({ type: 'LOADED', payload: { type: 'spotify' } });
+      dispatch({ type: 'LOADED' });
     });
   }, [embedController, dispatch]);
 
