@@ -9,8 +9,9 @@ import {
 } from 'react';
 import { useSoundcloud } from './SoundcloudProvider';
 import { useSpotify } from './SpotifyProvider';
-import { TrackMetadata, TrackType } from '@/types/Track';
+import { TrackMetadata } from '@/types/Track';
 import { useSound } from './SoundProvider';
+import { useYoutube } from './YoutubeProvider';
 
 type Player = {
   playing: boolean;
@@ -63,9 +64,6 @@ export type PlayerAction =
     }
   | {
       type: 'LOADED';
-      payload: {
-        type: TrackType;
-      };
     };
 
 const initialState: Player = {
@@ -104,12 +102,8 @@ const playerReducer = (state: Player, action: PlayerAction) => {
     }
     case 'SET_DURATION':
       return { ...state, duration: action.payload.duration };
-    case 'LOADED': {
-      const { type } = action.payload;
-      if (state.metadata?.type !== type) return state;
+    case 'LOADED':
       return { ...state, loading: false };
-    }
-
     default:
       return state;
   }
@@ -121,20 +115,21 @@ export default function PlayerProvider({ children }: { children: ReactNode }) {
   const scController = useSoundcloud(dispatch);
   const soundController = useSound(dispatch);
   const spotifyController = useSpotify(dispatch);
+  const youtubeController = useYoutube(dispatch);
 
   const currentController = useMemo(() => {
-    console.log('metadata?.type', metadata?.type);
     if (metadata?.type === 'soundcloud') return scController;
     if (metadata?.type === 'soundxyz') return soundController;
     if (metadata?.type === 'spotify') return spotifyController;
+    if (metadata?.type === 'youtube') return youtubeController;
     return null;
-  }, [metadata?.type, scController, soundController, spotifyController]);
+  }, [metadata?.type, scController, soundController, spotifyController, youtubeController]);
 
   useEffect(() => {
-    if (!metadata || !currentController) return;
+    if (!metadata?.url || !currentController) return;
     currentController.load(metadata.url);
     return () => currentController.pause();
-  }, [metadata, currentController]);
+  }, [metadata?.url, currentController]);
 
   useEffect(() => {
     if (player.loading || !currentController) return;

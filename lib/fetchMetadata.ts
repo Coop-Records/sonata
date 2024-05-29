@@ -50,6 +50,16 @@ export default async function fetchMetadata(url: string) {
       artworkUrl: releaseInfo.coverImage.url,
       url: releaseInfo?.track?.audio?.audio128k?.url,
     };
+  } else if (url.includes('youtube.com')) {
+    const videoId = url.split('v=')[1];
+    metadata = {
+      id: videoId,
+      type: 'youtube',
+      artistName: 'YT ChannelTitle',
+      trackName: 'YT Track Name',
+      artworkUrl: 'https://i.ytimg.com/vi/qRTG8uF2ES4/sddefault.jpg',
+      url: videoId,
+    };
   }
   return metadata;
 }

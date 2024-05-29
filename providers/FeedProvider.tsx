@@ -61,6 +61,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
       }
       setFeed((prev) => {
         const mergedUnique = mergeArraysUniqueByPostHash(prev, posts);
+        mergedUnique[0].embeds = ['{"url":"https://www.youtube.com/watch?v=qRTG8uF2ES4"}'];
         return mergedUnique;
       });
     },

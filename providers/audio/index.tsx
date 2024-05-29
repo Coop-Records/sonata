@@ -3,13 +3,16 @@ import PlayerProvider from './PlayerProvider';
 import { SoundProvider } from './SoundProvider';
 import { SoundcloudProvider } from './SoundcloudProvider';
 import { SpotifyProvider } from './SpotifyProvider';
+import { YoutubeProvider } from './YoutubeProvider';
 
 export default function AudioProvider({ children }: { children: ReactNode }) {
   return (
     <SpotifyProvider>
       <SoundcloudProvider>
         <SoundProvider>
-          <PlayerProvider>{children}</PlayerProvider>
+          <YoutubeProvider>
+            <PlayerProvider>{children}</PlayerProvider>
+          </YoutubeProvider>
         </SoundProvider>
       </SoundcloudProvider>
     </SpotifyProvider>
