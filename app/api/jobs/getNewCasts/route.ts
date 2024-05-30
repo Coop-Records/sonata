@@ -61,12 +61,13 @@ const getResponse = async (): Promise<NextResponse> => {
   ]);
   allEntries.push(...spotify, ...soundCloud, ...soundxyz);
 
-  youtube
-    .filter((entry) => {
-      const channelId = getChannelIdFromCast(entry);
-      return channelId && CHANNELS.find((channel) => channel.value === channelId);
-    })
-    .map(allEntries.push);
+  const youtubeFiltered = youtube.filter((entry) => {
+    const channelId = getChannelIdFromCast(entry);
+    return channelId && CHANNELS.find((channel) => channel.value === channelId);
+  });
+
+  console.log('jobs::getNewCasts', 'ytEntries', youtubeFiltered);
+  allEntries.push(...youtubeFiltered);
 
   console.log('jobs::getNewCasts', `${allEntries.length} new entries`);
   if (allEntries.length > 0) {
