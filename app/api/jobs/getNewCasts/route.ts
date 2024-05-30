@@ -53,19 +53,20 @@ const getResponse = async (): Promise<NextResponse> => {
 
   const allEntries: any[] = [];
 
-  const [spotify, soundCloud, soundxyz] = await Promise.all([
+  const [spotify, soundCloud, soundxyz, youtube] = await Promise.all([
     getFeedFromTime('spotify.com/track', formattedLastChecked),
     getFeedFromTime('soundcloud.com', formattedLastChecked),
     getFeedFromTime('sound.xyz', formattedLastChecked),
+    getFeedFromTime('youtube.com/watch', formattedLastChecked),
   ]);
   allEntries.push(...spotify, ...soundCloud, ...soundxyz);
 
-  let youtube = await getFeedFromTime('youtube.com/watch', formattedLastChecked);
-  youtube = youtube.filter((entry) => {
-    const channelId = getChannelIdFromCast(entry);
-    return channelId && CHANNELS.find((channel) => channel.value === channelId);
-  });
-  allEntries.push(...youtube);
+  youtube
+    .filter((entry) => {
+      const channelId = getChannelIdFromCast(entry);
+      return channelId && CHANNELS.find((channel) => channel.value === channelId);
+    })
+    .map(allEntries.push);
 
   console.log('jobs::getNewCasts', `${allEntries.length} new entries`);
   if (allEntries.length > 0) {
