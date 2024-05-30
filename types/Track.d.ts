@@ -1,4 +1,4 @@
-export type TrackType = 'spotify' | 'soundcloud' | 'soundxyz';
+export type TrackType = 'spotify' | 'soundcloud' | 'soundxyz' | 'youtube';
 
 export type TrackMetadata = {
   id: string;

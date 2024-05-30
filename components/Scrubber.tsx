@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Slider } from '@/components/ui/slider';
-import { usePlayer } from '@/providers/PlayerProvider';
+import { usePlayer } from '@/providers/audio/PlayerProvider';
 import { cn, formatDuration } from '@/lib/utils';
 
 export default function Scrubber({ className }: { className?: string }) {

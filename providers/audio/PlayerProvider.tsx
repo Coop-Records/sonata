@@ -1,8 +1,17 @@
-import { Dispatch, ReactNode, createContext, useContext, useEffect, useReducer } from 'react';
-import { useSoundcloudWidget } from './SoundcloudWidgetProvider';
-import { useSpotifyController } from './SpotifyControllerProvider';
-import { TrackMetadata, TrackType } from '@/types/Track';
-import { useSoundContext } from './SoundContextProvider';
+import {
+  Dispatch,
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+} from 'react';
+import { useSoundcloud } from './SoundcloudProvider';
+import { useSpotify } from './SpotifyProvider';
+import { TrackMetadata } from '@/types/Track';
+import { useSound } from './SoundProvider';
+import { useYoutube } from './YoutubeProvider';
 
 type Player = {
   playing: boolean;
@@ -55,9 +64,6 @@ export type PlayerAction =
     }
   | {
       type: 'LOADED';
-      payload: {
-        type: TrackType;
-      };
     };
 
 const initialState: Player = {
@@ -96,12 +102,8 @@ const playerReducer = (state: Player, action: PlayerAction) => {
     }
     case 'SET_DURATION':
       return { ...state, duration: action.payload.duration };
-    case 'LOADED': {
-      const { type } = action.payload;
-      if (state.metadata?.type !== type) return state;
+    case 'LOADED':
       return { ...state, loading: false };
-    }
-
     default:
       return state;
   }
@@ -110,69 +112,39 @@ const playerReducer = (state: Player, action: PlayerAction) => {
 export default function PlayerProvider({ children }: { children: ReactNode }) {
   const [player, dispatch] = useReducer(playerReducer, initialState);
   const { metadata } = player;
-  const { scWidget, scLoad } = useSoundcloudWidget(dispatch);
-  const { audio } = useSoundContext(dispatch);
-  const spotifyController = useSpotifyController(dispatch);
+  const scController = useSoundcloud(dispatch);
+  const soundController = useSound(dispatch);
+  const spotifyController = useSpotify(dispatch);
+  const youtubeController = useYoutube(dispatch);
+
+  const currentController = useMemo(() => {
+    if (metadata?.type === 'soundcloud') return scController;
+    if (metadata?.type === 'soundxyz') return soundController;
+    if (metadata?.type === 'spotify') return spotifyController;
+    if (metadata?.type === 'youtube') return youtubeController;
+    return null;
+  }, [metadata?.type, scController, soundController, spotifyController, youtubeController]);
 
   useEffect(() => {
-    if (!metadata) return;
-    if (metadata.type === 'soundcloud') {
-      scLoad(metadata.url);
-      return () => scWidget.pause();
-    } else if (metadata.type === 'soundxyz') {
-      audio.src = metadata.url;
-      audio.load();
-      return () => audio.pause();
-    } else if (metadata.type === 'spotify') {
-      spotifyController.loadUri(metadata.url);
-      return () => {
-        spotifyController.pause();
-      };
-    }
-  }, [metadata, scWidget, spotifyController, audio, scLoad]);
+    if (!metadata?.url || !currentController) return;
+    currentController.load(metadata.url);
+    return () => currentController.pause();
+  }, [metadata?.url, currentController]);
 
   useEffect(() => {
-    if (player.loading) return;
-    if (metadata?.type === 'soundcloud') {
-      if (player.playing) {
-        try {
-          scWidget.play();
-        } catch (e) {
-          console.error(e);
-        }
-      } else {
-        try {
-          scWidget.pause();
-        } catch (e) {
-          console.error(e);
-        }
-      }
-    } else if (metadata?.type === 'soundxyz') {
-      if (player.playing) {
-        audio.play();
-      } else {
-        audio.pause();
-      }
-    } else if (metadata?.type === 'spotify') {
-      if (player.playing) {
-        spotifyController.resume();
-      } else {
-        spotifyController.pause();
-      }
+    if (player.loading || !currentController) return;
+    if (player.playing) {
+      currentController.play();
+    } else {
+      currentController.pause();
     }
-  }, [player.loading, metadata?.type, player.playing, scWidget, audio, spotifyController]);
+  }, [player.loading, player.playing, currentController]);
 
   useEffect(() => {
-    if (player.seekTo === null) return;
-    if (metadata?.type === 'soundcloud') {
-      scWidget.seekTo(player.seekTo);
-    } else if (metadata?.type === 'soundxyz') {
-      audio.currentTime = player.seekTo / 1000;
-    } else if (metadata?.type === 'spotify') {
-      spotifyController.seek(player.seekTo / 1000);
-    }
+    if (player.seekTo === null || !currentController) return;
+    currentController.seek(player.seekTo);
     dispatch({ type: 'SEEKED' });
-  }, [player.seekTo, metadata?.type, scWidget, audio, spotifyController]);
+  }, [player.seekTo, currentController]);
 
   return <PlayerContext.Provider value={[player, dispatch]}>{children}</PlayerContext.Provider>;
 }

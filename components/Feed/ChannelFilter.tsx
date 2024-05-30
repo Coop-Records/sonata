@@ -4,19 +4,7 @@ import { useFeedProvider } from '@/providers/FeedProvider';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-
-const channels = [
-  {
-    label: '/sonata',
-    value: 'sonata',
-    icon: 'https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/4e85acaa-4f1d-444b-1e35-dd06d43d0800/rectcrop3',
-  },
-  { label: '/soundscapes', value: 'soundscapes', icon: 'https://i.imgur.com/TUtJ82Q.jpg' },
-  { label: '/albumoftheday', value: 'albumoftheday', icon: 'https://i.imgur.com/RZQbasU.gif' },
-  { label: '/djs', value: 'djs', icon: 'https://i.imgur.com/EQ7kMoE.jpg' },
-  { label: '/soundxyz', value: 'soundxyz', icon: 'https://i.imgur.com/BbvrNR2.jpg' },
-  { label: '/bangers', value: 'bangers', icon: 'https://i.imgur.com/URBvewb.png' },
-];
+import { CHANNELS } from '@/lib/consts';
 
 export default function ChannelFilter() {
   const { filter: currentFilter, updateFilter } = useFeedProvider();
@@ -30,7 +18,7 @@ export default function ChannelFilter() {
     <div className="flex flex-col sm:gap-2">
       <h2 className="font-semibold sm:mb-2">Channels</h2>
       <div>
-        {channels.map((option) => {
+        {CHANNELS.map((option) => {
           const active = currentFilter.channel === option.value;
           return (
             <Button

@@ -27,7 +27,7 @@ export async function GET(req: NextRequest): Promise<Response> {
       filter_type: 'embed_url',
       embed_url: embedUrl,
       with_recasts: 'false',
-      limit: '22',
+      limit: '100',
     });
 
     const response = await fetch(

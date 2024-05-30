@@ -2,6 +2,7 @@ import { TrackMetadata } from '@/types/Track';
 import extractSoundArtistAndTrack from './sound/extractSoundArtistAndTrack';
 import getReleaseInfo from './sound/getReleaseInfo';
 import getSpotifyTrackId from './spotify/getSpotifyTrackId';
+import getYoutubeVideoData from './getYoutubeVideoData';
 
 export default async function fetchMetadata(url: string) {
   let metadata: TrackMetadata = {} as TrackMetadata;
@@ -49,6 +50,17 @@ export default async function fetchMetadata(url: string) {
       trackName: releaseInfo.title,
       artworkUrl: releaseInfo.coverImage.url,
       url: releaseInfo?.track?.audio?.audio128k?.url,
+    };
+  } else if (url.includes('youtube.com')) {
+    const videoId = url.split('v=')[1];
+    const youtubeData = await getYoutubeVideoData(videoId);
+    metadata = {
+      id: youtubeData.id,
+      type: 'youtube',
+      artistName: youtubeData.snippet.channelTitle,
+      trackName: youtubeData.snippet.title,
+      artworkUrl: youtubeData.snippet.thumbnails.default.url,
+      url: youtubeData.id,
     };
   }
   return metadata;
