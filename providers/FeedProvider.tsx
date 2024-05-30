@@ -10,12 +10,12 @@ import {
   useState,
 } from 'react';
 import { SupabasePost } from '@/types/SupabasePost';
-import { useSupabaseProvider } from './SupabaseProvider';
 import findValidEmbed from '@/lib/findValidEmbed';
 import fetchPosts from '@/lib/supabase/fetchPosts';
 import mergeArraysUniqueByPostHash from '@/lib/mergeArraysUniqueByPostHash';
 import { useNeynarProvider } from './NeynarProvider';
 import { fetchPostsLimit } from '@/lib/consts';
+import { supabaseClient } from '@/lib/supabase/client';
 
 type FeedProviderType = {
   filter: FeedFilter;
@@ -33,7 +33,6 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const [filter, setFilter] = useState<FeedFilter>({});
   const [feed, setFeed] = useState<SupabasePost[]>([]);
   const [feedType, setFeedType] = useState<string>();
-  const { supabaseClient } = useSupabaseProvider();
   const [hasMore, setHasMore] = useState(true);
   const { user, loading: userLoading } = useNeynarProvider();
   const fid = user?.fid;

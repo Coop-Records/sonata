@@ -1,17 +1,22 @@
+'use server';
 const getCastHash = async (url: string) => {
   const options = {
     method: 'GET',
-    headers: { accept: 'application/json' },
+    headers: { accept: 'application/json', api_key: process.env.NEYNAR_API_KEY },
   } as any;
 
   try {
     const queryParams = new URLSearchParams({
-      url,
+      identifier: url,
+      type: 'url',
     });
 
-    const response = await fetch(`/api/neynar/getCastHash?${queryParams}`, options);
+    const response = await fetch(
+      `https://api.neynar.com/v2/farcaster/cast?${queryParams}`,
+      options,
+    );
     const data = await response.json();
-    return data.hash;
+    return data.cast.hash;
   } catch (error) {
     console.error(error);
     return { error };
