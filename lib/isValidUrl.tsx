@@ -11,7 +11,7 @@ const isValidUrl = (url: string) => {
       valid = true;
     }
   } else if (url.includes('youtube.com')) {
-    if (url.match(/^https:\/\/www.youtube.com\/watch\?v=[a-zA-Z0-9]+(\?.*)?$/)) {
+    if (url.match(/^https:\/\/www.youtube.com\/watch\?v=(.+)$/)) {
       valid = true;
     }
   }

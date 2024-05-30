@@ -12,18 +12,18 @@ const SingleFeed = ({ username, hash }: { username: string; hash: string }) => {
   const [cast, setCast] = useState<SupabasePost | undefined>();
 
   useEffect(() => {
-    if (!isEmpty(supabaseClient)) getCast();
-  }, [supabaseClient]);
-
-  const getCast = async () => {
-    const fullHash = await getCastHash(`https://warpcast.com/${username}/${hash}`);
-    const { data } = await supabaseClient
-      .from('posts')
-      .select('*')
-      .eq('post_hash', fullHash)
-      .single();
-    setCast(data);
-  };
+    if (isEmpty(supabaseClient) || !hash || !username) return;
+    const getCast = async () => {
+      const fullHash = await getCastHash(`https://warpcast.com/${username}/${hash}`);
+      const { data } = await supabaseClient
+        .from('posts')
+        .select('*')
+        .eq('post_hash', fullHash)
+        .single();
+      setCast(data);
+    };
+    getCast();
+  }, [supabaseClient, hash, username]);
 
   return isNil(cast) ? <></> : <Cast cast={cast} />;
 };
