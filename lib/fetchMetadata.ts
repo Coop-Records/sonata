@@ -52,7 +52,11 @@ export default async function fetchMetadata(url: string) {
       url: releaseInfo?.track?.audio?.audio128k?.url,
     };
   } else if (url.includes('youtube.com')) {
-    const videoId = url.split('v=')[1];
+    const queryParams = new URLSearchParams(url.split('?')[1]);
+    const videoId = queryParams.get('v');
+    if (!videoId) {
+      throw new Error('Could not find video id in url');
+    }
     const youtubeData = await getYoutubeVideoData(videoId);
     metadata = {
       id: youtubeData.id,

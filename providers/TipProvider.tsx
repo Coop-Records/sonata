@@ -6,9 +6,9 @@ import { isEmpty, isNil } from 'lodash';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Address } from 'viem';
 import { useNeynarProvider } from './NeynarProvider';
-import { useSupabaseProvider } from './SupabaseProvider';
 import { useToast } from '@/components/ui/use-toast';
 import claimAirdrop from '@/lib/sonata/claimAirdrop';
+import { supabaseClient } from '@/lib/supabase/client';
 
 const TipContext = createContext<any>(null);
 
@@ -18,7 +18,6 @@ const TipProvider = ({ children }: any) => {
   const [balance, setBalance] = useState<bigint | undefined>(undefined);
   const [dailyTipAllowance, setDailyTipAllowance] = useState<bigint | undefined>(undefined);
   const { user, signer } = useNeynarProvider();
-  const { supabaseClient } = useSupabaseProvider();
 
   const [remainingTipAllocation, setRemainingTipAllocation] = useState<bigint | undefined>(
     undefined,
