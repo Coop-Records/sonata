@@ -1,3 +1,4 @@
+'use client';
 import UserDetails from '@/components/UserDetails';
 import findValidEmbed from '@/lib/findValidEmbed';
 import TipButton from '@/components/TipButton';
