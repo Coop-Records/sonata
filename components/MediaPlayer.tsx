@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { usePlayer } from '@/providers/PlayerProvider';
+import { usePlayer } from '@/providers/audio/PlayerProvider';
 import { TrackMetadata } from '@/types/Track';
 import Image from 'next/image';
 import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';

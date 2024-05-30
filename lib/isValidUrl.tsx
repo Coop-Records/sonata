@@ -10,6 +10,10 @@ const isValidUrl = (url: string) => {
     if (!url.match(/(\/post\/)|(\/playlist\/)/)) {
       valid = true;
     }
+  } else if (url.includes('youtube.com')) {
+    if (url.match(/^https:\/\/www.youtube.com\/watch\?v=[a-zA-Z0-9]+(\?.*)?$/)) {
+      valid = true;
+    }
   }
   return valid;
 };
