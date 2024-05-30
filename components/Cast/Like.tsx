@@ -1,6 +1,5 @@
 import createReaction from '@/lib/neynar/createReaction';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
-import { useTipProvider } from '@/providers/TipProvider';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import getCastLikes from '@/lib/neynar/getCastLikes';
@@ -15,7 +14,6 @@ export default function Like({ cast }: { cast: SupabasePost }) {
   const [upvoted, setUpvoted] = useState(false);
   const [votes, setVotes] = useState<number>(cast.likes || 0);
   const { checkLoggedIn } = useUi();
-  const { tip } = useTipProvider();
   const userFid = user?.fid;
   const castAuthorFid = cast.author?.fid;
   const isSelfPost = userFid === castAuthorFid;
@@ -46,11 +44,8 @@ export default function Like({ cast }: { cast: SupabasePost }) {
 
     if (response.success) {
       if (isSelfPost) return;
-      const data = await tip(10, cast.post_hash, cast.author.verifications);
-      if (!data) {
-        setUpvoted(false);
-        setVotes(currentVotes);
-      }
+      setUpvoted(false);
+      setVotes(currentVotes);
     }
   };
 
