@@ -1,6 +1,5 @@
 import createReaction from '@/lib/neynar/createReaction';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
-import { useTipProvider } from '@/providers/TipProvider';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import getCastLikes from '@/lib/neynar/getCastLikes';
