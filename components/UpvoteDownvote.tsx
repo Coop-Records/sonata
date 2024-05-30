@@ -86,7 +86,7 @@ export default function UpvoteDownvote({
 
   if (!(verifications && verifications.length > 0)) return <></>;
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row rounded-full bg-muted pl-1 pr-1">
       <Popover open={showUpvoteDropdown} onOpenChange={setShowUpvoteDropdown}>
         <PopoverTrigger asChild className={cn('rounded-full', className)}>
           <Button
