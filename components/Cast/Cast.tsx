@@ -49,7 +49,7 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
 
       <MediaPlayer metadata={metadata} />
       <div className="flex gap-2">
-        <UpvoteDownvote verifications={verifications} cast={cast} currency="NOTES" />
+        <UpvoteDownvote verifications={verifications} cast={cast} />
         <TipButton verifications={verifications} cast={cast} currency="DEGEN" className="ml-auto" />
         <Like cast={cast} />
         <Share cast={cast} />
