@@ -49,7 +49,7 @@ export default function UpvoteDownvote({
   const handleUpvoteTip = async (amount: number) => {
     setShowUpvoteDropdown(false);
     if (amount === 0) return;
-    let response = await tip(amount, cast.post_hash, cast.author.fid);
+    const response = await tip(amount, cast.post_hash, cast.author.fid);
     setTotal(response.totalTipOnPost ?? 0);
     setCustomTip('');
   };
@@ -57,7 +57,7 @@ export default function UpvoteDownvote({
   const handleDownvoteTip = async (amount: number) => {
     setShowDownvoteDropdown(false);
     if (amount === 0) return;
-    let response = await downvote(amount, cast.post_hash, cast.author.fid);
+    const response = await downvote(amount, cast.post_hash, cast.author.fid);
     setTotal(response.totalTipOnPost ?? 0);
     setCustomTip('');
   };
@@ -81,8 +81,6 @@ export default function UpvoteDownvote({
     if (isSelfPost) return;
     setShowDownvoteDropdown(!showDownvoteDropdown);
   };
-
-  let iconSize = 24;
 
   if (!(verifications && verifications.length > 0)) return <></>;
   return (
