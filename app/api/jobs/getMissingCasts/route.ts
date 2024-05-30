@@ -1,4 +1,6 @@
+import { CHANNELS } from '@/lib/consts';
 import createPostReply from '@/lib/neynar/createPostReply';
+import getChannelIdFromCast from '@/lib/neynar/getChannelIdFromCast';
 import getFeedFromTime from '@/lib/neynar/getFeedFromTime';
 import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { createClient } from '@supabase/supabase-js';
@@ -45,15 +47,25 @@ const getResponse = async (): Promise<NextResponse> => {
 
   const formattedLastChecked = new Date(`${lastChecked}`);
 
-  const [spotify, soundCloud, soundxyz] = await Promise.all([
+  const [spotify, soundCloud, soundxyz, youtube] = await Promise.all([
     getFeedFromTime('spotify.com/track', formattedLastChecked),
     getFeedFromTime('soundcloud.com', formattedLastChecked),
     getFeedFromTime('sound.xyz', formattedLastChecked),
+    getFeedFromTime('youtube.com/watch', formattedLastChecked),
   ]);
   const allEntries: any[] = [];
   allEntries.push(...spotify, ...soundCloud, ...soundxyz);
 
+  const youtubeFiltered = youtube.filter((entry) => {
+    const channelId = getChannelIdFromCast(entry);
+    return channelId && CHANNELS.find((channel) => channel.value === channelId);
+  });
+
+  console.log('jobs::getNewCasts', 'ytEntries', youtubeFiltered);
+  allEntries.push(...youtubeFiltered);
+
   console.log('jobs::getMissingCasts', `${allEntries.length} new entries`);
+
   if (allEntries.length > 0) {
     await processEntriesInBatches(allEntries);
   }
