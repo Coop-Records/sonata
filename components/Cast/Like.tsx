@@ -46,11 +46,8 @@ export default function Like({ cast }: { cast: SupabasePost }) {
 
     if (response.success) {
       if (isSelfPost) return;
-      const data = await tip(10, cast.post_hash, cast.author.verifications);
-      if (!data) {
-        setUpvoted(false);
-        setVotes(currentVotes);
-      }
+      setUpvoted(false);
+      setVotes(currentVotes);
     }
   };
 

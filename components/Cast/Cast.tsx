@@ -11,6 +11,7 @@ import Like from './Like';
 import Share from './Share';
 import { Separator } from '@/components/ui/separator';
 import { timeFromNow } from '@/lib/utils';
+import UpvoteDownvote from '../UpvoteDownvote';
 
 const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
   const embed = findValidEmbed(cast);
@@ -48,7 +49,7 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
 
       <MediaPlayer metadata={metadata} />
       <div className="flex gap-2">
-        <TipButton verifications={verifications} cast={cast} currency="NOTES" />
+        <UpvoteDownvote verifications={verifications} cast={cast} currency="NOTES" />
         <TipButton verifications={verifications} cast={cast} currency="DEGEN" className="ml-auto" />
         <Like cast={cast} />
         <Share cast={cast} />
