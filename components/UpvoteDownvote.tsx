@@ -5,7 +5,7 @@ import { useTipProvider } from '@/providers/TipProvider';
 import { SupabasePost } from '@/types/SupabasePost';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { Popover, PopoverContent } from '@/components/ui/popover';
-import { cn, isValidNumber } from '@/lib/utils';
+import { cn, formatBigInt, isValidNumber } from '@/lib/utils';
 import { PopoverTrigger } from '@radix-ui/react-popover';
 import { useUi } from '@/providers/UiProvider';
 import { Badge } from './ui/badge';
@@ -95,7 +95,7 @@ export default function UpvoteDownvote({
             )}
             onClick={handleUpvoteClick}
           >
-            <span>{total}</span>
+            <span>{formatBigInt(BigInt(total))}</span>
             <Image src={logos.NOTES} width={16} height={16} alt="" />
             <ArrowBigUp className="hover:fill-black" />
           </Button>
