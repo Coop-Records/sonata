@@ -33,6 +33,7 @@ export const CHANNELS = [
   { label: '/djs', value: 'djs', icon: 'https://i.imgur.com/EQ7kMoE.jpg' },
   { label: '/soundxyz', value: 'soundxyz', icon: 'https://i.imgur.com/BbvrNR2.jpg' },
   { label: '/bangers', value: 'bangers', icon: 'https://i.imgur.com/URBvewb.png' },
+  { label: '/rock', value: 'rock', icon: 'https://i.imgur.com/Ffj1Opg.png' },
 ];
 
 export const fetchPostsLimit = 20;
