@@ -16,7 +16,6 @@ export default function Like({ cast }: { cast: SupabasePost }) {
   const { checkLoggedIn } = useUi();
   const userFid = user?.fid;
   const castAuthorFid = cast.author?.fid;
-  const isSelfPost = userFid === castAuthorFid;
 
   useEffect(() => {
     const updateReaction = async () => {

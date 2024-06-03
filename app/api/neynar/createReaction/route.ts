@@ -47,7 +47,7 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
     );
     const castData = await castResponse.json();
 
-    var likes_count = castData.cast.reactions.likes.length;
+    let likes_count = castData.cast.reactions.likes.length;
     const isFidIncluded = castData.cast.reactions.likes.some((item: Item) => item.fid === fid);
 
     if (!isFidIncluded) {
