@@ -1,6 +1,6 @@
 # A string used to distinguish different Supabase projects on the same host. Defaults to the
 # working directory name when running `supabase init`.
-project_id = "sonata-1"
+project_id = "sonata"
 
 [api]
 enabled = true
