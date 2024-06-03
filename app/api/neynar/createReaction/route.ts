@@ -51,11 +51,10 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
     const isFidIncluded = castData.cast.reactions.likes.some((item: Item) => item.fid === fid);
 
     if (!isFidIncluded) {
-      const response = await fetch(`https://api.neynar.com/v2/farcaster/reaction?`, options);
-      const data = await response.json();
+      await fetch(`https://api.neynar.com/v2/farcaster/reaction?`, options);
 
       likes_count++;
-      const { error } = await supabase.from('posts').upsert(
+      await supabase.from('posts').upsert(
         {
           post_hash: target,
           likes: likes_count,
