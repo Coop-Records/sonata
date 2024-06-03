@@ -32,7 +32,6 @@ export default function Like({ cast }: { cast: SupabasePost }) {
 
   const handleClick = async () => {
     if (!checkLoggedIn()) return;
-    const currentVotes = votes;
     setUpvoted(true);
 
     const { signer_uuid } = signer as Signer;
