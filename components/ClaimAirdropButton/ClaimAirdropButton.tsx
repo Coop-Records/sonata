@@ -19,11 +19,11 @@ export default function ClaimAirdropButton() {
     <div>
       <Button
         type="button"
-        className="flex items-center space-x-2 rounded-full py-6 px-6"
+        className="flex items-center space-x-2 rounded-full p-6"
         onClick={handleClick}
       >
         <img width={24} height={24} className="fill-white" src="images/notes.png" />
-        <span className="text-[14px] line-height-[16.8px]">Claim Airdrop</span>
+        <span className="line-height-[16.8px] text-[14px]">Claim Airdrop</span>
       </Button>
 
       <ClaimAirdropDialog
