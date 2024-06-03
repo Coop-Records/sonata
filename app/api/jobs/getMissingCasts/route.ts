@@ -39,7 +39,7 @@ const getResponse = async (): Promise<NextResponse> => {
   'use server';
 
   const dateFourHoursAgo = new Date();
-  dateFourHoursAgo.setHours(dateFourHoursAgo.getHours() - 4);
+  dateFourHoursAgo.setHours(dateFourHoursAgo.getHours() - 6);
 
   const lastChecked = dateFourHoursAgo;
 

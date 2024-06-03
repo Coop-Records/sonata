@@ -10,13 +10,10 @@ import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
 
 export default function Like({ cast }: { cast: SupabasePost }) {
-  const { signer, user } = useNeynarProvider();
+  const { signer } = useNeynarProvider();
   const [upvoted, setUpvoted] = useState(false);
   const [votes, setVotes] = useState<number>(cast.likes || 0);
   const { checkLoggedIn } = useUi();
-  const userFid = user?.fid;
-  const castAuthorFid = cast.author?.fid;
-  const isSelfPost = userFid === castAuthorFid;
 
   useEffect(() => {
     const updateReaction = async () => {
@@ -35,17 +32,13 @@ export default function Like({ cast }: { cast: SupabasePost }) {
 
   const handleClick = async () => {
     if (!checkLoggedIn()) return;
-    const currentVotes = votes;
     setUpvoted(true);
-    setVotes(votes + 1);
 
     const { signer_uuid } = signer as Signer;
     const response = await createReaction(signer_uuid, cast.post_hash);
 
     if (response.success) {
-      if (isSelfPost) return;
-      setUpvoted(false);
-      setVotes(currentVotes);
+      setVotes(response.likes);
     }
   };
 
