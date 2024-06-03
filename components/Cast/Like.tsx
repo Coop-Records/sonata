@@ -10,12 +10,10 @@ import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
 
 export default function Like({ cast }: { cast: SupabasePost }) {
-  const { signer, user } = useNeynarProvider();
+  const { signer } = useNeynarProvider();
   const [upvoted, setUpvoted] = useState(false);
   const [votes, setVotes] = useState<number>(cast.likes || 0);
   const { checkLoggedIn } = useUi();
-  const userFid = user?.fid;
-  const castAuthorFid = cast.author?.fid;
 
   useEffect(() => {
     const updateReaction = async () => {
