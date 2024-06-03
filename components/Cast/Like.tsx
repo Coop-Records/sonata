@@ -37,15 +37,12 @@ export default function Like({ cast }: { cast: SupabasePost }) {
     if (!checkLoggedIn()) return;
     const currentVotes = votes;
     setUpvoted(true);
-    setVotes(votes + 1);
 
     const { signer_uuid } = signer as Signer;
     const response = await createReaction(signer_uuid, cast.post_hash);
 
     if (response.success) {
-      if (isSelfPost) return;
-      setUpvoted(false);
-      setVotes(currentVotes);
+      setVotes(response.likes);
     }
   };
 
