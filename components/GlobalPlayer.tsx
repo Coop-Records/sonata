@@ -14,7 +14,14 @@ export default function GlobalPlayer() {
   const { feed } = useFeedProvider();
   const { metadata } = player;
 
+  useEffect(() => {
+    if (player.position !== 0 && player.position > player.duration - 1000) {
+      handleNext();
+    }
+  }, [player.position]);
+
   if (!metadata) return <></>;
+
   const handlePlay = () => {
     dispatch({ type: 'RESUME', payload: { id: metadata.id } });
   };
@@ -23,14 +30,8 @@ export default function GlobalPlayer() {
     dispatch({ type: 'PAUSE', payload: { id: metadata.id } });
   };
 
-  useEffect(() => {
-    if (player.position > 0 && player.position > player.duration - 1000) {
-      handleNext();
-    }
-  }, [player]);
-
   const handleNext = async () => {
-    if (player.currentPlayingIndex + 1 < feed.length) {
+    if (player.currentPlayingIndex && player.currentPlayingIndex + 1 < feed.length) {
       const embed = findValidEmbed(feed[player.currentPlayingIndex + 1]);
       const url = embed?.url;
       if (url) {
@@ -44,7 +45,7 @@ export default function GlobalPlayer() {
   };
 
   const handlePrev = async () => {
-    if (player.currentPlayingIndex > 0) {
+    if (player.currentPlayingIndex && player.currentPlayingIndex > 0) {
       const embed = findValidEmbed(feed[player.currentPlayingIndex - 1]);
       const url = embed?.url;
       if (url) {
