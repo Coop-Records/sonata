@@ -13,7 +13,13 @@ import { Separator } from '@/components/ui/separator';
 import { timeFromNow } from '@/lib/utils';
 import UpvoteDownvote from '../UpvoteDownvote';
 
-const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
+const Cast = ({
+  cast = {} as SupabasePost,
+  currentPlayingIndex,
+}: {
+  cast: SupabasePost;
+  currentPlayingIndex: number;
+}) => {
   const embed = findValidEmbed(cast);
   const url = embed?.url;
 
@@ -47,7 +53,7 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
         </span>
       </div>
 
-      <MediaPlayer metadata={metadata} />
+      <MediaPlayer metadata={metadata} currentPlayingIndex={currentPlayingIndex} />
       <div className="flex gap-2">
         <UpvoteDownvote verifications={verifications} cast={cast} />
         <TipButton verifications={verifications} cast={cast} currency="DEGEN" className="ml-auto" />
