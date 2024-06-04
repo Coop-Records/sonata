@@ -31,7 +31,7 @@ export default function GlobalPlayer() {
   };
 
   const handleNext = async () => {
-    if (player.currentPlayingIndex && player.currentPlayingIndex + 1 < feed.length) {
+    if (player.currentPlayingIndex + 1 < feed.length) {
       const embed = findValidEmbed(feed[player.currentPlayingIndex + 1]);
       const url = embed?.url;
       if (url) {
