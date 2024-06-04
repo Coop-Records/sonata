@@ -18,7 +18,7 @@ const Cast = ({
   currentPlayingIndex,
 }: {
   cast: SupabasePost;
-  currentPlayingIndex: number;
+  currentPlayingIndex?: number;
 }) => {
   const embed = findValidEmbed(cast);
   const url = embed?.url;

@@ -20,7 +20,7 @@ type Player = {
   metadata?: TrackMetadata;
   loading: boolean;
   seekTo: number | null;
-  currentPlayingIndex: number;
+  currentPlayingIndex?: number;
 };
 
 export type PlayerAction =
@@ -28,7 +28,7 @@ export type PlayerAction =
       type: 'PLAY';
       payload: {
         metadata: TrackMetadata;
-        currentPlayingIndex: number;
+        currentPlayingIndex?: number;
       };
     }
   | {

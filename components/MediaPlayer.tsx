@@ -9,7 +9,7 @@ import Scrubber from '@/components/Scrubber';
 
 type MediaPlayerProps = {
   metadata?: TrackMetadata;
-  currentPlayingIndex: number;
+  currentPlayingIndex?: number;
 };
 
 export default function MediaPlayer({ metadata, currentPlayingIndex }: MediaPlayerProps) {
