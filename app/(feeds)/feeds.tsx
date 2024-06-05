@@ -7,7 +7,6 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 const Feeds = () => {
   const { feed, fetchMore, hasMore } = useFeedProvider();
-
   return (
     <InfiniteScroll
       dataLength={feed.length}
