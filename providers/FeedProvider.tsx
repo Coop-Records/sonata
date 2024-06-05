@@ -27,8 +27,8 @@ type FeedProviderType = {
   setFeedType: (feedType: string) => void;
   fetchMore: (start: number) => void;
   hasMore: boolean;
-  handleNext: () => {};
-  handlePrev: () => {};
+  handleNext: () => void;
+  handlePrev: () => void;
 };
 
 const FeedContext = createContext<FeedProviderType>({} as any);
@@ -97,11 +97,11 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const handleNext = async () => {
-    let feedIndex = feed.findIndex((feedObj: SupabasePost) => feedObj.id === player.feedId);
+    const feedIndex = feed.findIndex((feedObj: SupabasePost) => feedObj.id === player.feedId);
     if (feedIndex > -1) {
       if (feedIndex + 1 < feed.length) {
         const embed = findValidEmbed(feed[feedIndex + 1]);
-        let feedObj = feed[feedIndex + 1];
+        const feedObj = feed[feedIndex + 1];
         const url = embed?.url;
         if (url) {
           const metadata = await fetchMetadata(url, feedObj);
@@ -116,11 +116,11 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const handlePrev = async () => {
-    let feedIndex = feed.findIndex((feedObj: SupabasePost) => feedObj.id === player.feedId);
+    const feedIndex = feed.findIndex((feedObj: SupabasePost) => feedObj.id === player.feedId);
     if (feedIndex > -1) {
       if (feedIndex && feedIndex > 0) {
         const embed = findValidEmbed(feed[feedIndex - 1]);
-        let feedObj = feed[feedIndex - 1];
+        const feedObj = feed[feedIndex - 1];
         const url = embed?.url;
         if (url) {
           const metadata = await fetchMetadata(url, feedObj);
