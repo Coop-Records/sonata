@@ -10,7 +10,7 @@ type PlayerButtonProps = {
   metadata?: TrackMetadata;
 };
 
-export default function PlayerButtons({ metadata }: PlayerButtonProps) {
+const PlayerButtons = ({ metadata }: PlayerButtonProps) => {
   const [player, dispatch] = usePlayer();
   const { handleNext, handlePrev } = useFeedProvider();
 
@@ -54,4 +54,6 @@ export default function PlayerButtons({ metadata }: PlayerButtonProps) {
       </Button>
     </div>
   );
-}
+};
+
+export default PlayerButtons;

@@ -2,7 +2,7 @@
 import { usePlayer } from '@/providers/audio/PlayerProvider';
 import Image from 'next/image';
 import Scrubber from '@/components/Scrubber';
-import PlayerButtons from './PlayerButtons/PlayerButtons';
+import PlayerButtons from './PlayerButtons';
 
 export default function GlobalPlayer() {
   const [player] = usePlayer();
