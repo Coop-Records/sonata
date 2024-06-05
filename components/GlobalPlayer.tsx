@@ -34,7 +34,7 @@ export default function GlobalPlayer() {
         </div>
 
         <div className="ml-6 flex max-w-2xl grow flex-col items-center gap-1">
-          <PlayerButtons metadata={metadata} />
+          {metadata && <PlayerButtons metadata={metadata} />}
           <Scrubber className="w-full max-md:hidden" />
         </div>
       </div>

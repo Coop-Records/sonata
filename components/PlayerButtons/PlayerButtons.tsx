@@ -20,14 +20,16 @@ export default function PlayerButtons({ metadata }: PlayerButtonProps) {
     }
   }, [player.position]);
 
-  if (!metadata) return <></>;
-
   const handlePlay = () => {
-    dispatch({ type: 'RESUME', payload: { id: metadata.id } });
+    {
+      metadata && dispatch({ type: 'RESUME', payload: { id: metadata.id } });
+    }
   };
 
   const handlePause = () => {
-    dispatch({ type: 'PAUSE', payload: { id: metadata.id } });
+    {
+      metadata && dispatch({ type: 'PAUSE', payload: { id: metadata.id } });
+    }
   };
 
   return (
