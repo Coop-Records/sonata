@@ -33,7 +33,7 @@ export default async function CastHome({ params }: { params: { username: string;
   return (
     <main className="container flex grow items-center justify-center">
       <meta property="of:accepts:xmtp" content="2024-02-01" />
-      <Cast cast={cast} currentPlayingIndex={-1} />
+      <Cast cast={cast} />
     </main>
   );
 }
