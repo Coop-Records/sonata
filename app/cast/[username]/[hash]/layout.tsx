@@ -4,7 +4,6 @@ import { ReactNode } from 'react';
 import Sidebar from '@/components/Sidebar';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { useUi } from '@/providers/UiProvider';
-import Header from '@/components/Header';
 import { Separator } from '@/components/ui/separator';
 import GlobalPlayer from '@/components/GlobalPlayer';
 import CreatePost from '@/components/CreatePost';
