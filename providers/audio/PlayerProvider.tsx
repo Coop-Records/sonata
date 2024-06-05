@@ -20,6 +20,7 @@ type Player = {
   metadata?: TrackMetadata;
   loading: boolean;
   seekTo: number | null;
+  feedId: number;
 };
 
 export type PlayerAction =
@@ -27,6 +28,7 @@ export type PlayerAction =
       type: 'PLAY';
       payload: {
         metadata: TrackMetadata;
+        feedId: number;
       };
     }
   | {
@@ -72,6 +74,7 @@ const initialState: Player = {
   duration: 0,
   loading: false,
   seekTo: null,
+  feedId: -1,
 };
 
 const PlayerContext = createContext<[Player, Dispatch<PlayerAction>]>([initialState, () => {}]);
@@ -80,7 +83,15 @@ const playerReducer = (state: Player, action: PlayerAction) => {
   switch (action.type) {
     case 'PLAY': {
       const metadata = action?.payload?.metadata;
-      return { ...state, playing: true, metadata, position: 0, loading: true };
+      const id = action?.payload?.metadata.feedId;
+      return {
+        ...state,
+        playing: true,
+        metadata,
+        position: 0,
+        loading: true,
+        feedId: id,
+      };
     }
     case 'RESUME': {
       const { id } = action.payload;

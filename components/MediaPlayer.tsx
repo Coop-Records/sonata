@@ -23,7 +23,7 @@ export default function MediaPlayer({ metadata }: MediaPlayerProps) {
     }
     dispatch({
       type: 'PLAY',
-      payload: { metadata },
+      payload: { metadata, feedId: metadata.feedId },
     });
   };
 

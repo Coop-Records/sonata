@@ -1,23 +1,14 @@
 'use client';
 import { usePlayer } from '@/providers/audio/PlayerProvider';
 import Image from 'next/image';
-import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';
-import { Button } from '@/components/ui/button';
 import Scrubber from '@/components/Scrubber';
+import PlayerButtons from './PlayerButtons';
 
 export default function GlobalPlayer() {
-  const [player, dispatch] = usePlayer();
+  const [player] = usePlayer();
   const { metadata } = player;
 
   if (!metadata) return <></>;
-
-  const handlePlay = () => {
-    dispatch({ type: 'RESUME', payload: { id: metadata.id } });
-  };
-
-  const handlePause = () => {
-    dispatch({ type: 'PAUSE', payload: { id: metadata.id } });
-  };
 
   return (
     <div
@@ -43,17 +34,7 @@ export default function GlobalPlayer() {
         </div>
 
         <div className="ml-6 flex max-w-2xl grow flex-col items-center gap-1">
-          <Button
-            onClick={player.playing ? handlePause : handlePlay}
-            variant="ghost"
-            className="rounded-full p-0"
-          >
-            {player.playing ? (
-              <MdPauseCircle className="text-4xl" />
-            ) : (
-              <MdPlayCircle className="text-4xl" />
-            )}
-          </Button>
+          {metadata && <PlayerButtons metadata={metadata} />}
           <Scrubber className="w-full max-md:hidden" />
         </div>
       </div>
