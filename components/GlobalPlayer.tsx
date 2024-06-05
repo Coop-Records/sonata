@@ -1,32 +1,14 @@
 'use client';
 import { usePlayer } from '@/providers/audio/PlayerProvider';
 import Image from 'next/image';
-import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';
-import { Button } from '@/components/ui/button';
 import Scrubber from '@/components/Scrubber';
-import { useFeedProvider } from '@/providers/FeedProvider';
-import { useEffect } from 'react';
+import PlayerButtons from './PlayerButtons/PlayerButtons';
 
 export default function GlobalPlayer() {
-  const [player, dispatch] = usePlayer();
-  const { handleNext, handlePrev } = useFeedProvider();
+  const [player] = usePlayer();
   const { metadata } = player;
 
-  useEffect(() => {
-    if (player.position !== 0 && player.position > player.duration - 1000) {
-      handleNext();
-    }
-  }, [player.position]);
-
   if (!metadata) return <></>;
-
-  const handlePlay = () => {
-    dispatch({ type: 'RESUME', payload: { id: metadata.id } });
-  };
-
-  const handlePause = () => {
-    dispatch({ type: 'PAUSE', payload: { id: metadata.id } });
-  };
 
   return (
     <div
@@ -52,26 +34,7 @@ export default function GlobalPlayer() {
         </div>
 
         <div className="ml-6 flex max-w-2xl grow flex-col items-center gap-1">
-          <div className="flex items-center">
-            <Button onClick={handlePrev} className="bg-white">
-              <Image src="/images/skip-back.png" width={22} height={22} alt="" />
-            </Button>
-
-            <Button
-              onClick={player.playing ? handlePause : handlePlay}
-              variant="ghost"
-              className="rounded-full p-0"
-            >
-              {player.playing ? (
-                <MdPauseCircle className="text-4xl" />
-              ) : (
-                <MdPlayCircle className="text-4xl" />
-              )}
-            </Button>
-            <Button onClick={handleNext} className="bg-white">
-              <Image src="/images/skip-forward.png" width={22} height={22} alt="" />
-            </Button>
-          </div>
+          <PlayerButtons metadata={metadata} />
           <Scrubber className="w-full max-md:hidden" />
         </div>
       </div>

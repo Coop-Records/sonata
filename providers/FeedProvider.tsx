@@ -18,6 +18,7 @@ import { fetchPostsLimit } from '@/lib/consts';
 import { supabaseClient } from '@/lib/supabase/client';
 import fetchMetadata from '@/lib/fetchMetadata';
 import { usePlayer } from '@/providers/audio/PlayerProvider';
+import getChannelIdFromCast from '@/lib/neynar/getChannelIdFromCast';
 
 type FeedProviderType = {
   filter: FeedFilter;
@@ -38,6 +39,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const [feed, setFeed] = useState<SupabasePost[]>([]);
   const [feedType, setFeedType] = useState<string>();
   const [hasMore, setHasMore] = useState(true);
+  const [isChannelChanged, setIsChannelChanged] = useState(false);
   const { user, loading: userLoading } = useNeynarProvider();
   const [player, dispatch] = usePlayer();
   const fid = user?.fid;
@@ -52,6 +54,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   }, [userLoading, user]);
 
   const updateFilter = (change: FeedFilter) => {
+    setIsChannelChanged(true);
     setFilter((prev) => ({ ...prev, ...change }));
   };
 
@@ -96,21 +99,30 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     [feed, filter],
   );
 
+  const playFeedId = async (feedIndex: number) => {
+    const embed = findValidEmbed(feed[feedIndex]);
+    const feedObj = feed[feedIndex];
+    const url = embed?.url;
+    if (url) {
+      const metadata = await fetchMetadata(url, feedObj);
+      if (metadata)
+        dispatch({
+          type: 'PLAY',
+          payload: { metadata, feedId: feedObj.id },
+        });
+    }
+  };
+
   const handleNext = async () => {
+    if (isChannelChanged) {
+      playFeedId(0);
+      setIsChannelChanged(false);
+    }
+
     const feedIndex = feed.findIndex((feedObj: SupabasePost) => feedObj.id === player.feedId);
     if (feedIndex > -1) {
       if (feedIndex + 1 < feed.length) {
-        const embed = findValidEmbed(feed[feedIndex + 1]);
-        const feedObj = feed[feedIndex + 1];
-        const url = embed?.url;
-        if (url) {
-          const metadata = await fetchMetadata(url, feedObj);
-          if (metadata)
-            dispatch({
-              type: 'PLAY',
-              payload: { metadata, feedId: feedObj.id },
-            });
-        }
+        playFeedId(feedIndex + 1);
       }
     }
   };
@@ -119,16 +131,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     const feedIndex = feed.findIndex((feedObj: SupabasePost) => feedObj.id === player.feedId);
     if (feedIndex > -1) {
       if (feedIndex && feedIndex > 0) {
-        const embed = findValidEmbed(feed[feedIndex - 1]);
-        const feedObj = feed[feedIndex - 1];
-        const url = embed?.url;
-        if (url) {
-          const metadata = await fetchMetadata(url, feedObj);
-          dispatch({
-            type: 'PLAY',
-            payload: { metadata, feedId: feedObj.id },
-          });
-        }
+        playFeedId(feedIndex - 1);
       }
     }
   };
