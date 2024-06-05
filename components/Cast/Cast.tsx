@@ -13,13 +13,7 @@ import { Separator } from '@/components/ui/separator';
 import { timeFromNow } from '@/lib/utils';
 import UpvoteDownvote from '../UpvoteDownvote';
 
-const Cast = ({
-  cast = {} as SupabasePost,
-  currentPlayingIndex,
-}: {
-  cast: SupabasePost;
-  currentPlayingIndex: number;
-}) => {
+const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
   const embed = findValidEmbed(cast);
   const url = embed?.url;
 
@@ -32,7 +26,7 @@ const Cast = ({
     const init = async () => {
       if (url) {
         try {
-          const metadata = await fetchMetadata(url);
+          const metadata = await fetchMetadata(url, cast);
           setMetadata(metadata);
         } catch (error) {
           console.error(error);
@@ -53,7 +47,7 @@ const Cast = ({
         </span>
       </div>
 
-      <MediaPlayer metadata={metadata} currentPlayingIndex={currentPlayingIndex} />
+      <MediaPlayer metadata={metadata} />
       <div className="flex gap-2">
         <UpvoteDownvote verifications={verifications} cast={cast} />
         <TipButton verifications={verifications} cast={cast} currency="DEGEN" className="ml-auto" />

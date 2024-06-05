@@ -16,6 +16,8 @@ import mergeArraysUniqueByPostHash from '@/lib/mergeArraysUniqueByPostHash';
 import { useNeynarProvider } from './NeynarProvider';
 import { fetchPostsLimit } from '@/lib/consts';
 import { supabaseClient } from '@/lib/supabase/client';
+import fetchMetadata from '@/lib/fetchMetadata';
+import { usePlayer } from '@/providers/audio/PlayerProvider';
 
 type FeedProviderType = {
   filter: FeedFilter;
@@ -25,6 +27,8 @@ type FeedProviderType = {
   setFeedType: (feedType: string) => void;
   fetchMore: (start: number) => void;
   hasMore: boolean;
+  handleNext: () => void;
+  handlePrev: () => void;
 };
 
 const FeedContext = createContext<FeedProviderType>({} as any);
@@ -35,6 +39,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const [feedType, setFeedType] = useState<string>();
   const [hasMore, setHasMore] = useState(true);
   const { user, loading: userLoading } = useNeynarProvider();
+  const [player, dispatch] = usePlayer();
   const fid = user?.fid;
 
   useEffect(() => {
@@ -91,6 +96,43 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     [feed, filter],
   );
 
+  const playFeedId = async (feedIndex: number) => {
+    const embed = findValidEmbed(feed[feedIndex]);
+    const feedObj = feed[feedIndex];
+    const url = embed?.url;
+    if (url) {
+      const metadata = await fetchMetadata(url, feedObj);
+      if (metadata)
+        dispatch({
+          type: 'PLAY',
+          payload: { metadata, feedId: feedObj.id },
+        });
+    }
+  };
+
+  const handleNext = async () => {
+    const feedIndex = feed.findIndex((feedObj: SupabasePost) => feedObj.id === player.feedId);
+
+    if (feedIndex > -1) {
+      if (feedIndex + 1 < feed.length) {
+        playFeedId(feedIndex + 1);
+      }
+      return;
+    }
+    playFeedId(0);
+  };
+
+  const handlePrev = async () => {
+    const feedIndex = feed.findIndex((feedObj: SupabasePost) => feedObj.id === player.feedId);
+    if (feedIndex > -1) {
+      if (feedIndex && feedIndex > 0) {
+        playFeedId(feedIndex - 1);
+      }
+      return;
+    }
+    playFeedId(0);
+  };
+
   const value = {
     filter,
     updateFilter,
@@ -99,6 +141,8 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     setFeedType,
     fetchMore,
     hasMore,
+    handleNext,
+    handlePrev,
   };
 
   return <FeedContext.Provider value={value}>{children}</FeedContext.Provider>;
