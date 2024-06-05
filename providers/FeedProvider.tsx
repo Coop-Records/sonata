@@ -118,7 +118,8 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
         playFeedId(feedIndex + 1);
       }
       return;
-    } else playFeedId(0);
+    }
+    playFeedId(0);
   };
 
   const handlePrev = async () => {
@@ -128,7 +129,8 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
         playFeedId(feedIndex - 1);
       }
       return;
-    } else playFeedId(0);
+    }
+    playFeedId(0);
   };
 
   const value = {
