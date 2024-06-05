@@ -26,16 +26,17 @@ export default function GlobalPlayer() {
           />
         </div>
 
-        <div className="space-y-0.5 self-center">
+        <div className=" max-w-[33%] space-y-0.5 self-center">
           <div className="line-clamp-2 text-sm font-bold">{metadata.trackName}</div>
           <div className="line-clamp-2 text-xs font-extralight text-muted-foreground">
             {metadata.artistName}
           </div>
         </div>
-
-        <div className="ml-6 flex max-w-2xl grow flex-col items-center gap-1">
-          {metadata && <PlayerButtons metadata={metadata} />}
-          <Scrubber className="w-full max-md:hidden" />
+        <div className="absolute left-1/4 w-full">
+          <div className="ml-6 flex max-w-2xl grow flex-col items-center gap-1">
+            {metadata && <PlayerButtons metadata={metadata} />}
+            <Scrubber className="w-full max-md:hidden" />
+          </div>
         </div>
       </div>
 
