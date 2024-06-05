@@ -16,6 +16,8 @@ import mergeArraysUniqueByPostHash from '@/lib/mergeArraysUniqueByPostHash';
 import { useNeynarProvider } from './NeynarProvider';
 import { fetchPostsLimit } from '@/lib/consts';
 import { supabaseClient } from '@/lib/supabase/client';
+import fetchMetadata from '@/lib/fetchMetadata';
+import { usePlayer } from '@/providers/audio/PlayerProvider';
 
 type FeedProviderType = {
   filter: FeedFilter;
@@ -25,6 +27,8 @@ type FeedProviderType = {
   setFeedType: (feedType: string) => void;
   fetchMore: (start: number) => void;
   hasMore: boolean;
+  handleNext: () => {};
+  handlePrev: () => {};
 };
 
 const FeedContext = createContext<FeedProviderType>({} as any);
@@ -35,6 +39,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const [feedType, setFeedType] = useState<string>();
   const [hasMore, setHasMore] = useState(true);
   const { user, loading: userLoading } = useNeynarProvider();
+  const [player, dispatch] = usePlayer();
   const fid = user?.fid;
 
   useEffect(() => {
@@ -91,6 +96,43 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     [feed, filter],
   );
 
+  const handleNext = async () => {
+    let feedIndex = feed.findIndex((feedObj: SupabasePost) => feedObj.id === player.feedId);
+    if (feedIndex > -1) {
+      if (feedIndex + 1 < feed.length) {
+        const embed = findValidEmbed(feed[feedIndex + 1]);
+        let feedObj = feed[feedIndex + 1];
+        const url = embed?.url;
+        if (url) {
+          const metadata = await fetchMetadata(url, feedObj);
+          if (metadata)
+            dispatch({
+              type: 'PLAY',
+              payload: { metadata, feedId: feedObj.id },
+            });
+        }
+      }
+    }
+  };
+
+  const handlePrev = async () => {
+    let feedIndex = feed.findIndex((feedObj: SupabasePost) => feedObj.id === player.feedId);
+    if (feedIndex > -1) {
+      if (feedIndex && feedIndex > 0) {
+        const embed = findValidEmbed(feed[feedIndex - 1]);
+        let feedObj = feed[feedIndex - 1];
+        const url = embed?.url;
+        if (url) {
+          const metadata = await fetchMetadata(url, feedObj);
+          dispatch({
+            type: 'PLAY',
+            payload: { metadata, feedId: feedObj.id },
+          });
+        }
+      }
+    }
+  };
+
   const value = {
     filter,
     updateFilter,
@@ -99,6 +141,8 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     setFeedType,
     fetchMore,
     hasMore,
+    handleNext,
+    handlePrev,
   };
 
   return <FeedContext.Provider value={value}>{children}</FeedContext.Provider>;

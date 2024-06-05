@@ -11,4 +11,5 @@ export type SupabasePost = {
   degen?: number;
   parent_url?: string;
   channelId?: string;
+  id:number
 };

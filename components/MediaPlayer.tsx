@@ -9,10 +9,9 @@ import Scrubber from '@/components/Scrubber';
 
 type MediaPlayerProps = {
   metadata?: TrackMetadata;
-  currentPlayingIndex: number;
 };
 
-export default function MediaPlayer({ metadata, currentPlayingIndex }: MediaPlayerProps) {
+export default function MediaPlayer({ metadata }: MediaPlayerProps) {
   const [player, dispatch] = usePlayer();
   const currentTrack = player?.metadata?.id === metadata?.id;
 
@@ -24,7 +23,7 @@ export default function MediaPlayer({ metadata, currentPlayingIndex }: MediaPlay
     }
     dispatch({
       type: 'PLAY',
-      payload: { metadata, currentPlayingIndex: currentPlayingIndex },
+      payload: { metadata, feedId: metadata.feedId },
     });
   };
 

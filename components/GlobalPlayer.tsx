@@ -5,13 +5,11 @@ import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';
 import { Button } from '@/components/ui/button';
 import Scrubber from '@/components/Scrubber';
 import { useFeedProvider } from '@/providers/FeedProvider';
-import fetchMetadata from '@/lib/fetchMetadata';
-import findValidEmbed from '@/lib/findValidEmbed';
 import { useEffect } from 'react';
 
 export default function GlobalPlayer() {
   const [player, dispatch] = usePlayer();
-  const { feed } = useFeedProvider();
+  const { handleNext, handlePrev } = useFeedProvider();
   const { metadata } = player;
 
   useEffect(() => {
@@ -28,34 +26,6 @@ export default function GlobalPlayer() {
 
   const handlePause = () => {
     dispatch({ type: 'PAUSE', payload: { id: metadata.id } });
-  };
-
-  const handleNext = async () => {
-    if (player.currentPlayingIndex + 1 < feed.length) {
-      const embed = findValidEmbed(feed[player.currentPlayingIndex + 1]);
-      const url = embed?.url;
-      if (url) {
-        const metadata = await fetchMetadata(url);
-        dispatch({
-          type: 'PLAY',
-          payload: { metadata, currentPlayingIndex: player.currentPlayingIndex + 1 },
-        });
-      }
-    }
-  };
-
-  const handlePrev = async () => {
-    if (player.currentPlayingIndex && player.currentPlayingIndex > 0) {
-      const embed = findValidEmbed(feed[player.currentPlayingIndex - 1]);
-      const url = embed?.url;
-      if (url) {
-        const metadata = await fetchMetadata(url);
-        dispatch({
-          type: 'PLAY',
-          payload: { metadata, currentPlayingIndex: player.currentPlayingIndex - 1 },
-        });
-      }
-    }
   };
 
   return (

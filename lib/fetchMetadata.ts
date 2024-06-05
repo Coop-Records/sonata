@@ -3,8 +3,9 @@ import extractSoundArtistAndTrack from './sound/extractSoundArtistAndTrack';
 import getReleaseInfo from './sound/getReleaseInfo';
 import getSpotifyTrackId from './spotify/getSpotifyTrackId';
 import getYoutubeVideoData from './getYoutubeVideoData';
+import { SupabasePost } from '@/types/SupabasePost';
 
-export default async function fetchMetadata(url: string) {
+export default async function fetchMetadata(url: string, cast:SupabasePost) {
   let metadata: TrackMetadata = {} as TrackMetadata;
   if (url?.includes('spotify')) {
     const oEmbedUrl = `https://open.spotify.com/oembed?url=${encodeURIComponent(url)}`;
@@ -18,6 +19,7 @@ export default async function fetchMetadata(url: string) {
       trackName: embedData.title,
       artworkUrl: embedData.thumbnail_url,
       url: `spotify:track:${trackId}`,
+      feedId: cast.id
     };
   } else if (url.includes('soundcloud')) {
     const oEmbedUrl = `https://soundcloud.com/oembed?format=json&url=${encodeURIComponent(url)}`;
@@ -38,6 +40,7 @@ export default async function fetchMetadata(url: string) {
       trackName: embedData.title.split(' - ')[0].split(' by ')[0],
       artworkUrl: embedData.thumbnail_url,
       url: iframeUrl,
+      feedId: cast.id
     };
   } else if (url.includes('sound.xyz')) {
     const { artist, trackName } = extractSoundArtistAndTrack(url);
@@ -50,6 +53,7 @@ export default async function fetchMetadata(url: string) {
       trackName: releaseInfo.title,
       artworkUrl: releaseInfo.coverImage.url,
       url: releaseInfo?.track?.audio?.audio128k?.url,
+      feedId: cast.id
     };
   } else if (url.includes('youtube.com')) {
     const queryParams = new URLSearchParams(url.split('?')[1]);
@@ -65,6 +69,7 @@ export default async function fetchMetadata(url: string) {
       trackName: youtubeData.snippet.title,
       artworkUrl: youtubeData.snippet.thumbnails.default.url,
       url: youtubeData.id,
+      feedId: cast.id
     };
   }
   return metadata;
