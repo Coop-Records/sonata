@@ -1,6 +1,9 @@
 'use client';
 import { cn } from '@/lib/utils';
 import { useFeedProvider } from '@/providers/FeedProvider';
+import { useNeynarProvider } from '@/providers/NeynarProvider';
+import { FeedType } from '@/types/Feed';
+import { Button } from '@/components/ui/button';
 
 type tab = {
   label: string;
@@ -10,22 +13,28 @@ type tab = {
 
 export default function Tabs({ tabs, className = '' }: { tabs: tab[]; className?: string }) {
   const { feedType, setFeedType } = useFeedProvider();
+  const { user } = useNeynarProvider();
 
   return (
-    <ul className={`flex gap-4 ${className}`}>
-      {tabs.map((tab, index) => {
-        return (
-          <li
-            className={cn(
-              'py-2 text-lg font-bold',
-              feedType === tab.value && 'border-b-2 border-black',
-            )}
-            key={index}
-          >
-            <button onClick={() => setFeedType(tab.value)}>{tab.label} </button>
-          </li>
-        );
-      })}
+    <ul className={cn('flex gap-4 md:gap-8', className)}>
+      {tabs
+        .filter((tab) => {
+          const isDisabled = tab.value === FeedType.Following && !user;
+          return !isDisabled;
+        })
+        .map((tab, index) => {
+          return (
+            <li className={cn(feedType === tab.value && 'border-b-2 border-black')} key={index}>
+              <Button
+                variant="ghost"
+                className="p-0 text-sm font-bold hover:bg-transparent md:text-lg"
+                onClick={() => setFeedType(tab.value)}
+              >
+                {tab.label}
+              </Button>
+            </li>
+          );
+        })}
     </ul>
   );
 }

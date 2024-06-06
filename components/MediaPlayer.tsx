@@ -1,112 +1,88 @@
-import { formatDuration } from '@/lib/utils';
-import { usePlayer } from '@/providers/PlayerProvider';
-import { TrackControls, TrackMetadata } from '@/types/Track';
+import { cn } from '@/lib/utils';
+import { usePlayer } from '@/providers/audio/PlayerProvider';
+import { TrackMetadata } from '@/types/Track';
 import Image from 'next/image';
-import { useEffect } from 'react';
 import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';
 import { Skeleton } from '@/components/ui/skeleton';
-import ReactSlider from 'react-slider';
-import { useFeedProvider } from '@/providers/FeedProvider';
-import { SupabasePost } from '@/types/SupabasePost';
+import { Button } from '@/components/ui/button';
+import Scrubber from '@/components/Scrubber';
 
 type MediaPlayerProps = {
   metadata?: TrackMetadata;
-  controls?: TrackControls | null;
-  position: number;
-  cast: SupabasePost;
 };
 
-export default function MediaPlayer({ metadata, controls, position, cast }: MediaPlayerProps) {
+export default function MediaPlayer({ metadata }: MediaPlayerProps) {
   const [player, dispatch] = usePlayer();
-  const { setActiveFeed } = useFeedProvider();
-
   const currentTrack = player?.metadata?.id === metadata?.id;
-  const displayPosition = currentTrack ? player.position : position;
-  const displayDuration = metadata?.duration || 0;
-
-  useEffect(() => {
-    if (currentTrack && controls && cast) {
-      setActiveFeed(cast);
-      dispatch({ type: 'PROGRESS', payload: { position } });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [position, currentTrack, dispatch, controls, cast]);
 
   const handlePlay = () => {
-    if (!metadata || !controls) return;
-
+    if (!metadata) return;
+    if (currentTrack) {
+      dispatch({ type: 'RESUME', payload: { id: metadata.id } });
+      return;
+    }
     dispatch({
       type: 'PLAY',
-      payload: { metadata, controls: currentTrack ? player?.controls : controls },
+      payload: { metadata, feedId: metadata.feedId },
     });
   };
 
   const handlePause = () => {
-    dispatch({ type: 'PAUSE' });
+    if (!metadata) return;
+    dispatch({ type: 'PAUSE', payload: { id: metadata.id } });
   };
 
   return (
-    <div data-type={metadata?.type} className="flex w-full flex-col gap-4 rounded-lg border p-2">
-      <div className="flex gap-4">
-        <div className="relative my-auto aspect-square w-16 shrink-0 overflow-hidden rounded-lg shadow-md">
-          {metadata?.artworkUrl ? (
-            <Image
-              src={metadata.artworkUrl}
-              alt=""
-              fill
-              style={{ objectFit: 'cover', objectPosition: 'center' }}
-              unoptimized
-            />
-          ) : (
-            <Skeleton className="size-full" />
-          )}
-        </div>
-
-        <div className="flex grow flex-col gap-1 pt-2 text-left">
-          <div className="line-clamp-2 font-inter text-sm font-bold">
-            {metadata?.trackName ? (
-              <>{metadata.trackName}</>
-            ) : (
-              <Skeleton className="h-2 w-32 rounded-sm" />
-            )}
-          </div>
-          <div className="line-clamp-2 font-inter text-xs font-extralight">
-            {metadata?.artistName ? (
-              <>{metadata.artistName}</>
-            ) : (
-              <Skeleton className="h-2 w-12 rounded-sm" />
-            )}
-          </div>
-        </div>
-        <div className="my-auto">
-          {controls ? (
-            currentTrack && player.playing ? (
-              <button onClick={handlePause}>
-                <MdPauseCircle className="text-4xl" />
-              </button>
-            ) : (
-              <button onClick={handlePlay}>
-                <MdPlayCircle className="text-4xl" />
-              </button>
-            )
-          ) : (
-            <Skeleton className="h-8 w-8 rounded-full" />
-          )}
-        </div>
+    <div
+      data-type={metadata?.type}
+      className={cn(
+        'flex w-full gap-4 bg-white py-2',
+        currentTrack && player.loading && 'animate-pulse',
+      )}
+    >
+      <div className="relative my-auto aspect-square w-16 shrink-0 overflow-hidden rounded-lg shadow-md">
+        {metadata?.artworkUrl ? (
+          <Image
+            src={metadata.artworkUrl}
+            alt=""
+            fill
+            style={{ objectFit: 'cover', objectPosition: 'center' }}
+            unoptimized
+          />
+        ) : (
+          <Skeleton className="size-full" />
+        )}
       </div>
-      <div className="flex flex-col gap-1">
-        <div className="flex justify-between font-inter text-xs font-light">
-          <span>{formatDuration(displayPosition)}</span>
-          <span>{formatDuration(displayDuration)}</span>
+
+      <div className="flex grow flex-col gap-1 text-left">
+        <div className="line-clamp-2 text-lg font-semibold leading-none">
+          {metadata?.trackName ? (
+            <>{metadata.trackName}</>
+          ) : (
+            <Skeleton className="h-2 w-32 rounded-sm" />
+          )}
         </div>
-        <ReactSlider
-          className="w-full h-1 bg-gray-300 scrub"
-          thumbClassName={`${metadata?.type === 'spotify' ? '' : 'scrub-thumb'}`}
-          trackClassName="scrub-track"
-          value={(displayPosition / displayDuration) * 100}
-          disabled={metadata?.type === 'spotify'}
-          onChange={(value) => controls?.seek((value / 100) * displayDuration)}
-        />
+        <div className="line-clamp-2 text-sm font-extralight">
+          {metadata?.artistName ? (
+            <>{metadata.artistName}</>
+          ) : (
+            <Skeleton className="h-2 w-12 rounded-sm" />
+          )}
+        </div>
+        {currentTrack && !player.loading && <Scrubber className="mt-auto max-md:hidden" />}
+      </div>
+      <div className="my-auto">
+        <Button
+          onClick={currentTrack && player.playing ? handlePause : handlePlay}
+          variant="ghost"
+          className="rounded-full p-0"
+        >
+          {currentTrack && player.playing ? (
+            <MdPauseCircle className="text-4xl" />
+          ) : (
+            <MdPlayCircle className="text-4xl" />
+          )}
+        </Button>
       </div>
     </div>
   );

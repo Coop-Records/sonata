@@ -1,57 +1,60 @@
-import AuthorDetails from './AuthorDetails';
-import Upvote from './Upvote';
+'use client';
+import UserDetails from '@/components/UserDetails';
 import findValidEmbed from '@/lib/findValidEmbed';
-import TipButton from '../Tipping/TipButton';
-import { useMemo } from 'react';
-import SpotifyEmbed from './SpotifyEmbed';
-import SoundCloudEmbed from './SoundCloudEmbed';
-import SoundXyzEmbed from './SoundXyzEmbed';
-import { useFeedProvider } from '@/providers/FeedProvider';
+import TipButton from '@/components/TipButton';
 import { SupabasePost } from '@/types/SupabasePost';
+import fetchMetadata from '@/lib/fetchMetadata';
+import MediaPlayer from '../MediaPlayer';
+import { useEffect, useState } from 'react';
+import { TrackMetadata } from '@/types/Track';
+import Like from './Like';
+import Share from './Share';
+import { Separator } from '@/components/ui/separator';
+import { timeFromNow } from '@/lib/utils';
+import UpvoteDownvote from '../UpvoteDownvote';
 
 const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
-  const { filter } = useFeedProvider();
   const embed = findValidEmbed(cast);
   const url = embed?.url;
-  const isSpotify = url?.includes('spotify');
 
   const { author } = cast;
   const { verifications } = author;
 
-  const EmbedComponent = useMemo(() => {
-    if (!url) return null;
-    if (isSpotify) return SpotifyEmbed;
-    if (url.includes('soundcloud')) return SoundCloudEmbed;
-    if (url.includes('sound.xyz')) return SoundXyzEmbed;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  const [metadata, setMetadata] = useState<TrackMetadata>();
+
+  useEffect(() => {
+    const init = async () => {
+      if (url) {
+        try {
+          const metadata = await fetchMetadata(url, cast);
+          setMetadata(metadata);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+    init();
   }, [url]);
 
-  const shouldBeFiltered = useMemo(() => {
-    const channelId = cast.channelId;
-
-    if (filter.channel) {
-      if (!(channelId && channelId.includes(filter.channel))) return false;
-    }
-
-    const validEmbed = findValidEmbed(cast, { platform: filter.platform });
-    if (!validEmbed) return false;
-
-    return true;
-  }, [filter, cast]);
-
-  if (!url) return <></>;
-
+  if (!metadata) return <></>;
   return (
-    <div
-      className={`flex items-center gap-5 p-2.5 ${shouldBeFiltered ? '' : 'hidden'}`}
-      key={cast.post_hash}
-    >
-      <Upvote cast={cast} />
-      <div className="w-full space-y-4">
-        <AuthorDetails author={author} />
-        {EmbedComponent && <EmbedComponent trackUrl={url} cast={cast} />}
-        <TipButton verifications={verifications} cast={cast} />
+    <div className="w-full space-y-4">
+      <div className="flex gap-2">
+        <UserDetails user={author} />
+        <span className="text-sm leading-none text-muted-foreground">
+          {'• '}
+          {timeFromNow(cast.created_at)}
+        </span>
       </div>
+
+      <MediaPlayer metadata={metadata} />
+      <div className="flex gap-2">
+        <UpvoteDownvote verifications={verifications} cast={cast} />
+        <TipButton verifications={verifications} cast={cast} currency="DEGEN" className="ml-auto" />
+        <Like cast={cast} />
+        <Share cast={cast} />
+      </div>
+      <Separator className="bg-muted" />
     </div>
   );
 };

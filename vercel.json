@@ -11,6 +11,10 @@
     {
       "path": "/api/jobs/getNewCasts",
       "schedule": "*/1 * * * *"
+    },
+    {
+      "path": "/api/jobs/getMissingCasts",
+      "schedule": "0 */3 * * *"
     }
   ]
 }

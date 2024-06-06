@@ -1,3 +1,6 @@
+import { CHANNELS } from '@/lib/consts';
+import createPostReply from '@/lib/neynar/createPostReply';
+import getChannelIdFromCast from '@/lib/neynar/getChannelIdFromCast';
 import getFeedFromTime from '@/lib/neynar/getFeedFromTime';
 import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { createClient } from '@supabase/supabase-js';
@@ -6,6 +9,7 @@ import { NextResponse } from 'next/server';
 
 const SUPABASE_URL = process.env.SUPABASE_URL as string;
 const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
+const BOT_SIGNER_UUID = process.env.BOT_SIGNER_UUID as string;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
   auth: {
@@ -28,6 +32,7 @@ const processSingleEntry = async (cast: Cast) => {
 
   if (!isEmpty(address)) {
     await createCast(cast);
+    await sendBotCast(cast);
   }
 };
 
@@ -40,29 +45,45 @@ const getResponse = async (): Promise<NextResponse> => {
     .single();
   console.log('jobs::getNewCasts', `Starting Job from ${cast_query_date?.lastcheck}`);
 
-  const lastChecked = cast_query_date ? cast_query_date.lastcheck : '';
+  const twoMinutesAgo = new Date(new Date().getTime() - 2 * 60 * 1000).toISOString();
+
+  const lastChecked = cast_query_date ? cast_query_date.lastcheck : twoMinutesAgo;
 
   const formattedLastChecked = new Date(`${lastChecked}`);
 
-  const [spotify, soundCloud, soundxyz] = await Promise.all([
+  const allEntries: any[] = [];
+
+  const [spotify, soundCloud, soundxyz, youtube] = await Promise.all([
     getFeedFromTime('spotify.com/track', formattedLastChecked),
     getFeedFromTime('soundcloud.com', formattedLastChecked),
     getFeedFromTime('sound.xyz', formattedLastChecked),
+    getFeedFromTime('youtube.com/watch', formattedLastChecked),
   ]);
-  const allEntries: any[] = [];
   allEntries.push(...spotify, ...soundCloud, ...soundxyz);
+
+  const youtubeFiltered = youtube.filter((entry) => {
+    const channelId = getChannelIdFromCast(entry);
+    return channelId && CHANNELS.find((channel) => channel.value === channelId);
+  });
+
+  console.log('jobs::getNewCasts', 'ytEntries', youtubeFiltered);
+  allEntries.push(...youtubeFiltered);
 
   console.log('jobs::getNewCasts', `${allEntries.length} new entries`);
   if (allEntries.length > 0) {
     await processEntriesInBatches(allEntries);
   }
 
-  const newLastChecked: string = allEntries.reduce((max, cast) => {
+  let newLastChecked: string = allEntries.reduce((max, cast) => {
     const current = new Date(cast.timestamp as string);
     return current > new Date(max) ? cast.timestamp : max;
   }, lastChecked);
 
   console.log('jobs::getNewCasts', `About to set cast_query_date to ${newLastChecked}`);
+
+  if (isEmpty(newLastChecked)) {
+    newLastChecked = twoMinutesAgo;
+  }
 
   const { data, error } = await supabase
     .from('cast_query_date')
@@ -74,14 +95,7 @@ const getResponse = async (): Promise<NextResponse> => {
 
 async function createCast(cast: Cast) {
   const likes = (cast as any).reactions.likes_count;
-  const parentUrl = cast.parent_url;
-  let channelId = null;
-  if (parentUrl) {
-    const match = /\/channel\/([^/]+)$/.exec(parentUrl);
-    if (match) {
-      channelId = match[1];
-    }
-  }
+  const channelId = getChannelIdFromCast(cast);
 
   const { error } = await supabase.from('posts').upsert(
     {
@@ -103,6 +117,16 @@ async function createCast(cast: Cast) {
     console.error('Error calling function:', error);
     return null;
   }
+
+  return { success: true };
+}
+
+async function sendBotCast(cast: Cast) {
+  await createPostReply(
+    BOT_SIGNER_UUID,
+    cast.hash,
+    `This song is now available on @sonatatips where you earn NOTES when people tip you.\n\nSee you over there!\n\nhttps://sonata.tips/cast/${cast.author.username}/${cast.hash.substring(0, 8)}`,
+  );
 
   return { success: true };
 }

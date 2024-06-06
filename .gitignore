@@ -2,3 +2,7 @@ node_modules
 .DS_STORE
 .next/
 .env.local
+.env
+.vscode
+yarn.lock
+package-lock.json

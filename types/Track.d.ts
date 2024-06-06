@@ -1,10 +1,13 @@
+export type TrackType = 'spotify' | 'soundcloud' | 'soundxyz' | 'youtube';
+
 export type TrackMetadata = {
   id: string;
-  type: 'spotify' | 'soundcloud' | 'soundxyz';
+  type: TrackType;
   artistName: string;
   trackName: string;
   artworkUrl: string;
-  duration: number;
+  url: string;
+  feedId: number;
 };
 
 export type TrackControls = {

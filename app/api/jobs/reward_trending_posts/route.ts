@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server';
 
 const SUPABASE_URL = process.env.SUPABASE_URL as string;
 const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
-const TIP_AWARD_PER = 2500;
+const TIP_AWARD_PER = 1000;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -39,7 +39,7 @@ async function fetchTopPosts() {
     .from('trending_posts')
     .select('*')
     .order('score', { ascending: false })
-    .limit(10);
+    .limit(100);
 
   if (error) {
     console.error('Error fetching posts:', error);

@@ -12,9 +12,15 @@ type NeynarContextType = {
   signIn: () => void;
   signOut: () => void;
   user?: User;
+  loading: boolean;
 };
 
-const NeynarContext = createContext<NeynarContextType>({ signer: null, signIn() {}, signOut() {} });
+const NeynarContext = createContext<NeynarContextType>({
+  signer: null,
+  signIn() {},
+  signOut() {},
+  loading: true,
+});
 
 const NeynarProvider = ({ children }: any) => {
   if (!clientId) {
@@ -30,6 +36,8 @@ const NeynarProvider = ({ children }: any) => {
   });
 
   const [user, setUser] = useState<User>();
+  const [loading, setLoading] = useState(true);
+
   const signIn = useCallback(() => {
     const authUrl = new URL(loginUrl);
     const authOrigin = new URL(loginUrl).origin;
@@ -58,18 +66,20 @@ const NeynarProvider = ({ children }: any) => {
 
   useEffect(() => {
     const updateUser = async () => {
+      setLoading(true);
       if (!signer?.fid) {
         setUser(undefined);
       } else {
         const user = await getUser(signer.fid);
         setUser(user);
       }
+      setLoading(false);
     };
     updateUser();
   }, [signer?.fid]);
 
   return (
-    <NeynarContext.Provider value={{ signer, signIn, signOut, user }}>
+    <NeynarContext.Provider value={{ signer, signIn, signOut, user, loading }}>
       {children}
     </NeynarContext.Provider>
   );

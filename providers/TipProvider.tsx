@@ -6,9 +6,10 @@ import { isEmpty, isNil } from 'lodash';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Address } from 'viem';
 import { useNeynarProvider } from './NeynarProvider';
-import { useSupabaseProvider } from './SupabaseProvider';
 import { useToast } from '@/components/ui/use-toast';
 import claimAirdrop from '@/lib/sonata/claimAirdrop';
+import { supabaseClient } from '@/lib/supabase/client';
+import executeDownvote from '@/lib/sonata/executeDownvote';
 
 const TipContext = createContext<any>(null);
 
@@ -18,7 +19,6 @@ const TipProvider = ({ children }: any) => {
   const [balance, setBalance] = useState<bigint | undefined>(undefined);
   const [dailyTipAllowance, setDailyTipAllowance] = useState<bigint | undefined>(undefined);
   const { user, signer } = useNeynarProvider();
-  const { supabaseClient } = useSupabaseProvider();
 
   const [remainingTipAllocation, setRemainingTipAllocation] = useState<bigint | undefined>(
     undefined,
@@ -71,12 +71,17 @@ const TipProvider = ({ children }: any) => {
       .ilike('wallet_address', user.verifications[0])
       .single();
 
-    const currentBalance = data.notes;
+    const currentBalance = data?.notes;
     setAirdropBalance(currentBalance);
   };
 
   const tipDegen = async (amount: bigint, postHash: string) => {
     if (isNil(user) || isEmpty(user.verifications) || isNil(signer?.signer_uuid)) {
+      toast({
+        title: 'Unable to Tip',
+        description: 'Something went wrong',
+        variant: 'destructive',
+      });
       return;
     }
 
@@ -86,7 +91,6 @@ const TipProvider = ({ children }: any) => {
       amount,
       postHash,
     );
-    console.log(data);
     const message = data.message;
     toast({ description: message });
 
@@ -105,16 +109,45 @@ const TipProvider = ({ children }: any) => {
       isNil(signer) ||
       isNil(signer?.signer_uuid)
     ) {
+      toast({
+        title: 'Unable to Tip',
+        description: 'Something went wrong',
+        variant: 'destructive',
+      });
       return;
     }
 
-    const data = await executeTip(
-      signer?.signer_uuid,
-      amount,
-      postHash,
-      recipientFid,
-    );
+    const data = await executeTip(signer?.signer_uuid, amount, postHash, recipientFid);
+    const message = data.message;
+    const tipRemaining = data.tipRemaining;
 
+    setRemainingTipAllocation(BigInt(tipRemaining));
+    toast({ description: message });
+
+    return data;
+  };
+
+  const downvote = async (
+    amount: bigint,
+    postHash: string,
+    recipientFid: number,
+  ): Promise<TipResponse | undefined> => {
+    if (
+      isNil(user) ||
+      isNil(remainingTipAllocation) ||
+      isEmpty(user.verifications) ||
+      isNil(signer) ||
+      isNil(signer?.signer_uuid)
+    ) {
+      toast({
+        title: 'Unable to Downvote',
+        description: 'Something went wrong',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    const data = await executeDownvote(signer?.signer_uuid, amount, postHash, recipientFid);
     const message = data.message;
     const tipRemaining = data.tipRemaining;
 
@@ -144,6 +177,7 @@ const TipProvider = ({ children }: any) => {
       value={{
         balance,
         tip,
+        downvote,
         tipDegen,
         remainingTipAllocation,
         dailyTipAllowance,
