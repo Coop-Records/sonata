@@ -6,13 +6,11 @@ import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { useUi } from '@/providers/UiProvider';
 import { Separator } from '@/components/ui/separator';
 import GlobalPlayer from '@/components/GlobalPlayer';
-import CreatePost from '@/components/CreatePost';
-import { useNeynarProvider } from '@/providers/NeynarProvider';
 import FeedProvider from '@/providers/FeedProvider';
+import { CaretLeftIcon } from '@radix-ui/react-icons';
 
 export default function FeedLayout({ children }: { children: ReactNode }) {
   const { menuOpen, setMenuOpen } = useUi();
-  const { user } = useNeynarProvider();
 
   return (
     <FeedProvider>
@@ -39,7 +37,10 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
                 id="feed-container"
               >
                 <div className="container mx-auto max-w-3xl space-y-6">
-                  {user && <CreatePost />}
+                  <a href="/" className="flex flex-row items-center font-semibold">
+                    <CaretLeftIcon />
+                    <div className="">Home</div>
+                  </a>
                   {children}
                 </div>
               </div>
