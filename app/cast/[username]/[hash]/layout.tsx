@@ -12,7 +12,6 @@ import { CaretLeftIcon } from '@radix-ui/react-icons';
 
 export default function FeedLayout({ children }: { children: ReactNode }) {
   const { menuOpen, setMenuOpen } = useUi();
-  const { user } = useNeynarProvider();
 
   return (
     <FeedProvider>
