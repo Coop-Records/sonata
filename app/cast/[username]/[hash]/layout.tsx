@@ -6,7 +6,6 @@ import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { useUi } from '@/providers/UiProvider';
 import { Separator } from '@/components/ui/separator';
 import GlobalPlayer from '@/components/GlobalPlayer';
-import { useNeynarProvider } from '@/providers/NeynarProvider';
 import FeedProvider from '@/providers/FeedProvider';
 import { CaretLeftIcon } from '@radix-ui/react-icons';
 
