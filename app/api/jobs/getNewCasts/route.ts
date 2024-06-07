@@ -1,9 +1,7 @@
 import createPostReply from '@/lib/neynar/createPostReply';
 import getChannelIdFromCast from '@/lib/neynar/getChannelIdFromCast';
 import getFeedFromTime from '@/lib/neynar/getFeedFromTime';
-import getAlternativeLinks from '@/lib/songLink/getAlternativeLinks';
-import getSongLinksFromCasts from '@/lib/spotify/getSongLinksFromCasts';
-import mergeWithAlternatives from '@/lib/spotify/mergeWithAlternatives';
+import getSpotifyWithAlternatives from '@/lib/spotify/getSpotifyWithAlternatives';
 import filterByChannels from '@/lib/youtube/filterByChannels';
 import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { createClient } from '@supabase/supabase-js';
@@ -64,10 +62,8 @@ const getResponse = async (): Promise<NextResponse> => {
   ]);
   allEntries.push( ...soundCloud, ...soundxyz);
 
-  const spotifySongLinks = await getSongLinksFromCasts(spotify);
-  const spotifyAlternative = getAlternativeLinks(spotifySongLinks)
-  const spotifyWithAlternatives = mergeWithAlternatives(spotify, spotifyAlternative);
-  console.log("SWEETS spotifyWithAlternatives", spotifyWithAlternatives)
+  const spotifyWithAlternatives = await getSpotifyWithAlternatives(spotify);
+  console.log('jobs::getNewCasts', 'spotifyEntries', spotifyWithAlternatives);
   allEntries.push(...spotifyWithAlternatives);
 
   const youtubeFiltered = filterByChannels(youtube)
