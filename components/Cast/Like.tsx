@@ -22,7 +22,6 @@ export default function Like({ cast }: { cast: SupabasePost }) {
     if (likes.some((like: any) => like.fid === Number(signer?.fid))) {
       setUpvoted(true);
     }
-    console.log(likes.some((like: any) => like.fid === signer?.fid));
   };
   useEffect(() => {
     if (signer?.fid && cast.post_hash) {
