@@ -1,7 +1,8 @@
-import { CHANNELS } from '@/lib/consts';
 import createPostReply from '@/lib/neynar/createPostReply';
 import getChannelIdFromCast from '@/lib/neynar/getChannelIdFromCast';
 import getFeedFromTime from '@/lib/neynar/getFeedFromTime';
+import getSpotifyWithAlternatives from '@/lib/spotify/getSpotifyWithAlternatives';
+import filterByChannels from '@/lib/youtube/filterByChannels';
 import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { createClient } from '@supabase/supabase-js';
 import { isEmpty } from 'lodash';
@@ -59,13 +60,13 @@ const getResponse = async (): Promise<NextResponse> => {
     getFeedFromTime('sound.xyz', formattedLastChecked),
     getFeedFromTime('youtube.com/watch', formattedLastChecked),
   ]);
-  allEntries.push(...spotify, ...soundCloud, ...soundxyz);
+  allEntries.push( ...soundCloud, ...soundxyz);
 
-  const youtubeFiltered = youtube.filter((entry) => {
-    const channelId = getChannelIdFromCast(entry);
-    return channelId && CHANNELS.find((channel) => channel.value === channelId);
-  });
+  const spotifyWithAlternatives = await getSpotifyWithAlternatives(spotify);
+  console.log('jobs::getNewCasts', 'spotifyEntries', spotifyWithAlternatives);
+  allEntries.push(...spotifyWithAlternatives);
 
+  const youtubeFiltered = filterByChannels(youtube)
   console.log('jobs::getNewCasts', 'ytEntries', youtubeFiltered);
   allEntries.push(...youtubeFiltered);
 
@@ -95,6 +96,7 @@ const getResponse = async (): Promise<NextResponse> => {
 
 async function createCast(cast: Cast) {
   const likes = (cast as any).reactions.likes_count;
+  const alternativeEmbeds = (cast as any).alternativeEmbeds;
   const channelId = getChannelIdFromCast(cast);
 
   const { error } = await supabase.from('posts').upsert(
@@ -105,6 +107,7 @@ async function createCast(cast: Cast) {
       embeds: cast.embeds,
       author: cast.author,
       channelId,
+      alternativeEmbeds,
     },
     {
       onConflict: 'post_hash',

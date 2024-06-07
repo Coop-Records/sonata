@@ -34,6 +34,9 @@ export const CHANNELS = [
   { label: '/soundxyz', value: 'soundxyz', icon: 'https://i.imgur.com/BbvrNR2.jpg' },
   { label: '/bangers', value: 'bangers', icon: 'https://i.imgur.com/URBvewb.png' },
   { label: '/rock', value: 'rock', icon: 'https://i.imgur.com/Ffj1Opg.png' },
+  { label: '/spotify', value: 'spotify', icon: 'https://i.imgur.com/3Z8YjMT.jpg' },
+  { label: '/coop-recs', value: 'coop-recs', icon: 'https://i.imgur.com/eecb7AP.gif' },
+  { label: '/louder', value: 'louder', icon: 'https://i.imgur.com/r4GIRLL.png' },
 ];
 
 export const fetchPostsLimit = 20;
