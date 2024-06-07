@@ -50,14 +50,12 @@ const getResponse = async (): Promise<NextResponse> => {
 
   const twoMinutesAgo = new Date(new Date().getTime() - 2 * 60 * 1000).toISOString();
 
-  const lastChecked = twoMinutesAgo;
-  console.log("SWEETS lastChecked", lastChecked)
+  const lastChecked = cast_query_date ? cast_query_date.lastcheck : twoMinutesAgo;
 
   const formattedLastChecked = new Date(`${lastChecked}`);
 
   const allEntries: any[] = [];
 
-  console.log("SWEETS formattedLastChecked", formattedLastChecked)
   const [spotify, soundCloud, soundxyz, youtube] = await Promise.all([
     getFeedFromTime('spotify.com/track', formattedLastChecked),
     getFeedFromTime('soundcloud.com', formattedLastChecked),
@@ -66,11 +64,8 @@ const getResponse = async (): Promise<NextResponse> => {
   ]);
   allEntries.push( ...soundCloud, ...soundxyz);
 
-  console.log("SWEETS USE SONG LINK", spotify)
   const spotifySongLinks = await getSongLinksFromCasts(spotify);
-  console.log("SWEETS spotifySongLinks", spotifySongLinks)
   const spotifyAlternative = getAlternativeLinks(spotifySongLinks)
-  console.log("SWEETS spotifyAlternative", spotifyAlternative)
   const spotifyWithAlternatives = mergeWithAlternatives(spotify, spotifyAlternative);
   console.log("SWEETS spotifyWithAlternatives", spotifyWithAlternatives)
   allEntries.push(...spotifyWithAlternatives);
