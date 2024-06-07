@@ -16,7 +16,7 @@ export default async function verifySignerUUID(signer_uuid: string): Promise<Ver
       options,
     );
     const { status, fid } = await response.json();
-    let verified = status === 'approved' ? true : false;
+    const verified = status === 'approved' ? true : false;
     return { status: verified, fid };
   } catch (error) {
     console.error(error);
