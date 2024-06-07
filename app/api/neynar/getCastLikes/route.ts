@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import { has, isEmpty } from 'lodash';
 import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest): Promise<Response> {
@@ -19,19 +19,19 @@ export async function GET(req: NextRequest): Promise<Response> {
   } as any;
 
   try {
-    const queryParams = new URLSearchParams({
-      hash,
-      types: 'likes',
-      limit: '25',
-    });
+      const queryParams = new URLSearchParams({
+        identifier: hash,
+        type: 'hash',
+  });
 
-    const response = await fetch(
-      `https://api.neynar.com/v2/farcaster/reactions/cast?${queryParams}`,
+
+     const castResponse = await fetch(
+      `https://api.neynar.com/v2/farcaster/cast?${queryParams}`,
       options,
     );
-    const data = await response.json();
-
-    return new Response(JSON.stringify({ reactions: data.reactions }), {
+    const castData = await castResponse.json();
+    let likes = castData.cast?.reactions ? castData.cast?.reactions.likes: [];
+    return new Response(JSON.stringify({ reactions: likes }), {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
