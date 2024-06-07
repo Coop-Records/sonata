@@ -7,6 +7,7 @@ export type SupabasePost = {
   author: User;
   created_at: Date;
   embeds: string[];
+  alternativeEmbeds: string[];
   points?: number;
   degen?: number;
   parent_url?: string;
