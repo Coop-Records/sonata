@@ -2,6 +2,10 @@ import { CHANNELS } from '@/lib/consts';
 import createPostReply from '@/lib/neynar/createPostReply';
 import getChannelIdFromCast from '@/lib/neynar/getChannelIdFromCast';
 import getFeedFromTime from '@/lib/neynar/getFeedFromTime';
+import getAlternativeLinks from '@/lib/songLink/getAlternativeLinks';
+import getSongLinksFromCasts from '@/lib/spotify/getSongLinksFromCasts';
+import mergeWithAlternatives from '@/lib/spotify/mergeWithAlternatives';
+import filterByChannels from '@/lib/youtube/filterByChannels';
 import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { createClient } from '@supabase/supabase-js';
 import { isEmpty } from 'lodash';
@@ -45,27 +49,34 @@ const getResponse = async (): Promise<NextResponse> => {
     .single();
   console.log('jobs::getNewCasts', `Starting Job from ${cast_query_date?.lastcheck}`);
 
-  const twoMinutesAgo = new Date(new Date().getTime() - 2 * 60 * 1000).toISOString();
+  const twoMinutesAgo = new Date(new Date().getTime() - 60 * 60 * 1000).toISOString();
 
-  const lastChecked = cast_query_date ? cast_query_date.lastcheck : twoMinutesAgo;
+  const lastChecked = twoMinutesAgo;
+  console.log("SWEETS lastChecked", lastChecked)
 
   const formattedLastChecked = new Date(`${lastChecked}`);
 
   const allEntries: any[] = [];
 
+  console.log("SWEETS formattedLastChecked", formattedLastChecked)
   const [spotify, soundCloud, soundxyz, youtube] = await Promise.all([
     getFeedFromTime('spotify.com/track', formattedLastChecked),
     getFeedFromTime('soundcloud.com', formattedLastChecked),
     getFeedFromTime('sound.xyz', formattedLastChecked),
     getFeedFromTime('youtube.com/watch', formattedLastChecked),
   ]);
-  allEntries.push(...spotify, ...soundCloud, ...soundxyz);
+  allEntries.push( ...soundCloud, ...soundxyz);
 
-  const youtubeFiltered = youtube.filter((entry) => {
-    const channelId = getChannelIdFromCast(entry);
-    return channelId && CHANNELS.find((channel) => channel.value === channelId);
-  });
+  console.log("SWEETS USE SONG LINK", spotify)
+  const spotifySongLinks = await getSongLinksFromCasts(spotify);
+  console.log("SWEETS spotifySongLinks", spotifySongLinks)
+  const spotifyAlternative = getAlternativeLinks(spotifySongLinks)
+  console.log("SWEETS spotifyAlternative", spotifyAlternative)
+  const spotifyWithAlternatives = mergeWithAlternatives(spotify, spotifyAlternative);
+  console.log("SWEETS spotifyWithAlternatives", spotifyWithAlternatives)
+  allEntries.push(...spotifyWithAlternatives);
 
+  const youtubeFiltered = filterByChannels(youtube)
   console.log('jobs::getNewCasts', 'ytEntries', youtubeFiltered);
   allEntries.push(...youtubeFiltered);
 
@@ -95,6 +106,8 @@ const getResponse = async (): Promise<NextResponse> => {
 
 async function createCast(cast: Cast) {
   const likes = (cast as any).reactions.likes_count;
+  const alternativeEmbeds = (cast as any).alternativeEmbeds;
+  console.log("SWEETS alternativeEmbeds", alternativeEmbeds)
   const channelId = getChannelIdFromCast(cast);
 
   const { error } = await supabase.from('posts').upsert(
@@ -105,6 +118,7 @@ async function createCast(cast: Cast) {
       embeds: cast.embeds,
       author: cast.author,
       channelId,
+      alternativeEmbeds,
     },
     {
       onConflict: 'post_hash',
