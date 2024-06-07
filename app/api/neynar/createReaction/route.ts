@@ -2,7 +2,6 @@ import verifySignerUUID from '@/lib/neynar/verifySigner';
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { Item } from '@/types/Item';
-import { VERCEL_URL } from '@/lib/consts';
 
 const SUPABASE_URL = process.env.SUPABASE_URL as string;
 const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
@@ -27,7 +26,10 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
     }),
   } as any;
 
-
+  const queryParams = new URLSearchParams({
+    identifier: target,
+    type: 'hash',
+  });
 
   const castOptions = {
     method: 'GET',
@@ -39,22 +41,18 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
   const fid = verify.fid;
 
   try {
-    const queryParams = new URLSearchParams({
-      hash: target,
-    });
-    const response = await fetch(`${VERCEL_URL}/api/neynar/getCastLikes?${queryParams}`, castOptions);
-    const data = await response.json();
-    let likes_count = data.reactions.length;
-    const isFidIncluded = data.reactions.some((item: Item) => item.fid === verify.fid);
+    const castResponse = await fetch(
+      `https://api.neynar.com/v2/farcaster/cast?${queryParams}`,
+      castOptions,
+    );
+    const castData = await castResponse.json();
+
+    let likes_count = castData.cast.reactions.likes.length;
+    const isFidIncluded = castData.cast.reactions.likes.some((item: Item) => item.fid === fid);
 
     if (!isFidIncluded) {
-      const response = await fetch(`https://api.neynar.com/v2/farcaster/reaction?`, options)
-      .then(res => res.json())
-      .then(json => json)
-      .catch(err => console.error('error:' + err));
-        console.log(response)
+      await fetch(`https://api.neynar.com/v2/farcaster/reaction?`, options);
 
-    if( response.code !== "NotFound"){
       likes_count++;
       await supabase.from('posts').upsert(
         {
@@ -65,9 +63,6 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
           onConflict: 'post_hash',
         },
       );
-    }else{
-       return NextResponse.json({ errors: 'Something went wrong', success: false }, { status: 400 })
-    }
     }
 
     return NextResponse.json({ success: true, likes: likes_count }, { status: 200 });
