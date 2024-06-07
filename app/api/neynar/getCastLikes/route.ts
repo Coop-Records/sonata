@@ -30,7 +30,7 @@ export async function GET(req: NextRequest): Promise<Response> {
       options,
     );
     const castData = await castResponse.json();
-    let likes = castData.cast?.reactions ? castData.cast?.reactions.likes: [];
+    const likes = castData.cast?.reactions ? castData.cast?.reactions.likes: [];
     return new Response(JSON.stringify({ reactions: likes }), {
       status: 200,
       headers: {

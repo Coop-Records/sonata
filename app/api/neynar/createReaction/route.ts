@@ -27,10 +27,7 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
     }),
   } as any;
 
-  const queryParams = new URLSearchParams({
-    identifier: target,
-    type: 'hash',
-  });
+
 
   const castOptions = {
     method: 'GET',
@@ -51,7 +48,7 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
     const isFidIncluded = data.reactions.some((item: Item) => item.fid === verify.fid);
 
     if (!isFidIncluded) {
-      let response = await fetch(`https://api.neynar.com/v2/farcaster/reaction?`, options)
+      const response = await fetch(`https://api.neynar.com/v2/farcaster/reaction?`, options)
       .then(res => res.json())
       .then(json => json)
       .catch(err => console.error('error:' + err));
