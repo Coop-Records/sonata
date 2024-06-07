@@ -1,3 +1,5 @@
+import { VERCEL_URL } from '../consts';
+
 const getSongLinksFromCasts = async (casts: any[]) => {
   try {
     const spotifyLinks = casts
@@ -9,7 +11,7 @@ const getSongLinksFromCasts = async (casts: any[]) => {
     const songLinks = await Promise.all(
       spotifyLinks.map(async (trackUrl) => {
         const response = await fetch(
-          `http://localhost:3000/api/songLink/fetchSoundcloudUrl?trackUrl=${encodeURIComponent(trackUrl)}`,
+          `${VERCEL_URL}/api/songLink/fetchLink?trackUrl=${encodeURIComponent(trackUrl)}`,
         );
         const data = await response.json();
         return data;
