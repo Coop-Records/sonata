@@ -1,4 +1,3 @@
-import { CHANNELS } from '@/lib/consts';
 import createPostReply from '@/lib/neynar/createPostReply';
 import getChannelIdFromCast from '@/lib/neynar/getChannelIdFromCast';
 import getFeedFromTime from '@/lib/neynar/getFeedFromTime';
@@ -49,7 +48,7 @@ const getResponse = async (): Promise<NextResponse> => {
     .single();
   console.log('jobs::getNewCasts', `Starting Job from ${cast_query_date?.lastcheck}`);
 
-  const twoMinutesAgo = new Date(new Date().getTime() - 60 * 60 * 1000).toISOString();
+  const twoMinutesAgo = new Date(new Date().getTime() - 2 * 60 * 1000).toISOString();
 
   const lastChecked = twoMinutesAgo;
   console.log("SWEETS lastChecked", lastChecked)
