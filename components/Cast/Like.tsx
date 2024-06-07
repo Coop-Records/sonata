@@ -12,33 +12,35 @@ import { Button } from '@/components/ui/button';
 export default function Like({ cast }: { cast: SupabasePost }) {
   const { signer } = useNeynarProvider();
   const [upvoted, setUpvoted] = useState(false);
-  const [votes, setVotes] = useState<number>(cast.likes || 0);
+  const [votes, setVotes] = useState<number>(cast?.likes || 0);
   const { checkLoggedIn } = useUi();
 
-  useEffect(() => {
-    const updateReaction = async () => {
-      const likes = await getCastLikes(cast.post_hash);
-      if ('error' in likes) {
-        return;
-      }
-      if (likes.some((like: any) => like.fid === signer?.fid)) {
-        setUpvoted(true);
-      }
-    };
-    if (signer?.fid && cast.post_hash) {
-      updateReaction();
-    }
-  }, [cast.post_hash, signer?.fid]);
+  // const updateReaction = async () => {
+  //   const likes = await getCastLikes(cast.post_hash);
+
+  //   if ('error' in likes) {
+  //     return;
+  //   }
+  //   if (likes.some((like: any) => like.fid === signer?.fid)) {
+  //     setUpvoted(true);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (signer?.fid && cast.post_hash) {
+  //     updateReaction();
+  //   }
+  // }, [cast.post_hash, signer?.fid, upvoted]);
 
   const handleClick = async () => {
     if (!checkLoggedIn()) return;
-    setUpvoted(true);
 
     const { signer_uuid } = signer as Signer;
     const response = await createReaction(signer_uuid, cast.post_hash);
 
     if (response.success) {
       setVotes(response.likes);
+      setUpvoted(true);
     }
   };
 

@@ -42,10 +42,11 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
 
   try {
     const castResponse = await fetch(
-      `https://api.neynar.com/v2/farcaster/cast?${queryParams}`,
+      `https://api.neynar.com/v2/farcaster/reaction?${queryParams}`,
       castOptions,
     );
     const castData = await castResponse.json();
+    debugger;
 
     let likes_count = castData.cast.reactions.likes.length;
     const isFidIncluded = castData.cast.reactions.likes.some((item: Item) => item.fid === fid);
