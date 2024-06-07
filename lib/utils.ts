@@ -10,13 +10,16 @@ export function cn(...inputs: ClassValue[]) {
 
 export function formatDuration(duration: number) {
   const durationSeconds = Math.floor(duration / 1000);
-  const hours = Math.floor(durationSeconds / 3600);
-  const minutes = Math.floor((durationSeconds % 3600) / 60);
+  const hours = Math.floor(durationSeconds / 3600); 
+  const minutes = Math.floor((durationSeconds % 3600) / 60); 
   const seconds = Math.floor(durationSeconds % 60);
 
-  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  if (hours > 0) {
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  } else {
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
 }
-
 export const formatBigInt = (balance: bigint | string): string => {
   const formatter = new Intl.NumberFormat('en-US', {
     maximumFractionDigits: 1,
