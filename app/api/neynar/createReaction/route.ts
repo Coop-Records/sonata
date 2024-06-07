@@ -36,7 +36,7 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
 
   const verify = await verifySignerUUID(signer_uuid);
 
-  const fid = verify.fid;
+
 
   try {
     const queryParams = new URLSearchParams({

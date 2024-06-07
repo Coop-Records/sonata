@@ -1,4 +1,4 @@
-import { has, isEmpty } from 'lodash';
+import {  isEmpty } from 'lodash';
 import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest): Promise<Response> {
