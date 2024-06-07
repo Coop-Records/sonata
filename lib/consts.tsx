@@ -34,11 +34,8 @@ export const CHANNELS = [
   { label: '/soundxyz', value: 'soundxyz', icon: 'https://i.imgur.com/BbvrNR2.jpg' },
   { label: '/bangers', value: 'bangers', icon: 'https://i.imgur.com/URBvewb.png' },
   { label: '/rock', value: 'rock', icon: 'https://i.imgur.com/Ffj1Opg.png' },
-  {
-    label: '/music',
-    value: 'music',
-    icon: 'https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/4e85acaa-4f1d-444b-1e35-dd06d43d0800/rectcrop3',
-  },
+  { label: '/spotify', value: 'spotify', icon: 'https://i.imgur.com/3Z8YjMT.jpg' },
+  { label: '/music', value: 'music', icon: 'https://i.imgur.com/3Z8YjMT.jpg' },
 ];
 
 export const fetchPostsLimit = 20;
