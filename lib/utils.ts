@@ -16,9 +16,8 @@ export function formatDuration(duration: number) {
 
   if (hours > 0) {
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  } else {
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   }
+  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 export const formatBigInt = (balance: bigint | string): string => {
   const formatter = new Intl.NumberFormat('en-US', {
