@@ -101,7 +101,6 @@ const getResponse = async (): Promise<NextResponse> => {
 async function createCast(cast: Cast) {
   const likes = (cast as any).reactions.likes_count;
   const alternativeEmbeds = (cast as any).alternativeEmbeds;
-  console.log("SWEETS alternativeEmbeds", alternativeEmbeds)
   const channelId = getChannelIdFromCast(cast);
 
   const { error } = await supabase.from('posts').upsert(
