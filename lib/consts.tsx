@@ -35,6 +35,7 @@ export const CHANNELS = [
   { label: '/bangers', value: 'bangers', icon: 'https://i.imgur.com/URBvewb.png' },
   { label: '/rock', value: 'rock', icon: 'https://i.imgur.com/Ffj1Opg.png' },
   { label: '/spotify', value: 'spotify', icon: 'https://i.imgur.com/3Z8YjMT.jpg' },
+  { label: '/coop-recs', value: 'coop-recs', icon: 'https://i.imgur.com/eecb7AP.gif' },
 ];
 
 export const fetchPostsLimit = 20;
