@@ -13,14 +13,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,
-    images: 'https://photos.sphereshowcase.com/tBJczsgyzUAP3woETDr31.jpg',
+    images: `${VERCEL_URL}/images/og.png`,
   },
   icons: [`${VERCEL_URL}/images/logo2.png`],
   other: {
     ...frameMetadata,
   },
 };
-console.log(window.location.origin);
 
 export default async function CastHome({ params }: { params: { username: string; hash: string } }) {
   const { username, hash } = params;
