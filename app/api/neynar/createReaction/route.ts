@@ -1,7 +1,7 @@
 import verifySignerUUID from '@/lib/neynar/verifySigner';
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
-import { Item } from '@/types/Item';
+import { ILike } from '@/types/Item';
 import { VERCEL_URL } from '@/lib/consts';
 
 const SUPABASE_URL = process.env.SUPABASE_URL as string;
@@ -27,16 +27,12 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
     }),
   } as any;
 
-
-
   const castOptions = {
     method: 'GET',
     headers: { accept: 'application/json', api_key: process.env.NEYNAR_API_KEY },
   } as any;
 
   const verify = await verifySignerUUID(signer_uuid);
-
-
 
   try {
     const queryParams = new URLSearchParams({
@@ -45,30 +41,23 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
     const response = await fetch(`${VERCEL_URL}/api/neynar/getCastLikes?${queryParams}`, castOptions);
     const data = await response.json();
     let likes_count = data.reactions.length;
-    const isFidIncluded = data.reactions.some((item: Item) => item.fid === verify.fid);
-
-    if (!isFidIncluded) {
-      const response = await fetch(`https://api.neynar.com/v2/farcaster/reaction?`, options)
-      .then(res => res.json())
-      .then(json => json)
-      .catch(err => console.error('error:' + err));
-        console.log(response)
-
-    if( response.code !== "NotFound"){
-      likes_count++;
-      await supabase.from('posts').upsert(
-        {
-          post_hash: target,
-          likes: likes_count,
-        },
-        {
-          onConflict: 'post_hash',
-        },
-      );
-    }else{
-       return NextResponse.json({ errors: 'Something went wrong', success: false }, { status: 400 })
+    const isFidIncluded = data.reactions.some((item: ILike) => Number(item.user.fid) === Number(verify.fid));
+      if (!isFidIncluded) {
+        likes_count++;
+        await fetch(`https://api.neynar.com/v2/farcaster/reaction?`, options)
+        .then(res => res.json())
+        .then(json => json)
+        .catch(err => console.error('error:' + err));
     }
-    }
+    await supabase.from('posts').upsert(
+      {
+        post_hash: target,
+        likes: likes_count,
+      },
+      {
+        onConflict: 'post_hash',
+      },
+    );
 
     return NextResponse.json({ success: true, likes: likes_count }, { status: 200 });
   } catch (error) {

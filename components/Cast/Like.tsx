@@ -8,6 +8,7 @@ import { Signer } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { useUi } from '@/providers/UiProvider';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
+import { Item } from '@/types/Item';
 
 export default function Like({ cast }: { cast: SupabasePost }) {
   const { signer } = useNeynarProvider();
@@ -19,7 +20,7 @@ export default function Like({ cast }: { cast: SupabasePost }) {
     if (!likes) {
       return;
     }
-    if (likes.some((like: any) => like.fid === Number(signer?.fid))) {
+    if (likes.some((like: Item) => like?.user?.fid === Number(signer?.fid))) {
       setUpvoted(true);
     }
   };

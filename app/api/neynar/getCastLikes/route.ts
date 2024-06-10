@@ -1,5 +1,6 @@
 import {  isEmpty } from 'lodash';
 import { NextRequest } from 'next/server';
+import axios from 'axios';
 
 export async function GET(req: NextRequest): Promise<Response> {
   const hash = req.nextUrl.searchParams.get('hash') as string;
@@ -13,24 +14,21 @@ export async function GET(req: NextRequest): Promise<Response> {
     });
   }
 
-  const options = {
-    method: 'GET',
-    headers: { accept: 'application/json', api_key: process.env.NEYNAR_API_KEY },
-  } as any;
-
   try {
       const queryParams = new URLSearchParams({
-        identifier: hash,
-        type: 'hash',
+        hash: hash,
+        types: "likes",
+        limit:"100"
   });
 
-
-     const castResponse = await fetch(
-      `https://api.neynar.com/v2/farcaster/cast?${queryParams}`,
-      options,
-    );
-    const castData = await castResponse.json();
-    const likes = castData.cast?.reactions ? castData.cast?.reactions.likes: [];
+    let castData =   await axios({
+      method: "GET",
+      url:  `https://api.neynar.com/v2/farcaster/reactions/cast?${queryParams}`,
+      headers: { accept: 'application/json', api_key: process.env.NEYNAR_API_KEY },
+    }).then(function (response) {
+      return response.data;
+    });
+    const likes = castData?.reactions ? castData.reactions: [];
     return new Response(JSON.stringify({ reactions: likes }), {
       status: 200,
       headers: {
