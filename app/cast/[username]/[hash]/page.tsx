@@ -1,12 +1,12 @@
 import { getFrameMetadata } from '@coinbase/onchainkit';
 import type { Metadata } from 'next';
-import { DEFAULT_FRAME, DESCRIPTION, TITLE, VERCEL_URL } from '@/lib/consts';
+import { DEFAULT_FRAME, DESCRIPTION, TITLE } from '@/lib/consts';
 import getCastHash from '@/lib/neynar/getCastHash';
 import { supabaseClient } from '@/lib/supabase/client';
 import Cast from '@/components/Cast';
 
 const frameMetadata = { ...getFrameMetadata(DEFAULT_FRAME), 'of:accepts:xmtp': '2024-02-01' };
-let url = window.location.origin;
+const url = window.location.origin;
 
 export const metadata: Metadata = {
   title: TITLE,
