@@ -3,7 +3,7 @@ const getFeed = async (embedUrl: string) => {
     method: 'GET',
     headers: { accept: 'application/json' },
     next: {
-      revalidate: 60,
+      revalidate: 0,
     },
   } as any;
 

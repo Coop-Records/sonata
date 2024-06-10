@@ -113,7 +113,6 @@ async function createCast(cast: Cast) {
       onConflict: 'post_hash',
     },
   );
-  
 
   console.log('jobs::getNewCasts', `Successfully created/updated ${cast.hash}`);
 

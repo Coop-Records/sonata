@@ -17,7 +17,7 @@ export async function GET(req: NextRequest): Promise<Response> {
     method: 'GET',
     headers: { accept: 'application/json', api_key: process.env.NEYNAR_API_KEY },
     next: {
-      revalidate: 60,
+      revalidate: 0,
     },
   } as any;
 
