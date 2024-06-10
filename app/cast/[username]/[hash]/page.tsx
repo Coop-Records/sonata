@@ -13,9 +13,8 @@ export const metadata: Metadata = {
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,
-    images: `${window.location.origin}/images/og.png`,
   },
-  icons: [`${VERCEL_URL}/images/logo2.png`],
+  icons: ['https://photos.sphereshowcase.com/tBJczsgyzUAP3woETDr31.jpg'],
   other: {
     ...frameMetadata,
   },
