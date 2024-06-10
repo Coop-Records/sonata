@@ -20,9 +20,7 @@ export const metadata: Metadata = {
 };
 
 export default function FeedsHome() {
-  let aa = window.location.origin;
   console.log(window.location.origin);
-  debugger;
 
   return <Feeds />;
 }

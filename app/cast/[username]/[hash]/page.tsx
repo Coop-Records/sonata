@@ -20,6 +20,7 @@ export const metadata: Metadata = {
     ...frameMetadata,
   },
 };
+console.log(window.location.origin);
 
 export default async function CastHome({ params }: { params: { username: string; hash: string } }) {
   const { username, hash } = params;
@@ -31,8 +32,6 @@ export default async function CastHome({ params }: { params: { username: string;
     .single();
 
   console.log(window.location.origin);
-  let aa = window.location.origin;
-  debugger;
   return (
     <main className="container flex grow items-center justify-center">
       <meta property="of:accepts:xmtp" content="2024-02-01" />
