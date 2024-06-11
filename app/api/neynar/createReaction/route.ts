@@ -49,6 +49,8 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
         .then(json => json)
         .catch(err => console.error('error:' + err));
     }
+    
+
     await supabase.from('posts').upsert(
       {
         post_hash: target,
