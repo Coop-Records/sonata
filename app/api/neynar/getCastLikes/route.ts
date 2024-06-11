@@ -21,7 +21,7 @@ export async function GET(req: NextRequest): Promise<Response> {
         limit:"100"
   });
 
-    let castData =   await axios({
+    const castData =   await axios({
       method: "GET",
       url:  `https://api.neynar.com/v2/farcaster/reactions/cast?${queryParams}`,
       headers: { accept: 'application/json', api_key: process.env.NEYNAR_API_KEY },
