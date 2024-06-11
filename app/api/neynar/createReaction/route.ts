@@ -42,6 +42,7 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
 
   try {
     const castResponse = await fetch(
+
       `https://api.neynar.com/v2/farcaster/cast?${queryParams}`,
       castOptions,
     );
