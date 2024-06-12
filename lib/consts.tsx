@@ -28,15 +28,16 @@ export const CHANNELS = [
     value: 'sonata',
     icon: 'https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/4e85acaa-4f1d-444b-1e35-dd06d43d0800/rectcrop3',
   },
-  { label: '/soundscapes', value: 'soundscapes', icon: 'https://i.imgur.com/TUtJ82Q.jpg' },
+  { label: '/louder', value: 'louder', icon: 'https://i.imgur.com/r4GIRLL.png' },
+  { label: '/rock', value: 'rock', icon: 'https://i.imgur.com/Ffj1Opg.png' },
+  { label: '/techno', value: 'techno', icon: 'https://i.imgur.com/omLkrpT.png' },
   { label: '/albumoftheday', value: 'albumoftheday', icon: 'https://i.imgur.com/RZQbasU.gif' },
+  { label: '/soundscapes', value: 'soundscapes', icon: 'https://i.imgur.com/TUtJ82Q.jpg' },
   { label: '/djs', value: 'djs', icon: 'https://i.imgur.com/EQ7kMoE.jpg' },
   { label: '/soundxyz', value: 'soundxyz', icon: 'https://i.imgur.com/BbvrNR2.jpg' },
   { label: '/bangers', value: 'bangers', icon: 'https://i.imgur.com/URBvewb.png' },
-  { label: '/rock', value: 'rock', icon: 'https://i.imgur.com/Ffj1Opg.png' },
   { label: '/spotify', value: 'spotify', icon: 'https://i.imgur.com/3Z8YjMT.jpg' },
   { label: '/coop-recs', value: 'coop-recs', icon: 'https://i.imgur.com/eecb7AP.gif' },
-  { label: '/louder', value: 'louder', icon: 'https://i.imgur.com/r4GIRLL.png' },
 ];
 
 export const fetchPostsLimit = 20;
