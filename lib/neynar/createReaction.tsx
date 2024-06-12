@@ -1,6 +1,6 @@
 import { Address } from 'viem';
 
-const createReaction = async (signer: string, target: Address, votes: number) => {
+const createReaction = async (signer: string, target: Address) => {
   const options = {
     method: 'POST',
     headers: {
@@ -11,7 +11,6 @@ const createReaction = async (signer: string, target: Address, votes: number) =>
       signer_uuid: signer,
       reaction_type: 'like',
       target: target,
-      votes: votes,
     }),
   } as any;
 

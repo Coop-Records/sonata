@@ -14,17 +14,17 @@ export default function Like({ cast }: { cast: SupabasePost }) {
   const [upvoted, setUpvoted] = useState(false);
   const [votes, setVotes] = useState<number>(cast.likes || 0);
   const { checkLoggedIn } = useUi();
-  const updateReaction = async () => {
-    const likes = await getCastLikes(cast.post_hash);
-    if (!likes) {
-      return;
-    }
-    if (likes.some((like: any) => like.fid === Number(signer?.fid))) {
-      setUpvoted(true);
-    }
-    console.log(likes.some((like: any) => like.fid === signer?.fid));
-  };
+
   useEffect(() => {
+    const updateReaction = async () => {
+      const likes = await getCastLikes(cast.post_hash);
+      if ('error' in likes) {
+        return;
+      }
+      if (likes.some((like: any) => like.fid === signer?.fid)) {
+        setUpvoted(true);
+      }
+    };
     if (signer?.fid && cast.post_hash) {
       updateReaction();
     }
@@ -32,10 +32,10 @@ export default function Like({ cast }: { cast: SupabasePost }) {
 
   const handleClick = async () => {
     if (!checkLoggedIn()) return;
+    setUpvoted(true);
 
     const { signer_uuid } = signer as Signer;
-    const response = await createReaction(signer_uuid, cast.post_hash, votes);
-    setUpvoted(response.success);
+    const response = await createReaction(signer_uuid, cast.post_hash);
 
     if (response.success) {
       setVotes(response.likes);
