@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { VERCEL_URL } from '@/lib/consts';
 import { Signer } from '@neynar/nodejs-sdk/build/neynar-api/v2';
+import axios from 'axios';
 
 const SUPABASE_URL = process.env.SUPABASE_URL as string;
 const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
@@ -39,10 +40,23 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
       hash: target,
       viewer_fid: signer?.fid,
     });
-    const response = await fetch(`${VERCEL_URL}/api/neynar/getCastLikes?${queryParams}`, castOptions);
-    const data = await response.json();
-    let likes_count = data.likes_count;
 
+
+    const response =   await axios({
+      method: "GET",
+      url:  `${VERCEL_URL}/api/neynar/getCastLikes?${queryParams}`,
+      headers: { accept: 'application/json', api_key: process.env.NEYNAR_API_KEY },
+    }).then(function (response) {
+      return response.data;
+    });
+
+   console.log(response)
+   console.log(target)
+
+
+    const data = await response;
+    let likes_count = data.likes_count;
+  console.log(data.viewContext)
     const viewContext = data.viewContext;
    
     if (!viewContext) {

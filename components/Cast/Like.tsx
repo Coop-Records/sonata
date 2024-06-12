@@ -29,6 +29,7 @@ export default function Like({ cast }: { cast: SupabasePost }) {
   }, [cast.post_hash, signer?.fid]);
 
   const handleClick = async () => {
+    if (upvoted) return;
     if (!checkLoggedIn()) return;
 
     const response = await createReaction(signer, cast.post_hash, votes);
