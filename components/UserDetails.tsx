@@ -9,7 +9,7 @@ export default function UserDetails({
   className,
 }: {
   user: User;
-  hasHypersub: boolean;
+  hasHypersub?: boolean;
   className?: string;
 }) {
   const profileUrl = `https://warpcast.com/${user.username}`;
