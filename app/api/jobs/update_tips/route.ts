@@ -1,4 +1,5 @@
 import getTipAllocationFeedFromTime from '@/lib/neynar/getTipAllocationFeedFromTime';
+import filterByChannels from '@/lib/youtube/filterByChannels';
 import { createClient } from '@supabase/supabase-js';
 import { isEmpty } from 'lodash';
 import { NextResponse } from 'next/server';
@@ -47,15 +48,21 @@ const getResponse = async (): Promise<NextResponse> => {
   const lastChecked = tip_query_date ? tip_query_date.last_checked : '';
   const formattedLastChecked = new Date(`${lastChecked}`);
 
-  const [spotify, soundCloud, soundxyz] = await Promise.all([
+  const [spotify, soundCloud, soundxyz, youtube] = await Promise.all([
     getTipAllocationFeedFromTime('spotify.com/track', formattedLastChecked),
     getTipAllocationFeedFromTime('soundcloud.com', formattedLastChecked),
     getTipAllocationFeedFromTime('sound.xyz', formattedLastChecked),
+    getTipAllocationFeedFromTime('youtube.com/watch', formattedLastChecked),
   ]);
 
   const allEntries: any[] = [];
 
   allEntries.push(...spotify, ...soundCloud, ...soundxyz);
+
+  const youtubeFiltered = filterByChannels(youtube);
+  console.log('jobs::update_tips', 'ytEntries', youtubeFiltered);
+  allEntries.push(...youtubeFiltered);
+
   console.log('jobs::update_tips', `New entries:`, allEntries.length);
 
   await processEntriesInBatches(allEntries);
