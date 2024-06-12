@@ -30,7 +30,6 @@ export default async function CastHome({ params }: { params: { username: string;
     .eq('post_hash', fullHash)
     .single();
 
-  console.log(window.location.origin);
   return (
     <main className="container flex grow items-center justify-center">
       <meta property="of:accepts:xmtp" content="2024-02-01" />
