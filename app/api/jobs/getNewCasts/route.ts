@@ -108,6 +108,7 @@ async function createCast(cast: Cast) {
       author: cast.author,
       channelId,
       alternativeEmbeds,
+      authorFid: cast.author.fid,
     },
     {
       onConflict: 'post_hash',
