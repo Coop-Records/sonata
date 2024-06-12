@@ -4,11 +4,9 @@ import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import getCastLikes from '@/lib/neynar/getCastLikes';
 import { SupabasePost } from '@/types/SupabasePost';
-import { Signer } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { useUi } from '@/providers/UiProvider';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
-import { Item } from '@/types/Item';
 
 export default function Like({ cast }: { cast: SupabasePost }) {
   const { signer } = useNeynarProvider();
@@ -16,11 +14,11 @@ export default function Like({ cast }: { cast: SupabasePost }) {
   const [votes, setVotes] = useState<number>(cast.likes || 0);
   const { checkLoggedIn } = useUi();
   const updateReaction = async () => {
-    const likes = await getCastLikes(cast.post_hash);
-    if (!likes) {
+    const data = await getCastLikes(cast.post_hash, signer?.fid);
+    if (!data.likes_count) {
       return;
     }
-    if (likes.some((like: Item) => like?.user?.fid === Number(signer?.fid))) {
+    if (data.viewContext) {
       setUpvoted(true);
     }
   };
@@ -33,8 +31,7 @@ export default function Like({ cast }: { cast: SupabasePost }) {
   const handleClick = async () => {
     if (!checkLoggedIn()) return;
 
-    const { signer_uuid } = signer as Signer;
-    const response = await createReaction(signer_uuid, cast.post_hash, votes);
+    const response = await createReaction(signer, cast.post_hash, votes);
     setUpvoted(response.success);
 
     if (response.success) {

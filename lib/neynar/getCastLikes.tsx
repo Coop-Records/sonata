@@ -1,6 +1,6 @@
 import { Address } from 'viem';
 
-const getCastLikes = async (hash: Address) => {
+const getCastLikes = async (hash: Address, signer: number | undefined) => {
   const options = {
     method: 'GET',
     headers: { accept: 'application/json' },
@@ -9,11 +9,12 @@ const getCastLikes = async (hash: Address) => {
   try {
     const queryParams = new URLSearchParams({
       hash,
+      viewer_fid: signer ? signer.toString() : '3',
     });
 
     const response = await fetch(`/api/neynar/getCastLikes?${queryParams}`, options);
     const data = await response.json();
-    return data.reactions;
+    return data;
   } catch (error) {
     console.error(error);
     return { error };

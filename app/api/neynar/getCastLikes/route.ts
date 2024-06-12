@@ -4,6 +4,8 @@ import axios from 'axios';
 
 export async function GET(req: NextRequest): Promise<Response> {
   const hash = req.nextUrl.searchParams.get('hash') as string;
+  const viewer_fid = req.nextUrl.searchParams.get('viewer_fid') as string;
+
 
   if (isEmpty(hash)) {
     return new Response(JSON.stringify({ error: 'hash required' }), {
@@ -16,20 +18,24 @@ export async function GET(req: NextRequest): Promise<Response> {
 
   try {
       const queryParams = new URLSearchParams({
-        hash: hash,
-        types: "likes",
-        limit:"100"
+        identifier: hash,
+        type: "hash",
+        viewer_fid: viewer_fid
   });
 
     const castData =   await axios({
       method: "GET",
-      url:  `https://api.neynar.com/v2/farcaster/reactions/cast?${queryParams}`,
+      url:  `https://api.neynar.com/v2/farcaster/cast?${queryParams}`,
       headers: { accept: 'application/json', api_key: process.env.NEYNAR_API_KEY },
     }).then(function (response) {
       return response.data;
     });
-    const likes = castData?.reactions ? castData.reactions: [];
-    return new Response(JSON.stringify({ reactions: likes }), {
+    const likes = castData.cast.reactions.likes_count ? castData.cast.reactions.likes_count: 0;
+
+    const viewContext = castData.cast.viewer_context.liked ? castData.cast.viewer_context.liked : false;
+    console.log(viewContext)
+
+    return new Response(JSON.stringify({ likes_count: likes , viewContext: viewContext }), {
       status: 200,
       headers: {
         'Content-Type': 'application/json',

@@ -1,8 +1,7 @@
-import verifySignerUUID from '@/lib/neynar/verifySigner';
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
-import { ILike } from '@/types/Item';
 import { VERCEL_URL } from '@/lib/consts';
+import { Signer } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 
 const SUPABASE_URL = process.env.SUPABASE_URL as string;
 const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
@@ -11,7 +10,9 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const getResponse = async (req: NextRequest): Promise<NextResponse> => {
   const body = await req.json();
-  const { signer_uuid, reaction_type, target } = body;
+  const { signer, reaction_type, target } = body;
+  const { signer_uuid } = signer as Signer;
+
 
   const options = {
     method: 'POST',
@@ -32,25 +33,24 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
     headers: { accept: 'application/json', api_key: process.env.NEYNAR_API_KEY },
   } as any;
 
-  const verify = await verifySignerUUID(signer_uuid);
 
   try {
     const queryParams = new URLSearchParams({
       hash: target,
+      viewer_fid: signer?.fid,
     });
     const response = await fetch(`${VERCEL_URL}/api/neynar/getCastLikes?${queryParams}`, castOptions);
     const data = await response.json();
-    let likes_count = data.reactions.length;
-    const isFidIncluded = data.reactions.some((item: ILike) => Number(item.user.fid) === Number(verify.fid));
-      if (!isFidIncluded) {
-        likes_count++;
+    const likes_count = data.likes_count;
+
+    const viewContext = data.viewContext;
+   
+    if (!viewContext) {
         await fetch(`https://api.neynar.com/v2/farcaster/reaction?`, options)
         .then(res => res.json())
         .then(json => json)
         .catch(err => console.error('error:' + err));
     }
-    
-
     await supabase.from('posts').upsert(
       {
         post_hash: target,

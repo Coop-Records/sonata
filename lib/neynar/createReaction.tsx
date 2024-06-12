@@ -1,6 +1,7 @@
+import { Signer } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { Address } from 'viem';
 
-const createReaction = async (signer: string, target: Address, votes: number) => {
+const createReaction = async (signer: Signer | null, target: Address, votes: number) => {
   const options = {
     method: 'POST',
     headers: {
@@ -8,7 +9,7 @@ const createReaction = async (signer: string, target: Address, votes: number) =>
       'content-type': 'application/json',
     },
     body: JSON.stringify({
-      signer_uuid: signer,
+      signer: signer,
       reaction_type: 'like',
       target: target,
       votes: votes,
