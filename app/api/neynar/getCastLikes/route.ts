@@ -33,7 +33,6 @@ export async function GET(req: NextRequest): Promise<Response> {
     const likes = castData.cast.reactions.likes_count ? castData.cast.reactions.likes_count: 0;
 
     const viewContext = castData.cast.viewer_context.liked ? castData.cast.viewer_context.liked : false;
-    console.log(viewContext)
 
     return new Response(JSON.stringify({ likes_count: likes , viewContext: viewContext }), {
       status: 200,

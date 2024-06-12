@@ -41,11 +41,12 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
     });
     const response = await fetch(`${VERCEL_URL}/api/neynar/getCastLikes?${queryParams}`, castOptions);
     const data = await response.json();
-    const likes_count = data.likes_count;
+    let likes_count = data.likes_count;
 
     const viewContext = data.viewContext;
    
     if (!viewContext) {
+        likes_count++
         await fetch(`https://api.neynar.com/v2/farcaster/reaction?`, options)
         .then(res => res.json())
         .then(json => json)
