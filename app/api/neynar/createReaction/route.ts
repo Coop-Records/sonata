@@ -29,12 +29,6 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
     }),
   } as any;
 
-  const castOptions = {
-    method: 'GET',
-    headers: { accept: 'application/json', api_key: process.env.NEYNAR_API_KEY },
-  } as any;
-
-
   try {
     const queryParams = new URLSearchParams({
       hash: target,
