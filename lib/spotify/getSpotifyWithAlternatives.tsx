@@ -3,9 +3,14 @@ import getSongLinksFromCasts from './getSongLinksFromCasts';
 import mergeWithAlternatives from './mergeWithAlternatives';
 
 const getSpotifyWithAlternatives = async (spotify: any[]) => {
-  const spotifySongLinks = await getSongLinksFromCasts(spotify);
-  const spotifyAlternative = getAlternativeLinks(spotifySongLinks);
-  return mergeWithAlternatives(spotify, spotifyAlternative);
+  try {
+    const spotifySongLinks = await getSongLinksFromCasts(spotify);
+    const spotifyAlternative = getAlternativeLinks(spotifySongLinks);
+    return mergeWithAlternatives(spotify, spotifyAlternative);
+  } catch (err) {
+    console.error('Error fetching Spotify URLs:', err);
+    return spotify;
+  }
 };
 
 export default getSpotifyWithAlternatives;
