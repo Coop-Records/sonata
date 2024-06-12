@@ -30,7 +30,7 @@ export async function GET(req: NextRequest): Promise<Response> {
     }).then(function (response) {
       return response.data;
     });
-    const likes = castData.cast.reactions.likes_count ? castData.cast.reactions.likes_count: 0;
+    const likes = castData.cast?.reactions?.likes_count ? castData.cast.reactions.likes_count: 0;
 
     const viewContext = castData.cast.viewer_context.liked ? castData.cast.viewer_context.liked : false;
 

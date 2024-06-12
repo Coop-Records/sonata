@@ -50,7 +50,7 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
 
     const data = await response;
     let likes_count = data.likes_count;
-  console.log(data.viewContext)
+    console.log(data.viewContext)
     const viewContext = data.viewContext;
    
     if (!viewContext) {
