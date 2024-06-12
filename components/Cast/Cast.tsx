@@ -26,7 +26,10 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
     const init = async () => {
       if (url) {
         try {
+          console.log('SWEETS url', url);
           const metadata = await fetchMetadata(url, cast);
+          console.log('SWEETS metadata', metadata);
+
           setMetadata(metadata);
         } catch (error) {
           console.error(error);
