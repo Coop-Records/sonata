@@ -20,7 +20,7 @@ const getSongLinksFromCasts = async (casts: any[]) => {
     return songLinks;
   } catch (error) {
     console.error('Error fetching Soundcloud URLs:', error);
-    return [];
+    return false;
   }
 };
 
