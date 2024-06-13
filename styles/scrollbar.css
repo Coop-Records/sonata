@@ -1,0 +1,3 @@
+.no-scroll::-webkit-scrollbar {
+    width: 0;
+}
