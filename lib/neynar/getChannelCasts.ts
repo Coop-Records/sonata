@@ -4,9 +4,9 @@ import { ErrorRes, FeedType, FilterType, NeynarV2APIClient as NeynarAPIClient } 
 
 
 const getChannelCasts = async (
-  channelId: string,  // channel name
-  lastChecked = new Date(new Date().getTime() - 2 * 60 * 1000), // two minutes ago
-  limit = 100 // max allowed 100
+  channelId: string,
+  lastChecked = new Date(new Date().getTime() - 2 * 60 * 1000),
+  limit = 100
 ) => {
   const client = new NeynarAPIClient(process.env.NEYNAR_API_KEY!);
 
@@ -30,7 +30,18 @@ const getChannelCasts = async (
       for (const entry of result.casts) {
         if (new Date(entry.timestamp) > lastChecked) {
 
-          const found = entry.embeds.some(filterByEmbed);
+          const found = entry.embeds.some((embed: any): boolean => {
+            const url = embed?.url as string | undefined;
+
+            if (!url) return false;
+
+            return (
+              url.includes('youtube.com/watch') ||
+              url.includes('soundcloud.com') ||
+              url.includes('sound.xyz') ||
+              url.includes('spotify.com/track')
+            );
+          });
 
           if (found) casts.push(entry);
         }
@@ -47,19 +58,6 @@ const getChannelCasts = async (
 
   if (error) return error;
   return casts;
-};
-
-const filterByEmbed = (embed: any): boolean => {
-  const url = embed?.url as string | undefined;
-
-  if (!url) return false;
-
-  return (
-    url.includes('youtube.com/watch') ||
-    url.includes('soundcloud.com') ||
-    url.includes('sound.xyz') ||
-    url.includes('spotify.com/track')
-  );
 };
 
 export default getChannelCasts;
