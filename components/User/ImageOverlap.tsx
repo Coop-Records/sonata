@@ -16,6 +16,7 @@ const ImageOverlap: FC<IImageOverlap> = ({ data } ) => {
             <div className="relative flex h-8  w-[48px]">
                 {mutalFriends.map((element, index) => (
                     <Image
+                        key={index}
                         width={24}
                         height={24}
                         src={element.img}
