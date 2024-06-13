@@ -5,7 +5,6 @@ import Sidebar from '@/components/Sidebar';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { useUi } from '@/providers/UiProvider';
 import GlobalPlayer from '@/components/GlobalPlayer';
-import { useNeynarProvider } from '@/providers/NeynarProvider';
 import FeedProvider from '@/providers/FeedProvider';
 import ClaimAirdropButton from "@/components/ClaimAirdropButton/ClaimAirdropButton";
 import {Avatar, AvatarImage} from "@/components/ui/avatar";
