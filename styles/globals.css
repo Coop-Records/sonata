@@ -83,3 +83,112 @@
       'calt' 1;
   }
 }
+.flex-padding  {
+  column-gap: 20px;
+}
+.padding{
+  padding: 0px 10px;
+}
+.custom-background {
+  /* font-family: Sora; */
+  background: #EEE4FE;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16.8px;
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: #8B49F7;
+  padding-top: 8px;
+    padding-bottom: 8px;
+}
+.custom-background img {
+  height: 14px;
+  width: 16px;
+  
+}
+.custom-width {
+  width: 100%;
+  display: grid;
+  white-space: pre;
+  grid-template-columns: 20% 80%;
+  padding: 10px 14px;
+  background: black;
+  color: white;
+  column-gap: 5px;
+  /* flex-wrap: wrap; */
+}
+.custom-width span {
+  margin-top: 3px;
+
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+}
+.right-corner{
+  margin-left: auto;
+  column-gap: 15px;
+  align-items: center;
+
+}
+.right-corner img:not(.w-4){
+  width: 36px;
+  height: 36px;
+}
+music-info {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 600px;
+}
+.info-section {
+  display: flex;
+  column-gap: 40px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.info-item {
+  text-align: center;
+}
+.info-number {
+  font-size: 16px;
+  font-weight: 600;
+}
+.info-label {
+  display: block;
+  color: #888;
+  text-align: justify;
+  font-size: 14px;
+}
+.top-song-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+}
+.followers {
+  display: flex;
+  align-items: center;
+}
+.follower-images {
+  display: flex;
+}
+.follower-image {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  margin-left: -10px;
+}
+.follower-text {
+  margin-left: 10px;
+  color: #888;
+}
+.info-item .flex span{
+  font-weight: 800;
+  font-size: 14px;
+  margin-left: 5px;
+  margin-top: 10px;
+}
+
