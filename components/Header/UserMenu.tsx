@@ -24,7 +24,9 @@ export default function UserMenu() {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="mr-2 min-w-52" alignOffset={100}>
-        <DropdownMenuLabel className="cursor-default">{user.display_name}</DropdownMenuLabel>
+        <a href={`/${user?.username}`}>
+          <DropdownMenuItem className="cursor-pointer">{user.display_name} </DropdownMenuItem>
+        </a>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={signOut} className="cursor-pointer">
           Logout

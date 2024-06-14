@@ -25,10 +25,12 @@ export default function CreatePost() {
 
   return (
     <div className="flex items-center gap-2">
-      <Avatar className="size-12 max-md:hidden">
-        <AvatarImage src={user?.pfp_url} />
-        <AvatarFallback>{user?.display_name?.[0]}</AvatarFallback>
-      </Avatar>
+      <a className="cursor-pointer" href={`/${user?.username}`}>
+        <Avatar className="size-12 max-md:hidden">
+          <AvatarImage src={user?.pfp_url} />
+          <AvatarFallback>{user?.display_name?.[0]}</AvatarFallback>
+        </Avatar>
+      </a>
 
       <div className="flex grow items-center justify-between rounded-2xl bg-muted p-3">
         <Input
