@@ -39,7 +39,7 @@ const Followers = () => {
           />
         )}
       </div>
-      <p className="text-[14px] leading-none text-grey">
+      <p className="text-[14px] leading-none text-grey translate-x-[-12px] flex items-center">
         Followed by {follower1st && `@${follower1st.username},`}
         {follower2nd && ` @${follower2nd.username},`}
         {follower3rd && ` @${follower3rd.username}`} and {`${followers.length}`} more friends.
