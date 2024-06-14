@@ -22,7 +22,7 @@ export default function ChannelFilter( ) {
 
           return (
             <Link
-              href={active ? '/' : `/channel/${option.label}`}
+              href={active ? '/' : `/channel${option.label}`}
               onClick={() => handleClick(option.value)}
               key={option.value}
               variant="ghost"

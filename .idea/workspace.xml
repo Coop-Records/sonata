@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bb766293-10f2-421d-84ac-68c216c4e4d0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/(feeds)/channel/[channelId]/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(feeds)/feeds.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(feeds)/feeds.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Feed/ChannelFilter.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Feed/ChannelFilter.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/getYoutubeVideoData.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/getYoutubeVideoData.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,7 +81,7 @@
       <workItem from="1718345075578" duration="186000" />
       <workItem from="1718345283051" duration="1515000" />
       <workItem from="1718348509584" duration="5466000" />
-      <workItem from="1718354306346" duration="1036000" />
+      <workItem from="1718354306346" duration="1559000" />
     </task>
     <servers />
   </component>
