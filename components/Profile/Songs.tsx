@@ -5,8 +5,8 @@ const Songs = () => {
   const { songs } = useProfileProvider();
 
   return (
-    <div className="flex flex-col justify-center w-fit">
-      <p className="text-[16px] font-semibold font-sora">{formatBigInt(BigInt(songs.length))}</p>
+    <div className="flex w-fit flex-col justify-center">
+      <p className="font-sora text-[16px] font-semibold">{formatBigInt(BigInt(songs.length))}</p>
       <p className="text-[14px] text-grey">Songs</p>
     </div>
   );

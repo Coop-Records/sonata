@@ -14,7 +14,7 @@ const Profile = () => {
   }, []);
 
   return (
-    <section className="container mx-auto max-w-3xl space-y-4 mb-4 mt-8">
+    <section className="container mx-auto mb-4 mt-8 max-w-3xl space-y-4">
       <BaseInfo />
       <div className="flex gap-4">
         <Songs />

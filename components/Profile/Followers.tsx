@@ -17,7 +17,7 @@ const Followers = () => {
             width={24}
             height={24}
             alt={follower1st.username}
-            className="rounded-full overflow-hidden"
+            className="overflow-hidden rounded-full"
           />
         )}
         {follower2nd && (
@@ -26,7 +26,7 @@ const Followers = () => {
             width={24}
             height={24}
             alt={follower2nd.username}
-            className="rounded-full overflow-hidden translate-x-[-8px]"
+            className="translate-x-[-8px] overflow-hidden rounded-full"
           />
         )}
         {follower3rd && (
@@ -35,11 +35,11 @@ const Followers = () => {
             width={24}
             height={24}
             alt={follower3rd.username}
-            className="rounded-full overflow-hidden translate-x-[-16px]"
+            className="translate-x-[-16px] overflow-hidden rounded-full"
           />
         )}
       </div>
-      <p className="text-[14px] leading-none text-grey translate-x-[-12px] flex items-center">
+      <p className="flex translate-x-[-12px] items-center text-[14px] leading-none text-grey">
         Followed by {follower1st && `@${follower1st.username},`}
         {follower2nd && ` @${follower2nd.username},`}
         {follower3rd && ` @${follower3rd.username}`} and {`${followers.length}`} more friends.

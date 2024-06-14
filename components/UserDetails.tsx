@@ -22,7 +22,7 @@ export default function UserDetails({
         </Avatar>
       </a>
       <div className="flex flex-col gap-1">
-        <div className="flex flex-row align-middle items-center">
+        <div className="flex flex-row items-center align-middle">
           <a href={profileUrl} target="_blank" className="text-sm font-semibold leading-none">
             {user.display_name}
           </a>

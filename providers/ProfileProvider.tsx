@@ -43,7 +43,9 @@ const ProfileProvider = ({ children }: { children: ReactNode }) => {
         const metadata = await fetchMetadata(url, topPost);
         if (!metadata) return;
         setTopSongMetadata(metadata);
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     if (!username) {

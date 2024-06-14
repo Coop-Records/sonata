@@ -45,7 +45,7 @@ const Header = () => {
                   stroke-linejoin="round"
                 />
               </svg>
-              <p className="text-[18px] font-semibold font-sora">Home</p>
+              <p className="font-sora text-[18px] font-semibold">Home</p>
             </Link>
           </div>
         )}
@@ -63,7 +63,7 @@ const Header = () => {
       {username && !hash && <Profile />}
       {feedType && (
         <div
-          className={`container mx-auto max-w-3xl flex ${username ? 'justify-start' : 'justify-center'}`}
+          className={`container mx-auto flex max-w-3xl ${username ? 'justify-start' : 'justify-center'}`}
         >
           <Tabs tabs={tabs} />
         </div>

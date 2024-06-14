@@ -6,8 +6,8 @@ const TopSong = () => {
   const { topSongMetadata } = useProfileProvider();
 
   return (
-    <div className="flex flex-col justify-center w-fit">
-      <div className="flex gap-1 items-center">
+    <div className="flex w-fit flex-col justify-center">
+      <div className="flex items-center gap-1">
         <div className="relative my-auto aspect-square w-[24px] shrink-0 overflow-hidden rounded-sm">
           {topSongMetadata?.artworkUrl ? (
             <Image

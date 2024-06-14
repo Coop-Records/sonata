@@ -19,8 +19,8 @@ const Notes = () => {
   }, [profile]);
 
   return (
-    <div className="flex flex-col justify-center w-fit">
-      <p className="text-[16px] font-semibold font-sora">{formatBigInt(BigInt(notes))}</p>
+    <div className="flex w-fit flex-col justify-center">
+      <p className="font-sora text-[16px] font-semibold">{formatBigInt(BigInt(notes))}</p>
       <p className="text-[14px] text-grey">Notes</p>
     </div>
   );
