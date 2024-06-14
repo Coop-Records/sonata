@@ -1,24 +1,21 @@
-const getNeynarProfile = async (username: string) => {
+const getUserSongs = async (profileFid: string) => {
   const options = {
     method: 'GET',
     headers: { accept: 'application/json' },
-    next: {
-      revalidate: 60,
-    },
   } as any;
 
   try {
     const queryParams = new URLSearchParams({
-      username,
+      profile_fid: profileFid,
     });
 
-    const response = await fetch(`/api/neynar/getProfile?${queryParams}`, options);
+    const response = await fetch(`/api/getSongs?${queryParams}`, options);
     const data = await response.json();
     return data;
   } catch (error) {
     console.error(error);
-    return [];
+    return { error };
   }
 };
 
-export default getNeynarProfile;
+export default getUserSongs;

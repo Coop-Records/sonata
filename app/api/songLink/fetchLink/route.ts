@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const getResponse = async (req: NextRequest): Promise<NextResponse> => {
-  const url = req.nextUrl; 
+  const url = req.nextUrl;
   const trackUrl = url.searchParams.get('trackUrl');
-  if (!trackUrl) return NextResponse.json({ errors: 'Missing trackUrl' }, { status: 422 })
+  if (!trackUrl) return NextResponse.json({ errors: 'Missing trackUrl' }, { status: 422 });
   const endpoint = `https://api.song.link/v1-alpha.1/links?url=${trackUrl}&userCountry=US&songIfSingle=true`;
   const headers = {
     'Content-Type': 'application/json',

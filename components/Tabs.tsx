@@ -15,14 +15,14 @@ type tab = {
 export default function Tabs({ tabs, className = '' }: { tabs: tab[]; className?: string }) {
   const { feedType, setFeedType } = useFeedProvider();
   const { user } = useNeynarProvider();
-  const { username } = useParams()
+  const { username } = useParams();
 
   return (
     <ul className={cn('flex gap-4 md:gap-8', className)}>
       {tabs
         .filter((tab) => {
           if (username) {
-            return tab.value === FeedType.Posts
+            return tab.value === FeedType.Posts;
           }
           const isDisabled = tab.value === FeedType.Following && !user;
           return !isDisabled;
