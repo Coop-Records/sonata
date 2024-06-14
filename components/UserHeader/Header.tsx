@@ -2,8 +2,7 @@
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import UserMenu from './UserMenu';
 import SignInButton from '@/components/SignInButton';
-import Tabs from '@/components/Tabs';
-import { tabs } from '@/lib/consts';
+
 import { Button } from '@/components/ui/button';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { useUi } from '@/providers/UiProvider';
@@ -38,7 +37,7 @@ const Header = () => {
 
       {feedType && (
         <div className="flex justify-center">
-          {/* <Tabs tabs={tabs} /> */}
+          
         </div>
       )}
     </header>

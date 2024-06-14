@@ -12,7 +12,7 @@ const Feeds = () => {
   const { feed, fetchMore, hasMore } = useFeedProvider();
   return (
     <div className='max-w-3xl'>
-        <div className="flex justify-left">
+        <div className="justify-left flex">
             <Tabs tabs={Post} />
             
         </div>

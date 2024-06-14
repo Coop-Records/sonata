@@ -4,8 +4,6 @@ import { ReactNode } from 'react';
 import Sidebar from '@/components/Sidebar';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { useUi } from '@/providers/UiProvider';
-import Header from '@/components/UserHeader';
-import { Separator } from '@/components/ui/separator';
 import GlobalPlayer from '@/components/GlobalPlayer';
 import FeedProvider from '@/providers/FeedProvider';
 import { CaretLeftIcon } from '@radix-ui/react-icons';
@@ -41,18 +39,18 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
           <main className="flex grow flex-col">
          
            
-            <div className='flex  flex-row container w-full pt-2 md:pt-6'>
+            <div className='container  flex w-full flex-row pt-2 md:pt-6'>
 
-                <a href="/" className="md:px-16 flex flex-row items-center font-semibold">
+                <a href="/" className="flex flex-row items-center font-semibold md:px-16">
                   
                   <CaretLeftIcon />
                   <div className="">Home</div>
                 </a>
-                <div className='flex right-corner'>
+                <div className='right-corner flex'>
 
                 
-                    <div className='flex  rounded-full custom-width flex-col '>
-                        <img className='w-4 md:w-8' src="/images/Ellipse_57.png" />
+                    <div className='custom-width  flex flex-col rounded-full '>
+                        <img className='w-4 md:w-8' alt="User" src="/images/Ellipse_57.png" />
                         <span>Claim Airdrop</span>
                     </div>
                     <a href="#" target="_blank">
@@ -77,7 +75,7 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
                 className="absolute left-0 top-0 size-full overflow-scroll pt-4"
                 id="feed-container"
               >
-               <div className="container mx-auto md:px-16 space-y-6">
+               <div className="container mx-auto space-y-6 md:px-16">
                   
                 {/* {feedType && (
                         <div className="flex justify-center">

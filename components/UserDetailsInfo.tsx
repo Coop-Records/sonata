@@ -1,8 +1,8 @@
-import { User } from '@neynar/nodejs-sdk/build/neynar-api/v2';
+
 // import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 // import { cn } from '@/lib/utils';
 
-export default function UserDetailsInfo({ user, className }: { user: User; className?: string }) {
+export default function UserDetailsInfo() {
 //   const profileUrl = `https://warpcast.com/test`;
   return (
     
