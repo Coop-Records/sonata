@@ -1,6 +1,7 @@
 import { FeedType } from '@/types/Feed';
 import { FrameMetadataType } from '@coinbase/onchainkit';
 import { zeroAddress } from 'viem';
+
 export const TITLE = 'Sonata';
 export const DESCRIPTION = 'Discover music on Farcaster';
 export const FARCASTER_ID_REGISTRY = '0x00000000fc6c5f01fc30151999387bb99a9f489b';
@@ -40,6 +41,20 @@ export const CHANNELS = [
   { label: '/spotify', value: 'spotify', icon: 'https://i.imgur.com/3Z8YjMT.jpg' },
   { label: '/coop-recs', value: 'coop-recs', icon: 'https://i.imgur.com/eecb7AP.gif' },
   { label: '/housemusic', value: 'housemusic', icon: 'https://i.imgur.com/rt1dcOI.jpg' },
+  {
+    label: '/music',
+    value: 'music',
+    icon: 'https://i.imgur.com/Mjyb3Y8.png',
+    parentUrl: 'chain://eip155:7777777/erc721:0xe96c21b136a477a6a97332694f0caae9fbb05634'
+  },
 ];
 
 export const fetchPostsLimit = 20;
+
+export const CONTENT_PLATFORMS = [
+  'spotify.com/track',
+  'soundcloud.com',
+  'sound.xyz',
+  'youtube.com/watch',
+  'youtu.be',
+];
