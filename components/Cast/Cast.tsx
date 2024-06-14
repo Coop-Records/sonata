@@ -39,7 +39,7 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
 
   if (!metadata) return <></>;
   return (
-    <div className="w-full space-y-4">
+    <div className="w-full space-y-4 ">
       <div className="flex gap-2">
         <UserDetails user={author} hasHypersub={!isNil(cast.hypersub_subscribed_since)} />
         <span className="text-sm leading-none text-muted-foreground">
