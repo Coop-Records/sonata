@@ -4,6 +4,7 @@ import { useFeedProvider } from '@/providers/FeedProvider';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { FeedType } from '@/types/Feed';
 import { Button } from '@/components/ui/button';
+import { useParams } from 'next/navigation';
 
 type tab = {
   label: string;
@@ -14,12 +15,17 @@ type tab = {
 export default function Tabs({ tabs, className = '' }: { tabs: tab[]; className?: string }) {
   const { feedType, setFeedType } = useFeedProvider();
   const { user } = useNeynarProvider();
+  const { username } = useParams();
 
   return (
     <ul className={cn('flex gap-4 md:gap-8', className)}>
       {tabs
         .filter((tab) => {
-          const isDisabled = tab.value === FeedType.Following && !user;
+          if (username) {
+            return tab.value === FeedType.Posts;
+          }
+          const isDisabled =
+            (tab.value === FeedType.Following && !user) || tab.value === FeedType.Posts;
           return !isDisabled;
         })
         .map((tab, index) => {

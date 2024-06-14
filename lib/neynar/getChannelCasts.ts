@@ -1,7 +1,11 @@
 import 'server-only';
 
-import { ErrorRes, FeedType, FilterType, NeynarV2APIClient as NeynarAPIClient } from '@neynar/nodejs-sdk/build/neynar-api/v2';
-
+import {
+  ErrorRes,
+  FeedType,
+  FilterType,
+  NeynarV2APIClient as NeynarAPIClient,
+} from '@neynar/nodejs-sdk/build/neynar-api/v2';
 
 const getChannelCasts = async (channelId: string, limit = 100) => {
   const client = new NeynarAPIClient(process.env.NEYNAR_API_KEY!);
@@ -10,15 +14,12 @@ const getChannelCasts = async (channelId: string, limit = 100) => {
   let error: ErrorRes | undefined;
 
   try {
-    const result = await client.fetchFeed(
-      FeedType.Filter,
-      {
-        filterType: FilterType.ChannelId,
-        withRecasts: false,
-        channelId,
-        limit
-      }
-    );
+    const result = await client.fetchFeed(FeedType.Filter, {
+      filterType: FilterType.ChannelId,
+      withRecasts: false,
+      channelId,
+      limit,
+    });
 
     for (const entry of result.casts) {
       const found = entry.embeds.some((embed: any): boolean => {
@@ -36,7 +37,6 @@ const getChannelCasts = async (channelId: string, limit = 100) => {
 
       if (found) casts.push(entry);
     }
-
   } catch (err: any) {
     error = err;
   }

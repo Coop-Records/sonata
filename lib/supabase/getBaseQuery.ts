@@ -24,4 +24,10 @@ export default function getBaseQuery(
     query.order('created_at', { ascending: false });
     return query;
   }
+
+  if (feedType === FeedType.Posts) {
+    const query = supabaseClient.from('posts').select('*');
+    query.order('created_at', { ascending: false });
+    return query;
+  }
 }
