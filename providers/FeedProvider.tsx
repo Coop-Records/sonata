@@ -75,6 +75,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
       }
       setFeed((prev) => {
         const mergedUnique = mergeArraysUniqueByPostHash(prev, posts);
+        if (profileFid) return mergedUnique.filter((feed) => feed.authorFid === profileFid);
         return mergedUnique;
       });
     },

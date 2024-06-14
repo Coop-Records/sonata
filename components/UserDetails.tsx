@@ -14,7 +14,7 @@ export default function UserDetails({
 }) {
   return (
     <div className={cn('flex space-x-3', className)}>
-      <a href={`/${user.username}`} >
+      <a href={`/${user.username}`}>
         <Avatar className="size-8">
           <AvatarImage src={user.pfp_url} />
           <AvatarFallback>{user.display_name}</AvatarFallback>
@@ -22,7 +22,11 @@ export default function UserDetails({
       </a>
       <div className="flex flex-col gap-1">
         <div className="flex flex-row items-center align-middle">
-          <a href={`/${user.username}`} target="_blank" className="text-sm font-semibold leading-none">
+          <a
+            href={`/${user.username}`}
+            target="_blank"
+            className="text-sm font-semibold leading-none"
+          >
             {user.display_name}
           </a>
           {hasHypersub && <Image src="/images/hypersub.png" width={20} height={20} alt="" />}
