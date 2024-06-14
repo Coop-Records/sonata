@@ -1,10 +1,6 @@
 import { FeedType } from '@/types/Feed';
 import { FrameMetadataType } from '@coinbase/onchainkit';
 import { zeroAddress } from 'viem';
-import { promises as fs } from 'fs';
-import util from 'util';
-
-const readFileAsync = util.promisify(fs.readFile);
 
 export const TITLE = 'Sonata';
 export const DESCRIPTION = 'Discover music on Farcaster';
