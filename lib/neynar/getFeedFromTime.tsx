@@ -1,6 +1,11 @@
 import 'server-only';
 
-import { ErrorRes, FeedType, FilterType, NeynarV2APIClient as NeynarAPIClient } from '@neynar/nodejs-sdk/build/neynar-api/v2';
+import {
+  ErrorRes,
+  FeedType,
+  FilterType,
+  NeynarV2APIClient as NeynarAPIClient,
+} from '@neynar/nodejs-sdk/build/neynar-api/v2';
 
 const client = new NeynarAPIClient(process.env.NEYNAR_API_KEY!);
 
@@ -11,16 +16,13 @@ const getFeedFromTime = async (embedUrl: string, date: Date) => {
 
   mainLoop: do {
     try {
-      const data = await client.fetchFeed(
-        FeedType.Filter,
-        {
-          filterType: FilterType.EmbedUrl,
-          embedUrl,
-          withRecasts: false,
-          limit: 100,
-          cursor
-        }
-      );
+      const data = await client.fetchFeed(FeedType.Filter, {
+        filterType: FilterType.EmbedUrl,
+        embedUrl,
+        withRecasts: false,
+        limit: 100,
+        cursor,
+      });
 
       for (const entry of data.casts) {
         if (new Date(entry.timestamp) > date) entries.push(entry);
