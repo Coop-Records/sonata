@@ -12,10 +12,9 @@ export default function UserDetails({
   hasHypersub?: boolean;
   className?: string;
 }) {
-  const profileUrl = `https://warpcast.com/${user.username}`;
   return (
     <div className={cn('flex space-x-3', className)}>
-      <a href={profileUrl} target="_blank">
+      <a href={`/${user.username}`} >
         <Avatar className="size-8">
           <AvatarImage src={user.pfp_url} />
           <AvatarFallback>{user.display_name}</AvatarFallback>
@@ -23,13 +22,13 @@ export default function UserDetails({
       </a>
       <div className="flex flex-col gap-1">
         <div className="flex flex-row items-center align-middle">
-          <a href={profileUrl} target="_blank" className="text-sm font-semibold leading-none">
+          <a href={`/${user.username}`} target="_blank" className="text-sm font-semibold leading-none">
             {user.display_name}
           </a>
           {hasHypersub && <Image src="/images/hypersub.png" width={20} height={20} alt="" />}
         </div>
         <a
-          href={profileUrl}
+          href={`/${user.username}`}
           target="_blank"
           className="text-xs leading-none text-muted-foreground hover:underline"
         >
