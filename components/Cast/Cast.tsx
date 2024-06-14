@@ -36,8 +36,8 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
     init();
   }, [url]);
 
-  // @TODO remove metadata
-  // if (!metadata) return <></>;
+  if (!metadata) return <></>;
+
   return (
     <div className="w-full space-y-4">
       <div className="flex gap-2">
