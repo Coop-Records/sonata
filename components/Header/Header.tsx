@@ -13,7 +13,6 @@ import ClaimAirdropButton from '@/components/ClaimAirdropButton/ClaimAirdropButt
 import { useTipProvider } from '@/providers/TipProvider';
 import { useParams } from 'next/navigation';
 import Profile from '../Profile';
-import Link from 'next/link';
 import HomeButton from './HomeButton';
 
 const Header = () => {
