@@ -11,6 +11,7 @@ const fetchPosts = async (
   feedType: string,
   start: number,
   fid?: number,
+  profileFid?: number,
 ) => {
   const followingFids = [];
   if (feedType === FeedType.Following) {
@@ -35,6 +36,10 @@ const fetchPosts = async (
   if (filter?.channel) {
     query.eq('channelId', filter.channel);
   }
+  if (profileFid) {
+    query.eq('authorFid', profileFid);
+  }
+
   query.range(start, start + fetchPostsLimit - 1);
 
   const { data: posts } = await query.returns<SupabasePost[]>();
