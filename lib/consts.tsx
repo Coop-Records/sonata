@@ -44,7 +44,7 @@ export const CHANNELS = [
   {
     label: '/music',
     value: 'music',
-    icon: 'https://ipfs.decentralized-content.com/ipfs/bafybeibdk7mvrhmud76ye6wm623sjgtiashik2imee7dkeliiq4wfissqq',
+    icon: 'https://i.imgur.com/Mjyb3Y8.png',
     parentUrl: 'chain://eip155:7777777/erc721:0xe96c21b136a477a6a97332694f0caae9fbb05634'
   },
 ];
