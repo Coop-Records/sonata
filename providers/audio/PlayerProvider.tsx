@@ -82,15 +82,14 @@ const PlayerContext = createContext<[Player, Dispatch<PlayerAction>]>([initialSt
 const playerReducer = (state: Player, action: PlayerAction) => {
   switch (action.type) {
     case 'PLAY': {
-      const metadata = action?.payload?.metadata;
-      const id = action?.payload?.metadata.feedId;
+      const { metadata, feedId } = action.payload;
       return {
         ...state,
         playing: true,
         metadata,
         position: 0,
         loading: true,
-        feedId: id,
+        feedId,
       };
     }
     case 'RESUME': {
@@ -140,7 +139,7 @@ export default function PlayerProvider({ children }: { children: ReactNode }) {
     if (!metadata?.url || !currentController) return;
     currentController.load(metadata.url);
     return () => currentController.pause();
-  }, [metadata?.url, currentController]);
+  }, [metadata?.url, metadata?.feedId, currentController]);
 
   useEffect(() => {
     if (player.loading || !currentController) return;
