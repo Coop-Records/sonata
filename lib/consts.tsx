@@ -21,27 +21,35 @@ export const tabs = [
   { label: 'Following', href: '/following', value: FeedType.Following },
   { label: 'Trending', href: '/', value: FeedType.Trending },
   { label: 'Recent', href: '/recent', value: FeedType.Recent },
+  { label: 'Posts', href: '#', value: FeedType.Posts },
 ];
 
 export const CHANNELS = [
   {
-    parentUrl: 'https://warpcast.com/~/channel/sonata',
     label: '/sonata',
     value: 'sonata',
     icon: 'https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/4e85acaa-4f1d-444b-1e35-dd06d43d0800/rectcrop3',
   },
-  { parentUrl: 'https://warpcast.com/~/channel/louder', label: '/louder', value: 'louder', icon: 'https://i.imgur.com/r4GIRLL.png' },
-  { parentUrl: 'https://warpcast.com/~/channel/rock', label: '/rock', value: 'rock', icon: 'https://i.imgur.com/Ffj1Opg.png' },
-  { parentUrl: 'https://warpcast.com/~/channel/techno', label: '/techno', value: 'techno', icon: 'https://i.imgur.com/omLkrpT.png' },
-  { parentUrl: 'https://warpcast.com/~/channel/albumoftheday', label: '/albumoftheday', value: 'albumoftheday', icon: 'https://i.imgur.com/RZQbasU.gif' },
-  { parentUrl: 'https://warpcast.com/~/channel/soundscapes', label: '/soundscapes', value: 'soundscapes', icon: 'https://i.imgur.com/TUtJ82Q.jpg' },
-  { parentUrl: 'https://warpcast.com/~/channel/djs', label: '/djs', value: 'djs', icon: 'https://i.imgur.com/EQ7kMoE.jpg' },
-  { parentUrl: 'https://warpcast.com/~/channel/soundxyz', label: '/soundxyz', value: 'soundxyz', icon: 'https://i.imgur.com/BbvrNR2.jpg' },
-  { parentUrl: 'https://warpcast.com/~/channel/bangers', label: '/bangers', value: 'bangers', icon: 'https://i.imgur.com/URBvewb.png' },
-  { parentUrl: 'https://warpcast.com/~/channel/spotify', label: '/spotify', value: 'spotify', icon: 'https://i.imgur.com/3Z8YjMT.jpg' },
-  { parentUrl: 'https://warpcast.com/~/channel/coop', label: '/coop-recs', value: 'coop-recs', icon: 'https://i.imgur.com/eecb7AP.gif' },
-  { parentUrl: 'chain://eip155:7777777/erc721:0xe96c21b136a477a6a97332694f0caae9fbb05634', label: '/music', value: 'music', icon: 'https://i.imgur.com/eecb7AP.gif' },
+  { label: '/louder', value: 'louder', icon: 'https://i.imgur.com/r4GIRLL.png' },
+  { label: '/rock', value: 'rock', icon: 'https://i.imgur.com/Ffj1Opg.png' },
+  { label: '/techno', value: 'techno', icon: 'https://i.imgur.com/omLkrpT.png' },
+  { label: '/albumoftheday', value: 'albumoftheday', icon: 'https://i.imgur.com/RZQbasU.gif' },
+  { label: '/soundscapes', value: 'soundscapes', icon: 'https://i.imgur.com/TUtJ82Q.jpg' },
+  { label: '/djs', value: 'djs', icon: 'https://i.imgur.com/EQ7kMoE.jpg' },
+  { label: '/soundxyz', value: 'soundxyz', icon: 'https://i.imgur.com/BbvrNR2.jpg' },
+  { label: '/bangers', value: 'bangers', icon: 'https://i.imgur.com/URBvewb.png' },
+  { label: '/spotify', value: 'spotify', icon: 'https://i.imgur.com/3Z8YjMT.jpg' },
+  { label: '/coop-recs', value: 'coop-recs', icon: 'https://i.imgur.com/eecb7AP.gif' },
+  { label: '/housemusic', value: 'housemusic', icon: 'https://i.imgur.com/rt1dcOI.jpg' },
+  {
+    label: '/music',
+    value: 'music',
+    icon: 'https://i.imgur.com/eecb7AP.gif',
+    parentUrl: 'chain://eip155:7777777/erc721:0xe96c21b136a477a6a97332694f0caae9fbb05634'
+  },
 ];
+
+export const fetchPostsLimit = 20;
 
 export const CONTENT_PLATFORMS = [
   { name: 'spotify' as const, url: 'spotify.com/track' },
