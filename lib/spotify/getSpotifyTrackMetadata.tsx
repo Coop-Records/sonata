@@ -4,7 +4,7 @@ import { SupabasePost } from '@/types/SupabasePost';
 import getSoundcloudTrackMetadata from '../soundcloud/getSoundcloudTrackMetadata';
 import getYoutubeTrackMetadata from "@/lib/youtube/getYoutubeTrackMetadata";
 
-const getSpotifyTrackMetadata = async (url: string, cast: SupabasePost) => {
+const getSpotifyTrackMetadata = async (url: string, cast: SupabasePost): Promise<TrackMetadata> => {
   const youtubeLink = cast.alternativeEmbeds.find((link) => link.includes('youtube.com'));
   const soundcloudLink = cast.alternativeEmbeds.find((link) => link.includes('soundcloud.com'));
   const spotifyLink = cast.alternativeEmbeds.find((link) => link.includes('spotify.com'));
