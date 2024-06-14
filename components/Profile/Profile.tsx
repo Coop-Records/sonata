@@ -5,6 +5,7 @@ import BaseInfo from './BaseInfo';
 import Notes from './Notes';
 import Songs from './Songs';
 import TopSong from './TopSong';
+import Followers from './Followers';
 
 const Profile = () => {
   useEffect(() => {
@@ -20,6 +21,7 @@ const Profile = () => {
         <Notes />
         <TopSong />
       </div>
+      <Followers />
     </section>
   );
 };

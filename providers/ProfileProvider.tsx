@@ -1,32 +1,37 @@
 'use client';
 import fetchMetadata from '@/lib/fetchMetadata';
 import findValidEmbed from '@/lib/findValidEmbed';
+import getFollowers from '@/lib/neynar/getFollowers';
 import getNeynarProfile from '@/lib/neynar/getNeynarProfile';
 import getUserSongs from '@/lib/sonata/getUserSongs';
-import { ProfileData } from '@/types/ProfileData';
+import { NeynarUserData } from '@/types/NeynarUserData';
 import { SupabasePost } from '@/types/SupabasePost';
 import { TrackMetadata } from '@/types/Track';
 import { useParams } from 'next/navigation';
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 
 type ProfileProviderType = {
-  profile: ProfileData | null;
+  profile: NeynarUserData | null;
   songs: SupabasePost[];
   topSongMetadata: TrackMetadata | null;
+  followers: NeynarUserData[];
 };
 
 const ProfileContext = createContext<ProfileProviderType>({} as any);
 
 const ProfileProvider = ({ children }: { children: ReactNode }) => {
   const { username } = useParams();
-  const [profile, setProfile] = useState<ProfileData | null>(null);
+  const [profile, setProfile] = useState<NeynarUserData | null>(null);
   const [songs, setSongs] = useState<SupabasePost[]>([]);
   const [topSongMetadata, setTopSongMetadata] = useState<TrackMetadata | null>(null);
+  const [followers, setFollowers] = useState<NeynarUserData[]>([]);
 
   useEffect(() => {
     const init = async () => {
       const data = await getNeynarProfile(username as string);
       setProfile(data);
+      const response = await getFollowers(data.fid);
+      setFollowers(response.users);
       const posts = await getUserSongs(data.fid);
       setSongs(posts.songs);
       if (posts.length <= 0) return;
@@ -49,6 +54,7 @@ const ProfileProvider = ({ children }: { children: ReactNode }) => {
     profile,
     songs,
     topSongMetadata,
+    followers,
   };
 
   return <ProfileContext.Provider value={value}>{children}</ProfileContext.Provider>;

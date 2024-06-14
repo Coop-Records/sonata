@@ -1,6 +1,6 @@
 import { Address } from 'viem';
 
-export type ProfileData = {
+export type NeynarUserData = {
   fid: number;
   custodyAddress: Address;
   username: string;
@@ -8,6 +8,7 @@ export type ProfileData = {
   pfp: {
     url: string;
   };
+  pfp_url: string;
   profile: {
     bio: {
       text?: string;
