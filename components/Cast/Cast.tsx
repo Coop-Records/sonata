@@ -38,6 +38,7 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
   }, [url]);
 
   if (!metadata) return <></>;
+
   return (
     <div className="w-full space-y-4">
       <div className="flex gap-2">

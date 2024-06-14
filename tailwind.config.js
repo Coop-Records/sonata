@@ -81,6 +81,16 @@ module.exports = {
           to: { height: '0' },
         },
       },
+      zIndex: {
+        '1': '1',
+        '2': '2',
+        '3': '3',
+      },
+      spacing: {
+        '1/2': '50%',
+        '6': '1.5rem',
+        '12': '3rem',
+      },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
