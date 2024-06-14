@@ -13,9 +13,10 @@ const getSpotifyTrackMetadata = async (url: string, cast: SupabasePost): Promise
     return await getYoutubeTrackMetadata(youtubeLink, cast);
   } else if(soundcloudLink) {
     return await getSoundcloudTrackMetadata(soundcloudLink, cast);
-  } else if(spotifyLink) {
-    return await getSpotifyTrackMetadata(spotifyLink, cast);
   }
+
+  return await getSpotifyTrackMetadata(spotifyLink!, cast);
+
 
   const oEmbedUrl = `https://open.spotify.com/oembed?url=${encodeURIComponent(url)}`;
   const response = await fetch(oEmbedUrl);
