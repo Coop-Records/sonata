@@ -61,8 +61,6 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [userLoading, user, username, hash]);
 
-  useEffect(() => {}, [username, hash]);
-
   const updateFilter = (change: FeedFilter) => {
     setFilter((prev) => ({ ...prev, ...change }));
   };
