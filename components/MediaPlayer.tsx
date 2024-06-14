@@ -13,10 +13,11 @@ type MediaPlayerProps = {
 
 export default function MediaPlayer({ metadata }: MediaPlayerProps) {
   const [player, dispatch] = usePlayer();
-  const currentTrack = player?.metadata?.id === metadata?.id;
+  const currentTrack = player?.metadata?.feedId === metadata?.feedId;
 
   const handlePlay = () => {
     if (!metadata) return;
+
     if (currentTrack) {
       dispatch({ type: 'RESUME', payload: { id: metadata.id } });
       return;
