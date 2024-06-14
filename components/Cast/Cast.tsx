@@ -12,6 +12,7 @@ import Share from './Share';
 import { Separator } from '@/components/ui/separator';
 import { timeFromNow } from '@/lib/utils';
 import UpvoteDownvote from '../UpvoteDownvote';
+import { isNil } from 'lodash';
 
 const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
   const embed = findValidEmbed(cast);
@@ -36,13 +37,11 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
     init();
   }, [url]);
 
-  // @TODO remove metadata
-  // if (!metadata) return <></>;
-
+  if (!metadata) return <></>;
   return (
-    <div className="w-full space-y-4">
+    <div className="w-full space-y-4 ">
       <div className="flex gap-2">
-        <UserDetails user={author} />
+        <UserDetails user={author} hasHypersub={!isNil(cast.hypersub_subscribed_since)} />
         <span className="text-sm leading-none text-muted-foreground">
           {'• '}
           {timeFromNow(cast.created_at)}

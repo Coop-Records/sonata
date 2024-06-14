@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { CHANNELS } from '@/lib/consts';
 import { useFeedProvider } from '@/providers/FeedProvider';
 
-export default function ChannelFilter( ) {
+export default function ChannelFilter() {
   const { filter: currentFilter, updateFilter } = useFeedProvider();
 
   const handleClick = (value: string) => {
@@ -19,7 +19,6 @@ export default function ChannelFilter( ) {
       <div>
         {CHANNELS.map((option) => {
           const active = currentFilter?.channel === option.value;
-
           return (
             <Link
               href={active ? '/' : `/channel${option.label}`}

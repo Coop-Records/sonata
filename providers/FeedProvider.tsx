@@ -18,6 +18,8 @@ import { fetchPostsLimit } from '@/lib/consts';
 import { supabaseClient } from '@/lib/supabase/client';
 import fetchMetadata from '@/lib/fetchMetadata';
 import { usePlayer } from '@/providers/audio/PlayerProvider';
+import { useProfileProvider } from './ProfileProvider';
+import { useParams } from 'next/navigation';
 
 type FeedProviderType = {
   filter: FeedFilter;
@@ -40,16 +42,24 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const [hasMore, setHasMore] = useState(true);
   const { user, loading: userLoading } = useNeynarProvider();
   const [player, dispatch] = usePlayer();
+  const { profile } = useProfileProvider();
+  const { username, hash } = useParams();
+
   const fid = user?.fid;
+  const profileFid = profile?.fid;
 
   useEffect(() => {
     if (userLoading) return;
+    if (username && !hash) {
+      setFeedType(FeedType.Posts);
+      return;
+    }
     if (user) {
       setFeedType(FeedType.Following);
     } else {
       setFeedType(FeedType.Trending);
     }
-  }, [userLoading, user]);
+  }, [userLoading, user, username, hash]);
 
   const updateFilter = (change: FeedFilter) => {
     setFilter((prev) => ({ ...prev, ...change }));
@@ -59,7 +69,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     async (start: number) => {
       if (!feedType) return;
       setHasMore(true);
-      const { posts } = await fetchPosts(supabaseClient, filter, feedType, start, fid);
+      const { posts } = await fetchPosts(supabaseClient, filter, feedType, start, fid, profileFid);
       if (!(posts && posts.length === fetchPostsLimit)) {
         setHasMore(false);
       }
@@ -68,7 +78,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
         return mergedUnique;
       });
     },
-    [feedType, filter, supabaseClient, fid],
+    [feedType, filter, supabaseClient, fid, profileFid],
   );
 
   useEffect(() => {

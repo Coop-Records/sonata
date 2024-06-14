@@ -54,6 +54,14 @@ module.exports = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        grey: {
+          DEFAULT: '#949494',
+          light: '#f6f6f6',
+        },
+        purple: {
+          DEFAULT: '#8B49F7',
+          light: '#EEE4FE',
+        },
       },
       borderRadius: {
         lg: `var(--radius)`,
@@ -72,16 +80,6 @@ module.exports = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
-      },
-      zIndex: {
-        '1': '1',
-        '2': '2',
-        '3': '3',
-      },
-      spacing: {
-        '1/2': '50%',
-        '6': '1.5rem',
-        '12': '3rem',
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',

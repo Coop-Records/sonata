@@ -60,13 +60,13 @@ const getResponse = async (): Promise<NextResponse> => {
     getFeedFromTime('sound.xyz', formattedLastChecked),
     getFeedFromTime('youtube.com/watch', formattedLastChecked),
   ]);
-  allEntries.push( ...soundCloud, ...soundxyz);
+  allEntries.push(...soundCloud, ...soundxyz);
 
   const spotifyWithAlternatives = await getSpotifyWithAlternatives(spotify);
   console.log('jobs::getNewCasts', 'spotifyEntries', spotifyWithAlternatives);
   allEntries.push(...spotifyWithAlternatives);
 
-  const youtubeFiltered = filterByChannels(youtube)
+  const youtubeFiltered = filterByChannels(youtube);
   console.log('jobs::getNewCasts', 'ytEntries', youtubeFiltered);
   allEntries.push(...youtubeFiltered);
 

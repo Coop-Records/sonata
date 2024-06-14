@@ -12,5 +12,6 @@ export type SupabasePost = {
   degen?: number;
   parent_url?: string;
   channelId?: string;
-  id:number
+  hypersub_subscribed_since?: Date;
+  id: number;
 };

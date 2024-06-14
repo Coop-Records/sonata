@@ -20,6 +20,7 @@ export const tabs = [
   { label: 'Following', href: '/following', value: FeedType.Following },
   { label: 'Trending', href: '/', value: FeedType.Trending },
   { label: 'Recent', href: '/recent', value: FeedType.Recent },
+  { label: 'Posts', href: '#', value: FeedType.Posts },
 ];
 
 export const CHANNELS = [
@@ -38,6 +39,7 @@ export const CHANNELS = [
   { label: '/bangers', value: 'bangers', icon: 'https://i.imgur.com/URBvewb.png' },
   { label: '/spotify', value: 'spotify', icon: 'https://i.imgur.com/3Z8YjMT.jpg' },
   { label: '/coop-recs', value: 'coop-recs', icon: 'https://i.imgur.com/eecb7AP.gif' },
+  { label: '/housemusic', value: 'housemusic', icon: 'https://i.imgur.com/rt1dcOI.jpg' },
 ];
 
 export const fetchPostsLimit = 20;
