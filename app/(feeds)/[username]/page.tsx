@@ -2,7 +2,6 @@ import { getFrameMetadata } from '@coinbase/onchainkit';
 import type { Metadata } from 'next';
 import { DEFAULT_FRAME, DESCRIPTION, TITLE, VERCEL_URL } from '@/lib/consts';
 import Feeds from '../feeds';
-import ProfileProvider from '@/providers/ProfileProvider';
 
 const frameMetadata = { ...getFrameMetadata(DEFAULT_FRAME), 'of:accepts:xmtp': '2024-02-01' };
 
