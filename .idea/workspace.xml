@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bb766293-10f2-421d-84ac-68c216c4e4d0" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/app/[userId]/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/[userId]/layout.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/(feeds)/channel/[channelId]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/(feeds)/feeds.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(feeds)/feeds.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Feed/ChannelFilter.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Feed/ChannelFilter.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/getYoutubeVideoData.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/getYoutubeVideoData.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,8 +19,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="TypeScript JSX File" />
         <option value="CSS File" />
+        <option value="TypeScript JSX File" />
       </list>
     </option>
   </component>
@@ -34,24 +38,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "feat/user-page-ui",
-    "last_opened_file_path": "/home/developer/Desktop/sonata",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.standard": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.standard": "",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "yarn",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "/home/developer/Desktop/sonata/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/user-page-ui&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/developer/Desktop/sonata&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.javascript.linters.eslint&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/home/developer/Desktop/sonata/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/app" />
@@ -79,7 +83,9 @@
       <workItem from="1718258384384" duration="25656000" />
       <workItem from="1718289855457" duration="2754000" />
       <workItem from="1718345075578" duration="186000" />
-      <workItem from="1718345283051" duration="1167000" />
+      <workItem from="1718345283051" duration="1515000" />
+      <workItem from="1718348509584" duration="5466000" />
+      <workItem from="1718354306346" duration="1036000" />
     </task>
     <servers />
   </component>

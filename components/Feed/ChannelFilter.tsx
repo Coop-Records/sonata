@@ -1,12 +1,11 @@
 'use client';
-
-import { useFeedProvider } from '@/providers/FeedProvider';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import Link from "next/link";
 import Image from 'next/image';
+import { cn } from '@/lib/utils';
 import { CHANNELS } from '@/lib/consts';
+import { useFeedProvider } from '@/providers/FeedProvider';
 
-export default function ChannelFilter() {
+export default function ChannelFilter( ) {
   const { filter: currentFilter, updateFilter } = useFeedProvider();
 
   const handleClick = (value: string) => {
@@ -20,8 +19,10 @@ export default function ChannelFilter() {
       <div>
         {CHANNELS.map((option) => {
           const active = currentFilter?.channel === option.value;
+
           return (
-            <Button
+            <Link
+              href={active ? '/' : `/channel/${option.label}`}
               onClick={() => handleClick(option.value)}
               key={option.value}
               variant="ghost"
@@ -40,7 +41,7 @@ export default function ChannelFilter() {
               </div>
 
               <span>{option.label}</span>
-            </Button>
+            </Link>
           );
         })}
       </div>
