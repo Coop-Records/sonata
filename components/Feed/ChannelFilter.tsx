@@ -25,7 +25,6 @@ export default function ChannelFilter( ) {
               href={active ? '/' : `/channel${option.label}`}
               onClick={() => handleClick(option.value)}
               key={option.value}
-              variant="ghost"
               className={cn(
                 'flex px-3 py-2 justify-start items-center space-x-2 w-full font-semibold',
                 active && 'bg-muted',
