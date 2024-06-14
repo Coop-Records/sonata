@@ -24,7 +24,8 @@ export default function Tabs({ tabs, className = '' }: { tabs: tab[]; className?
           if (username) {
             return tab.value === FeedType.Posts;
           }
-          const isDisabled = tab.value === FeedType.Following && !user;
+          const isDisabled =
+            (tab.value === FeedType.Following && !user) || tab.value === FeedType.Posts;
           return !isDisabled;
         })
         .map((tab, index) => {
