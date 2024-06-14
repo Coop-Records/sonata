@@ -19,7 +19,6 @@ import { supabaseClient } from '@/lib/supabase/client';
 import fetchMetadata from '@/lib/fetchMetadata';
 import { usePlayer } from '@/providers/audio/PlayerProvider';
 import { useProfileProvider } from './ProfileProvider';
-import { useParams } from 'next/navigation';
 
 type FeedProviderType = {
   filter: FeedFilter;
@@ -43,14 +42,13 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const { user, loading: userLoading } = useNeynarProvider();
   const [player, dispatch] = usePlayer();
   const { profile } = useProfileProvider();
-  const { username, hash } = useParams();
 
   const fid = user?.fid;
   const profileFid = profile?.fid;
 
   useEffect(() => {
     if (userLoading) return;
-    if (username && !hash) {
+    if (profileFid) {
       setFeedType(FeedType.Posts);
       return;
     }
@@ -59,7 +57,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     } else {
       setFeedType(FeedType.Trending);
     }
-  }, [userLoading, user, username, hash]);
+  }, [userLoading, user, profileFid]);
 
   const updateFilter = (change: FeedFilter) => {
     setFilter((prev) => ({ ...prev, ...change }));
@@ -99,12 +97,14 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
           if (!(channelId && channelId.includes(filter.channel))) return false;
         }
 
+        if (profileFid && cast.authorFid !== profileFid) return false;
+
         const validEmbed = findValidEmbed(cast, { platform: filter.platform });
         if (!validEmbed) return false;
 
         return true;
       }),
-    [feed, filter],
+    [feed, filter, profileFid],
   );
 
   const playFeedId = async (feedIndex: number) => {
