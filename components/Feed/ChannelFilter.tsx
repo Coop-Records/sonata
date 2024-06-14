@@ -19,7 +19,7 @@ export default function ChannelFilter() {
       <h2 className="font-semibold sm:mb-2">Channels</h2>
       <div>
         {CHANNELS.map((option) => {
-          const active = currentFilter?.channel === option.value;
+          const active = currentFilter.channel === option.value;
           return (
             <Button
               onClick={() => handleClick(option.value)}
