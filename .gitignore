@@ -4,6 +4,7 @@ node_modules
 .env.local
 .env
 .vscode
+.idea
 yarn.lock
 package-lock.json
 supabase/config.toml

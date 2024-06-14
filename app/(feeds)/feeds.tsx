@@ -1,12 +1,20 @@
 'use client';
 
+import { useEffect } from "react";
 import Feed from '@/components/Feed';
 import Loader from '@/components/Loader';
 import { useFeedProvider } from '@/providers/FeedProvider';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-const Feeds = () => {
-  const { feed, fetchMore, hasMore } = useFeedProvider();
+const Feeds = ({channelId} : {channelId?: string}) => {
+  const { feed, fetchMore, hasMore, updateFilter, filter } = useFeedProvider();
+
+  useEffect(() => {
+    if(!filter.channel && channelId !== "/") {
+      updateFilter({ channel: channelId })
+    }
+  }, [channelId]);
+
   return (
     <InfiniteScroll
       dataLength={feed.length}
