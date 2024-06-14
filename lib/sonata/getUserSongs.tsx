@@ -9,7 +9,7 @@ const getUserSongs = async (profileFid: string) => {
       profile_fid: profileFid,
     });
 
-    const response = await fetch(`/api/getSongs?${queryParams}`, options);
+    const response = await fetch(`/api/user/getSongs?${queryParams}`, options);
     const data = await response.json();
     return data;
   } catch (error) {
