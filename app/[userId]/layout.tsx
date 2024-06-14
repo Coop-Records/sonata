@@ -11,10 +11,13 @@ import Link from 'next/link';
 import { ChevronLeft } from 'lucide-react';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import UserMenu from '@/components/Header/UserMenu';
-
+import { Skeleton } from "@/components/ui/skeleton";
+import SignInButton from "@/components/SignInButton";
+import { useTipProvider } from "@/providers/TipProvider";
 export default function FeedLayout({ children }: { children: ReactNode }) {
   const { menuOpen, setMenuOpen } = useUi();
-  const { user } = useNeynarProvider();
+  const { user, loading: userLoading } = useNeynarProvider();
+  const { airdropBalance } = useTipProvider();
 
   return (
     <FeedProvider>
@@ -33,15 +36,23 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
             <Sidebar />
           </nav>
 
-          <main className="flex grow flex-col">
+          <main className="flex  grow flex-col">
             <div className="flex justify-between max-w-3xl w-full px-2 mx-auto items-center pt-12">
-              <Link href={'/'} className="flex item-center gap-1 font-semibold text-[#333536]">
+              <Link href={'/'} className="flex item-center gap-1 text-lg font-semibold text-[#333536]">
                 <ChevronLeft size={24} /> Home
               </Link>
-              <div className="flex items-center gap-2">
-                {user && <ClaimAirdropButton />}
-                {user && <UserMenu />}
-              </div>
+
+                {userLoading ? (
+                    <Skeleton className="size-9 rounded-full"/>
+                ) : user ? (
+                    <div className="flex items-center gap-2">
+                      {airdropBalance > 0 && <ClaimAirdropButton/>}
+                      <UserMenu/>
+                    </div>
+                ) : (
+                    <SignInButton/>
+                )}
+
             </div>
 
             <div className="container mx-auto max-w-3xl space-y-6">{children}</div>
