@@ -19,6 +19,7 @@ import { supabaseClient } from '@/lib/supabase/client';
 import fetchMetadata from '@/lib/fetchMetadata';
 import { usePlayer } from '@/providers/audio/PlayerProvider';
 import { useProfileProvider } from './ProfileProvider';
+import { useParams } from 'next/navigation';
 
 type FeedProviderType = {
   filter: FeedFilter;
@@ -42,6 +43,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const { user, loading: userLoading } = useNeynarProvider();
   const [player, dispatch] = usePlayer();
   const { profile } = useProfileProvider();
+  const { username, hash } = useParams();
 
   const fid = user?.fid;
   const profileFid = profile?.fid;
@@ -54,6 +56,10 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
       setFeedType(FeedType.Trending);
     }
   }, [userLoading, user]);
+
+  useEffect(() => {
+    if (username && !hash) setFeedType(FeedType.Posts);
+  }, [username, hash]);
 
   const updateFilter = (change: FeedFilter) => {
     setFilter((prev) => ({ ...prev, ...change }));
