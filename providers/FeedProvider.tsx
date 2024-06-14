@@ -50,16 +50,18 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (userLoading) return;
+    if (username && !hash) {
+      setFeedType(FeedType.Posts);
+      return;
+    }
     if (user) {
       setFeedType(FeedType.Following);
     } else {
       setFeedType(FeedType.Trending);
     }
-  }, [userLoading, user]);
+  }, [userLoading, user, username, hash]);
 
-  useEffect(() => {
-    if (username && !hash) setFeedType(FeedType.Posts);
-  }, [username, hash]);
+  useEffect(() => {}, [username, hash]);
 
   const updateFilter = (change: FeedFilter) => {
     setFilter((prev) => ({ ...prev, ...change }));
