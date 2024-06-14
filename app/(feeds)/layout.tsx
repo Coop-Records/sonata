@@ -11,9 +11,11 @@ import CreatePost from '@/components/CreatePost';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import FeedProvider from '@/providers/FeedProvider';
 import ProfileProvider from '@/providers/ProfileProvider';
+import { useParams } from 'next/navigation';
 
 export default function FeedLayout({ children }: { children: ReactNode }) {
   const { menuOpen, setMenuOpen } = useUi();
+  const { username } = useParams();
   const { user } = useNeynarProvider();
 
   return (
@@ -43,7 +45,7 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
                   id="feed-container"
                 >
                   <div className="container mx-auto max-w-3xl space-y-6">
-                    {user && <CreatePost />}
+                    {user && !username && <CreatePost />}
                     {children}
                   </div>
                 </div>
