@@ -44,7 +44,7 @@ export const CHANNELS = [
   {
     label: '/music',
     value: 'music',
-    icon: 'https://i.imgur.com/eecb7AP.gif',
+    icon: 'https://ipfs.decentralized-content.com/ipfs/bafybeibdk7mvrhmud76ye6wm623sjgtiashik2imee7dkeliiq4wfissqq',
     parentUrl: 'chain://eip155:7777777/erc721:0xe96c21b136a477a6a97332694f0caae9fbb05634'
   },
 ];
@@ -52,9 +52,9 @@ export const CHANNELS = [
 export const fetchPostsLimit = 20;
 
 export const CONTENT_PLATFORMS = [
-  { name: 'spotify' as const, url: 'spotify.com/track' },
-  { name: 'soundcloud' as const, url: 'soundcloud.com' },
-  { name: 'soundxyz' as const, url: 'sound.xyz' },
-  { name: 'youtube' as const, url: 'youtube.com/watch' },
-  { name: 'youtube' as const, url: 'youtu.be' },
+  'spotify.com/track',
+  'soundcloud.com',
+  'sound.xyz',
+  'youtube.com/watch',
+  'youtu.be',
 ];
