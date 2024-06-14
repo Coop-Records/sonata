@@ -46,7 +46,13 @@ const ProfileProvider = ({ children }: { children: ReactNode }) => {
       } catch (error) {}
     };
 
-    if (!username) return;
+    if (!username) {
+      setProfile(null);
+      setFollowers([]);
+      setSongs([]);
+      setTopSongMetadata(null);
+      return;
+    }
     init();
   }, [username]);
 

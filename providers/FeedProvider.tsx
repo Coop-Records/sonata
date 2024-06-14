@@ -18,6 +18,7 @@ import { fetchPostsLimit } from '@/lib/consts';
 import { supabaseClient } from '@/lib/supabase/client';
 import fetchMetadata from '@/lib/fetchMetadata';
 import { usePlayer } from '@/providers/audio/PlayerProvider';
+import { useProfileProvider } from './ProfileProvider';
 
 type FeedProviderType = {
   filter: FeedFilter;
@@ -40,7 +41,10 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const [hasMore, setHasMore] = useState(true);
   const { user, loading: userLoading } = useNeynarProvider();
   const [player, dispatch] = usePlayer();
+  const { profile } = useProfileProvider();
+
   const fid = user?.fid;
+  const profileFid = profile?.fid;
 
   useEffect(() => {
     if (userLoading) return;
@@ -59,7 +63,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     async (start: number) => {
       if (!feedType) return;
       setHasMore(true);
-      const { posts } = await fetchPosts(supabaseClient, filter, feedType, start, fid);
+      const { posts } = await fetchPosts(supabaseClient, filter, feedType, start, fid, profileFid);
       if (!(posts && posts.length === fetchPostsLimit)) {
         setHasMore(false);
       }
@@ -68,7 +72,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
         return mergedUnique;
       });
     },
-    [feedType, filter, supabaseClient, fid],
+    [feedType, filter, supabaseClient, fid, profileFid],
   );
 
   useEffect(() => {
