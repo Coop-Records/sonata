@@ -11,13 +11,14 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useFeedProvider } from '@/providers/FeedProvider';
 import ClaimAirdropButton from '@/components/ClaimAirdropButton/ClaimAirdropButton';
 import { useTipProvider } from '@/providers/TipProvider';
+import { useParams } from 'next/navigation';
 
 const Header = () => {
   const { user, loading: userLoading } = useNeynarProvider();
   const { feedType } = useFeedProvider();
   const { menuOpen, setMenuOpen } = useUi();
   const { airdropBalance } = useTipProvider();
-
+  const { username } = useParams()
   return (
     <header className="container w-full pt-2 md:pt-6">
       <div className="flex items-center justify-between md:justify-end">
@@ -36,7 +37,7 @@ const Header = () => {
         )}
       </div>
       {feedType && (
-        <div className="flex justify-center">
+        <div className={`container mx-auto max-w-3xl flex ${username ? "justify-start" : "justify-center"}`}>
           <Tabs tabs={tabs} />
         </div>
       )}
