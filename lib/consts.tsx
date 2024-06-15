@@ -47,6 +47,11 @@ export const CHANNELS = [
     icon: 'https://i.imgur.com/Mjyb3Y8.png',
     parentUrl: 'chain://eip155:7777777/erc721:0xe96c21b136a477a6a97332694f0caae9fbb05634',
   },
+  {
+    label: '/classical',
+    value: 'classical',
+    icon: '/images/classical.png',
+  },
 ];
 
 export const fetchPostsLimit = 20;
