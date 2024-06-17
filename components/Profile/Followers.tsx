@@ -17,7 +17,7 @@ const Followers = () => {
             width={24}
             height={24}
             alt={follower1st.username}
-            className="overflow-hidden rounded-full"
+            className="object-cover min-w-6 min-h-6 max-w-6 max-h-6  overflow-hidden rounded-full"
           />
         )}
         {follower2nd && (
@@ -26,7 +26,7 @@ const Followers = () => {
             width={24}
             height={24}
             alt={follower2nd.username}
-            className="translate-x-[-8px] overflow-hidden rounded-full"
+            className="translate-x-[-8px] object-cover min-w-6 min-h-6 max-w-6 max-h-6  overflow-hidden rounded-full"
           />
         )}
         {follower3rd && (
@@ -35,7 +35,7 @@ const Followers = () => {
             width={24}
             height={24}
             alt={follower3rd.username}
-            className="translate-x-[-16px] overflow-hidden rounded-full"
+            className="translate-x-[-16px] object-cover min-w-6 min-h-6 max-w-6 max-h-6  overflow-hidden rounded-full"
           />
         )}
       </div>
