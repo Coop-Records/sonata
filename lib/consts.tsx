@@ -36,12 +36,6 @@ export const CHANNELS = [
     icon: 'https://i.imgur.com/Mjyb3Y8.png',
     parentUrl: 'chain://eip155:7777777/erc721:0xe96c21b136a477a6a97332694f0caae9fbb05634',
   },
-  {
-    label: '/classical',
-    value: 'classical',
-    icon: 'https://i.imgur.com/7ng6bHS.png',
-    parentUrl: 'https://en.wikipedia.org/wiki/Johann_Sebastian_Bach',
-  },
   { label: '/louder', value: 'louder', icon: 'https://i.imgur.com/r4GIRLL.png' },
   { label: '/rock', value: 'rock', icon: 'https://i.imgur.com/Ffj1Opg.png' },
   { label: '/techno', value: 'techno', icon: 'https://i.imgur.com/omLkrpT.png' },
@@ -53,6 +47,12 @@ export const CHANNELS = [
   { label: '/spotify', value: 'spotify', icon: 'https://i.imgur.com/3Z8YjMT.jpg' },
   { label: '/coop-recs', value: 'coop-recs', icon: 'https://i.imgur.com/eecb7AP.gif' },
   { label: '/housemusic', value: 'housemusic', icon: 'https://i.imgur.com/rt1dcOI.jpg' },
+  {
+    label: '/classical',
+    value: 'classical',
+    icon: 'https://i.imgur.com/7ng6bHS.png',
+    parentUrl: 'https://en.wikipedia.org/wiki/Johann_Sebastian_Bach',
+  },
 ];
 
 export const fetchPostsLimit = 20;
