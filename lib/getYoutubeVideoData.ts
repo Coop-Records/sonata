@@ -8,6 +8,6 @@ export default async function getYoutubeVideoData(videoId: string) {
     const video = data.items[0];
     return video;
   } else {
-    throw new Error('No video data found');
+    console.error('No video data found');
   }
 }
