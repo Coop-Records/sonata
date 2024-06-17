@@ -51,6 +51,7 @@ export const CHANNELS = [
     label: '/classical',
     value: 'classical',
     icon: 'https://i.imgur.com/7ng6bHS.png',
+    parentUrl: 'https://en.wikipedia.org/wiki/Johann_Sebastian_Bach',
   },
 ];
 
