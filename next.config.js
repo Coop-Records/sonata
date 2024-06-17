@@ -21,6 +21,9 @@ const nextConfig = {
       {
         hostname: 'i.imgur.com',
       },
+      {
+        hostname: 'ipfs.decentralized-content.com'
+      }
     ],
   },
 };
