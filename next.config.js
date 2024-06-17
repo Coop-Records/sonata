@@ -23,6 +23,12 @@ const nextConfig = {
       },
       {
         hostname: 'ipfs.decentralized-content.com'
+      },
+      {
+        hostname: 'i.seadn.io'
+      },
+      {
+        hostname: 'arweave.net'
       }
     ],
   },

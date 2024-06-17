@@ -10,7 +10,7 @@ const BaseInfo = () => {
   return (
     <div className="flex items-center gap-2">
       <Avatar className="size-[60px]">
-        <AvatarImage src={profile?.pfp.url} />
+        <AvatarImage className='object-cover' src={profile?.pfp.url} />
       </Avatar>
       <div className="space-y-1">
         <p className="font-sora text-[21px] font-semibold">{profile?.displayName}</p>

@@ -18,6 +18,7 @@ export default function CreatePost() {
     if (!checkLoggedIn()) return;
     if (embedUrl) {
       handlePost();
+      
       return;
     }
     setIsPostDialogOpen(true);
@@ -34,6 +35,7 @@ export default function CreatePost() {
 
       <div className="flex grow items-center justify-between rounded-2xl bg-muted p-3">
         <Input
+          value={embedUrl}
           className="border-none bg-transparent text-muted-foreground focus-visible:ring-0 focus-visible:ring-offset-0"
           placeholder="Share SoundCloud, Sound or Spotify links here!"
           onChange={(e) => setEmbedUrl(e.target.value)}
