@@ -50,7 +50,7 @@ export const CHANNELS = [
   {
     label: '/classical',
     value: 'classical',
-    icon: '/images/classical.png',
+    icon: 'https://i.imgur.com/7ng6bHS.png',
   },
 ];
 
