@@ -22,10 +22,13 @@ const getProfileRank = async (wallets: Address[]) => {
     let lowestRank = Number.MAX_VALUE;
     rank.filter((obj: any) => {
       if (obj.rank && obj.rank < lowestRank) {
-        lowestRank = obj.rank;
+        lowestRank = obj;
       }
     });
-    return lowestRank;
+    const rankObj: any = {
+      rank: lowestRank,
+    };
+    return rankObj.rank;
   } catch (error) {
     console.error(error);
     return { error };
