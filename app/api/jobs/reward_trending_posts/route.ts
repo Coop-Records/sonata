@@ -1,4 +1,4 @@
-import { StackClient } from '@stackso/js-core';
+import { stack } from '@/lib/stack/client';
 import { createClient } from '@supabase/supabase-js';
 import { isNil } from 'lodash';
 import { NextResponse } from 'next/server';
@@ -8,11 +8,6 @@ const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
 const TIP_AWARD_PER = 1000;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-const stack = new StackClient({
-  apiKey: process.env.STACK_API_KEY as string,
-  pointSystemId: Number(process.env.STACK_SYSTEM_ID),
-});
 
 const getResponse = async (): Promise<NextResponse> => {
   const topPosts = await fetchTopPosts();

@@ -7,19 +7,19 @@ const getProfileRank = async (wallets: Address[]) => {
   } as any;
 
   try {
-    const notesPromise = wallets.map(async (wallet) => {
+    const rankPromise = wallets.map(async (wallet) => {
       const queryParams = new URLSearchParams({
         wallet_address: wallet,
       });
 
       const response = await fetch(`/api/getLeaderboardRank?${queryParams}`, options);
       const data = await response.json();
-      return data.notes;
+      return data.leaderBoard;
     });
 
-    const notes = await Promise.all(notesPromise);
-    const notesCount = notes.reduce((acc, cur) => acc + cur, 0);
-    return notesCount;
+    const rank = await Promise.all(rankPromise);
+    const rankLeaderBoard = rank.reduce((acc, cur) => acc + cur, 0);
+    return rankLeaderBoard;
   } catch (error) {
     console.error(error);
     return { error };

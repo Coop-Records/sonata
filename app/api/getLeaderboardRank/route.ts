@@ -1,10 +1,5 @@
+import { stack } from '@/lib/stack/client';
 import { NextRequest } from 'next/server';
-import { StackClient } from '@stackso/js-core';
-
-const stack = new StackClient({
-  apiKey: process.env.STACK_API_KEY as string,
-  pointSystemId: Number(process.env.STACK_SYSTEM_ID),
-});
 
 export async function GET(req: NextRequest): Promise<Response> {
   // Retrieve the wallet_address from the query parameters
@@ -18,9 +13,9 @@ export async function GET(req: NextRequest): Promise<Response> {
       },
     });
   }
-  const currentRank = await stack.getLeaderboardRank(wallet_address);
+  const leaderBoard = await stack.getLeaderboardRank(wallet_address);
 
-  return new Response(JSON.stringify({ rank: currentRank }), {
+  return new Response(JSON.stringify({ leaderBoard: leaderBoard }), {
     status: 200,
     headers: {
       'Content-Type': 'application/json',
