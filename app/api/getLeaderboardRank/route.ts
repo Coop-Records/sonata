@@ -2,7 +2,6 @@ import { stack } from '@/lib/stack/client';
 import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest): Promise<Response> {
-  // Retrieve the wallet_address from the query parameters
   const wallet_address = req.nextUrl.searchParams.get('wallet_address');
 
   if (!wallet_address) {
