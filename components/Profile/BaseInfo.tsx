@@ -16,9 +16,7 @@ const BaseInfo = () => {
       <div className="space-y-1">
         <p className="font-sora text-[21px] font-semibold">{profile?.displayName}</p>
         <div className="flex gap-2">
-          <div className="flex h-[33px] items-center justify-center rounded-full bg-grey-light px-4 font-sora text-[14px] font-semibold">
-            <Rank />
-          </div>
+          <Rank />
           <Link
             href={warpcastProfileURL}
             target="_blank"
