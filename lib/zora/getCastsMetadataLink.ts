@@ -21,12 +21,6 @@ async function multicallToCasts(
   }, []);
 }
 
-/**
- * Given a list of blockchain callable contract queries to casts mapping, 
- * will run the queries retrieving the ipfs metadata link. 
- * Will then attach the link to the casts.
- * 
- */
 async function getCastsMetadataLink({
   arbitrum,
   base,

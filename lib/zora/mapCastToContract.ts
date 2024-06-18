@@ -26,10 +26,6 @@ function mapContractsToCasts(
   return previous;
 }
 
-/**
- * Creates a contract callable query from a given cast's zora embbeding, then maps each query to it's appropriate cast.
- * Each query is mapped to the appropriate chain, returning a list of chains with the queries and casts.
- */
 function getCastContractMapping(casts: Cast[]) {
   let arbitrum: ICastsAndContracts = { casts: [], contracts: [] };
   let base: ICastsAndContracts = { casts: [], contracts: [] };

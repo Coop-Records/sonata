@@ -2,16 +2,12 @@ import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import getCastsMetadataLink from './getCastsMetadataLink';
 import getCastContractMapping from './mapCastToContract';
 
-/**
- * Filter zora feed/casts by the audio mimeType
- * 
- */
 async function filterZoraFeed(casts: Cast[]) {
   try {
     const data = await getCastsMetadataLink(getCastContractMapping(casts));
 
-    const castsMetaData = await Promise.all(data.map(cast => (
-      fetch(`https://gateway.pinata.cloud/${cast.ipfs}`, { cache: 'force-cache' })
+    const castsMetadata = await Promise.all(data.map(cast => (
+      fetch(`https://cloudflare-ipfs.com/${cast.ipfs}`, { cache: 'force-cache' })
     )));
 
     const response: Cast[] = [];
@@ -24,7 +20,7 @@ async function filterZoraFeed(casts: Cast[]) {
           mime?: string;
           uri?: string
         }
-      } = await castsMetaData[index].json();
+      } = await castsMetadata[index].json();
 
       if (
         metadata &&
