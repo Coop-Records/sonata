@@ -6,7 +6,7 @@ import mapContractsToCasts from './mapContractsToCasts';
 import parseCollectionUrl, { pattern as collectionUrlPattern } from './parseCollectionUrl';
 
 function getCastContractMapping(casts: Cast[]) {
-  const castContractMappings: { [K in ZoraChains]?: ICastsAndContracts } = {} as any;
+  const castContractMappings: { [Key in ZoraChains]?: ICastsAndContracts } = {} as any;
 
   for (const cast of casts) {
     const embed = cast.embeds.find((embed: any) => collectionUrlPattern.test(embed?.url));
