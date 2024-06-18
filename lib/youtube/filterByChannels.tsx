@@ -1,10 +1,10 @@
-import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
+import { CHANNELS } from '../consts';
 import getChannelIdFromCast from '../neynar/getChannelIdFromCast';
 
-const filterByChannels = (youtube: Cast[]) =>
+const filterByChannels = (youtube: any) =>
   youtube.filter((entry: any) => {
     const channelId = getChannelIdFromCast(entry);
-    return channelId;
+    return channelId && CHANNELS.find((channel) => channel.value === channelId);
   });
 
 export default filterByChannels;
