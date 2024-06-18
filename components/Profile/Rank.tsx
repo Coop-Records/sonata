@@ -9,8 +9,8 @@ const Rank = () => {
   useEffect(() => {
     const init = async () => {
       if (!profile?.verifications) return;
-      const cnt: any = await getProfileRank(profile?.verifications);
-      setRank(cnt);
+      const leaderBoardRank: any = await getProfileRank(profile?.verifications);
+      setRank(leaderBoardRank);
     };
     if (!profile) return;
 
