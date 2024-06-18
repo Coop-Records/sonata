@@ -1,7 +1,6 @@
 import { FeedType } from '@/types/Feed';
 import { FrameMetadataType } from '@coinbase/onchainkit';
 import { zeroAddress } from 'viem';
-
 export const TITLE = 'Sonata';
 export const DESCRIPTION = 'Discover music on Farcaster';
 export const FARCASTER_ID_REGISTRY = '0x00000000fc6c5f01fc30151999387bb99a9f489b';
@@ -21,7 +20,6 @@ export const tabs = [
   { label: 'Following', href: '/following', value: FeedType.Following },
   { label: 'Trending', href: '/', value: FeedType.Trending },
   { label: 'Recent', href: '/recent', value: FeedType.Recent },
-  { label: 'Posts', href: '#', value: FeedType.Posts },
 ];
 
 export const CHANNELS = [
@@ -29,12 +27,6 @@ export const CHANNELS = [
     label: '/sonata',
     value: 'sonata',
     icon: 'https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/4e85acaa-4f1d-444b-1e35-dd06d43d0800/rectcrop3',
-  },
-  {
-    label: '/music',
-    value: 'music',
-    icon: 'https://i.imgur.com/Mjyb3Y8.png',
-    parentUrl: 'chain://eip155:7777777/erc721:0xe96c21b136a477a6a97332694f0caae9fbb05634',
   },
   { label: '/louder', value: 'louder', icon: 'https://i.imgur.com/r4GIRLL.png' },
   { label: '/rock', value: 'rock', icon: 'https://i.imgur.com/Ffj1Opg.png' },
@@ -46,26 +38,6 @@ export const CHANNELS = [
   { label: '/bangers', value: 'bangers', icon: 'https://i.imgur.com/URBvewb.png' },
   { label: '/spotify', value: 'spotify', icon: 'https://i.imgur.com/3Z8YjMT.jpg' },
   { label: '/coop-recs', value: 'coop-recs', icon: 'https://i.imgur.com/eecb7AP.gif' },
-  { label: '/housemusic', value: 'housemusic', icon: 'https://i.imgur.com/rt1dcOI.jpg' },
-  {
-    label: '/classical',
-    value: 'classical',
-    icon: 'https://i.imgur.com/7ng6bHS.png',
-    parentUrl: 'https://en.wikipedia.org/wiki/Johann_Sebastian_Bach',
-  },
-  {
-    label: '/classical',
-    value: 'classical',
-    icon: '/images/classical.png',
-  },
 ];
 
 export const fetchPostsLimit = 20;
-
-export const CONTENT_PLATFORMS = [
-  'spotify.com/track',
-  'soundcloud.com',
-  'sound.xyz',
-  'youtube.com/watch',
-  'youtu.be',
-];
