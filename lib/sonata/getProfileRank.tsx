@@ -18,8 +18,10 @@ const getProfileRank = async (wallets: Address[]) => {
     });
 
     const rank = await Promise.all(rankPromise);
-    const rankLeaderBoard = rank.reduce((acc, cur) => acc + cur, 0);
-    return rankLeaderBoard;
+    let rankLeaderBoard = rank.reduce(function (res, obj) {
+      return obj.rank < res.rank ? obj : res;
+    });
+    return rankLeaderBoard.rank;
   } catch (error) {
     console.error(error);
     return { error };

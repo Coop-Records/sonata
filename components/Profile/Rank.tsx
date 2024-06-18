@@ -19,7 +19,7 @@ const Rank = () => {
 
   return (
     <div className="flex w-fit flex-col justify-center">
-      <p className="font-sora text-[16px] font-semibold">{rank}</p>
+      <p className="font-sora text-[16px] font-semibold">#{rank}</p>
     </div>
   );
 };
