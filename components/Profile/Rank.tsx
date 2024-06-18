@@ -1,5 +1,4 @@
 import getProfileRank from '@/lib/sonata/getProfileRank';
-import { formatBigInt } from '@/lib/utils';
 import { useProfileProvider } from '@/providers/ProfileProvider';
 import { useEffect, useState } from 'react';
 
