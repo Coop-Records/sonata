@@ -30,6 +30,12 @@ export const CHANNELS = [
     value: 'sonata',
     icon: 'https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/4e85acaa-4f1d-444b-1e35-dd06d43d0800/rectcrop3',
   },
+  {
+    label: '/music',
+    value: 'music',
+    icon: 'https://i.imgur.com/Mjyb3Y8.png',
+    parentUrl: 'chain://eip155:7777777/erc721:0xe96c21b136a477a6a97332694f0caae9fbb05634',
+  },
   { label: '/louder', value: 'louder', icon: 'https://i.imgur.com/r4GIRLL.png' },
   { label: '/rock', value: 'rock', icon: 'https://i.imgur.com/Ffj1Opg.png' },
   { label: '/techno', value: 'techno', icon: 'https://i.imgur.com/omLkrpT.png' },
@@ -42,10 +48,10 @@ export const CHANNELS = [
   { label: '/coop-recs', value: 'coop-recs', icon: 'https://i.imgur.com/eecb7AP.gif' },
   { label: '/housemusic', value: 'housemusic', icon: 'https://i.imgur.com/rt1dcOI.jpg' },
   {
-    label: '/music',
-    value: 'music',
-    icon: 'https://i.imgur.com/Mjyb3Y8.png',
-    parentUrl: 'chain://eip155:7777777/erc721:0xe96c21b136a477a6a97332694f0caae9fbb05634',
+    label: '/classical',
+    value: 'classical',
+    icon: 'https://i.imgur.com/7ng6bHS.png',
+    parentUrl: 'https://en.wikipedia.org/wiki/Johann_Sebastian_Bach',
   },
   {
     label: '/classical',

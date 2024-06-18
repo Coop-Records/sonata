@@ -17,9 +17,9 @@ const HomeButton = () => {
         <path
           d="M7 13L1 7L7 1"
           stroke="#333536"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </svg>
       <p className="font-sora text-[18px] font-semibold">Home</p>

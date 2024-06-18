@@ -58,8 +58,15 @@ const TipProvider = ({ children }: any) => {
 
   const syncPoints = async () => {
     if (isNil(user) || user.verifications.length === 0) return;
-    const currentBalance = await getCurrentNotes(user.verifications[0] as Address);
-    setBalance(BigInt(currentBalance));
+
+    let totalBalance = BigInt(0);
+
+    for (const verification of user.verifications) {
+      const currentBalance = await getCurrentNotes(verification as Address);
+      totalBalance += BigInt(currentBalance);
+    }
+
+    setBalance(totalBalance);
   };
 
   const getAirdropBalance = async () => {
