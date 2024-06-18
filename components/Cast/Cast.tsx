@@ -42,9 +42,6 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
        
         try {
           const metadata = await fetchMetadata(url, cast);
-         
-          console.log(cast)
-          console.log(metadata)
           
           setMetadata(metadata);
         } catch (error) {
@@ -67,7 +64,7 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
                 <AvatarFallback>{author.display_name}</AvatarFallback>
               </Avatar>
             </a>
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1 justify-center">
               <div className="flex flex-row items-center align-middle">
                 <a
                   href={`/channel/${cast.channelId}`}
