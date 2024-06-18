@@ -21,7 +21,10 @@ import BaseInfo from '../MediaObject/BaseProfile';
 
 
 
+
 const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
+
+  const pathname = location.pathname;
 
   const embed = findValidEmbed(cast);
   const url = embed?.url;
@@ -53,7 +56,7 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
   }, [url]);
 
   if (!metadata) return <></>;
-  if(location.pathname.includes("/cast/")){
+  if(pathname.includes("/cast/")){
     return (
       <div className="w-full space-y-4 ">
         <div className="flex gap-2">
@@ -111,7 +114,7 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
           </div>
           <div className="my-auto rounded-2xl bg-grey-light  px-8 md:py-6">
             <div className="flex">
-              <span className="font-bold ">{formatBigInt(BigInt(cast.points))}</span>
+              <span className="font-bold ">{formatBigInt(BigInt(cast.points || 0))}</span>
               <Image src={logos.NOTES} width={16} height={16} alt="" />
             </div>
             Notes Collected
