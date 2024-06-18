@@ -1,6 +1,6 @@
 import getUser from '@/lib/neynar/getNeynarUser';
 import verifySignerUUID from '@/lib/neynar/verifySigner';
-import { StackClient } from '@stackso/js-core';
+import { stack } from '@/lib/stack/client';
 import { createClient } from '@supabase/supabase-js';
 import { isEmpty, isNil } from 'lodash';
 import { NextRequest, NextResponse } from 'next/server';
@@ -9,10 +9,6 @@ const SUPABASE_URL = process.env.SUPABASE_URL as string;
 const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-const stack = new StackClient({
-  apiKey: process.env.STACK_API_KEY as string,
-  pointSystemId: Number(process.env.STACK_SYSTEM_ID),
-});
 
 const getResponse = async (req: NextRequest): Promise<NextResponse> => {
   const body = await req.json();
