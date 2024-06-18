@@ -1,18 +1,12 @@
 import Zora1155 from '@/abis/zora1155.json';
 import { ICastsAndContracts } from '@/types/ContractCastMap';
 import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
+import { ZoraChains } from '../consts';
 import mapContractsToCasts from './mapContractsToCasts';
 import parseCollectionUrl, { pattern as collectionUrlPattern } from './parseCollectionUrl';
 
-
 function getCastContractMapping(casts: Cast[]) {
-  let arbitrum: ICastsAndContracts = { casts: [], contracts: [] };
-  let base: ICastsAndContracts = { casts: [], contracts: [] };
-  let blast: ICastsAndContracts = { casts: [], contracts: [] };
-  let mainnet: ICastsAndContracts = { casts: [], contracts: [] };
-  let optimism: ICastsAndContracts = { casts: [], contracts: [] };
-  let pgn: ICastsAndContracts = { casts: [], contracts: [] };
-  let zora: ICastsAndContracts = { casts: [], contracts: [] };
+  const castContractMappings: { [K in ZoraChains]?: ICastsAndContracts } = {} as any;
 
   for (const cast of casts) {
     const embed = cast.embeds.find((embed: any) => collectionUrlPattern.test(embed?.url));
@@ -30,24 +24,12 @@ function getCastContractMapping(casts: Cast[]) {
       args: [collectionData.tokenId]
     };
 
-    if (chain == 'arb') arbitrum = mapContractsToCasts(cast, contract, arbitrum);
-    else if (chain == 'base') base = mapContractsToCasts(cast, contract, base);
-    else if (chain == 'blast') blast = mapContractsToCasts(cast, contract, blast);
-    else if (chain == 'eth') mainnet = mapContractsToCasts(cast, contract, mainnet);
-    else if (chain == 'oeth') optimism = mapContractsToCasts(cast, contract, optimism);
-    else if (chain == 'pgn') pgn = mapContractsToCasts(cast, contract, pgn);
-    else if (chain == 'zora') zora = mapContractsToCasts(cast, contract, zora);
+    const castContractMapping = castContractMappings[chain] ?? { casts: [], contracts: [] };
+
+    castContractMappings[chain] = mapContractsToCasts(cast, contract, castContractMapping);
   }
 
-  return {
-    arbitrum,
-    base,
-    blast,
-    mainnet,
-    optimism,
-    pgn,
-    zora
-  }
+  return castContractMappings;
 }
 
 export default getCastContractMapping;
