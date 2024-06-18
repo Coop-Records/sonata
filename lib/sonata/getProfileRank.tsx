@@ -7,28 +7,26 @@ const getProfileRank = async (wallets: Address[]) => {
   } as any;
 
   try {
-    const rankPromise = wallets.map(async (wallet) => {
+    const ranksPromise = wallets.map(async (wallet) => {
       const queryParams = new URLSearchParams({
         wallet_address: wallet,
       });
 
       const response = await fetch(`/api/getLeaderboardRank?${queryParams}`, options);
       const data = await response.json();
-
-      return data.leaderBoard;
+      return data.leaderBoard.rank;
     });
 
-    const rank = await Promise.all(rankPromise);
-    let lowestRank = Number.MAX_VALUE;
-    rank.filter((obj: any) => {
-      if (obj.rank && obj.rank < lowestRank) {
-        lowestRank = obj;
-      }
-    });
-    const rankObj: any = {
-      rank: lowestRank,
-    };
-    return rankObj.rank;
+    const ranks = await Promise.all(ranksPromise);
+
+    const validRanks = ranks.filter((rank) => rank !== null && rank !== undefined);
+
+    if (validRanks.length === 0) {
+      return null;
+    }
+
+    const highestRank = Math.min(...validRanks);
+    return highestRank;
   } catch (error) {
     console.error(error);
     return { error };
