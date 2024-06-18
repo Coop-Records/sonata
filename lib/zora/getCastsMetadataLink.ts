@@ -1,25 +1,6 @@
-import { Cast } from "@neynar/nodejs-sdk/build/neynar-api/v2";
-import { Chain, createPublicClient, http, } from "viem";
 import * as chains from 'viem/chains';
-import getCastContractMapping, { ICastsAndContracts } from "./mapCastToContract";
-
-async function multicallToCasts(
-  { chain, contracts, casts }: ICastsAndContracts & { chain: Chain }
-) {
-  const responses = await createPublicClient({ chain, transport: http() }).multicall({ contracts });
-
-  return responses.reduce<
-    (Cast & { ipfs: string })[]
-  >((prev, res, index) => {
-    if (res.status === 'success' && typeof res.result === 'string') {
-      prev.push({
-        ...casts[index],
-        ipfs: res.result.replace(':/', '')
-      })
-    }
-    return prev;
-  }, []);
-}
+import getCastContractMapping from "./mapCastToContract";
+import multicallToCasts from './multicallToCasts';
 
 async function getCastsMetadataLink({
   arbitrum,
@@ -30,7 +11,6 @@ async function getCastsMetadataLink({
   pgn,
   zora
 }: ReturnType<typeof getCastContractMapping>) {
-
   const data = [];
 
   if (arbitrum.contracts.length) data.push(...await multicallToCasts({ chain: chains.arbitrum, ...arbitrum }));

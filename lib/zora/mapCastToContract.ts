@@ -1,30 +1,9 @@
 import Zora1155 from '@/abis/zora1155.json';
+import { ICastsAndContracts } from '@/types/ContractCastMap';
 import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
-import { Address } from 'viem';
+import mapContractsToCasts from './mapContractsToCasts';
 import parseCollectionUrl, { pattern as collectionUrlPattern } from './parseCollectionUrl';
 
-export interface IContract {
-  address: Address,
-  abi: any,
-  functionName: string,
-  args?: unknown[]
-};
-
-export interface ICastsAndContracts {
-  contracts: IContract[],
-  casts: Cast[],
-};
-
-function mapContractsToCasts(
-  cast: Cast,
-  contract: IContract,
-  previous: ICastsAndContracts
-) {
-  previous.casts.push(cast);
-  previous.contracts.push(contract);
-
-  return previous;
-}
 
 function getCastContractMapping(casts: Cast[]) {
   let arbitrum: ICastsAndContracts = { casts: [], contracts: [] };
