@@ -4,8 +4,6 @@ import { NextRequest } from 'next/server';
 
 export const runtime = 'edge';
 
-export const contentType = 'image/png';
-
 export async function GET(req: NextRequest) {
   const trackName = req.nextUrl.searchParams.get('trackName') || 'defaultHash';
   const artistName = req.nextUrl.searchParams.get('artistName') || 'Default artistName';

@@ -9,8 +9,7 @@ import fetchMetadata from '@/lib/fetchMetadata';
 
 const frameMetadata = { ...getFrameMetadata(DEFAULT_FRAME), 'of:accepts:xmtp': '2024-02-01' };
 
-// Default metadata that applies if specific metadata can't be generated
-export const defaultMetadata: Metadata = {
+const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   openGraph: {
@@ -35,10 +34,6 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
       .select('*')
       .eq('post_hash', fullHash)
       .single();
-
-    if (!cast) {
-      return defaultMetadata;
-    }
 
     const embed = findValidEmbed(cast);
     const url: any = embed?.url;
@@ -68,7 +63,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
     };
   } catch (error) {
     console.error('Failed to generate metadata:', error);
-    return defaultMetadata;
+    return metadata;
   }
 }
 
