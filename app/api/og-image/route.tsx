@@ -1,16 +1,31 @@
+import { VERCEL_URL } from '@/lib/consts';
 import { ImageResponse } from '@vercel/og';
 import { NextRequest } from 'next/server';
 
 export const runtime = 'edge';
 
+export const contentType = 'image/png';
+
 export async function GET(req: NextRequest) {
-  const trackName = req.nextUrl.searchParams.get('trackName') || 'defaultHash';
-  const artistName = req.nextUrl.searchParams.get('artistName') || 'Default artistName';
-  const artworkUrl = req.nextUrl.searchParams.get('artworkUrl') || 'Default artworkUrl';
-  const points = req.nextUrl.searchParams.get('points') || 'Default points';
-  const username = req.nextUrl.searchParams.get('username') || 'Default username';
-  const channelLabel = req.nextUrl.searchParams.get('channelLabel') || 'Default channelLabel';
-  const channelIcon = req.nextUrl.searchParams.get('channelIcon') || 'Default channelIcon';
+  const encodedParams = req.nextUrl.searchParams.get('data');
+  let params = {};
+
+  if (encodedParams) {
+    params = JSON.parse(atob(encodedParams));
+  } else {
+    params = {
+      trackName: 'defaultTrackName',
+      artistName: 'Default artistName',
+      artworkUrl: 'Default artworkUrl',
+      points: 'Default points',
+      username: 'Default username',
+      channelLabel: 'Default channelLabel',
+      channelIcon: 'Default channelIcon',
+    };
+  }
+
+  const { trackName, artistName, artworkUrl, points, username, channelLabel, channelIcon }: any =
+    params;
 
   return new ImageResponse(
     (
@@ -28,7 +43,7 @@ export async function GET(req: NextRequest) {
         <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '50px' }}>
           <div style={{ display: 'flex', margin: 0, alignItems: 'center' }}>
             <img
-              src="https://sonata-git-tahir-update-image-for-individu-321df3-cooprecsmusic.vercel.app/images/notes.jpg"
+              src={`${VERCEL_URL}/images/notes.jpg`}
               alt=""
               style={{
                 width: '32px',
@@ -84,7 +99,7 @@ export async function GET(req: NextRequest) {
               <div style={{ display: 'flex', margin: 0, width: '65%', alignItems: 'center' }}>
                 <p style={{ margin: 0, fontSize: '18px', fontWeight: 'bold' }}>{points}</p>
                 <img
-                  src="https://sonata-git-tahir-update-image-for-individu-321df3-cooprecsmusic.vercel.app/images/notes.jpg"
+                  src={`${VERCEL_URL}/images/notes.jpg`}
                   alt=""
                   style={{
                     width: '28px',
@@ -109,12 +124,7 @@ export async function GET(req: NextRequest) {
                 width: '200px',
               }}
             >
-              <img
-                src="https://sonata-git-tahir-update-image-for-individu-321df3-cooprecsmusic.vercel.app/images/neynar.svg"
-                alt="warpcast"
-                width={16}
-                height={14}
-              />
+              <img src={`${VERCEL_URL}/images/neynar.svg`} alt="warpcast" width={16} height={14} />
               <p style={{ color: '#8b49f7' }}>{username}</p>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import { getFrameMetadata } from '@coinbase/onchainkit';
 import type { Metadata } from 'next';
-import { CHANNELS, DEFAULT_FRAME, DESCRIPTION, TITLE } from '@/lib/consts';
+import { CHANNELS, DEFAULT_FRAME, DESCRIPTION, TITLE, VERCEL_URL } from '@/lib/consts';
 import getCastHash from '@/lib/neynar/getCastHash';
 import { supabaseClient } from '@/lib/supabase/client';
 import Cast from '@/components/Cast';
@@ -15,12 +15,9 @@ const metadata: Metadata = {
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,
-    images:
-      'https://sonata-git-tahir-update-image-for-individu-321df3-cooprecsmusic.vercel.app/images/og.png',
+    images: `${VERCEL_URL}/images/og.png`,
   },
-  icons: [
-    'https://sonata-git-tahir-update-image-for-individu-321df3-cooprecsmusic.vercel.app/images/logo2.png',
-  ],
+  icons: [`${VERCEL_URL}/images/logo2.png`],
   other: {
     ...frameMetadata,
   },
@@ -51,24 +48,29 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
     const channelData = getChannelData(channelId);
 
     const channelLabel = channelData?.label || '/sonata';
-    const channelLink =
-      channelData?.icon ||
-      'https://sonata-git-tahir-update-image-for-individu-321df3-cooprecsmusic.vercel.app/images/notes.jpg';
-    const ogImageUrl = `/api/og-image/?trackName=${encodeURIComponent(metadata?.trackName || '')}&artistName=${encodeURIComponent(metadata?.artistName || '')}&artworkUrl=${encodeURIComponent(metadata?.artworkUrl || '')}&points=${encodeURIComponent(cast?.points || '')}&channelLabel=${encodeURIComponent(channelLabel)}&channelIcon=${encodeURIComponent(channelLink)}`;
+    const channelLink = channelData?.icon || `${VERCEL_URL}/images/notes.jpg`;
+    // const ogImageUrl = `/api/og-image?trackName=${metadata?.trackName}&artistName=${metadata?.artistName}&artworkUrl=${metadata?.artworkUrl}&points=${cast?.points}&username=${username}&channelLabel=${channelLabel}&channelIcon=${channelLink}`;
+    const params = {
+      trackName: metadata?.trackName,
+      artistName: metadata?.artistName,
+      artworkUrl: metadata?.artworkUrl,
+      points: cast?.points,
+      username: username,
+      channelLabel: channelLabel,
+      channelIcon: channelLink,
+    };
 
+    const encodedParams = btoa(JSON.stringify(params));
+    const ogImageUrl = `/api/og-image?data=${encodedParams}`;
     return {
       title: cast.title || TITLE,
       description: cast.description || DESCRIPTION,
       openGraph: {
         title: cast.title || TITLE,
         description: cast.description || DESCRIPTION,
-        images:
-          'https://sonata-git-tahir-update-image-for-individu-321df3-cooprecsmusic.vercel.app/' +
-          ogImageUrl,
+        images: VERCEL_URL + ogImageUrl,
       },
-      icons: [
-        'https://sonata-git-tahir-update-image-for-individu-321df3-cooprecsmusic.vercel.app/images/logo2.png',
-      ],
+      icons: [`${VERCEL_URL}/images/logo2.png`],
       other: {
         ...frameMetadata,
       },
