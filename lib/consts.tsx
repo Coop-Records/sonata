@@ -58,21 +58,10 @@ export const CHANNELS = [
 export const fetchPostsLimit = 20;
 
 export const CONTENT_PLATFORMS = [
-  'spotify.com/track',
-  'soundcloud.com',
-  'sound.xyz',
-  'youtube.com/watch',
-  'youtu.be',
-];
-
-export const ZORA_TO_VIEM = {
-  arb: 'arbitrum',
-  base: 'base',
-  blast: 'blast',
-  eth: 'mainnet',
-  oeth: 'optimism',
-  pgn: 'pgn',
-  zora: 'zora',
-} as const;
-
-export type ZoraChains = keyof typeof ZORA_TO_VIEM;
+  {url:'spotify.com/track', title: 'spotify'},
+  {url:'spotify.com/intl-es/track', title: 'spotify'},
+  {url:'soundcloud.com', title: 'soundcloud'},
+  {url:'sound.xyz', title: 'soundxyz'},
+  {url:'youtube.com/watch', title: 'youtube'},
+  {url:'youtu.be', title: 'youtube'},
+] as const;
