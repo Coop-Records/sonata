@@ -46,7 +46,10 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
     };
 
     const channelData = getChannelData(channelId);
-    const ogImageUrl = `/api/og-image?trackName=${metadata?.trackName}&artistName=${metadata?.artistName}&artworkUrl=${metadata?.artworkUrl}&points=${cast?.points}&username=${username}&channelLabel=${channelData?.label}&channelIcon=${channelData?.icon}`;
+
+    const channelLabel = channelData?.label || '/sonata';
+    const channelLink = channelData?.icon || `${VERCEL_URL}/images/notes.jpg`;
+    const ogImageUrl = `/api/og-image?trackName=${metadata?.trackName}&artistName=${metadata?.artistName}&artworkUrl=${metadata?.artworkUrl}&points=${cast?.points}&username=${username}&channelLabel=${channelLabel}&channelIcon=${channelLink}`;
 
     return {
       title: cast.title || TITLE,
