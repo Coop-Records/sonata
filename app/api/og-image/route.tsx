@@ -4,8 +4,6 @@ import { NextRequest } from 'next/server';
 
 export const runtime = 'edge';
 
-export const contentType = 'image/png';
-
 export async function GET(req: NextRequest) {
   const encodedParams = req.nextUrl.searchParams.get('data');
   let params = {};
