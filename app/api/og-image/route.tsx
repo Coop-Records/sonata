@@ -1,4 +1,3 @@
-import { VERCEL_URL } from '@/lib/consts';
 import { ImageResponse } from '@vercel/og';
 import { NextRequest } from 'next/server';
 
@@ -29,7 +28,7 @@ export async function GET(req: NextRequest) {
         <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '50px' }}>
           <div style={{ display: 'flex', margin: 0, alignItems: 'center' }}>
             <img
-              src={`${VERCEL_URL}/images/notes.jpg`}
+              src="https://sonata-git-tahir-update-image-for-individu-321df3-cooprecsmusic.vercel.app/images/notes.jpg"
               alt=""
               style={{
                 width: '32px',
@@ -85,7 +84,7 @@ export async function GET(req: NextRequest) {
               <div style={{ display: 'flex', margin: 0, width: '65%', alignItems: 'center' }}>
                 <p style={{ margin: 0, fontSize: '18px', fontWeight: 'bold' }}>{points}</p>
                 <img
-                  src={`${VERCEL_URL}/images/notes.jpg`}
+                  src="https://sonata-git-tahir-update-image-for-individu-321df3-cooprecsmusic.vercel.app/images/notes.jpg"
                   alt=""
                   style={{
                     width: '28px',
@@ -110,7 +109,12 @@ export async function GET(req: NextRequest) {
                 width: '200px',
               }}
             >
-              <img src={`${VERCEL_URL}/images/neynar.svg`} alt="warpcast" width={16} height={14} />
+              <img
+                src="https://sonata-git-tahir-update-image-for-individu-321df3-cooprecsmusic.vercel.app/images/neynar.svg"
+                alt="warpcast"
+                width={16}
+                height={14}
+              />
               <p style={{ color: '#8b49f7' }}>{username}</p>
             </div>
           </div>

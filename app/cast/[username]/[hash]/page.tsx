@@ -1,6 +1,6 @@
 import { getFrameMetadata } from '@coinbase/onchainkit';
 import type { Metadata } from 'next';
-import { CHANNELS, DEFAULT_FRAME, DESCRIPTION, TITLE, VERCEL_URL } from '@/lib/consts';
+import { CHANNELS, DEFAULT_FRAME, DESCRIPTION, TITLE } from '@/lib/consts';
 import getCastHash from '@/lib/neynar/getCastHash';
 import { supabaseClient } from '@/lib/supabase/client';
 import Cast from '@/components/Cast';
@@ -15,9 +15,12 @@ const metadata: Metadata = {
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,
-    images: `${VERCEL_URL}/images/og.png`,
+    images:
+      'https://sonata-git-tahir-update-image-for-individu-321df3-cooprecsmusic.vercel.app/images/og.png',
   },
-  icons: [`${VERCEL_URL}/images/logo2.png`],
+  icons: [
+    'https://sonata-git-tahir-update-image-for-individu-321df3-cooprecsmusic.vercel.app/images/logo2.png',
+  ],
   other: {
     ...frameMetadata,
   },
@@ -48,7 +51,9 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
     const channelData = getChannelData(channelId);
 
     const channelLabel = channelData?.label || '/sonata';
-    const channelLink = channelData?.icon || `${VERCEL_URL}/images/notes.jpg`;
+    const channelLink =
+      channelData?.icon ||
+      'https://sonata-git-tahir-update-image-for-individu-321df3-cooprecsmusic.vercel.app/images/notes.jpg';
     const ogImageUrl = `/api/og-image/?trackName=${encodeURIComponent(metadata?.trackName || '')}&artistName=${encodeURIComponent(metadata?.artistName || '')}&artworkUrl=${encodeURIComponent(metadata?.artworkUrl || '')}&points=${encodeURIComponent(cast?.points || '')}&channelLabel=${encodeURIComponent(channelLabel)}&channelIcon=${encodeURIComponent(channelLink)}`;
 
     return {
@@ -57,9 +62,13 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
       openGraph: {
         title: cast.title || TITLE,
         description: cast.description || DESCRIPTION,
-        images: VERCEL_URL + ogImageUrl,
+        images:
+          'https://sonata-git-tahir-update-image-for-individu-321df3-cooprecsmusic.vercel.app/' +
+          ogImageUrl,
       },
-      icons: [`${VERCEL_URL}/images/logo2.png`],
+      icons: [
+        'https://sonata-git-tahir-update-image-for-individu-321df3-cooprecsmusic.vercel.app/images/logo2.png',
+      ],
       other: {
         ...frameMetadata,
       },
