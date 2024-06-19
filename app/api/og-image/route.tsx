@@ -119,8 +119,5 @@ export async function GET(req: NextRequest) {
         </div>
       </div>
     ),
-    {
-      ...size,
-    },
   );
 }
