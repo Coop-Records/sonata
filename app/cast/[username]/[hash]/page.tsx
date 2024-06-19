@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
 
     const channelLabel = channelData?.label || '/sonata';
     const channelLink = channelData?.icon || `${VERCEL_URL}/images/notes.jpg`;
-    const ogImageUrl = `/api/cast/og-image/?trackName=${encodeURIComponent(metadata?.trackName || '')}&artistName=${encodeURIComponent(metadata?.artistName || '')}&artworkUrl=${encodeURIComponent(metadata?.artworkUrl || '')}&points=${encodeURIComponent(cast?.points || '')}&channelLabel=${encodeURIComponent(channelLabel)}&channelIcon=${encodeURIComponent(channelLink)}`;
+    const ogImageUrl = `/api/og-image/?trackName=${encodeURIComponent(metadata?.trackName || '')}&artistName=${encodeURIComponent(metadata?.artistName || '')}&artworkUrl=${encodeURIComponent(metadata?.artworkUrl || '')}&points=${encodeURIComponent(cast?.points || '')}&channelLabel=${encodeURIComponent(channelLabel)}&channelIcon=${encodeURIComponent(channelLink)}`;
 
     return {
       title: cast.title || TITLE,
