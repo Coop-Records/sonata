@@ -1,7 +1,7 @@
 import createPostReply from '@/lib/neynar/createPostReply';
-import getChannelIdFromCast from '@/lib/neynar/getChannelIdFromCast';
 import getPlatformFeedFromTime from '@/lib/neynar/getPlatformFeedFromTime';
 import getSpotifyWithAlternatives from '@/lib/spotify/getSpotifyWithAlternatives';
+import upsertCast from '@/lib/supabase/upsertCast';
 import filterByChannels from '@/lib/youtube/filterByChannels';
 import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { createClient } from '@supabase/supabase-js';
@@ -32,7 +32,7 @@ const processSingleEntry = async (cast: Cast) => {
   const address = cast?.author?.verifications ? cast?.author?.verifications : undefined;
 
   if (!isEmpty(address)) {
-    await createCast(cast);
+    await upsertCast(cast);
     await sendBotCast(cast);
   }
 };
@@ -89,37 +89,6 @@ const getResponse = async (): Promise<NextResponse> => {
   console.log(data, error);
   return NextResponse.json({ message: 'success', allEntries }, { status: 200 });
 };
-
-async function createCast(cast: Cast) {
-  const likes = (cast as any).reactions.likes_count;
-  const alternativeEmbeds = (cast as any).alternativeEmbeds;
-  const channelId = getChannelIdFromCast(cast);
-
-  const { error } = await supabase.from('posts').upsert(
-    {
-      post_hash: cast.hash,
-      likes,
-      created_at: new Date(cast.timestamp),
-      embeds: cast.embeds,
-      author: cast.author,
-      channelId,
-      alternativeEmbeds,
-      authorFid: cast.author.fid,
-    },
-    {
-      onConflict: 'post_hash',
-    },
-  );
-
-  console.log('jobs::getNewCasts', `Successfully created/updated ${cast.hash}`);
-
-  if (error) {
-    console.error('Error calling function:', error);
-    return null;
-  }
-
-  return { success: true };
-}
 
 async function sendBotCast(cast: Cast) {
   await createPostReply(
