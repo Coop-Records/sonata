@@ -1,12 +1,18 @@
 import { getFrameMetadata } from '@coinbase/onchainkit';
 import type { Metadata } from 'next';
-import { CHANNELS, DEFAULT_FRAME, DESCRIPTION, TITLE, VERCEL_URL } from '@/lib/consts';
+import { DEFAULT_FRAME, DESCRIPTION, TITLE, VERCEL_URL } from '@/lib/consts';
 import getCastHash from '@/lib/neynar/getCastHash';
 import { supabaseClient } from '@/lib/supabase/client';
 import Cast from '@/components/Cast';
-import findValidEmbed from '@/lib/findValidEmbed';
-import fetchMetadata from '@/lib/fetchMetadata';
 import getUserByUsername from '@/lib/neynar/getNeynarUserByUsername';
+import {
+  encodeParams,
+  formatPoints,
+  getChannelData,
+  getEmbedAndMetadata,
+  getFullHash,
+  getHighestRank,
+} from '@/lib/utils';
 import { stack } from '@/lib/stack/client';
 
 const frameMetadata = { ...getFrameMetadata(DEFAULT_FRAME), 'of:accepts:xmtp': '2024-02-01' };
@@ -25,10 +31,6 @@ const metadata: Metadata = {
   },
 };
 
-async function getFullHash(username: string, hash: string) {
-  return await getCastHash(`https://warpcast.com/${username}/${hash}`);
-}
-
 async function getUserLeaderboardRanks(verifications: any[]) {
   const leaderboardRanks = await Promise.all(
     verifications.map(async (verification: any) => {
@@ -39,31 +41,6 @@ async function getUserLeaderboardRanks(verifications: any[]) {
     }),
   );
   return leaderboardRanks.filter((rank) => rank !== null && rank !== undefined);
-}
-
-function getHighestRank(validRanks: any[]) {
-  return validRanks.length === 0 ? 0 : Math.min(...validRanks);
-}
-
-async function getEmbedAndMetadata(fullHash: string) {
-  const { data: cast } = await supabaseClient
-    .from('posts')
-    .select('*')
-    .eq('post_hash', fullHash)
-    .single();
-
-  const embed = findValidEmbed(cast);
-  const url: any = embed?.url;
-  const metadata = await fetchMetadata(url, cast);
-  return { cast, metadata };
-}
-
-function getChannelData(channelId: any) {
-  return CHANNELS.find((channel) => channel.value === channelId);
-}
-
-function encodeParams(params: any) {
-  return btoa(JSON.stringify(params));
 }
 
 export async function generateMetadata({ params }: any): Promise<Metadata> {
@@ -77,12 +54,13 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
     const highestRank = getHighestRank(validRanks);
     const { cast, metadata } = await getEmbedAndMetadata(fullHash);
     const channelData = getChannelData(cast?.channelId);
+    const points = formatPoints(cast?.points);
 
     const paramData = {
       trackName: metadata?.trackName,
       artistName: metadata?.artistName,
       artworkUrl: metadata?.artworkUrl,
-      points: cast?.points,
+      points: points,
       username,
       channelLabel: channelData?.label || '/sonata',
       channelIcon: channelData?.icon || `${VERCEL_URL}/images/notes.jpg`,
@@ -92,7 +70,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
 
     const encodedParams = encodeParams(paramData);
     const ogImageUrl = `/api/og-image?data=${encodedParams}`;
-    console.log(ogImageUrl);
+
     return {
       title: cast.title || TITLE,
       description: cast.description || DESCRIPTION,
