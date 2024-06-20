@@ -3,7 +3,6 @@ import { twMerge } from 'tailwind-merge';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import getCastHash from '@/lib/neynar/getCastHash';
-import { stack } from '@/lib/stack/client';
 import { supabaseClient } from '@/lib/supabase/client';
 import findValidEmbed from '@/lib/findValidEmbed';
 import fetchMetadata from '@/lib/fetchMetadata';
