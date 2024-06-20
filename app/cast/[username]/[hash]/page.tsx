@@ -6,6 +6,8 @@ import { supabaseClient } from '@/lib/supabase/client';
 import Cast from '@/components/Cast';
 import findValidEmbed from '@/lib/findValidEmbed';
 import fetchMetadata from '@/lib/fetchMetadata';
+import getUserByUsername from '@/lib/neynar/getNeynarUserByUsername';
+import { stack } from '@/lib/stack/client';
 
 const frameMetadata = { ...getFrameMetadata(DEFAULT_FRAME), 'of:accepts:xmtp': '2024-02-01' };
 
@@ -23,45 +25,74 @@ const metadata: Metadata = {
   },
 };
 
+async function getFullHash(username: string, hash: string) {
+  return await getCastHash(`https://warpcast.com/${username}/${hash}`);
+}
+
+async function getUserLeaderboardRanks(verifications: any[]) {
+  const leaderboardRanks = await Promise.all(
+    verifications.map(async (verification: any) => {
+      const leaderboardData = await stack.getLeaderboardRank(verification);
+      if (leaderboardData) {
+        return leaderboardData.rank;
+      }
+    }),
+  );
+  return leaderboardRanks.filter((rank) => rank !== null && rank !== undefined);
+}
+
+function getHighestRank(validRanks: any[]) {
+  return validRanks.length === 0 ? 0 : Math.min(...validRanks);
+}
+
+async function getEmbedAndMetadata(fullHash: string) {
+  const { data: cast } = await supabaseClient
+    .from('posts')
+    .select('*')
+    .eq('post_hash', fullHash)
+    .single();
+
+  const embed = findValidEmbed(cast);
+  const url: any = embed?.url;
+  const metadata = await fetchMetadata(url, cast);
+  return { cast, metadata };
+}
+
+function getChannelData(channelId: any) {
+  return CHANNELS.find((channel) => channel.value === channelId);
+}
+
+function encodeParams(params: any) {
+  return btoa(JSON.stringify(params));
+}
+
 export async function generateMetadata({ params }: any): Promise<Metadata> {
   const { username, hash } = params;
 
   try {
-    const fullHash = await getCastHash(`https://warpcast.com/${username}/${hash}`);
+    const fullHash = await getFullHash(username, hash);
+    const userProfile = await getUserByUsername(username);
+    const verifications = userProfile?.verifications || [];
+    const validRanks = await getUserLeaderboardRanks(verifications);
+    const highestRank = getHighestRank(validRanks);
+    const { cast, metadata } = await getEmbedAndMetadata(fullHash);
+    const channelData = getChannelData(cast?.channelId);
 
-    const { data: cast } = await supabaseClient
-      .from('posts')
-      .select('*')
-      .eq('post_hash', fullHash)
-      .single();
-
-    const embed = findValidEmbed(cast);
-    const url: any = embed?.url;
-    const metadata = await fetchMetadata(url, cast);
-
-    const channelId: any = cast?.channelId;
-
-    const getChannelData = (channelId: any) => {
-      return CHANNELS.find((channel) => channel.value === channelId);
-    };
-
-    const channelData = getChannelData(channelId);
-
-    const channelLabel = channelData?.label || '/sonata';
-    const channelLink = channelData?.icon || `${VERCEL_URL}/images/notes.jpg`;
-    // const ogImageUrl = `/api/og-image?trackName=${metadata?.trackName}&artistName=${metadata?.artistName}&artworkUrl=${metadata?.artworkUrl}&points=${cast?.points}&username=${username}&channelLabel=${channelLabel}&channelIcon=${channelLink}`;
-    const params = {
+    const paramData = {
       trackName: metadata?.trackName,
       artistName: metadata?.artistName,
       artworkUrl: metadata?.artworkUrl,
       points: cast?.points,
-      username: username,
-      channelLabel: channelLabel,
-      channelIcon: channelLink,
+      username,
+      channelLabel: channelData?.label || '/sonata',
+      channelIcon: channelData?.icon || `${VERCEL_URL}/images/notes.jpg`,
+      profilePfp: userProfile?.pfp?.url,
+      rank: highestRank,
     };
 
-    const encodedParams = btoa(JSON.stringify(params));
+    const encodedParams = encodeParams(paramData);
     const ogImageUrl = `/api/og-image?data=${encodedParams}`;
+    console.log(ogImageUrl);
     return {
       title: cast.title || TITLE,
       description: cast.description || DESCRIPTION,
