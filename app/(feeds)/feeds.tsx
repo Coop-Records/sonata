@@ -6,12 +6,8 @@ import Loader from '@/components/Loader';
 import { useFeedProvider } from '@/providers/FeedProvider';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import { VERCEL_URL } from '@/lib/consts';
-
 const Feeds = ({ channelId }: { channelId?: string }) => {
   const { feed, fetchMore, hasMore, updateFilter, filter } = useFeedProvider();
-
-  console.log(VERCEL_URL);
 
   useEffect(() => {
     if (!filter.channel && channelId !== '/') {

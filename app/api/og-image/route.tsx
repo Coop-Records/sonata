@@ -1,4 +1,3 @@
-import { VERCEL_URL } from '@/lib/consts';
 import { ImageResponse } from '@vercel/og';
 import { NextRequest } from 'next/server';
 
@@ -102,7 +101,7 @@ export async function GET(req: NextRequest) {
               <div tw="flex items-center m-0 w-[60%]">
                 <p tw="m-0 text-2xl">{points}</p>
                 <img
-                  src={`${VERCEL_URL}/images/notes.jpg`}
+                  src="https://i.imgur.com/Xa4LjYA.jpeg"
                   alt=""
                   width={50}
                   height={50}
@@ -124,12 +123,7 @@ export async function GET(req: NextRequest) {
                 </div>
               )}
               <div tw="flex items-center justify-center bg-[#EEE4FE] rounded-full w-[220px] ml-5">
-                <img
-                  src={`${VERCEL_URL}/images/neynar.svg`}
-                  alt="warpcast"
-                  width={28}
-                  height={24}
-                />
+                <img src="https://i.imgur.com/JXN6jYv.png" alt="warpcast" width={28} height={24} />
                 <p tw="text-[#8b49f7] ml-2">{username}</p>
               </div>
             </div>

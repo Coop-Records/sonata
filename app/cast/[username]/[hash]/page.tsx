@@ -63,7 +63,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
       points: points,
       username,
       channelLabel: channelData?.label || '/sonata',
-      channelIcon: channelData?.icon || `${VERCEL_URL}/images/notes.jpg`,
+      channelIcon: channelData?.icon || 'https://i.imgur.com/Xa4LjYA.jpeg',
       profilePfp: userProfile?.pfp?.url,
       rank: highestRank,
     };
