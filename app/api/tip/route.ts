@@ -1,14 +1,9 @@
 import getUser from '@/lib/neynar/getNeynarUser';
 import verifySignerUUID from '@/lib/neynar/verifySigner';
 import { stack } from '@/lib/stack/client';
-import { createClient } from '@supabase/supabase-js';
+import { supabaseClient as supabase } from '@/lib/supabase/client';
 import { isEmpty, isNil } from 'lodash';
 import { NextRequest, NextResponse } from 'next/server';
-
-const SUPABASE_URL = process.env.SUPABASE_URL as string;
-const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const getResponse = async (req: NextRequest): Promise<NextResponse> => {
   const body = await req.json();
@@ -23,12 +18,23 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
     );
   }
 
-  if (tipperFid === recipientFid) {
+  if (tipperFid == recipientFid) {
     return NextResponse.json(
       { message: `Can not tip yourself`, tipRemaining: 0, totalTipOnPost: 0 },
       { status: 400 },
     );
   }
+
+  const { count } = await supabase
+    .from('tips_activity_log')
+    .select('post_hash')
+    .eq('sender', `${tipperFid}`)
+    .eq('post_hash', postHash);
+
+  if (count) return NextResponse.json(
+    { message: 'Cannot tip again.' },
+    { status: 400 },
+  );
 
   const { remaining_tip_allocation, total_tip_on_post, used_tip } = await callAllocateTip(
     `${tipperFid}`,
@@ -61,7 +67,23 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
     );
   }
 
-  stack.track(`tip_from_${tipperFid}`, { account: recipientWalletAddress, points: tipAmount });
+  const { success } = await stack.track(
+    `tip_from_${tipperFid}`,
+    { account: recipientWalletAddress, points: tipAmount }
+  );
+
+  if (success) await supabase.from('tips_activity_log').upsert(
+    {
+      post_hash: postHash,
+      amount: tipAmount,
+      created_at: new Date(),
+      sender: `${tipperFid}`,
+      receiver: recipientFid,
+    },
+    {
+      onConflict: 'post_hash',
+    },
+  );
 
   return NextResponse.json(
     {

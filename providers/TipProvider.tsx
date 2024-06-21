@@ -18,6 +18,7 @@ const TipProvider = ({ children }: any) => {
   const [airdropBalance, setAirdropBalance] = useState<bigint | undefined>(undefined);
   const [balance, setBalance] = useState<bigint | undefined>(undefined);
   const [dailyTipAllowance, setDailyTipAllowance] = useState<bigint | undefined>(undefined);
+  const [tipInProgress, setTipInProgress] = useState(false);
   const { user, signer } = useNeynarProvider();
 
   const [remainingTipAllocation, setRemainingTipAllocation] = useState<bigint | undefined>(
@@ -109,6 +110,14 @@ const TipProvider = ({ children }: any) => {
     postHash: string,
     recipientFid: number,
   ): Promise<TipResponse | undefined> => {
+    if (tipInProgress) {
+      toast({
+        title: 'Tip in progress',
+        description: 'Currenlty tipping',
+        variant: 'destructive'
+      });
+      return;
+    }
     if (
       isNil(user) ||
       isNil(remainingTipAllocation) ||
@@ -124,14 +133,20 @@ const TipProvider = ({ children }: any) => {
       return;
     }
 
-    const data = await executeTip(signer?.signer_uuid, amount, postHash, recipientFid);
-    const message = data.message;
-    const tipRemaining = data.tipRemaining;
+    setTipInProgress(true);
 
-    setRemainingTipAllocation(BigInt(tipRemaining));
-    toast({ description: message });
+    try {
+      const data = await executeTip(signer?.signer_uuid, amount, postHash, recipientFid);
+      const message = data.message;
+      const tipRemaining = data.tipRemaining;
 
-    return data;
+      setRemainingTipAllocation(BigInt(tipRemaining));
+      toast({ description: message });
+
+      return data;
+    } finally {
+      setTipInProgress(false);
+    }
   };
 
   const downvote = async (
