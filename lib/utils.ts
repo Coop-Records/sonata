@@ -66,10 +66,6 @@ export function getChannelData(channelId: any) {
   return CHANNELS.find((channel) => channel.value === channelId);
 }
 
-export function encodeParams(params: any) {
-  return btoa(JSON.stringify(params));
-}
-
 export function formatPoints(points: any) {
   return `${(points / 1000).toFixed(1)}K`;
 }

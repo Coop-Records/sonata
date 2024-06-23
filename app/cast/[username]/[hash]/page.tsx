@@ -6,7 +6,6 @@ import { supabaseClient } from '@/lib/supabase/client';
 import Cast from '@/components/Cast';
 import getUserByUsername from '@/lib/neynar/getNeynarUserByUsername';
 import {
-  encodeParams,
   formatPoints,
   getChannelData,
   getEmbedAndMetadata,
