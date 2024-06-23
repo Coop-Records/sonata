@@ -69,10 +69,7 @@ export function getChannelData(channelId: any) {
 export function formatPoints(points: any) {
   return `${(points / 1000).toFixed(1)}K`;
 }
-
-export function urlSafeBase64Encode(obj: any) {
-  const str = JSON.stringify(obj);
-  const utf8Str = unescape(encodeURIComponent(str));
-  const base64Str = btoa(utf8Str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-  return base64Str;
+export function replaceSpecialCharacters(str: any) {
+  const specialChars = /[^a-zA-Z0-9]/g;
+  return str.replace(specialChars, '_');
 }

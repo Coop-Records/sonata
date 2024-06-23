@@ -1,39 +1,33 @@
+import getUserByUsername from '@/lib/neynar/getNeynarUserByUsername';
+import {
+  getEmbedAndMetadata,
+  getChannelData,
+  formatPoints,
+  replaceSpecialCharacters,
+} from '@/lib/utils';
 import { ImageResponse } from '@vercel/og';
 import { NextRequest } from 'next/server';
 
 export const runtime = 'edge';
 
-export async function GET(req: NextRequest) {
-  const encodedParams = req.nextUrl.searchParams.get('data');
-  let params = {};
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { username: string; hash: string; rank: string } },
+) {
+  const { username, hash, rank } = params;
 
-  if (encodedParams) {
-    params = JSON.parse(atob(decodeURIComponent(encodedParams)));
-  } else {
-    params = {
-      trackName: 'defaultTrackName',
-      artistName: 'Default artistName',
-      artworkUrl: 'Default artworkUrl',
-      points: 'Default points',
-      username: 'Default username',
-      channelLabel: 'Default channelLabel',
-      channelIcon: 'Default channelIcon',
-      profilePfp: 'Default channelIcon',
-      rank: 'Default rank',
-    };
-  }
+  const encodedUsername = replaceSpecialCharacters(username);
 
-  const {
-    trackName,
-    artistName,
-    artworkUrl,
-    points,
-    username,
-    channelLabel,
-    channelIcon,
-    profilePfp,
-    rank,
-  }: any = params;
+  const userProfile = await getUserByUsername(username);
+  const profilePfp = userProfile?.pfp?.url;
+
+  const { cast, metadata } = await getEmbedAndMetadata(hash);
+  const channelData = getChannelData(cast?.channelId);
+
+  const channelLabel = channelData?.label || '/sonata';
+  const channelIcon = channelData?.icon || 'https://i.imgur.com/Xa4LjYA.jpeg';
+
+  const points = formatPoints(cast?.points);
 
   return new ImageResponse(
     (
@@ -82,7 +76,13 @@ export async function GET(req: NextRequest) {
           </div>
 
           <div tw="flex items-center">
-            <img src={artworkUrl} alt="" width={110} height={110} tw="object-cover rounded-2xl" />
+            <img
+              src={metadata?.artworkUrl}
+              alt=""
+              width={110}
+              height={110}
+              tw="object-cover rounded-2xl"
+            />
             <div tw="flex flex-col ml-8 ">
               <p
                 style={{
@@ -93,9 +93,11 @@ export async function GET(req: NextRequest) {
                 }}
                 tw="text-3xl"
               >
-                {trackName}
+                {metadata?.trackName}
               </p>
-              <p tw="text-xl m-0 text-[#949494]">{artistName}</p>
+              <p tw="text-xl m-0 text-[#949494]">
+                {replaceSpecialCharacters(metadata?.artistName)}
+              </p>
             </div>
             <div tw="flex flex-col m-0 bg-[#F6F6F6] rounded-2xl w-[220px] h-[140px] items-center justify-center ml-[40px] mt-[60px] ">
               <div tw="flex items-center m-0 w-[60%]">
@@ -117,14 +119,14 @@ export async function GET(req: NextRequest) {
               <div tw="flex items-center rounded-full">
                 <img tw="rounded-full" src={profilePfp} alt="warpcast" width={38} height={38} />
               </div>
-              {rank > 0 && (
+              {rank && (
                 <div tw="flex items-center justify-center bg-[#F6F6F6] rounded-full w-[100px] ml-5">
                   <p tw="text-2xl ml-2 m-0 ">#{rank}</p>
                 </div>
               )}
               <div tw="flex items-center justify-center bg-[#EEE4FE] rounded-full w-[220px] ml-5">
                 <img src="https://i.imgur.com/JXN6jYv.png" alt="warpcast" width={28} height={24} />
-                <p tw="text-[#8b49f7] ml-2">{username}</p>
+                <p tw="text-[#8b49f7] ml-2">{encodedUsername}</p>
               </div>
             </div>
           </div>

@@ -5,14 +5,7 @@ import getCastHash from '@/lib/neynar/getCastHash';
 import { supabaseClient } from '@/lib/supabase/client';
 import Cast from '@/components/Cast';
 import getUserByUsername from '@/lib/neynar/getNeynarUserByUsername';
-import {
-  formatPoints,
-  getChannelData,
-  getEmbedAndMetadata,
-  getFullHash,
-  getHighestRank,
-  urlSafeBase64Encode,
-} from '@/lib/utils';
+import { getFullHash, getHighestRank } from '@/lib/utils';
 import { stack } from '@/lib/stack/client';
 
 const frameMetadata = { ...getFrameMetadata(DEFAULT_FRAME), 'of:accepts:xmtp': '2024-02-01' };
@@ -51,32 +44,17 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
     const userProfile = await getUserByUsername(username);
     const verifications = userProfile?.verifications || [];
     const validRanks = await getUserLeaderboardRanks(verifications);
-    const highestRank = getHighestRank(validRanks);
-    const { cast, metadata } = await getEmbedAndMetadata(fullHash);
-    const channelData = getChannelData(cast?.channelId);
-    const points = formatPoints(cast?.points);
+    const rank = getHighestRank(validRanks);
 
-    const paramData = {
-      trackName: metadata?.trackName,
-      artistName: metadata?.artistName,
-      artworkUrl: metadata?.artworkUrl,
-      points: points,
-      username,
-      channelLabel: channelData?.label || '/sonata',
-      channelIcon: channelData?.icon || 'https://i.imgur.com/Xa4LjYA.jpeg',
-      profilePfp: userProfile?.pfp?.url,
-      rank: highestRank,
-    };
-
-    const encodedParams = urlSafeBase64Encode(paramData);
-    const ogImageUrl = `/api/cast/og-image?data=${encodeURIComponent(encodedParams)}`;
+    const ogImageUrl = `/api/og-image/cast/${username}/${fullHash}/`;
+    Number(rank) > 0 && ogImageUrl + rank;
 
     return {
-      title: cast.title || TITLE,
-      description: cast.description || DESCRIPTION,
+      title: TITLE,
+      description: DESCRIPTION,
       openGraph: {
-        title: cast.title || TITLE,
-        description: cast.description || DESCRIPTION,
+        title: TITLE,
+        description: DESCRIPTION,
         images: VERCEL_URL + ogImageUrl,
       },
       icons: [`${VERCEL_URL}/images/logo2.png`],
