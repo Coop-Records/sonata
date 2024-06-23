@@ -69,7 +69,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
     };
 
     const encodedParams = urlSafeBase64Encode(paramData);
-    const ogImageUrl = `/api/og-image?data=${encodeURIComponent(encodedParams)}`;
+    const ogImageUrl = `/api/cast/og-image?data=${encodeURIComponent(encodedParams)}`;
 
     return {
       title: cast.title || TITLE,
