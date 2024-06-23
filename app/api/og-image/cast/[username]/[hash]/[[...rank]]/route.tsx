@@ -101,7 +101,7 @@ export async function GET(
               </p>
             </div>
             <div tw="flex flex-col m-0 bg-[#F6F6F6] rounded-2xl w-[220px] h-[140px] items-center justify-center ml-[40px] mt-[60px] ">
-              <div tw="flex items-center m-0 w-[60%]">
+              <div tw="flex items-center m-0 w-[66%]">
                 <p tw="m-0 text-2xl">{points}</p>
                 <img
                   src="https://i.imgur.com/Xa4LjYA.jpeg"
@@ -112,19 +112,19 @@ export async function GET(
                   tw="rounded-full ml-2"
                 />
               </div>
-              <p tw="m-0 text-lg	text-[#949494]">Notes Collected</p>
+              <p tw="m-0 text-xl text-[#949494]">Notes Collected</p>
             </div>
           </div>
           <div tw="flex flex-col ">
-            <p tw="text-[#949494]">Posted By</p>
+            <p tw="text-[#949494] text-xl">Posted By</p>
             <div tw="flex">
               <div tw="flex items-center rounded-full">
                 <img
                   tw="rounded-full"
                   src={profilePfp}
                   alt="warpcast"
-                  width={38}
-                  height={38}
+                  width={42}
+                  height={42}
                   loading="lazy"
                 />
               </div>
@@ -133,7 +133,7 @@ export async function GET(
                   <p tw="text-2xl ml-2 m-0 ">#{rank}</p>
                 </div>
               )}
-              <div tw="flex items-center justify-center bg-[#EEE4FE] rounded-full w-[220px] ml-5">
+              <div tw="flex items-center justify-center bg-[#EEE4FE] rounded-full max-w-[220px] w-full h-12 ml-5">
                 <img
                   src="https://i.imgur.com/JXN6jYv.png"
                   alt="warpcast"
@@ -141,7 +141,7 @@ export async function GET(
                   height={24}
                   loading="lazy"
                 />
-                <p tw="text-[#8b49f7] ml-2">{encodedUsername}</p>
+                <p tw="text-[#8b49f7] text-xl ml-2 ">{encodedUsername}</p>
               </div>
             </div>
           </div>
