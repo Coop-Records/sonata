@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
   let params = {};
 
   if (encodedParams) {
-    params = JSON.parse(atob(encodedParams));
+    params = JSON.parse(atob(decodeURIComponent(encodedParams)));
   } else {
     params = {
       trackName: 'defaultTrackName',

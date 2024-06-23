@@ -12,6 +12,7 @@ import {
   getEmbedAndMetadata,
   getFullHash,
   getHighestRank,
+  urlSafeBase64Encode,
 } from '@/lib/utils';
 import { stack } from '@/lib/stack/client';
 
@@ -68,8 +69,8 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
       rank: highestRank,
     };
 
-    const encodedParams = encodeParams(paramData);
-    const ogImageUrl = `/api/og-image?data=${encodedParams}`;
+    const encodedParams = urlSafeBase64Encode(paramData);
+    const ogImageUrl = `/api/og-image?data=${encodeURIComponent(encodedParams)}`;
 
     return {
       title: cast.title || TITLE,
