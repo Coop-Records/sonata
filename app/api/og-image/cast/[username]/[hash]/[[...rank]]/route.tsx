@@ -81,7 +81,8 @@ export async function GET(
               alt=""
               width={110}
               height={110}
-              tw="object-cover rounded-2xl"
+              loading="lazy"
+              tw="rounded-2xl"
             />
             <div tw="flex flex-col ml-8 ">
               <p
@@ -107,6 +108,7 @@ export async function GET(
                   alt=""
                   width={50}
                   height={50}
+                  loading="lazy"
                   tw="rounded-full ml-2"
                 />
               </div>
@@ -117,7 +119,14 @@ export async function GET(
             <p tw="text-[#949494]">Posted By</p>
             <div tw="flex">
               <div tw="flex items-center rounded-full">
-                <img tw="rounded-full" src={profilePfp} alt="warpcast" width={38} height={38} />
+                <img
+                  tw="rounded-full"
+                  src={profilePfp}
+                  alt="warpcast"
+                  width={38}
+                  height={38}
+                  loading="lazy"
+                />
               </div>
               {rank && (
                 <div tw="flex items-center justify-center bg-[#F6F6F6] rounded-full w-[100px] ml-5">
@@ -125,7 +134,13 @@ export async function GET(
                 </div>
               )}
               <div tw="flex items-center justify-center bg-[#EEE4FE] rounded-full w-[220px] ml-5">
-                <img src="https://i.imgur.com/JXN6jYv.png" alt="warpcast" width={28} height={24} />
+                <img
+                  src="https://i.imgur.com/JXN6jYv.png"
+                  alt="warpcast"
+                  width={28}
+                  height={24}
+                  loading="lazy"
+                />
                 <p tw="text-[#8b49f7] ml-2">{encodedUsername}</p>
               </div>
             </div>
