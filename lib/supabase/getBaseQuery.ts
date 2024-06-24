@@ -7,7 +7,7 @@ export default function getBaseQuery(
   followingFids: number[],
 ) {
   if (feedType === FeedType.Recent) {
-    const query = supabaseClient.from('posts').select('*').not('likes', 'is', null);
+    const query = supabaseClient.from('posts_with_hypersub').select('*').not('likes', 'is', null);
     query.order('created_at', { ascending: false });
     return query;
   }
