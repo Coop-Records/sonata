@@ -14,9 +14,11 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
   const data = await postMusicEmbed(signer_uuid, url);
 
   try {
-    if (!data?.cast?.hash) throw Error();
+    if (!data?.cast?.hash) throw Error('No hash provided');
 
     const { cast } = await client.lookUpCastByHashOrWarpcastUrl(data.cast.hash, 'hash');
+
+    console.log('api/postMusicEmbed::FoundCast', cast.timestamp, cast.hash);
 
     const found = CONTENT_PLATFORMS
       .findIndex(ptfm => ptfm.title === 'spotify' && url?.includes(ptfm.url));
@@ -26,7 +28,9 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
       const [castwithAlternatives] = await getSpotifyWithAlternatives([cast]);
       upsertCast(castwithAlternatives as any);
     }
-  } catch { /* empty */ }
+  } catch (error) {
+    console.error('api/postMusicEmbed::Error', error);
+  }
 
   return NextResponse.json(
     {
