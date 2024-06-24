@@ -2,10 +2,7 @@ import { CONTENT_PLATFORMS } from '@/lib/consts';
 import postMusicEmbed from '@/lib/neynar/postMusicEmbed';
 import getSpotifyWithAlternatives from '@/lib/spotify/getSpotifyWithAlternatives';
 import upsertCast from '@/lib/supabase/upsertCast';
-import { NeynarV2APIClient } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { NextRequest, NextResponse } from 'next/server';
-
-const client = new NeynarV2APIClient(process.env.NEYNAR_API_KEY!);
 
 const getResponse = async (req: NextRequest): Promise<NextResponse> => {
   const body = await req.json();
@@ -16,9 +13,16 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
   try {
     if (!data?.cast?.hash) throw Error('No hash provided');
 
-    const { cast } = await client.lookUpCastByHashOrWarpcastUrl(data.cast.hash, 'hash');
-
-    console.log('api/postMusicEmbed::FoundCast', cast.timestamp, cast.hash);
+    const cast: any = {
+      ...data.cast,
+      embeds: [{ url }],
+      timestamp: new Date().toISOString(),
+      parent_url: '',
+      root_parent_url: '',
+      reactions: {
+        likes_count: 0,
+      }
+    };
 
     const found = CONTENT_PLATFORMS
       .findIndex(ptfm => ptfm.title === 'spotify' && url?.includes(ptfm.url));
