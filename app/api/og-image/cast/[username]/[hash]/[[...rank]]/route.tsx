@@ -10,6 +10,11 @@ import { NextRequest } from 'next/server';
 
 export const runtime = 'edge';
 
+export const size = {
+  width: 800,
+  height: 550,
+};
+
 export async function GET(
   req: NextRequest,
   { params }: { params: { username: string; hash: string; rank: string } },
@@ -28,6 +33,14 @@ export async function GET(
   const channelIcon = channelData?.icon || 'https://i.imgur.com/Xa4LjYA.jpeg';
 
   const points = formatPoints(cast?.points);
+
+  const soraSemiBold = fetch(new URL('/public/Sora-SemiBold.ttf', import.meta.url)).then((res) =>
+    res.arrayBuffer(),
+  );
+
+  const soraNormal = fetch(new URL('/public/Sora-Regular.ttf', import.meta.url)).then((res) =>
+    res.arrayBuffer(),
+  );
 
   return new ImageResponse(
     (
@@ -61,38 +74,44 @@ export async function GET(
               </g>
             </svg>
 
-            <p tw="text-3xl	m-0">Sonata</p>
+            <p tw="text-2xl	m-0 ml-2 text-[#333536]" style={{ fontWeight: 600 }}>
+              Sonata
+            </p>
           </div>
-          <div tw="flex m-0 items-center mt-12">
+          <div tw="flex m-0 items-center mt-10">
             <img
               src={channelIcon}
-              alt=""
-              width={70}
-              height={70}
+              alt="channel Icon"
+              width={size.width}
+              height={size.height}
               loading="lazy"
-              tw="rounded-full "
+              tw="rounded-full  w-14 h-14 "
+              style={{ imageRendering: 'pixelated' }}
             />
-            <p tw="m-0 text-2xl ml-4">{channelLabel}</p>
+            <p tw="m-0 text-2xl ml-2 text-[#333536]" style={{ fontWeight: 600 }}>
+              {channelLabel}
+            </p>
           </div>
 
-          <div tw="flex items-center">
+          <div tw="flex items-center relative mt-3 ml-1">
             <img
               src={metadata?.artworkUrl}
               alt=""
-              width={110}
-              height={110}
+              width={120}
+              height={120}
               loading="lazy"
               tw="rounded-2xl"
             />
-            <div tw="flex flex-col ml-8 ">
+            <div tw="flex flex-col ml-6">
               <p
                 style={{
-                  maxWidth: '200px',
+                  maxWidth: '220px',
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
+                  fontWeight: 600,
                 }}
-                tw="text-3xl"
+                tw="text-3xl m-0 text-[#333536]  "
               >
                 {metadata?.trackName}
               </p>
@@ -100,23 +119,30 @@ export async function GET(
                 {replaceSpecialCharacters(metadata?.artistName)}
               </p>
             </div>
-            <div tw="flex flex-col m-0 bg-[#F6F6F6] rounded-2xl w-[220px] h-[140px] items-center justify-center ml-[40px] mt-[60px] ">
-              <div tw="flex items-center m-0 w-[66%]">
-                <p tw="m-0 text-2xl">{points}</p>
+            <div tw="flex flex-col m-0 bg-[#F6F6F6] rounded-2xl w-[240px] h-[145px] items-center justify-center ml-[40px] absolute left-[50%] top-5 ">
+              <div tw="flex items-center m-0 w-[68%]">
+                <p tw="m-0 text-3xl text-[#333536]" style={{ fontWeight: 600 }}>
+                  {points}
+                </p>
                 <img
                   src="https://i.imgur.com/Xa4LjYA.jpeg"
                   alt=""
-                  width={50}
-                  height={50}
+                  width={45}
+                  height={45}
                   loading="lazy"
                   tw="rounded-full ml-2"
+                  style={{ imageRendering: 'pixelated' }}
                 />
               </div>
-              <p tw="m-0 text-xl text-[#949494]">Notes Collected</p>
+              <p tw="m-0 text-xl text-[#949494]" style={{ fontWeight: 400 }}>
+                Notes Collected
+              </p>
             </div>
           </div>
-          <div tw="flex flex-col ">
-            <p tw="text-[#949494] text-xl">Posted By</p>
+          <div tw="flex flex-col mt-10 ml-1 ">
+            <p tw="text-[#949494] text-xl" style={{ fontWeight: 400 }}>
+              Posted By
+            </p>
             <div tw="flex">
               <div tw="flex items-center rounded-full">
                 <img
@@ -130,10 +156,12 @@ export async function GET(
               </div>
               {rank && (
                 <div tw="flex items-center justify-center bg-[#F6F6F6] rounded-full w-[100px] ml-5">
-                  <p tw="text-2xl ml-2 m-0 ">#{rank}</p>
+                  <p tw="text-xl ml-2 m-0 text-[#333536] " style={{ fontWeight: 600 }}>
+                    #{rank}
+                  </p>
                 </div>
               )}
-              <div tw="flex items-center justify-center bg-[#EEE4FE] rounded-full max-w-[220px] w-full h-12 ml-5">
+              <div tw="flex items-center justify-center bg-[#EEE4FE] rounded-full max-w-[220px] w-fit px-5 h-12 ml-5">
                 <img
                   src="https://i.imgur.com/JXN6jYv.png"
                   alt="warpcast"
@@ -141,15 +169,34 @@ export async function GET(
                   height={24}
                   loading="lazy"
                 />
-                <p tw="text-[#8b49f7] text-xl ml-2 ">{encodedUsername}</p>
+                <p tw="text-[#8b49f7] text-xl ml-2" style={{ fontWeight: 600 }}>
+                  {encodedUsername}
+                </p>
               </div>
             </div>
           </div>
         </div>
         <div tw="flex absolute bottom-4 left-[47%] justify-center">
-          <p>sonata.tips</p>
+          <p tw="text-[12px]" style={{ fontWeight: 400 }}>
+            sonata.tips
+          </p>
         </div>
       </div>
     ),
+    {
+      ...size,
+      fonts: [
+        {
+          name: 'Sora',
+          data: await soraNormal,
+          weight: 400,
+        },
+        {
+          name: 'Sora',
+          data: await soraSemiBold,
+          weight: 600,
+        },
+      ],
+    },
   );
 }

@@ -46,9 +46,8 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
     const validRanks = await getUserLeaderboardRanks(verifications);
     const rank = getHighestRank(validRanks);
 
-    const ogImageUrl = `/api/og-image/cast/${username}/${fullHash}/`;
-    Number(rank) > 0 && ogImageUrl + rank;
-
+    let ogImageUrl = `/api/og-image/cast/${username}/${fullHash}/`;
+    if (Number(rank) > 0) ogImageUrl = ogImageUrl + rank;
     return {
       title: TITLE,
       description: DESCRIPTION,
