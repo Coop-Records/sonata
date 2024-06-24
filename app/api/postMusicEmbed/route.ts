@@ -1,49 +1,42 @@
-import { CONTENT_PLATFORMS } from '@/lib/consts';
 import postMusicEmbed from '@/lib/neynar/postMusicEmbed';
-import getSpotifyWithAlternatives from '@/lib/spotify/getSpotifyWithAlternatives';
 import upsertCast from '@/lib/supabase/upsertCast';
-import { NextRequest, NextResponse } from 'next/server';
+import { NeynarV2APIClient } from '@neynar/nodejs-sdk/build/neynar-api/v2';
+import { NextRequest } from 'next/server';
 
-const getResponse = async (req: NextRequest): Promise<NextResponse> => {
+const client = new NeynarV2APIClient(process.env.NEYNAR_API_KEY!)
+
+const getResponse = async (req: NextRequest) => {
   const body = await req.json();
   const { signer_uuid, url } = body;
 
   const data = await postMusicEmbed(signer_uuid, url);
 
   try {
-    if (!data?.cast?.hash) throw Error('No hash provided');
+    if (!data?.cast?.hash) throw new Error('No hash provided');
+    if (!data.cast?.author?.fid) throw new Error('No author fid provided');
 
-    let cast: any = {
-      ...data.cast,
-      embeds: [{ url }],
+    const fid = Number(data.cast.author.fid);
+    const { users } = await client.fetchBulkUsers([fid]);
+
+    upsertCast({
       timestamp: new Date().toISOString(),
       parent_url: '',
       root_parent_url: '',
       reactions: {
         likes_count: 0,
-      }
-    };
-
-    const found = CONTENT_PLATFORMS
-      .findIndex(({ title, url }) => title === 'spotify' && url?.includes(url));
-
-    if (found >= 0) [cast] = await getSpotifyWithAlternatives([cast]);
-
-    upsertCast(cast);
+      },
+      ...data.cast,
+      embeds: [{ url }],
+      author: users[0],
+    });
   } catch (error) {
     console.error('api/postMusicEmbed::Error', error);
   }
 
-  return NextResponse.json(
-    {
-      message: `success`,
-      data,
-    },
-    { status: 200 },
-  );
+  return Response.json({ message: 'success', data }, { status: 200 });
 };
 
-export async function POST(req: NextRequest): Promise<Response> {
+export async function POST(req: NextRequest) {
   return getResponse(req);
 }
 
