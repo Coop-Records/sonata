@@ -13,7 +13,7 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
   try {
     if (!data?.cast?.hash) throw Error('No hash provided');
 
-    const cast: any = {
+    let cast: any = {
       ...data.cast,
       embeds: [{ url }],
       timestamp: new Date().toISOString(),
@@ -25,13 +25,11 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
     };
 
     const found = CONTENT_PLATFORMS
-      .findIndex(ptfm => ptfm.title === 'spotify' && url?.includes(ptfm.url));
+      .findIndex(({ title, url }) => title === 'spotify' && url?.includes(url));
 
-    if (found < 0) await upsertCast(cast);
-    else {
-      const [castwithAlternatives] = await getSpotifyWithAlternatives([cast]);
-      upsertCast(castwithAlternatives as any);
-    }
+    if (found >= 0) [cast] = await getSpotifyWithAlternatives([cast]);
+
+    upsertCast(cast);
   } catch (error) {
     console.error('api/postMusicEmbed::Error', error);
   }
