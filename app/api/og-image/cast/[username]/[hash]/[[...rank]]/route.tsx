@@ -1,5 +1,4 @@
 import getUserByUsername from '@/lib/neynar/getNeynarUserByUsername';
-import { stack } from '@/lib/stack/client';
 import {
   getEmbedAndMetadata,
   getChannelData,
