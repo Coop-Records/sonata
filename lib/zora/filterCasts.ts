@@ -1,9 +1,8 @@
 import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
+import getIpfsLink from '../getIpfsLink';
 import getCastsMetadataLink from './getCastsMetadataLink';
 import getCastContractMapping from './mapCastToContract';
-import getIpfsLink from '../getIpfsLink';
 
-const thirdwebId = process.env.THIRDWEB_CLIENT_ID!;
 
 async function filterZoraFeed(casts: Cast[]) {
   const batchSize = 99;
@@ -17,10 +16,8 @@ async function filterZoraFeed(casts: Cast[]) {
       const batch = data.slice(i, i + batchSize);
 
       castsMetadata.push(...await Promise.all(
-        batch.map(cast => {
-          return fetch(`https://${thirdwebId}.ipfscdn.io/ipfs/${getIpfsLink(cast.ipfs)}`);
-        }))
-      );
+        batch.map(cast => fetch(getIpfsLink(cast.ipfs)))
+      ));
     }
 
     for (let i = 0; i < data.length; i++) {
