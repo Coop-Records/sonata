@@ -1,4 +1,5 @@
 import getUserByUsername from '@/lib/neynar/getNeynarUserByUsername';
+import { stack } from '@/lib/stack/client';
 import {
   getEmbedAndMetadata,
   getChannelData,
@@ -11,8 +12,8 @@ import { NextRequest } from 'next/server';
 export const runtime = 'edge';
 
 export const size = {
-  width: 800,
-  height: 550,
+  width: 1200,
+  height: 630,
 };
 
 export async function GET(
@@ -41,6 +42,18 @@ export async function GET(
   const soraNormal = fetch(new URL('/public/Sora-Regular.ttf', import.meta.url)).then((res) =>
     res.arrayBuffer(),
   );
+
+  async function getUserLeaderboardRanks(verifications: any[]) {
+    const leaderboardRanks = await Promise.all(
+      verifications.map(async (verification: any) => {
+        const leaderboardData = await stack.getLeaderboardRank(verification);
+        if (leaderboardData) {
+          return leaderboardData.rank;
+        }
+      }),
+    );
+    return leaderboardRanks.filter((rank) => rank !== null && rank !== undefined);
+  }
 
   return new ImageResponse(
     (
@@ -82,8 +95,8 @@ export async function GET(
             <img
               src={channelIcon}
               alt="channel Icon"
-              width={size.width}
-              height={size.height}
+              width="40"
+              height="40"
               loading="lazy"
               tw="rounded-full  w-14 h-14 "
               style={{ imageRendering: 'pixelated' }}
@@ -119,18 +132,18 @@ export async function GET(
                 {replaceSpecialCharacters(metadata?.artistName)}
               </p>
             </div>
-            <div tw="flex flex-col m-0 bg-[#F6F6F6] rounded-2xl w-[240px] h-[145px] items-center justify-center ml-[40px] absolute left-[50%] top-5 ">
+            <div tw="flex flex-col m-0 bg-[#F6F6F6] rounded-2xl w-[240px] h-[145px] items-center justify-center ml-[40px] absolute left-1/3 top-5 ">
               <div tw="flex items-center m-0 w-[68%]">
-                <p tw="m-0 text-3xl text-[#333536]" style={{ fontWeight: 600 }}>
+                <p tw="m-0 text-4xl text-[#333536]" style={{ fontWeight: 600 }}>
                   {points}
                 </p>
                 <img
                   src="https://i.imgur.com/Xa4LjYA.jpeg"
                   alt=""
-                  width={45}
-                  height={45}
+                  width={100}
+                  height={100}
                   loading="lazy"
-                  tw="rounded-full ml-2"
+                  tw="rounded-full ml-2 w-16 h-16"
                   style={{ imageRendering: 'pixelated' }}
                 />
               </div>
@@ -149,8 +162,8 @@ export async function GET(
                   tw="rounded-full"
                   src={profilePfp}
                   alt="warpcast"
-                  width={42}
-                  height={42}
+                  width={50}
+                  height={50}
                   loading="lazy"
                 />
               </div>
