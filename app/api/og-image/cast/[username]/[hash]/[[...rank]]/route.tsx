@@ -11,11 +11,6 @@ import { NextRequest } from 'next/server';
 
 export const runtime = 'edge';
 
-export const size = {
-  width: 1200,
-  height: 630,
-};
-
 export async function GET(
   req: NextRequest,
   { params }: { params: { username: string; hash: string; rank: string } },
@@ -197,7 +192,8 @@ export async function GET(
       </div>
     ),
     {
-      ...size,
+      width: 1200,
+      height: 630,
       fonts: [
         {
           name: 'Sora',
