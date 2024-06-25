@@ -1,5 +1,3 @@
-'use client';
-
 import { Button } from '@/components/ui/button';
 import createReaction from '@/lib/neynar/createReaction';
 import hasUserLikedCast from '@/lib/neynar/hasUserLiked';
