@@ -1,6 +1,6 @@
-import Zora1155 from '@/abis/zora1155.json';
 import { ICastsAndContracts } from '@/types/ContractCastMap';
 import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
+import { zoraCreator1155ImplABI } from '@zoralabs/protocol-deployments';
 import { ZoraChains } from '../consts';
 import parseCollectionUrl, { pattern as collectionUrlPattern } from './parseCollectionUrl';
 
@@ -18,7 +18,7 @@ function getCastContractMapping(casts: Cast[]) {
 
     const contract = {
       address: collectionData.collectionAddress,
-      abi: Zora1155,
+      abi: zoraCreator1155ImplABI,
       functionName: 'uri',
       args: [collectionData.tokenId]
     };

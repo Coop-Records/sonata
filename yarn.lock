@@ -1210,6 +1210,11 @@
     rxjs "^7.8.0"
     undici "^5.8.1"
 
+"@zoralabs/protocol-deployments@^0.1.13":
+  version "0.1.13"
+  resolved "https://registry.yarnpkg.com/@zoralabs/protocol-deployments/-/protocol-deployments-0.1.13.tgz#e64e46a4b339b43de4f413ae7b5244cc0c3d3caa"
+  integrity sha512-pAJ+rr7Q6RsulTl2EB+osUJMldGx+Sj/XfrkfOQsScL/RQlu+H6sL0sRVdaG3VLWVd9ua8szIRSeJ+RqwEZNyg==
+
 abitype@0.9.8:
   version "0.9.8"
   resolved "https://registry.npmjs.org/abitype/-/abitype-0.9.8.tgz"
