@@ -39,6 +39,7 @@ const processSingleEntry = async (cast: Cast) => {
 };
 
 const getResponse = async (): Promise<NextResponse> => {
+  'use server';
   const { data: cast_query_date } = await supabase
     .from('cast_query_date')
     .select('lastcheck')

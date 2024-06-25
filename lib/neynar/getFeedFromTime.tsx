@@ -32,6 +32,7 @@ const getFeedFromTime = async (embedUrl: string, date: Date) => {
       cursor = data.next.cursor!;
     } catch (err: any) {
       error = err;
+      break;
     }
   } while (cursor);
 
