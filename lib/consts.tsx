@@ -64,6 +64,7 @@ export const CONTENT_PLATFORMS = [
   {url:'sound.xyz', title: 'soundxyz'},
   {url:'youtube.com/watch', title: 'youtube'},
   {url:'youtu.be', title: 'youtube'},
+  {url:'zora.co/collect', title: 'zora'},
 ] as const;
 
 export const ZORA_TO_VIEM = {
