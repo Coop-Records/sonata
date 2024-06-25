@@ -5,7 +5,7 @@ import getCastHash from '@/lib/neynar/getCastHash';
 import { supabaseClient } from '@/lib/supabase/client';
 import Cast from '@/components/Cast';
 import getUserByUsername from '@/lib/neynar/getNeynarUserByUsername';
-import { getFullHash, getHighestRank } from '@/lib/utils';
+import { getHighestRank } from '@/lib/utils';
 import { stack } from '@/lib/stack/client';
 
 const frameMetadata = { ...getFrameMetadata(DEFAULT_FRAME), 'of:accepts:xmtp': '2024-02-01' };
@@ -40,14 +40,15 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
   const { username, hash } = params;
 
   try {
-    const fullHash = await getFullHash(username, hash);
     const userProfile = await getUserByUsername(username);
     const verifications = userProfile?.verifications || [];
     const validRanks = await getUserLeaderboardRanks(verifications);
     const rank = getHighestRank(validRanks);
 
-    let ogImageUrl = `/api/og-image/cast/${username}/${fullHash}/`;
+    let ogImageUrl = `/api/og-image/cast/${username}/${hash}/`;
+
     if (Number(rank) > 0) ogImageUrl = ogImageUrl + rank;
+
     return {
       title: TITLE,
       description: DESCRIPTION,

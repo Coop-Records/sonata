@@ -23,6 +23,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["custom.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["custom.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "lib/sonata/getProfileRank.jsx"],
   "exclude": ["contracts", "node_modules"]
 }
