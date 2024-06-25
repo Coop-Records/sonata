@@ -63,7 +63,7 @@ const getResponse = async (): Promise<NextResponse> => {
     ...feeds.soundcloud,
     ...feeds.soundxyz,
     ...spotifyWithAlternatives,
-    ...youtubeFiltered
+    ...youtubeFiltered,
   ];
 
   console.log('jobs::getNewCasts', `${allEntries.length} new entries`);
