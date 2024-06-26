@@ -1,4 +1,4 @@
-const thirdwebId = process.env.THIRDWEB_CLIENT_ID!;
+const thirdwebId = process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID!;
 
 const getIpfsLink = (hash: string) =>
   hash?.indexOf?.("ipfs://") > -1

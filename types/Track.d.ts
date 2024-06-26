@@ -1,4 +1,6 @@
-export type TrackType = 'spotify' | 'soundcloud' | 'soundxyz' | 'youtube';
+import { CONTENT_PLATFORMS } from "@/lib/consts";
+
+export type TrackType = (typeof CONTENT_PLATFORMS)[number]['title'];
 
 export type TrackMetadata = {
   id: string;

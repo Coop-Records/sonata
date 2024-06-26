@@ -20,11 +20,9 @@ export default function findValidEmbed(cast: SupabasePost, filter: FeedFilter = 
   const validEmbed = embeds.find((embed) => {
     if (!embed || !('url' in embed)) return false;
     const url = embed.url;
-    const isValid = isValidUrl(url);
-    if (filter?.platform && !url.includes(filter.platform)) {
-      return false;
-    }
-    return isValid;
+    if (filter?.platform && !url.includes(filter.platform)) return false;
+
+    return isValidUrl(url) || url?.includes('ipfs://');
   });
 
   return validEmbed as EmbedUrl;
