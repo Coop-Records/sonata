@@ -1,2 +1,5 @@
-const Page = () => <div>API Page</div>;
+import ApiPage from '@/components/ApiPage';
+
+const Page = () => <ApiPage />;
+
 export default Page;
