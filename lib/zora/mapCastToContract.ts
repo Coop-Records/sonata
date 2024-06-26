@@ -20,7 +20,7 @@ function getCastContractMapping(casts: Cast[]) {
       address: collectionData.collectionAddress,
       abi: zoraCreator1155ImplABI,
       functionName: 'uri',
-      args: [collectionData.tokenId]
+      args: [collectionData.tokenId],
     };
 
     const placeholder = castContractMappings[chain] ?? { casts: [], contracts: [] };
