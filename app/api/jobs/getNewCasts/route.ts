@@ -69,10 +69,7 @@ const getResponse = async (): Promise<NextResponse> => {
     ...feeds.soundxyz,
     ...spotifyWithAlternatives,
     ...youtubeFiltered,
-<<<<<<< HEAD
-=======
     ...zoraFiltered,
->>>>>>> 4adab4949ef88ac03abc851f849c6f094acac59c
   ];
 
   console.log('jobs::getNewCasts', `${allEntries.length} new entries`);
