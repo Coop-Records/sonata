@@ -17,7 +17,7 @@ const UserInfo = ({ profilePfp, rank, encodedUsername }: any) => (
       {rank > 0 && (
         <div tw="flex items-center justify-center bg-[#F6F6F6] rounded-full w-[100px] ml-5">
           <p tw="text-2xl ml-2 m-0 text-[#333536]" style={{ fontWeight: 600 }}>
-            {rank}
+            #{rank}
           </p>
         </div>
       )}
