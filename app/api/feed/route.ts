@@ -1,11 +1,7 @@
-// app/api/feed/route.ts
-
 import { NextRequest, NextResponse } from 'next/server';
 import fetchPosts from '@/lib/supabase/fetchPosts';
 import { supabaseClient } from '@/lib/supabase/client';
-import mergeArraysUniqueByPostHash from '@/lib/mergeArraysUniqueByPostHash';
 import findValidEmbed from '@/lib/findValidEmbed';
-import { fetchPostsLimit } from '@/lib/consts';
 import { FeedType, FeedFilter } from '@/types/Feed';
 
 export async function GET(req: NextRequest) {
@@ -15,7 +11,7 @@ export async function GET(req: NextRequest) {
     const viewerFid: any = searchParams.get('viewerFid');
     const channelId = searchParams.get('channelId');
 
-    let filter: FeedFilter = {};
+    const filter: FeedFilter = {};
     if (channelId) {
       filter.channel = channelId;
     }
