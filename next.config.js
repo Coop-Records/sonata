@@ -30,6 +30,9 @@ const nextConfig = {
       {
         hostname: 'arweave.net',
       },
+      {
+        hostname: 'static.highongrowth.xyz',
+      },
     ],
   },
 };
