@@ -73,10 +73,23 @@ export const CHANNELS = [
 export const fetchPostsLimit = 20;
 
 export const CONTENT_PLATFORMS = [
-  { url: 'spotify.com/track', title: 'spotify' },
-  { url: 'spotify.com/intl-es/track', title: 'spotify' },
-  { url: 'soundcloud.com', title: 'soundcloud' },
-  { url: 'sound.xyz', title: 'soundxyz' },
-  { url: 'youtube.com/watch', title: 'youtube' },
-  { url: 'youtu.be', title: 'youtube' },
+  {url:'spotify.com/track', title: 'spotify'},
+  {url:'spotify.com/intl-es/track', title: 'spotify'},
+  {url:'soundcloud.com', title: 'soundcloud'},
+  {url:'sound.xyz', title: 'soundxyz'},
+  {url:'youtube.com/watch', title: 'youtube'},
+  {url:'youtu.be', title: 'youtube'},
+  {url:'zora.co/collect', title: 'zora'},
 ] as const;
+
+export const ZORA_TO_VIEM = {
+  arb: 'arbitrum',
+  base: 'base',
+  blast: 'blast',
+  eth: 'mainnet',
+  oeth: 'optimism',
+  pgn: 'pgn',
+  zora: 'zora',
+} as const;
+
+export type ZoraChains = keyof typeof ZORA_TO_VIEM;
