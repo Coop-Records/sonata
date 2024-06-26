@@ -9,7 +9,7 @@ const ChannelInfo = ({ channelIcon, channelLabel }: any) => (
       tw="rounded-full w-14 h-14"
       style={{ imageRendering: 'pixelated' }}
     />
-    <p tw="m-0 text-2xl ml-2 text-[#333536]" style={{ fontWeight: 600 }}>
+    <p tw="m-0 text-3xl ml-2 text-[#333536]" style={{ fontWeight: 600 }}>
       {channelLabel}
     </p>
   </div>

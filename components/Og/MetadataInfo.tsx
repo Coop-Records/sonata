@@ -20,15 +20,15 @@ const MetadataInfo = ({ metadata, points }: any) => (
           textOverflow: 'ellipsis',
           fontWeight: 600,
         }}
-        tw="text-3xl m-0 text-[#333536]"
+        tw="text-4xl m-0 text-[#333536]"
       >
         {metadata?.trackName}
       </p>
-      <p tw="text-xl m-0 text-[#949494]">{replaceSpecialCharacters(metadata?.artistName)}</p>
+      <p tw="text-[26px] m-0 text-[#949494]">{replaceSpecialCharacters(metadata?.artistName)}</p>
     </div>
-    <div tw="flex flex-col m-0 bg-[#F6F6F6] rounded-2xl w-[240px] h-[145px] items-center justify-center ml-[40px] absolute left-1/3 top-5">
-      <div tw="flex items-center m-0 w-[68%]">
-        <p tw="m-0 text-4xl text-[#333536]" style={{ fontWeight: 600 }}>
+    <div tw="flex flex-col m-0 bg-[#F6F6F6] rounded-2xl min-w-[200px] w-auto h-[145px] items-start pl-8 pr-8 justify-center ml-[40px] absolute left-[40%] top-5">
+      <div tw="flex items-center m-0 min-w-[68%] w-auto gap-2">
+        <p tw="m-0 text-4xl text-[#333536]  " style={{ fontWeight: 600 }}>
           {points}
         </p>
         <img
@@ -41,7 +41,7 @@ const MetadataInfo = ({ metadata, points }: any) => (
           style={{ imageRendering: 'pixelated' }}
         />
       </div>
-      <p tw="m-0 text-xl text-[#949494]" style={{ fontWeight: 400 }}>
+      <p tw="m-0 text-[26px] text-[#949494]" style={{ fontWeight: 400 }}>
         Notes Collected
       </p>
     </div>

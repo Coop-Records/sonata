@@ -25,7 +25,7 @@ const CastImageLayout = ({
       border: '1px solid #eaeaea',
     }}
   >
-    <div tw="flex flex-col ml-[50px]">
+    <div tw="flex flex-col ml-[140px] mt-[50px]">
       <Header />
       <ChannelInfo channelIcon={channelIcon} channelLabel={channelLabel} />
       <MetadataInfo metadata={metadata} points={points} />
