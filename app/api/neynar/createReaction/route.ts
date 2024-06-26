@@ -1,7 +1,8 @@
+import getCastLikesCount from '@/lib/neynar/getCastLikesCount';
+import hasUserLikedCast from '@/lib/neynar/hasUserLiked';
 import verifySignerUUID from '@/lib/neynar/verifySigner';
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
-import { Item } from '@/types/Item';
 
 const SUPABASE_URL = process.env.SUPABASE_URL as string;
 const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
@@ -26,29 +27,11 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
     }),
   } as any;
 
-  const queryParams = new URLSearchParams({
-    identifier: target,
-    type: 'hash',
-  });
-
-  const castOptions = {
-    method: 'GET',
-    headers: { accept: 'application/json', api_key: process.env.NEYNAR_API_KEY },
-  } as any;
-
-  const verify = await verifySignerUUID(signer_uuid);
-
-  const fid = verify.fid;
-
   try {
-    const castResponse = await fetch(
-      `https://api.neynar.com/v2/farcaster/cast?${queryParams}`,
-      castOptions,
-    );
-    const castData = await castResponse.json();
+    const { fid } = await verifySignerUUID(signer_uuid);
 
-    let likes_count = castData.cast.reactions.likes.length;
-    const isFidIncluded = castData.cast.reactions.likes.some((item: Item) => item.fid === fid);
+    let likes_count = await getCastLikesCount(target);
+    const isFidIncluded = await hasUserLikedCast(target, fid);
 
     if (!isFidIncluded) {
       await fetch(`https://api.neynar.com/v2/farcaster/reaction?`, options);
