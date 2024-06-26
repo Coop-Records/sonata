@@ -63,6 +63,12 @@ export const CHANNELS = [
     value: 'latinmusic',
     icon: 'https://i.imgur.com/SJPfK0B.jpg',
   },
+  {
+    label: '/electronic',
+    value: 'electronic',
+    icon: 'https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/802dff8d-78d2-47cb-9a78-c4fc3accac00/rectcrop3',
+    parentUrl: 'chain://eip155:1/erc721:0x05acde54e82e7e38ec12c5b5b4b1fd1c8d32658d',
+  },
 ];
 
 export const fetchPostsLimit = 20;
