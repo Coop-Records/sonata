@@ -2,10 +2,6 @@ import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { supabaseClient } from '@/lib/supabase/client';
-import findValidEmbed from '@/lib/findValidEmbed';
-import fetchMetadata from '@/lib/fetchMetadata';
-import { CHANNELS } from './consts';
 
 dayjs.extend(relativeTime);
 
@@ -38,27 +34,6 @@ export const isValidNumber = (value: string) => {
 
 export function timeFromNow(date: Date | string) {
   return dayjs(date).fromNow();
-}
-
-export function getHighestRank(validRanks: any[]) {
-  return validRanks.length === 0 ? 0 : Math.min(...validRanks);
-}
-
-export async function getEmbedAndMetadata(fullHash: string) {
-  const { data: cast } = await supabaseClient
-    .from('posts')
-    .select('*')
-    .eq('post_hash', fullHash)
-    .single();
-
-  const embed = findValidEmbed(cast);
-  const url: any = embed?.url;
-  const metadata = await fetchMetadata(url, cast);
-  return { cast, metadata };
-}
-
-export function getChannelData(channelId: any) {
-  return CHANNELS.find((channel) => channel.value === channelId);
 }
 
 export function formatPoints(points: any) {

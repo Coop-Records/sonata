@@ -5,8 +5,8 @@ import getCastHash from '@/lib/neynar/getCastHash';
 import { supabaseClient } from '@/lib/supabase/client';
 import Cast from '@/components/Cast';
 import getUserByUsername from '@/lib/neynar/getNeynarUserByUsername';
-import { getHighestRank } from '@/lib/utils';
 import { getUserLeaderboardRanks } from '@/lib/getUserLeadboardRank';
+import { getHighestRank } from '@/lib/getHighestRank';
 
 const frameMetadata = { ...getFrameMetadata(DEFAULT_FRAME), 'of:accepts:xmtp': '2024-02-01' };
 
