@@ -6,10 +6,10 @@ const MetadataInfo = ({ metadata, points }: any) => (
     <img
       src={metadata?.artworkUrl}
       alt=""
-      width={120}
-      height={120}
+      width={135}
+      height={135}
       loading="lazy"
-      tw="rounded-2xl"
+      tw="rounded-3xl"
     />
     <div tw="flex flex-col ml-6">
       <p
@@ -26,22 +26,22 @@ const MetadataInfo = ({ metadata, points }: any) => (
       </p>
       <p tw="text-[26px] m-0 text-[#949494]">{replaceSpecialCharacters(metadata?.artistName)}</p>
     </div>
-    <div tw="flex flex-col m-0 bg-[#F6F6F6] rounded-2xl min-w-[200px] w-auto h-[145px] items-start pl-8 pr-8 justify-center ml-[40px] absolute left-1/2 top-5">
+    <div tw="flex flex-col m-0 bg-[#F6F6F6] rounded-2xl min-w-[200px] w-auto min-h-[140px] h-auto items-start pl-8 pr-8 pt-8 pb-10 justify-center ml-[40px] absolute left-[58%] top-5">
       <div tw="flex items-center m-0 min-w-[68%] w-auto gap-2">
-        <p tw="m-0 text-4xl text-[#333536]  " style={{ fontWeight: 600 }}>
+        <p tw="m-1 text-4xl text-[#333536]  " style={{ fontWeight: 600 }}>
           {points}
         </p>
         <img
           src="https://i.imgur.com/Xa4LjYA.jpeg"
           alt=""
-          width={100}
-          height={100}
+          width={50}
+          height={50}
           loading="lazy"
-          tw="rounded-full ml-2 w-16 h-16"
+          tw="rounded-full ml-2 w-12 h-12"
           style={{ imageRendering: 'pixelated' }}
         />
       </div>
-      <p tw="m-0 text-[26px] text-[#949494]" style={{ fontWeight: 400 }}>
+      <p tw="m-1 text-[26px] text-[#949494]" style={{ fontWeight: 400 }}>
         Notes Collected
       </p>
     </div>
