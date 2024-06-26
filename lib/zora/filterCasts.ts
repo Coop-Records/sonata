@@ -4,7 +4,6 @@ import getIpfsLink from '../getIpfsLink';
 import getCastsMetadataLink from './getCastsMetadataLink';
 import getCastContractMapping from './mapCastToContract';
 
-
 async function filterZoraFeed(casts: Cast[]) {
   const batchSize = 99;
   const castsMetadata: Response[] = [];

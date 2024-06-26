@@ -17,7 +17,6 @@ async function getZoraTrackMetadata(url: string, cast: SupabasePost) {
   const response = await fetch(getIpfsLink(url));
   const metadata: ZoraMetadata = await response.json();
 
-
   return {
     id: url,
     type: 'zora',
