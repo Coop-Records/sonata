@@ -35,11 +35,3 @@ export const isValidNumber = (value: string) => {
 export function timeFromNow(date: Date | string) {
   return dayjs(date).fromNow();
 }
-
-export function formatPoints(points: any) {
-  return `${(points / 1000).toFixed(1)}K`;
-}
-export function replaceSpecialCharacters(str: any) {
-  const specialChars = /[^a-zA-Z0-9]/g;
-  return str.replace(specialChars, '_');
-}

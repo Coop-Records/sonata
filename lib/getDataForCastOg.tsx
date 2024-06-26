@@ -1,8 +1,9 @@
 import { getFullHash } from './getFullHash';
 import getUserByUsername from './neynar/getNeynarUserByUsername';
 import { getChannelData } from './getChannelData';
-import { formatPoints, replaceSpecialCharacters } from './utils';
 import { getEmbedAndMetadata } from './getEmbedAndMetadata';
+import { replaceSpecialCharacters } from './replaceSpecialCharacters';
+import { formatPoints } from './formatPoints';
 
 export async function getDataForCastOg(username: string, hash: any) {
   const fullHash: any = await getFullHash(username, hash);

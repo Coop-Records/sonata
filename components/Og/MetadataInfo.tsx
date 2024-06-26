@@ -1,4 +1,4 @@
-import { replaceSpecialCharacters } from '@/lib/utils';
+import { replaceSpecialCharacters } from '@/lib/replaceSpecialCharacters';
 import React from 'react';
 
 const MetadataInfo = ({ metadata, points }: any) => (
