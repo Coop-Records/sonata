@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { DEFAULT_FRAME, DESCRIPTION, TITLE, VERCEL_URL } from '@/lib/consts';
 
 import ApiCard from '@/components/ApiCard/ApiCard';
+import { feedEndpoints } from '@/lib/ApiEndpoints';
 
 const frameMetadata = { ...getFrameMetadata(DEFAULT_FRAME), 'of:accepts:xmtp': '2024-02-01' };
 
@@ -21,32 +22,11 @@ export const metadata: Metadata = {
 };
 
 export default function ApiHome() {
-  const feedEndpoints = [
-    {
-      title: 'Introduction',
-      endpoints: [
-        {
-          url: 'Brief overview of the API and its purpose.',
-        },
-      ],
-    },
-    {
-      title: 'Feed',
-      endpoints: [
-        {
-          method: 'GET',
-          url: '/api/feed/',
-          queryParams: '',
-        },
-      ],
-    },
-  ];
-
   return (
-    <>
+    <div className="mt-32 space-y-10">
       {feedEndpoints.map((api, index) => (
         <ApiCard key={index} title={api.title} endpoints={api.endpoints} />
       ))}
-    </>
+    </div>
   );
 }
