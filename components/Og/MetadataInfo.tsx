@@ -14,7 +14,7 @@ const MetadataInfo = ({ metadata, points }: any) => (
     <div tw="flex flex-col ml-6">
       <p
         style={{
-          maxWidth: '220px',
+          maxWidth: '340px',
           whiteSpace: 'nowrap',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
@@ -26,7 +26,7 @@ const MetadataInfo = ({ metadata, points }: any) => (
       </p>
       <p tw="text-[26px] m-0 text-[#949494]">{replaceSpecialCharacters(metadata?.artistName)}</p>
     </div>
-    <div tw="flex flex-col m-0 bg-[#F6F6F6] rounded-2xl min-w-[200px] w-auto h-[145px] items-start pl-8 pr-8 justify-center ml-[40px] absolute left-[40%] top-5">
+    <div tw="flex flex-col m-0 bg-[#F6F6F6] rounded-2xl min-w-[200px] w-auto h-[145px] items-start pl-8 pr-8 justify-center ml-[40px] absolute left-1/2 top-5">
       <div tw="flex items-center m-0 min-w-[68%] w-auto gap-2">
         <p tw="m-0 text-4xl text-[#333536]  " style={{ fontWeight: 600 }}>
           {points}
