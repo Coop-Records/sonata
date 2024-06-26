@@ -14,7 +14,6 @@ const getSpotifyWithAlternatives = async (spotify: Cast[]) => {
 
       return { ...cast, alternativeEmbeds };
     });
-
   } catch (err) {
     console.error('Error fetching Spotify URLs:', err);
     return spotify;

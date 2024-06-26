@@ -54,11 +54,6 @@ export const CHANNELS = [
     parentUrl: 'https://en.wikipedia.org/wiki/Johann_Sebastian_Bach',
   },
   {
-    label: '/electronic',
-    value: 'electronic',
-    icon: 'https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/802dff8d-78d2-47cb-9a78-c4fc3accac00/rectcrop3',
-  },
-  {
     label: '/rap',
     value: 'rap',
     icon: 'https://i.imgur.com/2wrkiVY.png',
@@ -73,13 +68,13 @@ export const CHANNELS = [
 export const fetchPostsLimit = 20;
 
 export const CONTENT_PLATFORMS = [
-  {url:'spotify.com/track', title: 'spotify'},
-  {url:'spotify.com/intl-es/track', title: 'spotify'},
-  {url:'soundcloud.com', title: 'soundcloud'},
-  {url:'sound.xyz', title: 'soundxyz'},
-  {url:'youtube.com/watch', title: 'youtube'},
-  {url:'youtu.be', title: 'youtube'},
-  {url:'zora.co/collect', title: 'zora'},
+  { url: 'spotify.com/track', title: 'spotify' },
+  { url: 'spotify.com/intl-es/track', title: 'spotify' },
+  { url: 'soundcloud.com', title: 'soundcloud' },
+  { url: 'sound.xyz', title: 'soundxyz' },
+  { url: 'youtube.com/watch', title: 'youtube' },
+  { url: 'youtu.be', title: 'youtube' },
+  { url: 'zora.co/collect', title: 'zora' },
 ] as const;
 
 export const ZORA_TO_VIEM = {

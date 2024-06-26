@@ -17,7 +17,7 @@ const useCreateDialog = () => {
     }
     callPostApi(signer?.signer_uuid, embedUrl);
     toast({ description: `Posted!!!` });
-    setEmbedUrl('')
+    setEmbedUrl('');
     setIsPostDialogOpen(false);
   };
 
