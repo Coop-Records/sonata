@@ -1,5 +1,5 @@
 import CastImageLayout from '@/components/Og/CastImageLayout';
-import { getDataForCastOg } from '@/lib/utils';
+import { getDataForCastOg } from '@/lib/getDataForCastOg';
 import { ImageResponse } from '@vercel/og';
 import { NextRequest } from 'next/server';
 

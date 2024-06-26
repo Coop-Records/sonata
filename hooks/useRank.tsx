@@ -3,7 +3,7 @@ import { useProfileProvider } from '@/providers/ProfileProvider';
 import { useEffect, useState } from 'react';
 
 const useRank = () => {
-  const [rank, setRank] = useState(0);
+  const [rank, setRank] = useState(null);
   const { profile } = useProfileProvider();
 
   useEffect(() => {
@@ -16,10 +16,6 @@ const useRank = () => {
 
     init();
   }, [profile]);
-
-  if (rank <= 0) {
-    return null;
-  }
 
   return rank;
 };

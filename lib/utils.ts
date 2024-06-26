@@ -2,12 +2,10 @@ import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import getCastHash from '@/lib/neynar/getCastHash';
 import { supabaseClient } from '@/lib/supabase/client';
 import findValidEmbed from '@/lib/findValidEmbed';
 import fetchMetadata from '@/lib/fetchMetadata';
 import { CHANNELS } from './consts';
-import getUserByUsername from './neynar/getNeynarUserByUsername';
 
 dayjs.extend(relativeTime);
 
@@ -42,10 +40,6 @@ export function timeFromNow(date: Date | string) {
   return dayjs(date).fromNow();
 }
 
-export async function getFullHash(username: string, hash: string) {
-  return await getCastHash(`https://warpcast.com/${username}/${hash}`);
-}
-
 export function getHighestRank(validRanks: any[]) {
   return validRanks.length === 0 ? 0 : Math.min(...validRanks);
 }
@@ -73,40 +67,4 @@ export function formatPoints(points: any) {
 export function replaceSpecialCharacters(str: any) {
   const specialChars = /[^a-zA-Z0-9]/g;
   return str.replace(specialChars, '_');
-}
-
-export async function getDataForCastOg(username: string, hash: any) {
-  const fullHash: any = await getFullHash(username, hash);
-
-  const encodedUsername = replaceSpecialCharacters(username);
-
-  const userProfile = await getUserByUsername(username);
-  const profilePfp = userProfile?.pfp?.url;
-
-  const { cast, metadata } = await getEmbedAndMetadata(fullHash);
-  const channelData = getChannelData(cast?.channelId);
-
-  const channelLabel = channelData?.label || '/sonata';
-  const channelIcon = channelData?.icon || 'https://i.imgur.com/Xa4LjYA.jpeg';
-
-  const points = formatPoints(cast?.points);
-
-  const soraSemiBold = fetch(new URL('/public/Sora-SemiBold.ttf', import.meta.url)).then((res) =>
-    res.arrayBuffer(),
-  );
-
-  const soraNormal = fetch(new URL('/public/Sora-Regular.ttf', import.meta.url)).then((res) =>
-    res.arrayBuffer(),
-  );
-
-  return {
-    encodedUsername,
-    profilePfp,
-    metadata,
-    channelLabel,
-    channelIcon,
-    points,
-    soraSemiBold,
-    soraNormal,
-  };
 }

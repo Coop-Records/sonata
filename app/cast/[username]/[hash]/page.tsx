@@ -6,7 +6,7 @@ import { supabaseClient } from '@/lib/supabase/client';
 import Cast from '@/components/Cast';
 import getUserByUsername from '@/lib/neynar/getNeynarUserByUsername';
 import { getHighestRank } from '@/lib/utils';
-import { stack } from '@/lib/stack/client';
+import { getUserLeaderboardRanks } from '@/lib/getUserLeadboardRank';
 
 const frameMetadata = { ...getFrameMetadata(DEFAULT_FRAME), 'of:accepts:xmtp': '2024-02-01' };
 
@@ -24,18 +24,6 @@ const metadata: Metadata = {
   },
 };
 
-async function getUserLeaderboardRanks(verifications: any[]) {
-  const leaderboardRanks = await Promise.all(
-    verifications.map(async (verification: any) => {
-      const leaderboardData = await stack.getLeaderboardRank(verification);
-      if (leaderboardData) {
-        return leaderboardData.rank;
-      }
-    }),
-  );
-  return leaderboardRanks.filter((rank) => rank !== null && rank !== undefined);
-}
-
 export async function generateMetadata({ params }: any): Promise<Metadata> {
   const { username, hash } = params;
 
@@ -45,9 +33,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
     const validRanks = await getUserLeaderboardRanks(verifications);
     const rank = getHighestRank(validRanks);
 
-    let ogImageUrl = `/api/og-image/cast/${username}/${hash}/`;
-
-    if (Number(rank) > 0) ogImageUrl = ogImageUrl + rank;
+    const ogImageUrl = `/api/og-image/cast/${username}/${hash}/${Number(rank) > 0 ? rank : 0}`;
 
     return {
       title: TITLE,
