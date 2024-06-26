@@ -9,7 +9,6 @@ import {
 } from 'react';
 import { PlayerAction } from './PlayerProvider';
 
-
 const ZoraContext = createContext<HTMLAudioElement | null>(null);
 
 export function ZoraProvider({ children }: { children: React.ReactNode }) {
@@ -18,7 +17,7 @@ export function ZoraProvider({ children }: { children: React.ReactNode }) {
   return <ZoraContext.Provider value={audio}>{children}</ZoraContext.Provider>;
 }
 
-export const useZora = (dispatch: Dispatch<PlayerAction>): AudioController => {
+export const useZoraProvider = (dispatch: Dispatch<PlayerAction>): AudioController => {
   const audio = useContext(ZoraContext)!;
 
   useEffect(() => {

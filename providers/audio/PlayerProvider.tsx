@@ -12,7 +12,7 @@ import { useSpotify } from './SpotifyProvider';
 import { TrackMetadata } from '@/types/Track';
 import { useSound } from './SoundProvider';
 import { useYoutube } from './YoutubeProvider';
-import { useZora } from './ZoraProvider';
+import { useZoraProvider } from './ZoraProvider';
 
 type Player = {
   playing: boolean;
@@ -127,7 +127,7 @@ export default function PlayerProvider({ children }: { children: ReactNode }) {
   const soundController = useSound(dispatch);
   const spotifyController = useSpotify(dispatch);
   const youtubeController = useYoutube(dispatch);
-  const zoraController = useZora(dispatch);
+  const zoraController = useZoraProvider(dispatch);
 
   const currentController = useMemo(() => {
     if (metadata?.type === 'soundcloud') return scController;

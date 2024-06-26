@@ -39,7 +39,7 @@ async function filterZoraFeed(casts: Cast[]) {
         metadata.content?.uri &&
         metadata.content?.mime.includes('audio')
       ) {
-        cast.embeds.unshift({ url: metadata.content?.uri });
+        cast.embeds.unshift({ url: cast.ipfs });
         delete (cast as any).ipfs;
         response.push(cast as Cast);
       }
