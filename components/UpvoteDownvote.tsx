@@ -74,7 +74,7 @@ export default function UpvoteDownvote({
               'rounded-full flex items-center flex-row gap-1 font-semibold py-2 px-4 bg-muted h-auto',
               'flex-row-reverse bg-transparent hover:bg-transparent',
             )}
-            onClick={handleUpvoteClick}            
+            onClick={handleUpvoteClick}
           >
             <span>{formatBigInt(BigInt(total))}</span>
             <Image src={logos.NOTES} width={16} height={16} alt="" />

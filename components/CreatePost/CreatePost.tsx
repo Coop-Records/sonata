@@ -18,7 +18,7 @@ export default function CreatePost() {
     if (!checkLoggedIn()) return;
     if (embedUrl) {
       handlePost();
-      
+
       return;
     }
     setIsPostDialogOpen(true);

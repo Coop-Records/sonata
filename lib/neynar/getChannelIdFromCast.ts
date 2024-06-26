@@ -3,13 +3,13 @@ import { CHANNELS } from '../consts';
 
 export default function getChannelIdFromCast(cast: Cast) {
   const parentUrl = cast.parent_url;
-  const rootParentUrl = (cast as any).root_parent_url
+  const rootParentUrl = (cast as any).root_parent_url;
 
   if (parentUrl) {
     const match = /\/channel\/([^/]+)$/.exec(parentUrl);
     if (match) {
       return match[1];
-    }  
+    }
     if (parentUrl) {
       return CHANNELS.find((val) => val.parentUrl == parentUrl)?.value ?? null;
     }

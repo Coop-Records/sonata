@@ -133,7 +133,6 @@ const TipProvider = ({ children }: any) => {
     return data;
   };
 
-
   const refreshBalances = async () => {
     getAirdropBalance();
     syncPoints();

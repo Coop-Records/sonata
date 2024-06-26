@@ -53,6 +53,16 @@ export const CHANNELS = [
     icon: 'https://i.imgur.com/7ng6bHS.png',
     parentUrl: 'https://en.wikipedia.org/wiki/Johann_Sebastian_Bach',
   },
+  {
+    label: '/rap',
+    value: 'rap',
+    icon: 'https://i.imgur.com/2wrkiVY.png',
+  },
+  {
+    label: '/latinmusic',
+    value: 'latinmusic',
+    icon: 'https://i.imgur.com/SJPfK0B.jpg',
+  },
 ];
 
 export const fetchPostsLimit = 20;
