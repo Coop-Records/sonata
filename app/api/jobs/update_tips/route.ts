@@ -1,5 +1,5 @@
+import filterCastsByChannels from '@/lib/filterCastsByChannels';
 import getTipAllocationFeedFromTime from '@/lib/neynar/getTipAllocationFeedFromTime';
-import filterByChannels from '@/lib/youtube/filterByChannels';
 import { createClient } from '@supabase/supabase-js';
 import { isEmpty } from 'lodash';
 import { NextResponse } from 'next/server';
@@ -59,7 +59,7 @@ const getResponse = async (): Promise<NextResponse> => {
 
   allEntries.push(...spotify, ...soundCloud, ...soundxyz);
 
-  const youtubeFiltered = filterByChannels(youtube);
+  const youtubeFiltered = filterCastsByChannels(youtube);
   console.log('jobs::update_tips', 'ytEntries', youtubeFiltered);
   allEntries.push(...youtubeFiltered);
 

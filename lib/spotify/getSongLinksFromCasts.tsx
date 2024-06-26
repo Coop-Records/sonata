@@ -13,7 +13,9 @@ const getSongLinksFromCasts = async (casts: Cast[]) => {
       spotifyLinks.map(async (trackUrl) => {
         if (!trackUrl) return null;
 
-        const response = await fetch(`${VERCEL_URL}/api/songLink/fetchLink?trackUrl=${encodeURIComponent(trackUrl)}`);
+        const response = await fetch(
+          `${VERCEL_URL}/api/songLink/fetchLink?trackUrl=${encodeURIComponent(trackUrl)}`,
+        );
         const data = await response.json();
         return data;
       }),
