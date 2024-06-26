@@ -12,6 +12,7 @@ const fetchPosts = async (
   start: number,
   fid?: number,
   profileFid?: number,
+  limit: boolean = true,
 ) => {
   const followingFids = [];
   if (feedType === FeedType.Following) {
@@ -39,8 +40,7 @@ const fetchPosts = async (
   if (profileFid) {
     query.eq('authorFid', profileFid);
   }
-
-  query.range(start, start + fetchPostsLimit - 1);
+  if (limit) query.range(start, start + fetchPostsLimit - 1);
 
   const { data: posts } = await query.returns<SupabasePost[]>();
   return { posts: posts || [] };
