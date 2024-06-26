@@ -1,4 +1,5 @@
 import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
+import filterCastsByChannels from '../filterCastsByChannels';
 import getIpfsLink from '../getIpfsLink';
 import getCastsMetadataLink from './getCastsMetadataLink';
 import getCastContractMapping from './mapCastToContract';
@@ -8,9 +9,10 @@ async function filterZoraFeed(casts: Cast[]) {
   const batchSize = 99;
   const castsMetadata: Response[] = [];
   const response: Cast[] = [];
+  const filteredCasts = filterCastsByChannels(casts);
 
   try {
-    const data = await getCastsMetadataLink(getCastContractMapping(casts));
+    const data = await getCastsMetadataLink(getCastContractMapping(filteredCasts));
 
     for (let i = 0; i < data.length; i += batchSize) {
       const batch = data.slice(i, i + batchSize);
