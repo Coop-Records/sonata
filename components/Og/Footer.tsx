@@ -1,6 +1,6 @@
 const Footer = () => (
   <div tw="flex absolute bottom-4 left-[47%] justify-center">
-    <p tw="text-[14px]" style={{ fontWeight: 400 }}>
+    <p tw="text-[16px]" style={{ fontWeight: 400 }}>
       sonata.tips
     </p>
   </div>
