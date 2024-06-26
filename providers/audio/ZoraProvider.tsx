@@ -2,9 +2,9 @@ import { AudioController } from '@/types/AudioController';
 import {
   Dispatch,
   createContext,
-  useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState
 } from 'react';
 import { PlayerAction } from './PlayerProvider';
@@ -38,10 +38,10 @@ export const useZoraProvider = (dispatch: Dispatch<PlayerAction>): AudioControll
     }
   }, [audio, dispatch]);
 
-  const play = useCallback(() => audio.play(), [audio]);
-  const pause = useCallback(() => audio.pause(), [audio]);
-  const load = useCallback((url: string) => { audio.src = url; audio.load() }, [audio]);
-  const seek = useCallback((time: number) => audio.currentTime = time / 1000, [audio]);
-
-  return { play, pause, load, seek };
+  return useMemo(() => ({
+    play: () => audio.play(),
+    pause: () => audio.pause(),
+    load: (url: string) => { audio.src = url; audio.load() },
+    seek: (time: number) => audio.currentTime = time / 1000,
+  }), [audio]);
 };
