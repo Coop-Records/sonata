@@ -2,11 +2,12 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import { CHANNELS } from '@/lib/consts';
 import { useFeedProvider } from '@/providers/FeedProvider';
+import { useUi } from '@/providers/UiProvider';
 
 export default function ChannelFilter() {
   const { filter: currentFilter, updateFilter } = useFeedProvider();
+  const { menuItems } = useUi();
 
   const handleClick = (value: string) => {
     const isActiveFilter = value === currentFilter.channel;
@@ -17,7 +18,7 @@ export default function ChannelFilter() {
     <div className="flex flex-col sm:gap-2">
       <h2 className="font-semibold sm:mb-2">Channels</h2>
       <div>
-        {CHANNELS.map((option) => {
+        {menuItems.map((option) => {
           const active = currentFilter?.channel === option.value;
           return (
             <Link
