@@ -60,7 +60,11 @@ const updateSupabaseEntry = async (fid: string, hasBalance: boolean): Promise<vo
     ? { hypersub_subscribed_since: now }
     : { hypersub_subscribed_since: null };
 
-  await supabase.from('tips').update(updateData).eq('fid', fid);
+  await supabase
+    .from('tips')
+    .update(updateData)
+    .eq('fid', fid)
+    .is('hypersub_subscribed_since', null);
 };
 
 const getResponse = async (): Promise<NextResponse> => {
@@ -71,18 +75,24 @@ const getResponse = async (): Promise<NextResponse> => {
   }
 
   const fidChunks = [];
-  const chunkSize = 100;
+  const chunkSize = 10; // Reduce chunk size for more parallel batches
   for (let i = 0; i < fids.length; i += chunkSize) {
     fidChunks.push(fids.slice(i, i + chunkSize));
   }
 
-  for (const chunk of fidChunks) {
+  const processChunks = fidChunks.map(async (chunk) => {
     const { users } = await fetchUserData(chunk.map((fid: any) => fid.fid));
-    for (const user of users) {
-      const hasBalance = await checkBalances(user.verifications);
-      await updateSupabaseEntry(user.fid, hasBalance);
-    }
-  }
+    const results = await Promise.all(
+      users.map(async (user: any) => {
+        const hasBalance = await checkBalances(user.verifications);
+        await updateSupabaseEntry(user.fid, hasBalance);
+        return { fid: user.fid, hasBalance }; // Return result if needed
+      }),
+    );
+    return results;
+  });
+
+  await Promise.all(processChunks);
 
   return NextResponse.json({ message: 'success' }, { status: 200 });
 };
