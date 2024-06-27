@@ -61,7 +61,7 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
     );
   }
 
-  stack.track(`tip_from_${tipperFid}`, { account: recipientWalletAddress, points: tipAmount });
+  stack.track(`tip_from_${tipperFid}`, { account: recipientWalletAddress, points: used_tip });
 
   return NextResponse.json(
     {
