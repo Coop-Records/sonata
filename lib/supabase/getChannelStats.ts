@@ -1,18 +1,6 @@
+import { ChannelAccumulator, ChannelStats } from "@/types/ChannelStats";
 import { CHANNELS } from "../consts";
 import { supabaseClient } from "./client";
-
-type ChannelAccumulator = Record<string, {
-  uniqueAuthors: Set<number>;
-  uniquePosts: Set<string>;
-  notes?: number;
-}>;
-
-interface Stats {
-  channelId: string;
-  numberOfCurators: number;
-  numberOfSongs: number;
-  numberOfNotes?: number
-};
 
 async function getChannelStats(includeNotes = false, filterChannels = false) {
   const limit = 1000;
@@ -53,7 +41,7 @@ async function getChannelStats(includeNotes = false, filterChannels = false) {
   } while (offset);
 
   const channels = Object.keys(entries).map(channelId => {
-    const channel: Stats = {
+    const channel: ChannelStats = {
       channelId,
       numberOfCurators: entries[channelId].uniqueAuthors.size,
       numberOfSongs: entries[channelId].uniquePosts.size,
