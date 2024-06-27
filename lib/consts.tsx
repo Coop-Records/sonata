@@ -53,14 +53,44 @@ export const CHANNELS = [
     icon: 'https://i.imgur.com/7ng6bHS.png',
     parentUrl: 'https://en.wikipedia.org/wiki/Johann_Sebastian_Bach',
   },
+  {
+    label: '/rap',
+    value: 'rap',
+    icon: 'https://i.imgur.com/2wrkiVY.png',
+  },
+  {
+    label: '/latinmusic',
+    value: 'latinmusic',
+    icon: 'https://i.imgur.com/SJPfK0B.jpg',
+  },
+  {
+    label: '/electronic',
+    value: 'electronic',
+    icon: 'https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/802dff8d-78d2-47cb-9a78-c4fc3accac00/rectcrop3',
+    parentUrl: 'chain://eip155:1/erc721:0x05acde54e82e7e38ec12c5b5b4b1fd1c8d32658d',
+  },
 ];
 
 export const fetchPostsLimit = 20;
 
 export const CONTENT_PLATFORMS = [
-  'spotify.com/track',
-  'soundcloud.com',
-  'sound.xyz',
-  'youtube.com/watch',
-  'youtu.be',
-];
+  { url: 'spotify.com/track', title: 'spotify' },
+  { url: 'spotify.com/intl-es/track', title: 'spotify' },
+  { url: 'soundcloud.com', title: 'soundcloud' },
+  { url: 'sound.xyz', title: 'soundxyz' },
+  { url: 'youtube.com/watch', title: 'youtube' },
+  { url: 'youtu.be', title: 'youtube' },
+  { url: 'zora.co/collect', title: 'zora' },
+] as const;
+
+export const ZORA_TO_VIEM = {
+  arb: 'arbitrum',
+  base: 'base',
+  blast: 'blast',
+  eth: 'mainnet',
+  oeth: 'optimism',
+  pgn: 'pgn',
+  zora: 'zora',
+} as const;
+
+export type ZoraChains = keyof typeof ZORA_TO_VIEM;

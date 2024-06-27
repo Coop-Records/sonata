@@ -2,6 +2,7 @@ import { User } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function UserDetails({
   user,
@@ -14,12 +15,12 @@ export default function UserDetails({
 }) {
   return (
     <div className={cn('flex space-x-3', className)}>
-      <a href={`/${user.username}`}>
+      <Link href={`/${user.username}`}>
         <Avatar className="size-8">
           <AvatarImage src={user.pfp_url} />
           <AvatarFallback>{user.display_name}</AvatarFallback>
         </Avatar>
-      </a>
+      </Link>
       <div className="flex flex-col gap-1">
         <div className="flex flex-row items-center align-middle">
           <a

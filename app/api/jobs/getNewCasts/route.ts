@@ -1,8 +1,9 @@
+import filterCastsByChannels from '@/lib/filterCastsByChannels';
 import createPostReply from '@/lib/neynar/createPostReply';
 import getChannelIdFromCast from '@/lib/neynar/getChannelIdFromCast';
-import getFeedFromTime from '@/lib/neynar/getFeedFromTime';
+import getPlatformFeedFromTime from '@/lib/neynar/getPlatformFeedFromTime';
 import getSpotifyWithAlternatives from '@/lib/spotify/getSpotifyWithAlternatives';
-import filterByChannels from '@/lib/youtube/filterByChannels';
+import filterZoraFeed from '@/lib/zora/filterCasts';
 import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { createClient } from '@supabase/supabase-js';
 import { isEmpty } from 'lodash';
@@ -52,23 +53,24 @@ const getResponse = async (): Promise<NextResponse> => {
 
   const formattedLastChecked = new Date(`${lastChecked}`);
 
-  const allEntries: any[] = [];
+  const feeds = await getPlatformFeedFromTime(formattedLastChecked);
 
-  const [spotify, soundCloud, soundxyz, youtube] = await Promise.all([
-    getFeedFromTime('spotify.com/track', formattedLastChecked),
-    getFeedFromTime('soundcloud.com', formattedLastChecked),
-    getFeedFromTime('sound.xyz', formattedLastChecked),
-    getFeedFromTime('youtube.com/watch', formattedLastChecked),
-  ]);
-  allEntries.push(...soundCloud, ...soundxyz);
-
-  const spotifyWithAlternatives = await getSpotifyWithAlternatives(spotify);
+  const spotifyWithAlternatives = await getSpotifyWithAlternatives(feeds.spotify);
   console.log('jobs::getNewCasts', 'spotifyEntries', spotifyWithAlternatives);
-  allEntries.push(...spotifyWithAlternatives);
 
-  const youtubeFiltered = filterByChannels(youtube);
+  const youtubeFiltered = filterCastsByChannels(feeds.youtube);
   console.log('jobs::getNewCasts', 'ytEntries', youtubeFiltered);
-  allEntries.push(...youtubeFiltered);
+
+  const zoraFiltered = await filterZoraFeed(feeds.zora);
+  console.log('jobs::getNewCasts', 'zoraEntriesCount', zoraFiltered.length);
+
+  const allEntries: Cast[] = [
+    ...feeds.soundcloud,
+    ...feeds.soundxyz,
+    ...spotifyWithAlternatives,
+    ...youtubeFiltered,
+    ...zoraFiltered,
+  ];
 
   console.log('jobs::getNewCasts', `${allEntries.length} new entries`);
   if (allEntries.length > 0) {
