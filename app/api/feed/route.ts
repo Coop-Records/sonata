@@ -14,6 +14,6 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ posts: filteredPosts });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ message: 'Internal Server Error', error }, { status: 500 });
   }
 }
