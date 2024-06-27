@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
     const viewerFid = searchParams.get('viewerFid');
     const channelId = searchParams.get('channelId');
 
-    const filteredPosts = await getFeed(channelId, feedType as FeedType, Number(viewerFid)); // Cast feedType appropriately
+    const filteredPosts = await getFeed(channelId, feedType as FeedType, Number(viewerFid));
 
     return NextResponse.json({ posts: filteredPosts });
   } catch (error) {
