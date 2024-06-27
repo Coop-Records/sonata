@@ -16,7 +16,11 @@ const fetchPosts = async (
 ) => {
   const followingFids = [];
   if (feedType === FeedType.Following) {
-    const following = await getFollowing(fid);
+    const baseUrl = process.env.API_URL || 'http://localhost:3000';
+    const followingUrl = new URL(`/api/neynar/getFollowing?fid=${fid}`, baseUrl).toString();
+
+    const following = await fetch(followingUrl).then((response) => response.json());
+
     followingFids.push(...following.users.map((user: { fid: number }) => user.fid));
     followingFids.push(fid);
   }
