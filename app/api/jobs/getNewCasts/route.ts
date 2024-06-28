@@ -1,8 +1,9 @@
+import filterCastsByChannels from '@/lib/filterCastsByChannels';
 import createPostReply from '@/lib/neynar/createPostReply';
 import getPlatformFeedFromTime from '@/lib/neynar/getPlatformFeedFromTime';
 import getSpotifyWithAlternatives from '@/lib/spotify/getSpotifyWithAlternatives';
 import upsertCast from '@/lib/supabase/upsertCast';
-import filterByChannels from '@/lib/youtube/filterByChannels';
+import filterZoraFeed from '@/lib/zora/filterCasts';
 import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { createClient } from '@supabase/supabase-js';
 import { isEmpty } from 'lodash';
@@ -38,6 +39,7 @@ const processSingleEntry = async (cast: Cast) => {
 };
 
 const getResponse = async (): Promise<NextResponse> => {
+  'use server';
   const { data: cast_query_date } = await supabase
     .from('cast_query_date')
     .select('lastcheck')
@@ -56,14 +58,18 @@ const getResponse = async (): Promise<NextResponse> => {
   const spotifyWithAlternatives = await getSpotifyWithAlternatives(feeds.spotify);
   console.log('jobs::getNewCasts', 'spotifyEntries', spotifyWithAlternatives);
 
-  const youtubeFiltered = filterByChannels(feeds.youtube);
+  const youtubeFiltered = filterCastsByChannels(feeds.youtube);
   console.log('jobs::getNewCasts', 'ytEntries', youtubeFiltered);
+
+  const zoraFiltered = await filterZoraFeed(feeds.zora);
+  console.log('jobs::getNewCasts', 'zoraEntriesCount', zoraFiltered.length);
 
   const allEntries: Cast[] = [
     ...feeds.soundcloud,
     ...feeds.soundxyz,
     ...spotifyWithAlternatives,
-    ...youtubeFiltered
+    ...youtubeFiltered,
+    ...zoraFiltered,
   ];
 
   console.log('jobs::getNewCasts', `${allEntries.length} new entries`);

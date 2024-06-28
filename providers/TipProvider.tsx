@@ -9,7 +9,6 @@ import { useNeynarProvider } from './NeynarProvider';
 import { useToast } from '@/components/ui/use-toast';
 import claimAirdrop from '@/lib/sonata/claimAirdrop';
 import { supabaseClient } from '@/lib/supabase/client';
-import executeDownvote from '@/lib/sonata/executeDownvote';
 
 const TipContext = createContext<any>(null);
 
@@ -134,36 +133,6 @@ const TipProvider = ({ children }: any) => {
     return data;
   };
 
-  const downvote = async (
-    amount: bigint,
-    postHash: string,
-    recipientFid: number,
-  ): Promise<TipResponse | undefined> => {
-    if (
-      isNil(user) ||
-      isNil(remainingTipAllocation) ||
-      isEmpty(user.verifications) ||
-      isNil(signer) ||
-      isNil(signer?.signer_uuid)
-    ) {
-      toast({
-        title: 'Unable to Downvote',
-        description: 'Something went wrong',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    const data = await executeDownvote(signer?.signer_uuid, amount, postHash, recipientFid);
-    const message = data.message;
-    const tipRemaining = data.tipRemaining;
-
-    setRemainingTipAllocation(BigInt(tipRemaining));
-    toast({ description: message });
-
-    return data;
-  };
-
   const refreshBalances = async () => {
     getAirdropBalance();
     syncPoints();
@@ -184,7 +153,6 @@ const TipProvider = ({ children }: any) => {
       value={{
         balance,
         tip,
-        downvote,
         tipDegen,
         remainingTipAllocation,
         dailyTipAllowance,

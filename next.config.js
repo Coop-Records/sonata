@@ -22,14 +22,17 @@ const nextConfig = {
         hostname: 'i.imgur.com',
       },
       {
-        hostname: 'ipfs.decentralized-content.com'
+        hostname: 'ipfs.decentralized-content.com',
       },
       {
-        hostname: 'i.seadn.io'
+        hostname: 'i.seadn.io',
       },
       {
-        hostname: 'arweave.net'
-      }
+        hostname: 'arweave.net',
+      },
+      {
+        hostname: 'static.highongrowth.xyz',
+      },
     ],
   },
 };

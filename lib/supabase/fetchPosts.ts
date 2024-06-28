@@ -1,6 +1,5 @@
 import { SupabasePost } from '@/types/SupabasePost';
 import { SupabaseClient } from '@supabase/supabase-js';
-import getFollowing from '../neynar/getFollowing';
 import { fetchPostsLimit } from '../consts';
 import { FeedType } from '@/types/Feed';
 import getBaseQuery from './getBaseQuery';
@@ -12,10 +11,13 @@ const fetchPosts = async (
   start: number,
   fid?: number,
   profileFid?: number,
+  limit: boolean = true,
 ) => {
   const followingFids = [];
   if (feedType === FeedType.Following) {
-    const following = await getFollowing(fid);
+    const baseUrl = process.env.API_URL;
+    const followingUrl = new URL(`/api/neynar/getFollowing?fid=${fid}`, baseUrl).toString();
+    const following = await fetch(followingUrl).then((response) => response.json());
     followingFids.push(...following.users.map((user: { fid: number }) => user.fid));
     followingFids.push(fid);
   }
@@ -39,8 +41,7 @@ const fetchPosts = async (
   if (profileFid) {
     query.eq('authorFid', profileFid);
   }
-
-  query.range(start, start + fetchPostsLimit - 1);
+  if (limit) query.range(start, start + fetchPostsLimit - 1);
 
   const { data: posts } = await query.returns<SupabasePost[]>();
   return { posts: posts || [] };

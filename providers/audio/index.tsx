@@ -4,6 +4,7 @@ import { SoundProvider } from './SoundProvider';
 import { SoundcloudProvider } from './SoundcloudProvider';
 import { SpotifyProvider } from './SpotifyProvider';
 import { YoutubeProvider } from './YoutubeProvider';
+import { ZoraProvider } from './ZoraProvider';
 
 export default function AudioProvider({ children }: { children: ReactNode }) {
   return (
@@ -11,7 +12,9 @@ export default function AudioProvider({ children }: { children: ReactNode }) {
       <SoundcloudProvider>
         <SoundProvider>
           <YoutubeProvider>
-            <PlayerProvider>{children}</PlayerProvider>
+            <ZoraProvider>
+              <PlayerProvider>{children}</PlayerProvider>
+            </ZoraProvider>
           </YoutubeProvider>
         </SoundProvider>
       </SoundcloudProvider>
