@@ -1,4 +1,4 @@
-import getChannelStats from '@/lib/supabase/getChannelStats';
+import getChannelStats from "@/lib/supabase/getChannelStats";
 
 export async function GET() {
   try {
