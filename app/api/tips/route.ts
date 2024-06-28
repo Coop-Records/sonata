@@ -26,6 +26,6 @@ const getLatestTips = async (): Promise<NextResponse> => {
   );
 };
 
-export async function GET(req: NextRequest): Promise<Response> {
+export async function GET(): Promise<Response> {
   return getLatestTips();
 }
