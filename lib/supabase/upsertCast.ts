@@ -25,7 +25,7 @@ async function upsertCast(cast: Cast) {
     },
   );
 
-  console.log('jobs::getNewCasts', `Successfully created/updated ${cast.hash}`);
+  console.log(`Successfully created/updated ${cast.hash}`);
 
   if (error) {
     console.error('Error calling function:', error);

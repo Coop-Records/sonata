@@ -1,6 +1,6 @@
 import filterCastsByChannels from '@/lib/filterCastsByChannels';
-import createPostReply from '@/lib/neynar/createPostReply';
 import getPlatformFeedFromTime from '@/lib/neynar/getPlatformFeedFromTime';
+import sendBotCast from '@/lib/sonata/sendBotCast';
 import getSpotifyWithAlternatives from '@/lib/spotify/getSpotifyWithAlternatives';
 import upsertCast from '@/lib/supabase/upsertCast';
 import filterZoraFeed from '@/lib/zora/filterCasts';
@@ -11,7 +11,6 @@ import { NextResponse } from 'next/server';
 
 const SUPABASE_URL = process.env.SUPABASE_URL as string;
 const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
-const BOT_SIGNER_UUID = process.env.BOT_SIGNER_UUID as string;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
   auth: {
@@ -95,16 +94,6 @@ const getResponse = async (): Promise<NextResponse> => {
   console.log(data, error);
   return NextResponse.json({ message: 'success', allEntries }, { status: 200 });
 };
-
-async function sendBotCast(cast: Cast) {
-  await createPostReply(
-    BOT_SIGNER_UUID,
-    cast.hash,
-    `This song is now available on @sonatatips where you earn NOTES when people tip you.\n\nSee you over there!\n\nhttps://sonata.tips/cast/${cast.author.username}/${cast.hash.substring(0, 8)}`,
-  );
-
-  return { success: true };
-}
 
 export async function GET(): Promise<Response> {
   const response = await getResponse().catch((error) => {
