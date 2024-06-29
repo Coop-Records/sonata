@@ -1,6 +1,6 @@
-import { SupabasePost } from "@/types/SupabasePost";
-import getIpfsLink from "../getIpfsLink";
-import { TrackMetadata } from "@/types/Track";
+import { SupabasePost } from '@/types/SupabasePost';
+import getIpfsLink from '../getIpfsLink';
+import { TrackMetadata } from '@/types/Track';
 
 interface ZoraMetadata {
   name: string;
@@ -8,9 +8,9 @@ interface ZoraMetadata {
   image: string;
   animation_url: string;
   content: {
-    mime: string
-    uri: string
-  }
+    mime: string;
+    uri: string;
+  };
 }
 
 async function getZoraTrackMetadata(url: string, cast: SupabasePost) {

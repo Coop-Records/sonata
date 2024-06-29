@@ -12,15 +12,30 @@ import { useNeynarProvider } from '@/providers/NeynarProvider';
 import FeedProvider from '@/providers/FeedProvider';
 import ProfileProvider from '@/providers/ProfileProvider';
 import { useParams } from 'next/navigation';
+import HorizontalScroller from '@/components/scroller/HorizontalScroller';
 
 export default function FeedLayout({ children }: { children: ReactNode }) {
   const { menuOpen, setMenuOpen } = useUi();
   const { username } = useParams();
   const { user } = useNeynarProvider();
+  const items = [
+    'Item 1',
+    'Item 2',
+    'Item 3',
+    'Item 4',
+    'Item 5',
+    'Item 6',
+    'Item 7',
+    'Item 8',
+    'Item 9',
+    'Item 10',
+    'Item 11',
+  ];
 
   return (
     <ProfileProvider>
       <FeedProvider>
+        <HorizontalScroller items={items} />
         <div className="flex grow flex-col">
           <meta property="of:accepts:xmtp" content="2024-02-01" />
           <div className="flex grow">
