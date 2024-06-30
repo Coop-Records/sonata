@@ -13,7 +13,6 @@ export const getLatestTips = async (): Promise<NextResponse> => {
     .order('created_at', { ascending: false })
     .limit(11);
 
-  console.log(data, error);
   if (error) {
     return NextResponse.json(
       { message: 'Error fetching latest tips', error: error.message },
