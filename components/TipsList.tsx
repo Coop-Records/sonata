@@ -4,7 +4,6 @@ import HorizontalScroller from './scroller/HorizontalScroller';
 
 const TipsList = () => {
   const [tips, setTips] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -31,15 +30,12 @@ const TipsList = () => {
         }
       } catch (error: any) {
         setError(error || 'Unknown error');
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchTips();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
   return <HorizontalScroller items={tips} />;
