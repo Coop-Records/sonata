@@ -1,4 +1,4 @@
-import useHorizontalScroll from '@/hooks/usehorizontalScroll';
+import useHorizontalScroll from '@/hooks/useHorizontalScroll';
 
 const HorizontalScroller = ({ items }: any) => {
   const { scrollerRef } = useHorizontalScroll();
