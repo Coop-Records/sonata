@@ -27,11 +27,13 @@ const getResponse = async (req: NextRequest) => {
       embeds: [{ url }],
       author: data.cast.author,
     };
-    const {success} = await upsertCast(cast);
-    if(success) sendBotCast(cast);
+    const { success } = await upsertCast(cast);
+    if (success) sendBotCast(cast);
 
   } catch (error) {
     console.error('Error:', error);
+    if (data?.success) return Response.json({ message: 'success', data }, { status: 200 });
+    else return Response.json({ message: 'failed' }, { status: 400 });
   }
 
   redirect(`/cast/${cast.author.username}/${cast.hash.substring(0, 8)}`);
