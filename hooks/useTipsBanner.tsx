@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import getUser from '@/lib/sonata/getUser';
+import getFormattedTips from '@/lib/getFormattedTips';
 
 const useTipsBanner = () => {
   const [tips, setTips] = useState([]);
@@ -9,20 +9,8 @@ const useTipsBanner = () => {
       try {
         const response = await fetch('/api/tips');
         const result = await response.json();
-        console.log('SWEETS result', result);
-
         if (response.ok) {
-          const formattedTips: any = await Promise.all(
-            result.tips.map(async (tip: any) => {
-              const senderUser = await getUser(tip.sender);
-              const receiverUser = await getUser(tip.receiver);
-              return {
-                text: `@${senderUser.username} tipped ${tip.amount} notes to @${receiverUser.username}`,
-                imgUrl: senderUser.pfp_url,
-              };
-            }),
-          );
-
+          const formattedTips: any = await getFormattedTips(result.tips);
           setTips(formattedTips);
         }
       } catch (error: any) {
