@@ -12,6 +12,8 @@ export const getLatestTips = async (): Promise<NextResponse> => {
     .select('*')
     .order('created_at', { ascending: false })
     .limit(11);
+  
+  console.log("SWEETS data", data)
 
   if (error) {
     return NextResponse.json(
