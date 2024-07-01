@@ -1,4 +1,4 @@
-import { CONTENT_PLATFORMS } from "@/lib/consts";
+import { CONTENT_PLATFORMS } from '@/lib/consts';
 
 export type TrackType = (typeof CONTENT_PLATFORMS)[number]['title'];
 
