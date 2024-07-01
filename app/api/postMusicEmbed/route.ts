@@ -5,37 +5,34 @@ import { redirect } from 'next/navigation';
 import { NextRequest } from 'next/server';
 
 const getResponse = async (req: NextRequest) => {
-  let cast: any;
   const body = await req.json();
   const { signer_uuid, url } = body;
 
   const data = await postMusicEmbed(signer_uuid, url);
+
+  if (!data?.success || !data?.cast?.hash) {
+    return Response.json({ message: 'casting failed' }, { status: 400 });
+  }
   console.log('new cast:', data);
 
-  try {
-    if (!data?.cast?.hash) throw new Error('No hash provided');
-    if (!data.cast?.author?.fid) throw new Error('No author provided');
+  const cast: any = {
+    timestamp: new Date().toISOString(),
+    parent_url: '',
+    root_parent_url: '',
+    reactions: {
+      likes_count: 0,
+    },
+    hash: data.cast.hash,
+    embeds: [{ url }],
+    author: data.cast.author,
+  };
+  const { success } = await upsertCast(cast);
 
-    cast = {
-      timestamp: new Date().toISOString(),
-      parent_url: '',
-      root_parent_url: '',
-      reactions: {
-        likes_count: 0,
-      },
-      hash: data.cast.hash,
-      embeds: [{ url }],
-      author: data.cast.author,
-    };
-    const { success } = await upsertCast(cast);
-    if (success) sendBotCast(cast);
-
-  } catch (error) {
-    console.error('Error:', error);
-    if (data?.success) return Response.json({ message: 'success', data }, { status: 200 });
-    else return Response.json({ message: 'failed' }, { status: 400 });
-  }
-
+  if (!success) return Response.json(
+    { message: 'successfuly casted', data },
+    { status: 200 }
+  );
+  sendBotCast(cast);
   redirect(`/cast/${cast.author.username}/${cast.hash.substring(0, 8)}`);
 };
 
