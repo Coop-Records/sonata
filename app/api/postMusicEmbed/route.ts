@@ -1,7 +1,6 @@
 import postMusicEmbed from '@/lib/neynar/postMusicEmbed';
 import sendBotCast from '@/lib/sonata/sendBotCast';
 import upsertCast from '@/lib/supabase/upsertCast';
-import { redirect } from 'next/navigation';
 import { NextRequest } from 'next/server';
 
 const getResponse = async (req: NextRequest) => {
@@ -33,7 +32,11 @@ const getResponse = async (req: NextRequest) => {
     { status: 200 }
   );
   sendBotCast(cast);
-  redirect(`/cast/${cast.author.username}/${cast.hash.substring(0, 8)}`);
+
+  return Response.json({
+    message: 'successfuly casted and indexed',
+    link: `/cast/${cast.author.username}/${cast.hash.substring(0, 8)}`
+  }, { status: 307 });
 };
 
 export async function POST(req: NextRequest) {
