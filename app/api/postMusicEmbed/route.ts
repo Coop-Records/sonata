@@ -1,6 +1,7 @@
 import postMusicEmbed from '@/lib/neynar/postMusicEmbed';
 import sendBotCast from '@/lib/sonata/sendBotCast';
 import upsertCast from '@/lib/supabase/upsertCast';
+import { redirect } from 'next/navigation';
 import { NextRequest } from 'next/server';
 
 const getResponse = async (req: NextRequest) => {
@@ -28,6 +29,7 @@ const getResponse = async (req: NextRequest) => {
     await upsertCast(cast);
     sendBotCast(cast);
 
+    return redirect(`/cast/${cast.author.username}/${cast.hash.substring(0, 8)}`);
   } catch (error) {
     console.error('Error:', error);
   }
