@@ -1,10 +1,11 @@
 import { ChannelStats } from "@/types/ChannelStats";
-import { PrivyLinkedAccount, PrivyUser } from "@/types/Privy";
+import { PrivyUser } from "@/types/Privy";
+import extractAddresses from "./extractAddresses";
 import getAllChannels from "./getAllChannels";
 import getPrivyIdentifier from "./getIdentifier";
 import pregenerateChannelWallet from "./pregenerateChannelWallet";
 
-type ChannelStatsWithAddresses = (ChannelStats & { addresses: PrivyLinkedAccount[] })[];
+type ChannelStatsWithAddresses = (ChannelStats & { addresses: string[] })[];
 
 async function combinePrivyAccountWithChannelStats(channelStats: ChannelStats[]) {
   let wallets: PrivyUser[] = await getAllChannels();
@@ -17,7 +18,10 @@ async function combinePrivyAccountWithChannelStats(channelStats: ChannelStats[])
       )
     );
     if (index >= 0) {
-      accumulator.push({ ...channelStats[index], addresses: wallet.linked_accounts });
+      accumulator.push({
+        ...channelStats[index],
+        addresses: extractAddresses(wallet.linked_accounts)
+      });
       channelStats.splice(index, 1);
     }
     return accumulator;
@@ -40,7 +44,10 @@ async function combinePrivyAccountWithChannelStats(channelStats: ChannelStats[])
         )
       );
 
-      return { ...(channelStats[index] ?? []), addresses: wallet.linked_accounts };
+      return {
+        ...(channelStats[index] ?? []),
+        addresses: extractAddresses(wallet.linked_accounts)
+      };
     })
   );
 }
