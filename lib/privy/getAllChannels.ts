@@ -9,6 +9,7 @@ async function getAllChannels() {
   do {
     const response = await privyClient('/users?' + query.toString(), { method: 'GET' });
     const json: PrivyBatchUserResponse = await response.json();
+    if (!json?.data?.length) break;
 
     channels.push(...json.data);
 

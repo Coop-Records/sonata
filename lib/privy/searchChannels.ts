@@ -15,6 +15,7 @@ async function searchChannels(channelIds: string[]) {
       }
     );
     const json: PrivyBatchUserResponse = await response.json();
+    if (!json?.data?.length) break;
 
     channels.push(...json.data);
 
