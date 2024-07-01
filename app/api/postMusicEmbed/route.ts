@@ -1,23 +1,44 @@
 import postMusicEmbed from '@/lib/neynar/postMusicEmbed';
-import { NextRequest, NextResponse } from 'next/server';
+import sendBotCast from '@/lib/sonata/sendBotCast';
+import upsertCast from '@/lib/supabase/upsertCast';
+import { NextRequest } from 'next/server';
 
-const getResponse = async (req: NextRequest): Promise<NextResponse> => {
+const getResponse = async (req: NextRequest) => {
   const body = await req.json();
   const { signer_uuid, url } = body;
 
   const data = await postMusicEmbed(signer_uuid, url);
 
-  return NextResponse.json(
-    {
-      message: `success`,
-      data,
+  if (!data?.success || !data?.cast?.hash) {
+    return Response.json({ message: 'casting failed' }, { status: 400 });
+  }
+  console.log('new cast:', data);
+
+  const cast: any = {
+    timestamp: new Date().toISOString(),
+    parent_url: '',
+    root_parent_url: '',
+    reactions: {
+      likes_count: 0,
     },
-    { status: 200 },
+    hash: data.cast.hash,
+    embeds: [{ url }],
+    author: data.cast.author,
+  };
+  const { success } = await upsertCast(cast);
+
+  if (!success) return Response.json(
+    { message: 'successfuly casted', data },
+    { status: 200 }
   );
+  sendBotCast(cast);
+
+  return Response.json({
+    message: 'successfuly casted and indexed',
+    link: `/cast/${cast.author.username}/${cast.hash.substring(0, 8)}`
+  }, { status: 307 });
 };
 
-export async function POST(req: NextRequest): Promise<Response> {
+export async function POST(req: NextRequest) {
   return getResponse(req);
 }
-
-export const dynamic = 'force-dynamic';
