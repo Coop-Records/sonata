@@ -1,8 +1,8 @@
 import filterCastsByChannels from '@/lib/filterCastsByChannels';
-import createPostReply from '@/lib/neynar/createPostReply';
-import getChannelIdFromCast from '@/lib/neynar/getChannelIdFromCast';
 import getPlatformFeedFromTime from '@/lib/neynar/getPlatformFeedFromTime';
+import sendBotCast from '@/lib/sonata/sendBotCast';
 import getSpotifyWithAlternatives from '@/lib/spotify/getSpotifyWithAlternatives';
+import upsertCast from '@/lib/supabase/upsertCast';
 import filterZoraFeed from '@/lib/zora/filterCasts';
 import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { createClient } from '@supabase/supabase-js';
@@ -11,7 +11,6 @@ import { NextResponse } from 'next/server';
 
 const SUPABASE_URL = process.env.SUPABASE_URL as string;
 const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
-const BOT_SIGNER_UUID = process.env.BOT_SIGNER_UUID as string;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
   auth: {
@@ -33,8 +32,8 @@ const processSingleEntry = async (cast: Cast) => {
   const address = cast?.author?.verifications ? cast?.author?.verifications : undefined;
 
   if (!isEmpty(address)) {
-    await createCast(cast);
-    await sendBotCast(cast);
+    const data = await upsertCast(cast);
+    if (data.statusText == 'Created') await sendBotCast(cast);
   }
 };
 
@@ -95,47 +94,6 @@ const getResponse = async (): Promise<NextResponse> => {
   console.log(data, error);
   return NextResponse.json({ message: 'success', allEntries }, { status: 200 });
 };
-
-async function createCast(cast: Cast) {
-  const likes = (cast as any).reactions.likes_count;
-  const alternativeEmbeds = (cast as any).alternativeEmbeds;
-  const channelId = getChannelIdFromCast(cast);
-
-  const { error } = await supabase.from('posts').upsert(
-    {
-      post_hash: cast.hash,
-      likes,
-      created_at: new Date(cast.timestamp),
-      embeds: cast.embeds,
-      author: cast.author,
-      channelId,
-      alternativeEmbeds,
-      authorFid: cast.author.fid,
-    },
-    {
-      onConflict: 'post_hash',
-    },
-  );
-
-  console.log('jobs::getNewCasts', `Successfully created/updated ${cast.hash}`);
-
-  if (error) {
-    console.error('Error calling function:', error);
-    return null;
-  }
-
-  return { success: true };
-}
-
-async function sendBotCast(cast: Cast) {
-  await createPostReply(
-    BOT_SIGNER_UUID,
-    cast.hash,
-    `This song is now available on @sonatatips where you earn NOTES when people tip you.\n\nSee you over there!\n\nhttps://sonata.tips/cast/${cast.author.username}/${cast.hash.substring(0, 8)}`,
-  );
-
-  return { success: true };
-}
 
 export async function GET(): Promise<Response> {
   const response = await getResponse().catch((error) => {
