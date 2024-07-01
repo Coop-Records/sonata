@@ -4,7 +4,7 @@ import getAllChannels from "./getAllChannels";
 import getPrivyIdentifier from "./getIdentifier";
 import pregenerateChannelWallet from "./pregenerateChannelWallet";
 
-type ChanneStatsWithAddresses = (ChannelStats & { addresses: PrivyLinkedAccount[] })[];
+type ChannelStatsWithAddresses = (ChannelStats & { addresses: PrivyLinkedAccount[] })[];
 
 async function combinePrivyAccountWithChannelStats(channelStats: ChannelStats[]) {
   let wallets: PrivyUser[] = await getAllChannels();
@@ -12,7 +12,7 @@ async function combinePrivyAccountWithChannelStats(channelStats: ChannelStats[])
 
   const channels = wallets.reduce((accumulator, wallet) => {
     const index = channelStats.findIndex(
-      stat => wallet.linked_accounts.some(
+      stat => wallet.linked_accounts?.some(
         account => account.address == getPrivyIdentifier(stat.channelId)
       )
     );
@@ -21,8 +21,8 @@ async function combinePrivyAccountWithChannelStats(channelStats: ChannelStats[])
       channelStats.splice(index, 1);
     }
     return accumulator;
-  }, [] as ChanneStatsWithAddresses);
-  console.log('combinePrivyAccountWithChannelStats count', wallets.length);
+  }, [] as ChannelStatsWithAddresses);
+  console.log('foundWalletChannels count', channels.length);
 
   if (channelStats.length == 0) return channels;
 
@@ -35,7 +35,7 @@ async function combinePrivyAccountWithChannelStats(channelStats: ChannelStats[])
   return channels.concat(
     wallets.map(wallet => {
       const index = channelStats.findIndex(
-        stat => wallet.linked_accounts.some(
+        stat => wallet.linked_accounts?.some(
           account => account.address == getPrivyIdentifier(stat.channelId)
         )
       );

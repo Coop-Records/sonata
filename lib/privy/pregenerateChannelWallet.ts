@@ -6,8 +6,8 @@ function pregenerateChannelWallet(channelId: string) {
     create_embedded_wallet: true,
     linked_accounts: [
       {
-        "address": getPrivyIdentifier(channelId),
-        "type": "email"
+        address: getPrivyIdentifier(channelId),
+        type: "email"
       }
     ],
   };
