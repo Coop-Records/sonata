@@ -2,7 +2,12 @@ import 'server-only';
 
 import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import getChannelIdFromCast from '../neynar/getChannelIdFromCast';
-import { supabaseClient } from './client';
+import { createClient } from '@supabase/supabase-js';
+
+const SUPABASE_URL = process.env.SUPABASE_URL!;
+const SUPABASE_KEY = process.env.SUPABASE_KEY!;
+
+export const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 async function upsertCast(cast: Cast) {
   const likes = (cast as any).reactions.likes_count;

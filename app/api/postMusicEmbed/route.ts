@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import { NextRequest } from 'next/server';
 
 const getResponse = async (req: NextRequest) => {
+  let cast: any;
   const body = await req.json();
   const { signer_uuid, url } = body;
 
@@ -15,7 +16,7 @@ const getResponse = async (req: NextRequest) => {
     if (!data?.cast?.hash) throw new Error('No hash provided');
     if (!data.cast?.author?.fid) throw new Error('No author provided');
 
-    const cast: any = {
+    cast = {
       timestamp: new Date().toISOString(),
       parent_url: '',
       root_parent_url: '',
@@ -26,14 +27,14 @@ const getResponse = async (req: NextRequest) => {
       embeds: [{ url }],
       author: data.cast.author,
     };
-    await upsertCast(cast);
-    sendBotCast(cast);
+    const {success} = await upsertCast(cast);
+    if(success) sendBotCast(cast);
 
-    return redirect(`/cast/${cast.author.username}/${cast.hash.substring(0, 8)}`);
   } catch (error) {
     console.error('Error:', error);
   }
-  return Response.json({ message: 'success', data }, { status: 200 });
+
+  redirect(`/cast/${cast.author.username}/${cast.hash.substring(0, 8)}`);
 };
 
 export async function POST(req: NextRequest) {
