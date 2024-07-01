@@ -14,7 +14,7 @@ const useTipsBanner = () => {
           setTips(formattedTips);
         }
       } catch (error: any) {
-        console.error('SWEETS', error);
+        console.error(error);
       }
     };
 
