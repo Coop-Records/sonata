@@ -32,8 +32,8 @@ const processSingleEntry = async (cast: Cast) => {
   const address = cast?.author?.verifications ? cast?.author?.verifications : undefined;
 
   if (!isEmpty(address)) {
-    await upsertCast(cast);
-    await sendBotCast(cast);
+    const data = await upsertCast(cast);
+    if (data.statusText == 'Created') await sendBotCast(cast);
   }
 };
 

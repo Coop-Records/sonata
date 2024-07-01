@@ -9,7 +9,7 @@ async function upsertCast(cast: Cast) {
   const alternativeEmbeds = (cast as any).alternativeEmbeds;
   const channelId = getChannelIdFromCast(cast);
 
-  const { error } = await supabaseClient.from('posts').upsert(
+  const { error, statusText } = await supabaseClient.from('posts').upsert(
     {
       post_hash: cast.hash,
       likes,
@@ -24,15 +24,12 @@ async function upsertCast(cast: Cast) {
       onConflict: 'post_hash',
     },
   );
-
-  console.log(`Successfully created/updated ${cast.hash}`);
-
   if (error) {
-    console.error('Error calling function:', error);
-    return null;
+    console.error('Error upserting cast:', error);
+    return { success: false, statusText };
   }
-
-  return { success: true };
+  console.log(statusText, 'cast(hash):', cast.hash);
+  return { success: true, statusText };
 }
 
 export default upsertCast;
