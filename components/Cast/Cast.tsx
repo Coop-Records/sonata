@@ -13,15 +13,15 @@ import { Separator } from '@/components/ui/separator';
 import { timeFromNow } from '@/lib/utils';
 import UpvoteDownvote from '../UpvoteDownvote';
 import { isNil } from 'lodash';
-import Collect from './Collect';
+import CollectButton from './CollectButton';
+import { EmbedUrl } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 
 const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
   const embed = findValidEmbed(cast);
-  const url = embed?.url;
-
+  const { url } = embed as EmbedUrl;
+  const isCollectible = url?.includes('sound.xyz') || url?.includes('zora.co');
   const { author } = cast;
   const { verifications } = author;
-
   const [metadata, setMetadata] = useState<TrackMetadata>();
 
   useEffect(() => {
@@ -36,6 +36,7 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
       }
     };
     init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url]);
 
   if (!metadata) return <></>;
@@ -52,7 +53,7 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
       <MediaPlayer metadata={metadata} />
       <div className="flex gap-2">
         <UpvoteDownvote verifications={verifications} cast={cast} />
-        <Collect metadata={metadata} />
+        {isCollectible && <CollectButton collectUrl={url} />}
         <TipButton verifications={verifications} cast={cast} currency="DEGEN" className="ml-auto" />
         <Like cast={cast} />
         <Share cast={cast} />
