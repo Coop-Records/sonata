@@ -1,7 +1,7 @@
 export interface PrivyLinkedAccount {
   type: "wallet" | "email";
   address: string;
-  chain_type?: string; // cuurently EVM only
+  chain_type?: string; // currently supporting EVM only
   verified_at: number;
 };
 
