@@ -1,12 +1,14 @@
+export interface PrivyLinkedAccount {
+  type: "wallet" | "email";
+  address: string;
+  chain_type?: string; // cuurently EVM only
+  verified_at: number;
+};
+
 export interface PrivyUser {
   id: string;
   created_at: number;
-  linked_accounts: {
-    type: "wallet" | "email";
-    address: string;
-    chain_type?: string; // cuurently EVM only
-    verified_at: number;
-  }[]
+  linked_accounts: PrivyLinkedAccount[];
 }
 
 export interface PrivyBatchUserResponse {
