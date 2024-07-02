@@ -1,10 +1,12 @@
 import { useEffect, useRef } from 'react';
 
 const useHorizontalScroll = () => {
-  const scrollerRef = useRef(null);
+  const scrollerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const scroller: any = scrollerRef.current;
+    const scroller = scrollerRef.current;
+    if(!scroller) return;
+
     let startOffset = 0;
 
     const autoScroll = () => {
@@ -19,10 +21,18 @@ const useHorizontalScroll = () => {
       });
     };
 
-    const interval = setInterval(autoScroll, 16);
+    let interval = setInterval(autoScroll, 16);
+
+    const playScroll = ()=> interval = setInterval(autoScroll, 16);
+    const pauseScroll = ()=> clearInterval(interval);
+
+    scroller.addEventListener('mouseenter',pauseScroll);
+    scroller.addEventListener('mouseleave', playScroll);
 
     return () => {
       clearInterval(interval);
+      scroller.removeEventListener('mouseenter', pauseScroll);
+      scroller.removeEventListener('mouseleave', playScroll);
     };
   }, []);
 
