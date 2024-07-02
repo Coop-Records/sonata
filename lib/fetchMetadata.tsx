@@ -10,5 +10,6 @@ export default async function fetchMetadata(url: string, cast: SupabasePost) {
   if (url.includes('soundcloud')) return await getSoundcloudTrackMetadata(url, cast);
   if (url.includes('sound.xyz')) return await getSoundTrackMetadata(url, cast);
   if (url.includes('youtube.com')) return await getYoutubeTrackMetadata(url, cast);
+  if (url.includes('youtu.be')) await getYoutubeTrackMetadata(url, cast);
   if (url.includes('ipfs://')) return await getZoraTrackMetadata(url, cast);
 }
