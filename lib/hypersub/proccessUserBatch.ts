@@ -1,10 +1,9 @@
-
-import { supabaseServerClient as supabase } from "../supabase/client";
+import { supabaseServerClient } from "../supabase/serverClient";
 import checkAddressBalances from "./checkAddressBalances";
 import updateSupabaseEntries from "./updateSupabaseEntries";
 
 const processUserBatch = async (offset = 0, limit = 1000) => {
-  const { data: fids, error } = await supabase
+  const { data: fids, error } = await supabaseServerClient
     .from('tips')
     .select('fid, wallet_address')
     .range(offset, offset + limit - 1);

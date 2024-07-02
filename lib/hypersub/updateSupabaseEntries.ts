@@ -1,8 +1,8 @@
-import { supabaseServerClient as supabase } from "../supabase/client";
+import { supabaseServerClient } from "../supabase/serverClient";
 
 const updateSupabaseEntries = (
   users: { fid: number, hasBalance: boolean }[]
-) => supabase.from('tips').upsert(
+) => supabaseServerClient.from('tips').upsert(
   users.map(user => {
     const now = user.hasBalance ? new Date().toISOString() : null;
 
