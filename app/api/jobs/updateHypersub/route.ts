@@ -18,7 +18,12 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
   },
 });
 
-const fetchUserData = async (fids: string[]): Promise<any> => {
+const BASEpublicServerClient = createPublicClient({
+  chain: base,
+  transport: http(`https://base-mainnet.g.alchemy.com/v2/${BASEAlchemyKey}`),
+});
+
+const fetchUserData = async (fids: string[]) => {
   const options = {
     method: 'GET',
     headers: { accept: 'application/json', api_key: NEYNAR_API_KEY },
@@ -32,69 +37,75 @@ const fetchUserData = async (fids: string[]): Promise<any> => {
   return response.json();
 };
 
-const checkBalances = async (verifications: string[]): Promise<boolean> => {
-  const BASEpublicServerClient = createPublicClient({
-    chain: base,
-    transport: http(`https://base-mainnet.g.alchemy.com/v2/${BASEAlchemyKey}`),
-  });
-
-  for (const address of verifications) {
-    const balance = (await BASEpublicServerClient.readContract({
+const checkBalances = async (verifications: string[]) => {
+  return BASEpublicServerClient.multicall({
+    contracts: verifications.map(address => ({
       address: hypersubContractAddress,
-      abi: HyperSub,
+      abi: HyperSub as any,
       functionName: 'balanceOf',
       args: [address],
-    })) as number;
-
-    if (balance > 0) {
-      return true;
-    }
-  }
-
-  return false;
+    })),
+    batchSize: 2000
+  });
 };
 
-const updateSupabaseEntry = async (fid: string, hasBalance: boolean): Promise<void> => {
+const updateSupabaseEntry = async (fid: number, hasBalance: boolean): Promise<void> => {
   const now = new Date().toISOString();
   const updateData = hasBalance
     ? { hypersub_subscribed_since: now }
     : { hypersub_subscribed_since: null };
 
-  await supabase
-    .from('tips')
-    .update(updateData)
-    .eq('fid', fid)
-    .is('hypersub_subscribed_since', null);
+  await supabase.from('tips').update(updateData).eq('fid', fid);
 };
 
-const getResponse = async (): Promise<NextResponse> => {
-  'use server';
-  const { data: fids, error } = await supabase.from('tips').select('fid');
-  if (error) {
-    return NextResponse.json({ message: 'Error retrieving fids', error }, { status: 500 });
-  }
+const processUsers = async (offset = 0, limit = 1000) => {
+  const { data: fids, error } = await supabase
+    .from('tips')
+    .select('fid')
+    .range(offset, offset + limit - 1);
+  if (error) return { count: 0, error };
 
-  const fidChunks = [];
-  const chunkSize = 10; // Reduce chunk size for more parallel batches
+  const users = [];
+  const chunkSize = 100; // neynar max : 100
+
   for (let i = 0; i < fids.length; i += chunkSize) {
-    fidChunks.push(fids.slice(i, i + chunkSize));
+    const chunk = fids.slice(i, i + chunkSize);
+    const data = await fetchUserData(chunk.map((fid: any) => fid.fid));
+
+    users.push(
+      ...data.users.map((user: any) => (
+        { fid: user.fid, verifications: user.verifications }
+      ))
+    );
   }
 
-  const processChunks = fidChunks.map(async (chunk) => {
-    const { users } = await fetchUserData(chunk.map((fid: any) => fid.fid));
-    const results = await Promise.all(
-      users.map(async (user: any) => {
-        const hasBalance = await checkBalances(user.verifications);
-        await updateSupabaseEntry(user.fid, hasBalance);
-        return { fid: user.fid, hasBalance }; // Return result if needed
-      }),
-    );
-    return results;
-  });
+  const allBalances = await checkBalances(users.flatMap((user: any) => user.verifications));
 
-  await Promise.all(processChunks);
+  await Promise.all(users.map(async (user) => {
+    const balances = allBalances.splice(0, user.verifications.length);
+    const hasBalance = balances.some(result => result?.result);
 
-  return NextResponse.json({ message: 'success' }, { status: 200 });
+    await updateSupabaseEntry(user.fid, hasBalance);
+    return { fid: user.fid, hasBalance }; // Return result if needed
+  }));
+
+  return { count: fids.length, error };
+};
+
+const getResponse = async () => {
+  let offset = 0;
+  const limit = 1000;
+
+  do {
+    const { count, error } = await processUsers(offset);
+
+    if (error) return Response.json(error, { status: 500 });
+    if (count < limit) break;
+
+    offset += limit;
+  } while (offset)
+
+  return Response.json({ message: 'success' });
 };
 
 export async function GET(): Promise<Response> {
