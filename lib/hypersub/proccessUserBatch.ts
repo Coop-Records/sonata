@@ -9,20 +9,27 @@ const processUserBatch = async (offset = 0, limit = 1000) => {
     .range(offset, offset + limit - 1);
   if (error) return { count: 0, error };
 
-  const allBalances = await checkAddressBalances(fids.flatMap((fid) => fid.wallet_address));
+  const allBalances = await checkAddressBalances(fids.map((fid) => fid.wallet_address));
 
   let updateError;
-  await Promise.all(fids.map(async (user, i) => {
-    const balance = allBalances[i];
-    const hasBalance = !!balance?.result;
+  const chunkSize = 150;
 
-    const result = await updateSupabaseEntry(user.fid, hasBalance);
+  for (let i = 0; i < fids.length; i += chunkSize) {
+    const fidChunk = fids.slice(i, i + chunkSize);
+    const balancesChunk = allBalances.slice(i, i + chunkSize);
 
-    if (result.error) updateError = result.error;
+    await Promise.all(
+      fidChunk.map(async (user, index) => {
+        const balance = balancesChunk[index];
+        const hasBalance = !!balance?.result;
 
-    return { hasBalance, fid: user.fid };
-  }));
+        const result = await updateSupabaseEntry(user.fid, hasBalance);
+        if (result.error) updateError = result.error;
 
+        return { hasBalance, fid: user.fid };
+      })
+    );
+  }
   return { count: fids.length, error: error ?? updateError };
 };
 
