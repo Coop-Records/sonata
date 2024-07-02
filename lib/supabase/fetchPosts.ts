@@ -15,11 +15,9 @@ const fetchPosts = async (
 ) => {
   const followingFids = [];
   if (feedType === FeedType.Following) {
-    const baseUrl = process.env.API_URL;
-    const followingUrl = new URL(`/api/neynar/getFollowing?fid=${fid}`, baseUrl).toString();
-    const following = await fetch(followingUrl).then((response) => response.json());
+    const response = await fetch(`/api/neynar/getFollowing?fid=${fid}`);
+    const following = await response.json();
     followingFids.push(...following.users.map((user: { fid: number }) => user.fid));
-    followingFids.push(fid);
   }
 
   const query = getBaseQuery(supabaseClient, feedType, followingFids);
