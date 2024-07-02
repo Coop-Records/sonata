@@ -1,4 +1,5 @@
 import getUser from '@/lib/sonata/getUser';
+import formatNumber from './formatNumber';
 
 const getFormattedTips = async (rawTips: any[]) =>
   await Promise.all(
@@ -6,7 +7,9 @@ const getFormattedTips = async (rawTips: any[]) =>
       const senderUser = await getUser(tip.sender);
       const receiverUser = await getUser(tip.receiver);
       return {
-        text: `@${senderUser.username} tipped ${tip.amount} notes to @${receiverUser.username}`,
+        sender: senderUser.username,
+        receiver: receiverUser.username,
+        amount: formatNumber(tip.amount),
         imgUrl: senderUser.pfp_url,
       };
     }),
