@@ -6,7 +6,6 @@ import { createPublicClient, http } from 'viem';
 
 const SUPABASE_URL = process.env.SUPABASE_URL as string;
 const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
-const NEYNAR_API_KEY = process.env.NEYNAR_API_KEY as string;
 const BASEAlchemyKey = process.env.BASE_ALCHEMY_KEY as string;
 const hypersubContractAddress = process.env.HYPERSUB_CONTRACT_ADDRESS as `0x${string}`;
 
@@ -37,7 +36,7 @@ const checkBalances = async (verifications: string[]) => {
 
 const updateSupabaseEntries = (
   users: { fid: number, hasBalance: boolean }[]
-) => supabase.from('tips').update(
+) => supabase.from('tips').upsert(
   users.map(user => {
     const now = user.hasBalance ? new Date().toISOString() : null;
 
