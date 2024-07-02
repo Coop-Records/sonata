@@ -1,6 +1,6 @@
 import { supabaseServerClient } from "../supabase/serverClient";
 import checkAddressBalances from "./checkAddressBalances";
-import updateSupabaseEntries from "./updateSupabaseEntries";
+import updateSupabaseEntry from "./updateSupabaseEntry";
 
 const processUserBatch = async (offset = 0, limit = 1000) => {
   const { data: fids, error } = await supabaseServerClient
@@ -11,16 +11,19 @@ const processUserBatch = async (offset = 0, limit = 1000) => {
 
   const allBalances = await checkAddressBalances(fids.flatMap((fid) => fid.wallet_address));
 
-  const updated = await updateSupabaseEntries(fids.map((user, i) => {
+  let updateError;
+  await Promise.all(fids.map(async (user, i) => {
     const balance = allBalances[i];
     const hasBalance = !!balance?.result;
 
-    return { fid: user.fid, hasBalance };
+    const result = await updateSupabaseEntry(user.fid, hasBalance);
+
+    if (result.error) updateError = result.error;
+
+    return { hasBalance, fid: user.fid };
   }));
 
-  console.info('updated info:', updated.statusText, updated.count, updated.error);
-
-  return { count: fids.length, error };
+  return { count: fids.length, error: error ?? updateError };
 };
 
 export default processUserBatch;
