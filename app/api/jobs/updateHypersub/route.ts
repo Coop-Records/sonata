@@ -23,20 +23,6 @@ const BASEpublicServerClient = createPublicClient({
   transport: http(`https://base-mainnet.g.alchemy.com/v2/${BASEAlchemyKey}`),
 });
 
-const fetchUserData = async (fids: string[]) => {
-  const options = {
-    method: 'GET',
-    headers: { accept: 'application/json', api_key: NEYNAR_API_KEY },
-  } as any;
-  const queryParams = new URLSearchParams({ fids: fids.join(',') });
-
-  const response = await fetch(
-    `https://api.neynar.com/v2/farcaster/user/bulk?${queryParams}`,
-    options,
-  );
-  return response.json();
-};
-
 const checkBalances = async (verifications: string[]) => {
   return BASEpublicServerClient.multicall({
     contracts: verifications.map(address => ({
@@ -49,45 +35,33 @@ const checkBalances = async (verifications: string[]) => {
   });
 };
 
-const updateSupabaseEntry = async (fid: number, hasBalance: boolean): Promise<void> => {
-  const now = new Date().toISOString();
-  const updateData = hasBalance
-    ? { hypersub_subscribed_since: now }
-    : { hypersub_subscribed_since: null };
+const updateSupabaseEntries = (
+  users: { fid: number, hasBalance: boolean }[]
+) => supabase.from('tips').update(
+  users.map(user => {
+    const now = user.hasBalance ? new Date().toISOString() : null;
 
-  await supabase.from('tips').update(updateData).eq('fid', fid);
-};
+    return { fid: user.fid, hypersub_subscribed_since: now };
+  })
+);
 
 const processUsers = async (offset = 0, limit = 1000) => {
   const { data: fids, error } = await supabase
     .from('tips')
-    .select('fid')
+    .select('fid, wallet_address')
     .range(offset, offset + limit - 1);
   if (error) return { count: 0, error };
 
-  const users = [];
-  const chunkSize = 100; // neynar max : 100
+  const allBalances = await checkBalances(fids.flatMap((fid) => fid.wallet_address));
 
-  for (let i = 0; i < fids.length; i += chunkSize) {
-    const chunk = fids.slice(i, i + chunkSize);
-    const data = await fetchUserData(chunk.map((fid: any) => fid.fid));
+  const updated = await updateSupabaseEntries(fids.map((user, i) => {
+    const balance = allBalances[i];
+    const hasBalance = !!balance?.result;
 
-    users.push(
-      ...data.users.map((user: any) => (
-        { fid: user.fid, verifications: user.verifications }
-      ))
-    );
-  }
-
-  const allBalances = await checkBalances(users.flatMap((user: any) => user.verifications));
-
-  await Promise.all(users.map(async (user) => {
-    const balances = allBalances.splice(0, user.verifications.length);
-    const hasBalance = balances.some(result => result?.result);
-
-    await updateSupabaseEntry(user.fid, hasBalance);
-    return { fid: user.fid, hasBalance }; // Return result if needed
+    return { fid: user.fid, hasBalance };
   }));
+
+  console.info('updated info:', updated.statusText, updated.count, updated.error);
 
   return { count: fids.length, error };
 };
