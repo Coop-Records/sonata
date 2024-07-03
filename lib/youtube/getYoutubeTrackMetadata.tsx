@@ -3,8 +3,10 @@ import { SupabasePost } from '@/types/SupabasePost';
 import getYoutubeVideoData from '../getYoutubeVideoData';
 
 const getYoutubeTrackMetadata = async (url: string, cast: SupabasePost) => {
-  const queryParams = new URLSearchParams(url.split('?')[1]);
-  const videoId = queryParams.get('v');
+  const urlData = new URL(url);
+  let videoId = urlData.searchParams.get('v');
+  if (!videoId) videoId = urlData.pathname.replace('/', '');
+
   if (!videoId) {
     throw new Error('Could not find video id in url');
   }
