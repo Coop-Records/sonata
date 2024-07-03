@@ -1,5 +1,6 @@
 import getUser from '@/lib/neynar/getNeynarUser';
 import verifySignerUUID from '@/lib/neynar/verifySigner';
+import getChannelTipInfo from '@/lib/sonata/getChannelTipInfo';
 import { stack } from '@/lib/stack/client';
 import { createClient } from '@supabase/supabase-js';
 import { isEmpty, isNil } from 'lodash';
@@ -61,7 +62,19 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
     );
   }
 
-  stack.track(`tip_from_${tipperFid}`, { account: recipientWalletAddress, points: used_tip });
+  let receiverAmount = used_tip;
+  const tipInfo = await getChannelTipInfo(req, used_tip);
+
+  if (tipInfo) {
+    const { channelAddress, channelAmount } = tipInfo;
+    stack.track(`tip_from_${tipperFid}`, { account: channelAddress, points: channelAmount });
+
+    receiverAmount = Number(used_tip) - tipInfo.channelAmount;
+    console.log('getChannelTipInfo', channelAddress, channelAmount);
+    console.log('receiverAmount', receiverAmount);
+  }
+
+  stack.track(`tip_from_${tipperFid}`, { account: recipientWalletAddress, points: receiverAmount });
 
   return NextResponse.json(
     {
