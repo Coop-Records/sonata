@@ -1,4 +1,4 @@
-import { FEE } from "@/lib/consts";
+import { CHANNELS, FEE } from "@/lib/consts";
 import pregenerateChannelWallet from "../../privy/pregenerateChannelWallet";
 import searchChannels from "../../privy/searchChannels";
 
@@ -10,7 +10,8 @@ function getChannelId(url: string) {
 
 async function getChannelTipInfo(referer = '', amount: number | null = null) {
   const channelId = getChannelId(referer);
-  if (!channelId) return null;
+  if (!channelId || !CHANNELS.some(channel=>channel.value === channelId)) return null;
+
   try {
     let [channel] = await searchChannels([channelId]);
 
