@@ -7,10 +7,7 @@ const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-async function getUserTipInfo(req: Request) {
-  const body = await req.json();
-  const { signer_uuid, tipAmount } = body;
-
+async function getUserTipInfo(signer_uuid = '', tipAmount = 0, referer = '') {
   const { status, fid: tipperFid } = await verifySignerUUID(signer_uuid);
   if (!status) throw Error('Invalid Signer UUID');
 
@@ -28,7 +25,7 @@ async function getUserTipInfo(req: Request) {
   );
   if (amount <= 0) throw Error('Already reached max NOTES');
 
-  const tipInfo = await getChannelTipInfo(req, tipAmount);
+  const tipInfo = await getChannelTipInfo(referer, tipAmount);
 
   return {
     tipperFid,

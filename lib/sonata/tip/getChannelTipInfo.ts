@@ -9,8 +9,8 @@ function getChannelId(url: string) {
   return null;
 }
 
-async function getChannelTipInfo(req: Request, amount: number | null = null) {
-  const channelId = getChannelId(req.headers.get('referer') ?? '');
+async function getChannelTipInfo(referer = '', amount: number | null = null) {
+  const channelId = getChannelId(referer);
   if (!channelId) return null;
   try {
     let [channel] = await searchChannels([channelId]);
