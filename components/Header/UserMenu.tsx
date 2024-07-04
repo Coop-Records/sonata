@@ -19,7 +19,7 @@ export default function UserMenu() {
       <DropdownMenuTrigger asChild>
         <Avatar className="size-9 cursor-pointer">
           <AvatarImage className="object-cover object-center" src={user?.pfp_url} />
-          <AvatarFallback>{user?.display_name[0]}</AvatarFallback>
+          <AvatarFallback>{user?.display_name?.[0]}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="mr-2 min-w-52" alignOffset={100}>
