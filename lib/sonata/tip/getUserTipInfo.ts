@@ -1,11 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import verifySignerUUID from "../../neynar/verifySigner";
 import getChannelTipInfo from "./getChannelTipInfo";
-
-const SUPABASE_URL = process.env.SUPABASE_URL as string;
-const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+import supabase from '@/lib/supabase/serverClient';
 
 async function getUserTipInfo(signer_uuid = '', tipAmount = 0, referer = '') {
   const { status, fid: tipperFid } = await verifySignerUUID(signer_uuid);

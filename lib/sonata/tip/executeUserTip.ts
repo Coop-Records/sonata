@@ -1,11 +1,6 @@
 import { stack } from "@/lib/stack/client";
-import { createClient } from "@supabase/supabase-js";
+import supabase from '@/lib/supabase/serverClient';
 import getUserTipInfo from "./getUserTipInfo";
-
-const SUPABASE_URL = process.env.SUPABASE_URL as string;
-const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 async function executeUserTip(
   postHash: string,
