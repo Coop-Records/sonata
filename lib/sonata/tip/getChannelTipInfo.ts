@@ -21,7 +21,11 @@ async function getChannelTipInfo(referer = '', amount: number | null = null) {
     }
     const account = channel.linked_accounts.find(account => account.type === 'wallet')!;
 
-    return { channelAmount: Number(amount ?? 0) * FEE, channelAddress: account.address };
+    return {
+      channelAmount: Number(amount ?? 0) * FEE,
+      channelAddress: account.address,
+      channelId
+    };
   } catch (error) {
     console.error(error)
     return null;
