@@ -1,0 +1,43 @@
+import { stack } from "@/lib/stack/client";
+import { createClient } from "@supabase/supabase-js";
+import getUserTipInfo from "./getUserTipInfo";
+
+const SUPABASE_URL = process.env.SUPABASE_URL as string;
+const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+async function executeUserTip(
+  postHash: string,
+  { recipientFid: receiver, recipientWalletAddress }: any,
+  tipInfo: Awaited<ReturnType<typeof getUserTipInfo>>
+) {
+  const { error, data: post } = await supabase
+    .from('posts')
+    .select('points')
+    .eq('post_hash', postHash).single();
+  if (error) throw error;
+
+  const { allowableAmount: amount, tipperFid: sender, tip, channelTip } = tipInfo;
+  let receiverAmount = amount;
+
+  if (channelTip) {
+    const { channelAddress, channelAmount } = channelTip;
+    stack.track(`channel_tip_from_${sender}`, { account: channelAddress, points: channelAmount });
+
+    receiverAmount = amount - channelAmount;
+  }
+  stack.track(`tip_from_${sender}`, { account: recipientWalletAddress, points: receiverAmount });
+
+  const remaining_tip_allocation = tip.remaining_tip_allocation - amount;
+  const daily_tip_allocation = tip.daily_tip_allocation - amount;
+  const totalTipOnPost = receiverAmount + post.points;
+
+  supabase.from('tips').update({ remaining_tip_allocation, daily_tip_allocation }).eq('fid', sender);
+  supabase.from('posts').update({ points: totalTipOnPost }).eq('post_hash', postHash);
+  supabase.from('tips_activity_log').insert({ sender, receiver, amount: receiverAmount, postHash });
+
+  return { remainingTip: daily_tip_allocation, totalTipOnPost };
+}
+
+export default executeUserTip;
