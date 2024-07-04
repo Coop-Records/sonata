@@ -20,14 +20,18 @@ async function executeUserTip(
 
   const { allowableAmount: amount, tipperFid: sender, tip, channelTip } = tipInfo;
   let receiverAmount = amount;
+  const stackCalls = [];
 
   if (channelTip) {
     const { channelAddress, channelAmount } = channelTip;
-    stack.track(`channel_tip_from_${sender}`, { account: channelAddress, points: channelAmount });
+    stackCalls.push(stack.track(`channel_tip_from_${sender}`, { account: channelAddress, points: channelAmount }));
 
     receiverAmount = amount - channelAmount;
   }
-  stack.track(`tip_from_${sender}`, { account: recipientWalletAddress, points: receiverAmount });
+  stackCalls.unshift(stack.track(`tip_from_${sender}`, { account: recipientWalletAddress, points: receiverAmount }));
+
+  const [{ success }] = await Promise.all(stackCalls);
+  if (!success) throw Error('Could not stack');
 
   const remaining_tip_allocation = tip.remaining_tip_allocation - amount;
   const daily_tip_allocation = tip.daily_tip_allocation - amount;
