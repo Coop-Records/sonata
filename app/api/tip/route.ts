@@ -1,13 +1,13 @@
 import getUser from '@/lib/neynar/getNeynarUser';
 import executeUserTip from '@/lib/sonata/tip/executeUserTip';
-import getTipInfo from '@/lib/sonata/tip/getUserTipInfo';
+import getUserTipInfo from '@/lib/sonata/tip/getUserTipInfo';
 import { NextRequest, NextResponse } from 'next/server';
 
 const getResponse = async (req: NextRequest): Promise<NextResponse> => {
   const referer = req.headers.get('referer') ?? '';
   const { postHash, recipientFid, signer_uuid, tipAmount } = await req.json();
 
-  const tipInfo = await getTipInfo(signer_uuid, tipAmount, referer);
+  const tipInfo = await getUserTipInfo(signer_uuid, tipAmount, referer);
 
   if (tipInfo.tipperFid === recipientFid) throw Error('Can not tip yourself');
 
