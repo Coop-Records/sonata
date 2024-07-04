@@ -1,4 +1,4 @@
-export default async function getUsers(fids: number | number[]) {
+export default async function getUsers(fids: number[]) {
   const options = {
     method: 'GET',
     headers: { accept: 'application/json' },
@@ -11,7 +11,7 @@ export default async function getUsers(fids: number | number[]) {
 
     const response = await fetch(`/api/neynar/getUser?${queryParams}`, options);
     const { users } = await response.json();
-    return typeof fids === 'number' ? users[0] : users;
+    return users;
   } catch (error) {
     console.error(error);
     return { error };
