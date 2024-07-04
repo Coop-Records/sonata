@@ -1,9 +1,8 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { useNeynarProvider } from './NeynarProvider';
 import SignInDialog from '@/components/SignInDialog';
-import { useMediaQuery } from 'usehooks-ts';
 import { CHANNELS } from '@/lib/consts';
-import sortChannels from '@/lib/sortChannels';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { useMediaQuery } from 'usehooks-ts';
+import { useNeynarProvider } from './NeynarProvider';
 
 type UiContextType = {
   menuOpen: boolean;
@@ -32,9 +31,17 @@ export default function UiProvider({ children }: any) {
   useEffect(() => { if (signer) setIsSignInDialogOpen(false) }, [signer]);
 
   useEffect(() => {
-    sortChannels().then(data => setMenuItems(
-      data.map(channelId => CHANNELS.find(channel => channel.value == channelId)!)
-    ));
+    fetch(
+      '/api/channel/stats?apply_channel_filter=true&only_channel_ids=true',
+      { cache: 'force-cache' }
+    )
+      .then(res => res.json())
+      .then(data => {
+        const items = data?.channels?.map(
+          (channelId: string) => CHANNELS.find(channel => channel.value == channelId)!
+        );
+        if (items) setMenuItems(items);
+      });
   }, []);
 
   return (
