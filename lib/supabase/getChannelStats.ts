@@ -2,7 +2,7 @@ import { ChannelAccumulator, ChannelStats } from "@/types/ChannelStats";
 import { CHANNELS } from "../consts";
 import { supabaseClient } from "./client";
 
-async function getChannelStats(includeNotes = false, filterChannels = false) {
+async function getChannelStats(filterChannels = false) {
   const limit = 1000;
   let offset = 0;
   const entries = {} as ChannelAccumulator;
@@ -46,7 +46,7 @@ async function getChannelStats(includeNotes = false, filterChannels = false) {
       numberOfCurators: entries[channelId].uniqueAuthors.size,
       numberOfSongs: entries[channelId].uniquePosts.size,
     };
-    if (includeNotes) channel.numberOfNotes = entries[channelId].notes;
+    channel.numberOfNotes = entries[channelId].notes;
 
     return channel;
   });
