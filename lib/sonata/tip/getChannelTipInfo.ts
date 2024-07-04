@@ -1,7 +1,7 @@
 import pregenerateChannelWallet from "../../privy/pregenerateChannelWallet";
 import searchChannels from "../../privy/searchChannels";
 
-const FEE = Math.min(Number(process.env.CHANNEL_FEE ?? 10) / 100, 1);
+const FEE = .1;
 
 function getChannelId(url: string) {
   const match = url.match(/^(\w+):\/\/([^/]+)\/channel\/(\w+)$/);
