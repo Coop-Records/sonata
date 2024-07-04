@@ -1,10 +1,8 @@
 import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest): Promise<Response> {
-  const { searchParams } = new URL(req.url);
-  const fid = searchParams.get('fid') as string;
-  let first = true,
-    cursor = null;
+  const fid = req.nextUrl.searchParams.get('fid');
+  if (!fid) return Response.json({ message: 'fid required' }, { status: 400 })
 
   const options = {
     method: 'GET',
@@ -15,39 +13,15 @@ export async function GET(req: NextRequest): Promise<Response> {
   } as any;
 
   try {
-    const params: any = { fid, limit: '100' };
-    const users = [];
-    while (first || cursor) {
-      first = false;
-      if (cursor) {
-        params.cursor = cursor;
-      }
-      const queryParams = new URLSearchParams(params);
+    const queryParams = new URLSearchParams({ fid, limit: '3' });
 
-      const response = await fetch(
-        `https://api.neynar.com/v2/farcaster/followers?${queryParams}`,
-        options,
-      );
-      const data = await response.json();
-      if (data.users) {
-        users.push(...data.users.map((user: any) => user.user));
-      }
-      cursor = data.next.cursor;
-    }
+    const response = await fetch(`https://api.neynar.com/v2/farcaster/followers?${queryParams}`, options);
+    const data = await response.json();
+    const users = data?.users?.map((follower: any) => follower.user) ?? [];
 
-    return new Response(JSON.stringify({ users }), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    return Response.json({ users });
   } catch (error) {
     console.error(error);
-    return new Response(JSON.stringify({ error: 'getFollowers Failed' }), {
-      status: 400,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    return Response.json({ message: 'getFollwers failed' }, { status: 500 });
   }
 }
