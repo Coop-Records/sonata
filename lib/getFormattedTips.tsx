@@ -1,9 +1,9 @@
-import getUser from '@/lib/sonata/getUser';
 import formatNumber from './formatNumber';
+import getUsers from './sonata/getUsers';
 
 const getFormattedTips = async (rawTips: any[]) => {
   const uniqueFids = new Set(rawTips.flatMap(tip => [tip.sender, tip.receiver]));
-  const users:any[] = await getUser(Array.from(uniqueFids));
+  const users:any[] = await getUsers(Array.from(uniqueFids));
 
   return rawTips.map((tip: any) => {
     const senderUser = users.find(user => user.fid == tip.sender);
