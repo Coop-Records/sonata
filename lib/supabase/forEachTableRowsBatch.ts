@@ -11,7 +11,6 @@ const forEachTableRowsBatch = async (
   const batchSize = size > 1000 ? (size / SUPABASE_LIMIT) : 1;
   const total = await supabase.from(tableName).select('id', { count: 'exact' });
 
-
   if (total.error) throw total.error;
   if (!total.count) throw Error('No count found');
 
