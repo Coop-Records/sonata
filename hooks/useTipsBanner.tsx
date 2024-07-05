@@ -7,7 +7,7 @@ const useTipsBanner = () => {
   useEffect(() => {
     const fetchTips = async () => {
       try {
-        const response = await fetch('/api/tips');
+        const response = await fetch('/api/tips', { next: { revalidate: 60 } });
         const result = await response.json();
         if (response.ok) {
           const formattedTips: any = await getFormattedTips(result.tips);
