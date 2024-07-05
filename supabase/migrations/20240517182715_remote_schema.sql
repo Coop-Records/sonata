@@ -41,6 +41,24 @@ CREATE TYPE "public"."tip_update_result" AS (
 
 ALTER TYPE "public"."tip_update_result" OWNER TO "postgres";
 
+CREATE TYPE "public"."fid_hypersub_subscribed_since" AS (
+	"fid" text,
+	"subscribed_since" timestamptz
+);
+
+CREATE OR REPLACE FUNCTION "public"."update_many_hypersub_subscribed"(updates fid_hypersub_subscribed_since[]) RETURNS VOID
+LANGUAGE "plpgsql"
+AS $$
+BEGIN
+    UPDATE tips t
+    SET hypersub_subscribed_since = u.subscribed_since
+    FROM unnest(updates) AS u
+    WHERE t.fid = u.fid AND t.hypersub_subscribed_since IS NULL;
+END;
+$$;
+
+ALTER FUNCTION "public"."update_many_hypersub_subscribed"(updates fid_hypersub_subscribed_since[]) OWNER TO "postgres";
+
 CREATE OR REPLACE FUNCTION "public"."allocate_tip"("wallet_address_input" character varying, "tip_amount" numeric, "post_hash_input" character varying) RETURNS "public"."tip_update_result"
     LANGUAGE "plpgsql"
     AS $$
@@ -544,6 +562,10 @@ GRANT USAGE ON SCHEMA "public" TO "postgres";
 GRANT USAGE ON SCHEMA "public" TO "anon";
 GRANT USAGE ON SCHEMA "public" TO "authenticated";
 GRANT USAGE ON SCHEMA "public" TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."update_many_hypersub_subscribed"(updates fid_hypersub_subscribed_since[]) TO "anon";
+GRANT ALL ON FUNCTION "public"."update_many_hypersub_subscribed"(updates fid_hypersub_subscribed_since[]) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."update_many_hypersub_subscribed"(updates fid_hypersub_subscribed_since[]) TO "service_role";
 
 GRANT ALL ON FUNCTION "public"."allocate_tip"("wallet_address_input" character varying, "tip_amount" numeric, "post_hash_input" character varying) TO "anon";
 GRANT ALL ON FUNCTION "public"."allocate_tip"("wallet_address_input" character varying, "tip_amount" numeric, "post_hash_input" character varying) TO "authenticated";
