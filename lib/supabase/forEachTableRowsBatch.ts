@@ -1,4 +1,4 @@
-import { supabaseServerClient as supabase } from "./serverClient";
+import supabase from "../supabase/serverClient";
 
 const forEachTableRowsBatch = async (
   tableName: string,

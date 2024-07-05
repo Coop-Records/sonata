@@ -1,5 +1,5 @@
 import { Address } from "viem";
-import { supabaseServerClient } from "../supabase/serverClient";
+import supabaseServerClient from "../supabase/serverClient";
 import checkAddressBalances from "./checkAddressBalances";
 
 async function processTipsBatch(fids: { fid: number; wallet_address: Address }[]) {
