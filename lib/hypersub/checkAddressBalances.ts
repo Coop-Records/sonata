@@ -18,7 +18,7 @@ const checkAddressBalances = async (verifications: Address[]) => {
       functionName: 'balanceOf',
       args: [address],
     })),
-    batchSize: 2000
+    batchSize: 3000
   });
 };
 
