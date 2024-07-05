@@ -9,7 +9,7 @@ const forEachTableRowsBatch = async (
   const SUPABASE_LIMIT = 1000 as const;
 
   const batchSize = size > 1000 ? (size / SUPABASE_LIMIT) : 1;
-  const total = await supabase.from(tableName).select('id', { count: 'exact' });
+  const total = await supabase.from('tips').select('*', { count: 'exact' }).limit(0);
 
   if (total.error) throw total.error;
   if (!total.count) throw Error('No count found');
