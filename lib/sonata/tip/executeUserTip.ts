@@ -31,11 +31,13 @@ async function executeUserTip(
   const daily_tip_allocation = tip.daily_tip_allocation - amount;
   const totalTipOnPost = receiverAmount + post.points;
 
-  await Promise.all([
+  const updates = await Promise.all([
     supabase.from('tips').update({ remaining_tip_allocation, daily_tip_allocation }).eq('fid', sender),
     supabase.from('posts').update({ points: totalTipOnPost }).eq('post_hash', postHash),
     supabase.from('tips_activity_log').insert({ sender, receiver, amount: receiverAmount, postHash }),
   ]);
+
+  console.log('updateErrors:', updates.map(({ error }, id) => ({ error, id })));
 
   return { tipRemaining: daily_tip_allocation, totalTipOnPost };
 }
