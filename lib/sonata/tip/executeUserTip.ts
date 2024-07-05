@@ -37,7 +37,7 @@ async function executeUserTip(
     supabase.from('tips_activity_log').insert({ sender, receiver, amount: receiverAmount, postHash }),
   ]);
 
-  return { remainingTip: daily_tip_allocation, totalTipOnPost };
+  return { tipRemaining: daily_tip_allocation, totalTipOnPost };
 }
 
 export default executeUserTip;
