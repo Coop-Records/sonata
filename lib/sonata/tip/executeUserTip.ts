@@ -24,7 +24,7 @@ async function executeUserTip(
     receiverAmount = amount - channelAmount;
     allUpdates.push(
       supabase
-      .from('tips_activity_log')
+      .from('channel_tips_activity_log')
       .insert({ sender, amount: channelAmount, post_hash: postHash, channelId, channelAddress })
     );
   }
