@@ -1,11 +1,6 @@
 import { stack } from "@/lib/stack/client";
-import { createClient } from "@supabase/supabase-js";
+import supabase from '@/lib/supabase/serverClient';
 import getUserTipInfo from "./getUserTipInfo";
-
-const SUPABASE_URL = process.env.SUPABASE_URL as string;
-const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 async function executeUserTip(
   postHash: string,
@@ -21,12 +16,17 @@ async function executeUserTip(
   const { allowableAmount: amount, tipperFid: sender, tip, channelTip } = tipInfo;
   let receiverAmount = amount;
   const stackCalls = [];
+  const allUpdates = [];
 
   if (channelTip) {
-    const { channelAddress, channelAmount } = channelTip;
+    const { channelAddress, channelAmount, channelId } = channelTip;
     stackCalls.push(stack.track(`channel_tip_from_${sender}`, { account: channelAddress, points: channelAmount }));
-
     receiverAmount = amount - channelAmount;
+    allUpdates.push(
+      supabase
+        .from('channel_tips_activity_log')
+        .insert({ sender, amount: channelAmount, post_hash: postHash, channelId, channelAddress })
+    );
   }
   stackCalls.unshift(stack.track(`tip_from_${sender}`, { account: recipientWalletAddress, points: receiverAmount }));
 
@@ -37,11 +37,16 @@ async function executeUserTip(
   const daily_tip_allocation = tip.daily_tip_allocation - amount;
   const totalTipOnPost = receiverAmount + post.points;
 
-  supabase.from('tips').update({ remaining_tip_allocation, daily_tip_allocation }).eq('fid', sender);
-  supabase.from('posts').update({ points: totalTipOnPost }).eq('post_hash', postHash);
-  supabase.from('tips_activity_log').insert({ sender, receiver, amount: receiverAmount, postHash });
+  allUpdates.push(
+    supabase.from('tips').update({ remaining_tip_allocation, daily_tip_allocation }).eq('fid', sender),
+    supabase.from('posts').update({ points: totalTipOnPost }).eq('post_hash', postHash),
+    supabase.from('tips_activity_log').insert({ sender, receiver, amount: receiverAmount, post_hash: postHash })
+  )
+  const updates = await Promise.all(allUpdates);
 
-  return { remainingTip: daily_tip_allocation, totalTipOnPost };
+  updates.map(({ error }, id) => error ? console.error({ error, id }) : undefined);
+
+  return { tipRemaining: daily_tip_allocation, totalTipOnPost };
 }
 
 export default executeUserTip;

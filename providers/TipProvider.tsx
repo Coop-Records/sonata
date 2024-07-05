@@ -127,7 +127,7 @@ const TipProvider = ({ children }: any) => {
     const message = data.message;
     const tipRemaining = data.tipRemaining;
 
-    setRemainingTipAllocation(BigInt(tipRemaining));
+    setRemainingTipAllocation(BigInt(tipRemaining ?? remainingTipAllocation));
     toast({ description: message });
 
     return data;

@@ -2,6 +2,7 @@ import { FeedType } from '@/types/Feed';
 import { FrameMetadataType } from '@coinbase/onchainkit';
 import { zeroAddress } from 'viem';
 
+export const FEE = .1;
 export const TITLE = 'Sonata';
 export const DESCRIPTION = 'Discover music on Farcaster';
 export const FARCASTER_ID_REGISTRY = '0x00000000fc6c5f01fc30151999387bb99a9f489b';
@@ -68,6 +69,30 @@ export const CHANNELS = [
     value: 'electronic',
     icon: 'https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/802dff8d-78d2-47cb-9a78-c4fc3accac00/rectcrop3',
     parentUrl: 'chain://eip155:1/erc721:0x05acde54e82e7e38ec12c5b5b4b1fd1c8d32658d',
+  },
+  {
+    label: '/musicaW3',
+    value: 'musicaw3',
+    icon: 'https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/691b5ce9-7811-4308-5fab-d647adfe1200/original',
+    parentUrl: 'https://warpcast.com/~/channel/musicaw3',
+  },
+  {
+    label: '/japanese-music',
+    value: 'japanese-music',
+    icon: 'https://i.imgur.com/kF2MbEf.jpg',
+    parentUrl: 'https://warpcast.com/~/channel/japanese-music',
+  },
+  {
+    label: '/speedymusic',
+    value: 'speedymusic',
+    icon: 'https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/736727ec-69cd-450e-0bf1-d01ab51c7600/original',
+    parentUrl: 'https://warpcast.com/~/channel/speedymusic',
+  },
+  {
+    label: '/videogamemusic',
+    value: 'videogamemusic',
+    icon: 'https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/4ff7ab8e-3679-4f40-f190-9cdd2541eb00/original',
+    parentUrl: 'https://warpcast.com/~/channel/videogamemusic',
   },
 ];
 
