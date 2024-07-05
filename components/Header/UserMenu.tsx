@@ -18,13 +18,13 @@ export default function UserMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="size-9 cursor-pointer">
-          <AvatarImage className="object-cover object-center" src={user.pfp_url} />
-          <AvatarFallback>{user.display_name[0]}</AvatarFallback>
+          <AvatarImage className="object-cover object-center" src={user?.pfp_url} />
+          <AvatarFallback>{user?.display_name?.[0]}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="mr-2 min-w-52" alignOffset={100}>
         <a href={`/${user?.username}`}>
-          <DropdownMenuItem className="cursor-pointer">{user.display_name} </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">{user?.display_name} </DropdownMenuItem>
         </a>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={signOut} className="cursor-pointer">
