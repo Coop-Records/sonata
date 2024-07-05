@@ -24,8 +24,8 @@ async function executeUserTip(
     receiverAmount = amount - channelAmount;
     allUpdates.push(
       supabase
-      .from('channel_tips_activity_log')
-      .insert({ sender, amount: channelAmount, post_hash: postHash, channelId, channelAddress })
+        .from('channel_tips_activity_log')
+        .insert({ sender, amount: channelAmount, post_hash: postHash, channelId, channelAddress })
     );
   }
   stackCalls.unshift(stack.track(`tip_from_${sender}`, { account: recipientWalletAddress, points: receiverAmount }));
@@ -44,7 +44,7 @@ async function executeUserTip(
   )
   const updates = await Promise.all(allUpdates);
 
-  console.log('updateErrors:', updates.map(({ error }, id) => ({ error, id })));
+  updates.map(({ error }, id) => error ? console.error({ error, id }) : undefined);
 
   return { tipRemaining: daily_tip_allocation, totalTipOnPost };
 }
