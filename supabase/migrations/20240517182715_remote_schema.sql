@@ -46,7 +46,7 @@ CREATE TYPE "public"."fid_hypersub_subscribed_since" AS (
 	"subscribed_since" timestamptz
 );
 
-CREATE OR REPLACE FUNCTION "public"."update_many_hypersub_subscribed"(updates fid_hypersub_subscribed_since[]) RETURNS VOID
+CREATE OR REPLACE FUNCTION "public"."update_many_hypersub_subscribed"("updates" fid_hypersub_subscribed_since[]) RETURNS VOID
 LANGUAGE "plpgsql"
 AS $$
 BEGIN
@@ -57,7 +57,7 @@ BEGIN
 END;
 $$;
 
-ALTER FUNCTION "public"."update_many_hypersub_subscribed"(updates fid_hypersub_subscribed_since[]) OWNER TO "postgres";
+ALTER FUNCTION "public"."update_many_hypersub_subscribed"("updates" fid_hypersub_subscribed_since[]) OWNER TO "postgres";
 
 CREATE OR REPLACE FUNCTION "public"."allocate_tip"("wallet_address_input" character varying, "tip_amount" numeric, "post_hash_input" character varying) RETURNS "public"."tip_update_result"
     LANGUAGE "plpgsql"
@@ -563,9 +563,9 @@ GRANT USAGE ON SCHEMA "public" TO "anon";
 GRANT USAGE ON SCHEMA "public" TO "authenticated";
 GRANT USAGE ON SCHEMA "public" TO "service_role";
 
-GRANT ALL ON FUNCTION "public"."update_many_hypersub_subscribed"(updates fid_hypersub_subscribed_since[]) TO "anon";
-GRANT ALL ON FUNCTION "public"."update_many_hypersub_subscribed"(updates fid_hypersub_subscribed_since[]) TO "authenticated";
-GRANT ALL ON FUNCTION "public"."update_many_hypersub_subscribed"(updates fid_hypersub_subscribed_since[]) TO "service_role";
+GRANT ALL ON FUNCTION "public"."update_many_hypersub_subscribed"("updates" fid_hypersub_subscribed_since[]) TO "anon";
+GRANT ALL ON FUNCTION "public"."update_many_hypersub_subscribed"("updates" fid_hypersub_subscribed_since[]) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."update_many_hypersub_subscribed"("updates" fid_hypersub_subscribed_since[]) TO "service_role";
 
 GRANT ALL ON FUNCTION "public"."allocate_tip"("wallet_address_input" character varying, "tip_amount" numeric, "post_hash_input" character varying) TO "anon";
 GRANT ALL ON FUNCTION "public"."allocate_tip"("wallet_address_input" character varying, "tip_amount" numeric, "post_hash_input" character varying) TO "authenticated";
