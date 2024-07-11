@@ -15,9 +15,9 @@ export default function ChannelFilter() {
   };
 
   return (
-    <div className="flex flex-col sm:gap-2">
-      <h2 className="font-semibold sm:mb-2">Channels</h2>
-      <div>
+    <div className="flex grow flex-col">
+      <h2 className="mb-2 font-semibold">Channels</h2>
+      <div className='grow basis-0 overflow-y-auto'>
         {menuItems.map((option) => {
           const active = currentFilter?.channel === option.value;
           return (
