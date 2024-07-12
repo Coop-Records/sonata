@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
-function useChannelDetails(channelId = '', image = '') {
-  const [channel, setChannel] = useState<any>({ image_url: image });
+function useChannelDetails(channelId = '') {
+  const [channel, setChannel] = useState<any>();
 
   useEffect(() => {
     if (channelId) fetch(
