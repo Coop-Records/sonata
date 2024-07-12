@@ -1,0 +1,97 @@
+import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
+import { Button } from "../ui/button";
+
+function ChannelDetails({ image = '', channelId = '' }) {
+  const [channel, setChannel] = useState<any>({ image_url: image });
+
+  useEffect(() => {
+    fetch(`/api/neynar/getChannelDetails?channelId=${channelId}`)
+      .then(res => {
+        if (res.ok) return res.json();
+        throw Error('');
+      })
+      .then(data => {
+        if (data?.channel) setChannel(data.channel)
+      })
+      .catch(console.error);
+  }, [channelId])
+
+  const moderators = useMemo(() => {
+    const users = [];
+
+    !!channel?.hosts?.[0] && users.push(channel.hosts[0]);
+    !!channel?.moderator && users.push(channel.moderator);
+
+    return users;
+  }, [channel]);
+
+  return (
+    <div className='mb-8'>
+      <Image
+        src={image ?? channel.image_url}
+        height={120}
+        width={120}
+        className='-mt-14 mb-4 rounded-full border-[5px] border-white max-md:hidden'
+        alt={channelId}
+      />
+      <div className='flex flex-wrap justify-between gap-x-3 gap-y-6 max-md:mt-3'>
+        <div>
+          <h1 className='text-2xl font-semibold'>/{channelId}</h1>
+          <h4 className='text-base font-normal text-[#141A1EB2]'>{channel.description}</h4>
+
+          <div className='mt-4 flex flex-wrap items-end gap-x-6 gap-y-3'>
+            <div className='grid grid-cols-[auto_1fr] gap-x-1'>
+              <span className="font-sora text-base/[17px] font-semibold">0</span>
+              <Image src="/images/notes.png" width={16} height={16} alt="notes" />
+              <span className="col-span-full text-sm text-grey">Notes</span>
+            </div>
+
+            <div className='grid grid-cols-[auto_1fr] gap-x-1'>
+              <span className="font-sora text-base/[17px] font-semibold">0</span>
+              <Image src="/images/notes.png" width={16} height={16} alt="notes" />
+              <span className="col-span-full text-sm text-grey">Staked</span>
+            </div>
+
+            <div>
+              <p className="font-sora text-base/[17px] font-semibold">0</p>
+              <p className="col-span-full text-sm text-grey">Stakers</p>
+            </div>
+
+            <div className='grid grid-cols-[auto_1fr] items-center gap-x-1'>
+              <Image className='rounded-md' src={channel.image_url} width={24} height={24} alt="song" />
+              <span className="font-sora text-base/[17px] font-semibold">High on...</span>
+              <span className="col-span-full text-sm text-grey">Top Song</span>
+            </div>
+
+            <div>
+              <div className="flex">
+                {moderators.map((moderator, i) => (
+                  <Image
+                    key={moderator.fid}
+                    src={moderator.pfp_url}
+                    width={24}
+                    height={24}
+                    alt={moderator.display_name}
+                    className={cn('rounded-3xl', { 'translate-x-[-8px]': i == 1 })}
+                  />
+                ))}
+              </div>
+              <p className="col-span-full text-sm/4 text-grey">Moderators</p>
+            </div>
+          </div>
+        </div>
+
+        <div className='text-center'>
+          <Button className="h-auto rounded-full px-9 py-4 text-base font-normal">STAKE NOTES</Button>
+          <p className='mt-2 text-sm font-semibold'>
+            <span className='text-sm font-normal text-grey'>Staked: </span>
+            1K NOTES</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default ChannelDetails;
