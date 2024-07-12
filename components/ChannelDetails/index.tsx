@@ -1,31 +1,10 @@
+import useChannelDetails from "@/hooks/useChannelDetails";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
 import { Button } from "../ui/button";
 
 function ChannelDetails({ image = '', channelId = '' }) {
-  const [channel, setChannel] = useState<any>({ image_url: image });
-
-  useEffect(() => {
-    fetch(`/api/neynar/getChannelDetails?channelId=${channelId}`)
-      .then(res => {
-        if (res.ok) return res.json();
-        throw Error('');
-      })
-      .then(data => {
-        if (data?.channel) setChannel(data.channel)
-      })
-      .catch(console.error);
-  }, [channelId])
-
-  const moderators = useMemo(() => {
-    const users = [];
-
-    !!channel?.hosts?.[0] && users.push(channel.hosts[0]);
-    !!channel?.moderator && users.push(channel.moderator);
-
-    return users;
-  }, [channel]);
+  const { moderators, channel } = useChannelDetails(channelId, image);
 
   return (
     <div className='mb-8'>
@@ -61,7 +40,7 @@ function ChannelDetails({ image = '', channelId = '' }) {
 
             <div className='grid grid-cols-[auto_1fr] items-center gap-x-1'>
               <Image className='rounded-md' src={channel.image_url} width={24} height={24} alt="song" />
-              <span className="font-sora text-base/[17px] font-semibold">High on...</span>
+              <span className="font-sora text-base/[17px] font-semibold">-</span>
               <span className="col-span-full text-sm text-grey">Top Song</span>
             </div>
 
@@ -87,7 +66,8 @@ function ChannelDetails({ image = '', channelId = '' }) {
           <Button className="h-auto rounded-full px-9 py-4 text-base font-normal">STAKE NOTES</Button>
           <p className='mt-2 text-sm font-semibold'>
             <span className='text-sm font-normal text-grey'>Staked: </span>
-            1K NOTES</p>
+            0 NOTES
+          </p>
         </div>
       </div>
     </div>
