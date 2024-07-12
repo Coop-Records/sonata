@@ -17,7 +17,7 @@ export default function ChannelFilter() {
   return (
     <div className="flex grow flex-col">
       <h2 className="mb-2 font-semibold">Channels</h2>
-      <div className='grow basis-0 overflow-y-auto scrollbar-thin md:-mr-16'>
+      <div className='grow basis-0 overflow-y-auto scrollbar-thin md:-mr-16 md:pr-12'>
         {menuItems.map((option) => {
           const active = currentFilter?.channel === option.value;
           return (
@@ -26,8 +26,8 @@ export default function ChannelFilter() {
               onClick={() => handleClick(option.value)}
               key={option.value}
               className={cn(
-                'flex px-3 py-2 justify-start items-center space-x-2 w-full font-semibold',
-                active && 'bg-muted',
+                'flex px-6 py-2 justify-start items-center gap-2 w-full font-semibold text-sm',
+                active && 'rounded-xl bg-grey-light',
               )}
             >
               <div className="relative size-6 overflow-hidden rounded-full">
