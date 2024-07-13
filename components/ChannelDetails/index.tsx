@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import DataPoints from "./DataPoints";
 import Skeleton from "./Skeleton";
+import StakeDialog from "./StakeDialog";
 
 function ChannelDetails({ image = '', channelId = '' }) {
   const { moderators, channel, userStakedAmount, loading, signedIn } = useChannelDetails(channelId);
@@ -22,11 +23,10 @@ function ChannelDetails({ image = '', channelId = '' }) {
           <div>
             <h1 className='text-2xl font-semibold'>/{channelId}</h1>
             <h4 className='text-base font-normal text-[#141A1EB2]'>{channel.info?.description}</h4>
-
             <DataPoints channel={channel} moderators={moderators} />
           </div>
-
-          <div className='text-center'>
+          <StakeDialog balance={userStakedAmount} disabled={!signedIn} />
+          <div className='text-center' hidden>
             <Button
               disabled={!signedIn}
               className="h-auto rounded-full px-9 py-4 text-base font-normal">
