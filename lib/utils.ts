@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { REFFERAL_ADDRESS } from './consts';
 
 dayjs.extend(relativeTime);
 
@@ -34,4 +35,22 @@ export const isValidNumber = (value: string) => {
 
 export function timeFromNow(date: Date | string) {
   return dayjs(date).fromNow();
+}
+
+export function findCollectibleUrlInCastEmbeds(embeds: string[]) {
+  try {
+    for (const embed of embeds) {
+      const { url }: { url: string } = JSON.parse(embed);
+      const link = new URL(url);
+
+      if (url.includes('sound.xyz')) {
+        link.searchParams.set('referral', REFFERAL_ADDRESS);
+        return link.toString();
+      }
+      if (url.includes('zora.co')) {
+        link.searchParams.set('referrer', REFFERAL_ADDRESS);
+        return link.toString();
+      }
+    }
+  } catch { return; }
 }
