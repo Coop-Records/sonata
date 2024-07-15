@@ -24,7 +24,7 @@ function DataPoints({ channel, moderators }: { channel: any; moderators: any[]; 
 
       <div className='grid grid-cols-[auto_1fr] items-center gap-x-1'>
         <Image
-          className='size-6 rounded-md'
+          className='size-6 rounded-md object-cover'
           src={channel.topSong?.artworkUrl ?? ''}
           width={24}
           height={24}
