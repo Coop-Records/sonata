@@ -87,5 +87,19 @@ module.exports = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [
+    require('tailwindcss-animate'),
+    function({ addUtilities }) {
+      const newUtilities = {
+        '.scrollbar-thin': {
+          '--scrollbar-width': '6px',
+          'scrollbar-width': 'thin',
+        },
+        '.scrollbar-thin::-webkit-scrollbar': {
+          width: 'var(--scrollbar-width)',
+        },
+      };
+      addUtilities(newUtilities);
+    }
+  ],
 };
