@@ -60,21 +60,17 @@ export const useYoutube = (dispatch: Dispatch<PlayerAction>) => {
     let progressPoll: ReturnType<typeof setInterval>;
 
     player.addEventListener('onStateChange', (event: any) => {
-      console.log('player state', player?.getPlayerState());
-      if (player?.getPlayerState() === 0) {
-        dispatch({ type: 'PROGRESS', payload: { position: player.getDuration() * 1000 + 1 } });
-        return;
-      }
-
-      if (event.data === api.PlayerState.PLAYING) {
+      if (event.data === api.PlayerState.ENDED) {
+        dispatch({ type: 'PROGRESS', payload: { position: player.getCurrentTime() * 1000 } });
+      } else if (event.data === api.PlayerState.PLAYING) {
         progressPoll = setInterval(() => {
           const position = player.getCurrentTime() * 1000;
           dispatch({ type: 'PROGRESS', payload: { position } });
         }, 1000);
         return;
       }
-
       clearInterval(progressPoll);
+
       if (event.data === api.PlayerState.CUED) {
         dispatch({ type: 'LOADED' });
         dispatch({ type: 'SET_DURATION', payload: { duration: player.getDuration() * 1000 } });
