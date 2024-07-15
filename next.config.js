@@ -4,6 +4,9 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
+        hostname: 'sns-avatar-qc.xhscdn.com',
+      },
+      {
         hostname: 'i1.sndcdn.com',
       },
       {

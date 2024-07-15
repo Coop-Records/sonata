@@ -65,6 +65,10 @@ export const useYoutube = (dispatch: Dispatch<PlayerAction>) => {
           const position = player.getCurrentTime() * 1000;
           dispatch({ type: 'PROGRESS', payload: { position } });
         }, 1000);
+
+        console.log('player state', player?.getPlayerState());
+        if (player?.getPlayerState() === 0)
+          dispatch({ type: 'PROGRESS', payload: { position: player.duration } });
         return;
       }
       clearInterval(progressPoll);
