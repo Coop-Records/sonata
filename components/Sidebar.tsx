@@ -6,16 +6,19 @@ import { Separator } from './ui/separator';
 import ChannelFilter from './Feed/ChannelFilter';
 import Image from 'next/image';
 import UserDetails from './UserDetails';
+import Link from 'next/link';
+import HomeButton from './Header/HomeButton';
 
 export default function MobileMenu({ isSingleCast = false }: { isSingleCast?: boolean }) {
   const { user, signOut } = useNeynarProvider();
 
   return (
     <div className="flex h-full flex-col gap-4 md:px-16 md:py-6">
-      <a href="/" className="mb-8 flex items-center gap-2 max-md:hidden">
+      <Link href="/" className="mb-8 flex items-center gap-2 max-md:hidden">
         <Image src="/images/notes.png" width={20} height={20} alt="" />
         <span className="font-semibold">Sonata</span>
-      </a>
+      </Link>
+      <HomeButton className='mb-2 md:hidden' />
       {user && <UserDetails className="mb-8 md:hidden" user={user} />}
       <BalanceInfo />
       <a

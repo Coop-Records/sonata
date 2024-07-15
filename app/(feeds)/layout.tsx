@@ -5,7 +5,6 @@ import Sidebar from '@/components/Sidebar';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { useUi } from '@/providers/UiProvider';
 import Header from '@/components/Header';
-import { Separator } from '@/components/ui/separator';
 import GlobalPlayer from '@/components/GlobalPlayer';
 import CreatePost from '@/components/CreatePost';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
@@ -16,7 +15,7 @@ import TipsList from '@/components/TipsList';
 
 export default function FeedLayout({ children }: { children: ReactNode }) {
   const { menuOpen, setMenuOpen } = useUi();
-  const { username } = useParams();
+  const { username, channelId } = useParams();
   const { user } = useNeynarProvider();
 
   return (
@@ -40,14 +39,13 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
 
             <main className="flex grow flex-col">
               <Header />
-              <Separator className="bg-muted" />
-              <div className="relative grow">
+              <div className="relative min-h-[600px] grow">
                 <div
                   className="absolute left-0 top-0 size-full overflow-scroll pt-4"
                   id="feed-container"
                 >
                   <div className="container mx-auto max-w-3xl space-y-6">
-                    {user && !username && <CreatePost />}
+                    {user && !username && !channelId && <CreatePost />}
                     {children}
                   </div>
                 </div>
