@@ -13,13 +13,13 @@ function ChannelDetails({ image = '', channelId = '' }) {
         src={channelImage}
         height={120}
         width={120}
-        className='-mt-14 mb-4 rounded-full border-[5px] border-white max-md:hidden'
+        className='-mt-14 mb-4 size-[120px] rounded-full border-[5px] border-white object-cover max-md:hidden'
         alt={channelId}
       />
       <div className='flex flex-wrap justify-between gap-x-3 gap-y-6 max-md:mt-3'>
         <div>
           <h1 className='text-2xl font-semibold'>/{channelId}</h1>
-          <h4 className='text-base font-normal text-[#141A1EB2]'>{channel?.description}</h4>
+          <h4 className='text-base font-normal text-[#141A1EB2] md:max-w-[600px]'>{channel?.description}</h4>
 
           <div className='mt-4 flex flex-wrap items-end gap-x-6 gap-y-3'>
             <div className='grid grid-cols-[auto_1fr] gap-x-1'>
@@ -40,7 +40,7 @@ function ChannelDetails({ image = '', channelId = '' }) {
             </div>
 
             <div className='grid grid-cols-[auto_1fr] items-center gap-x-1'>
-              <Image className='rounded-md' src={channelImage} width={24} height={24} alt="song" />
+              <Image className='size-6 rounded-md object-cover' src={channelImage} width={24} height={24} alt="song" />
               <span className="font-sora text-base/[17px] font-semibold">-</span>
               <span className="col-span-full text-sm text-grey">Top Song</span>
             </div>
@@ -54,7 +54,7 @@ function ChannelDetails({ image = '', channelId = '' }) {
                     width={24}
                     height={24}
                     alt={moderator.display_name}
-                    className={cn('rounded-3xl', { 'translate-x-[-8px]': i == 1 })}
+                    className={cn('rounded-3xl size-6 object-cover', { 'translate-x-[-8px]': i == 1 })}
                   />
                 ))}
               </div>
