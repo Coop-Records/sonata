@@ -61,7 +61,6 @@ export const useYoutube = (dispatch: Dispatch<PlayerAction>) => {
 
     player.addEventListener('onStateChange', (event: any) => {
       console.log('player state', player?.getPlayerState());
-      console.log('player.duration', player.duration);
       if (player?.getPlayerState() === 0) {
         dispatch({ type: 'PROGRESS', payload: { position: player.getDuration() * 1000 + 1 } });
         return;
