@@ -6,6 +6,7 @@ const executeTip = async (
   amount: bigint,
   postHash: string,
   recipientFid: number,
+  channelId?: string
 ): Promise<TipResponse> => {
   try {
     if (isNil(signer_uuid)) throw Error('Invalid Signer');
@@ -19,6 +20,7 @@ const executeTip = async (
         tipAmount: amount,
         postHash,
         recipientFid,
+        channelId
       }),
     });
     const data = (await res.json()) as TipResponse;

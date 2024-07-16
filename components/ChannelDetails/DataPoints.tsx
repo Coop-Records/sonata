@@ -8,7 +8,7 @@ function DataPoints({ channel, moderators }: { channel: any; moderators: any[]; 
       <div className='grid grid-cols-[auto_1fr] gap-x-1'>
         <span className="font-sora text-base/[17px] font-semibold">{formatNumber(channel.balance)}</span>
         <Image src="/images/notes.png" width={16} height={16} alt="notes" />
-        <span className="col-span-full text-sm text-grey">Notes</span>
+        <span className="col-span-full text-sm text-grey">Balance</span>
       </div>
 
       <div className='grid grid-cols-[auto_1fr] gap-x-1'>
