@@ -11,14 +11,13 @@ import {
 } from 'react';
 import { SupabasePost } from '@/types/SupabasePost';
 import findValidEmbed from '@/lib/findValidEmbed';
-import fetchPosts from '@/lib/supabase/fetchPosts';
 import mergeArraysUniqueByPostHash from '@/lib/mergeArraysUniqueByPostHash';
 import { useNeynarProvider } from './NeynarProvider';
 import { fetchPostsLimit } from '@/lib/consts';
-import { supabaseClient } from '@/lib/supabase/client';
 import fetchMetadata from '@/lib/fetchMetadata';
 import { usePlayer } from '@/providers/audio/PlayerProvider';
 import { useProfileProvider } from './ProfileProvider';
+import fetchPostsFromApi from '@/lib/fetchPostsFromApi';
 
 type FeedProviderType = {
   filter: FeedFilter;
@@ -26,8 +25,7 @@ type FeedProviderType = {
   feed: SupabasePost[];
   feedType?: string;
   setFeedType: (feedType: string) => void;
-  fetchMore: (start: number) => void;
-  hasMore: boolean;
+  fetchMore: () => void;
   handleNext: () => void;
   handlePrev: () => void;
 };
@@ -63,27 +61,32 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     setFilter((prev) => ({ ...prev, ...change }));
   };
 
-  const fetchMore = useCallback(
-    async (start: number) => {
-      if (!feedType) return;
-      setHasMore(true);
-      const { posts } = await fetchPosts(supabaseClient, filter, feedType, start, fid, profileFid);
+  const fetchMore = useCallback(async () => {
+    if (!feedType) return;
+    setHasMore(true);
+
+    try {
+      const posts = await fetchPostsFromApi(feedType, filter, fid);
+
       if (!(posts && posts.length === fetchPostsLimit)) {
         setHasMore(false);
       }
+
       setFeed((prev) => {
         const mergedUnique = mergeArraysUniqueByPostHash(prev, posts);
         if (profileFid) return mergedUnique.filter((feed) => feed.authorFid === profileFid);
         return mergedUnique;
       });
-    },
-    [feedType, filter, supabaseClient, fid, profileFid],
-  );
+    } catch (error) {
+      console.error('Failed to fetch posts:', error);
+      setHasMore(false);
+    }
+  }, [feedType, filter, fid, profileFid]);
 
   useEffect(() => {
     const init = async () => {
       setFeed([]);
-      await fetchMore(0);
+      await fetchMore();
     };
     init();
   }, [fetchMore]);
@@ -151,7 +154,6 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     feedType,
     setFeedType,
     fetchMore,
-    hasMore,
     handleNext,
     handlePrev,
   };

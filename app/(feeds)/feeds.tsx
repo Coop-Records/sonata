@@ -7,8 +7,8 @@ import { useFeedProvider } from '@/providers/FeedProvider';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 const Feeds = ({ channelId }: { channelId?: string }) => {
-  const { feed, fetchMore, hasMore, updateFilter, filter } = useFeedProvider();
-
+  const { feed, fetchMore, updateFilter, filter } = useFeedProvider();
+  const hasMore = false;
   useEffect(() => {
     if (!filter.channel && channelId !== '/') {
       updateFilter({ channel: channelId });
@@ -18,7 +18,7 @@ const Feeds = ({ channelId }: { channelId?: string }) => {
   return (
     <InfiniteScroll
       dataLength={feed.length}
-      next={() => fetchMore(feed.length)}
+      next={() => fetchMore()}
       hasMore={hasMore}
       loader={<Loader className="w-full" />}
       endMessage={<p className="py-4 text-center text-sm">{`That's All!`}</p>}
