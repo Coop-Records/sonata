@@ -67,7 +67,6 @@ export const useYoutube = (dispatch: Dispatch<PlayerAction>) => {
       } else if (event.data === api.PlayerState.PLAYING) {
         progressPoll = setInterval(() => {
           const position = player.getCurrentTime() * 1000;
-          dispatch({ type: 'LOADED' });
           dispatch({ type: 'PROGRESS', payload: { position } });
         }, 1000);
         return;

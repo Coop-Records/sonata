@@ -118,6 +118,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
           type: 'PLAY',
           payload: { metadata, feedId: feedObj.id },
         });
+      dispatch({ type: 'LOADED' });
     }
   };
 
