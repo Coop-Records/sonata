@@ -10,16 +10,17 @@ import { TrackMetadata } from '@/types/Track';
 import Like from './Like';
 import Share from './Share';
 import { Separator } from '@/components/ui/separator';
-import { findCollectibleUrlInCastEmbeds, timeFromNow } from '@/lib/utils';
+import { timeFromNow } from '@/lib/utils';
 import UpvoteDownvote from '../UpvoteDownvote';
 import { isNil } from 'lodash';
 import CollectButton from './CollectButton';
 import { EmbedUrl } from '@neynar/nodejs-sdk/build/neynar-api/v2';
+import findCollectibleUrl from '@/lib/findCollectibleUrlInCastEmbeds';
 
 const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
   const embed = findValidEmbed(cast);
   const { url } = embed as EmbedUrl;
-  const collectibleLink = findCollectibleUrlInCastEmbeds(cast.embeds);
+  const collectibleLink = findCollectibleUrl(cast.embeds);
   const { author } = cast;
   const { verifications } = author;
   const [metadata, setMetadata] = useState<TrackMetadata>();
