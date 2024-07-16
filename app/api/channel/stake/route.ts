@@ -29,10 +29,10 @@ export async function POST(req: NextRequest) {
   const referer = req.headers.get('referer') ?? '';
 
   try {
-    const { signer_uuid, tipAmount } = await req.json();
+    const { signer_uuid, amount: stakeAmount } = await req.json();
 
     const { allowableAmount: amount, channelTip, tip, tipperFid } =
-      await getUserTipInfo(signer_uuid, tipAmount, referer);
+      await getUserTipInfo(signer_uuid, stakeAmount, referer);
 
     if (!channelTip) throw Error('Could not find channel');
 
@@ -52,11 +52,11 @@ export async function POST(req: NextRequest) {
     updates.map(({ error }, id) => error ? console.error({ error, id }) : undefined);
 
     return NextResponse.json(
-      { message: `Staked ${amount} NOTES`, usedTip: amount, tipRemaining: daily_tip_allocation }
+      { message: `Staked ${amount} NOTES`, usedAmount: amount, dailyAmountRemaining: daily_tip_allocation }
     );
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Failed';
-    return NextResponse.json({ message, usedTip: 0 }, { status: 400 });
+    return NextResponse.json({ message, usedAmount: 0 }, { status: 500 });
   }
 }
 

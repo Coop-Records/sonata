@@ -1,24 +1,17 @@
 import getChannelDetails from "@/lib/sonata/getChannelDetails";
 import { useNeynarProvider } from "@/providers/NeynarProvider";
-import { TrackMetadata } from "@/types/Track";
+import { useTipProvider } from "@/providers/TipProvider";
 import { useEffect, useMemo, useState } from "react";
-
-const defaultChannel = {
-  info: undefined as any,
-  balance: 0,
-  topSong: undefined as TrackMetadata | undefined,
-  staking: {
-    stakers: 0,
-    staked: 0,
-  },
-};
 
 function useChannelDetails(channelId = '') {
   const { signer } = useNeynarProvider();
-
-  const [userStakedAmount, setUserStakedAmount] = useState(0);
+  const {
+    channelDetails: channel,
+    setChannelDetails: setChannel,
+    userStakedAmount,
+    setUserStakedAmount
+  } = useTipProvider();
   const [loading, setLoading] = useState(true);
-  const [channel, setChannel] = useState(defaultChannel);
 
   const moderators = useMemo(() => {
     const users = [];
@@ -48,13 +41,16 @@ function useChannelDetails(channelId = '') {
         })
         .finally(() => setLoading(false));
     }
-    return () => {
-      setChannel(defaultChannel);
-      setLoading(true);
-    };
-  }, [channelId, signer?.fid]);
+    return () => { setLoading(true); }
+  }, [channelId, signer?.fid, setChannel, setUserStakedAmount]);
 
-  return { moderators, channel, userStakedAmount, loading, signedIn: !!signer };
+  return {
+    moderators,
+    channel: channel,
+    userStakedAmount,
+    loading,
+    signedIn: !!signer
+  };
 }
 
 export default useChannelDetails;

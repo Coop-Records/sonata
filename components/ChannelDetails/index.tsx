@@ -1,7 +1,5 @@
 import useChannelDetails from "@/hooks/useChannelDetails";
-import formatNumber from "@/lib/formatNumber";
 import Image from "next/image";
-import { Button } from "../ui/button";
 import DataPoints from "./DataPoints";
 import Skeleton from "./Skeleton";
 import StakeDialog from "./StakeDialog";
@@ -27,17 +25,6 @@ function ChannelDetails({ image = '', channelId = '' }) {
             <DataPoints channel={channel} moderators={moderators} />
           </div>
           <StakeDialog balance={userStakedAmount} disabled={!signedIn} />
-          <div className='text-center' hidden>
-            <Button
-              disabled={!signedIn}
-              className="h-auto rounded-full px-9 py-4 text-base font-normal">
-              STAKE NOTES
-            </Button>
-            <p className='mt-2 text-sm font-semibold'>
-              <span className='text-sm font-normal text-grey'>Staked: </span>
-              {formatNumber(userStakedAmount)} NOTES
-            </p>
-          </div>
         </div>
       )}
     </div>
