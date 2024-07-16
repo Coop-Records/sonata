@@ -14,9 +14,9 @@ const getYoutubeTrackMetadata = async (url: string, cast: SupabasePost) => {
   return {
     id: youtubeData?.id,
     type: 'youtube',
-    artistName: youtubeData.snippet.channelTitle,
-    trackName: youtubeData.snippet.title,
-    artworkUrl: youtubeData.snippet.thumbnails.default.url,
+    artistName: youtubeData?.snippet.channelTitle,
+    trackName: youtubeData?.snippet.title,
+    artworkUrl: youtubeData?.snippet.thumbnails.default.url,
     url: youtubeData.id,
     feedId: cast.id,
   } as TrackMetadata;
