@@ -13,7 +13,6 @@ import { SupabasePost } from '@/types/SupabasePost';
 import findValidEmbed from '@/lib/findValidEmbed';
 import mergeArraysUniqueByPostHash from '@/lib/mergeArraysUniqueByPostHash';
 import { useNeynarProvider } from './NeynarProvider';
-import { fetchPostsLimit } from '@/lib/consts';
 import fetchMetadata from '@/lib/fetchMetadata';
 import { usePlayer } from '@/providers/audio/PlayerProvider';
 import { useProfileProvider } from './ProfileProvider';
@@ -36,7 +35,6 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const [filter, setFilter] = useState<FeedFilter>({});
   const [feed, setFeed] = useState<SupabasePost[]>([]);
   const [feedType, setFeedType] = useState<string>();
-  const [hasMore, setHasMore] = useState(true);
   const { user, loading: userLoading } = useNeynarProvider();
   const [player, dispatch] = usePlayer();
   const { profile } = useProfileProvider();
@@ -63,14 +61,9 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
 
   const fetchMore = useCallback(async () => {
     if (!feedType) return;
-    setHasMore(true);
 
     try {
       const posts = await fetchPostsFromApi(feedType, filter, fid);
-
-      if (!(posts && posts.length === fetchPostsLimit)) {
-        setHasMore(false);
-      }
 
       setFeed((prev) => {
         const mergedUnique = mergeArraysUniqueByPostHash(prev, posts);
@@ -79,7 +72,6 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
       });
     } catch (error) {
       console.error('Failed to fetch posts:', error);
-      setHasMore(false);
     }
   }, [feedType, filter, fid, profileFid]);
 
