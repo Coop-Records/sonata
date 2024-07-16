@@ -142,7 +142,7 @@ export default function PlayerProvider({ children }: { children: ReactNode }) {
     soundController,
     spotifyController,
     youtubeController,
-    zoraController
+    zoraController,
   ]);
 
   useEffect(() => {
