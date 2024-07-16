@@ -9,10 +9,12 @@ import { useNeynarProvider } from './NeynarProvider';
 import { useToast } from '@/components/ui/use-toast';
 import claimAirdrop from '@/lib/sonata/claimAirdrop';
 import { supabaseClient } from '@/lib/supabase/client';
+import { useParams } from 'next/navigation';
 
 const TipContext = createContext<any>(null);
 
 const TipProvider = ({ children }: any) => {
+  const { channelId } = useParams();
   const { toast } = useToast();
   const [airdropBalance, setAirdropBalance] = useState<bigint | undefined>(undefined);
   const [balance, setBalance] = useState<bigint | undefined>(undefined);
@@ -123,7 +125,13 @@ const TipProvider = ({ children }: any) => {
       return;
     }
 
-    const data = await executeTip(signer?.signer_uuid, amount, postHash, recipientFid);
+    const data = await executeTip(
+      signer?.signer_uuid,
+      amount,
+      postHash,
+      recipientFid,
+      Array.isArray(channelId) ? '' : channelId
+    );
     const message = data.message;
     const tipRemaining = data.tipRemaining;
 
