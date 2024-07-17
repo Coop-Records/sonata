@@ -22,7 +22,7 @@ async function executeChannelStake(channelId: string, stakeAmount: number, fid: 
 
   const results = await Promise.all([
     stack.track(`channel_stake_from_${fid}`, { account: balance.address, points: -amount }),
-    stack.track(`channel_stake_on_${channelAddress}`, { account: channelAddress, points: amount }),
+    stack.track(`channel_stake_to_${channelAddress}`, { account: channelAddress, points: amount }),
   ]);
   if (results.some(res => !res.success)) throw Error('Could not stack');
 
