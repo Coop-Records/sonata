@@ -10,3 +10,8 @@ export interface ChannelStats {
   numberOfSongs: number;
   numberOfNotes?: number
 };
+
+export interface RankCriterion {
+  name: keyof Omit<ChannelStats, 'channelId'>;
+  weight: number;
+}
