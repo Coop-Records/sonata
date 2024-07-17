@@ -4,4 +4,4 @@ export async function GET(): Promise<Response> {
   return getLatestTips();
 }
 
- export const revalidate = 60;
+export const dynamic = 'force-dynamic';
