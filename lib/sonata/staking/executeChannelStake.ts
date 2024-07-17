@@ -1,29 +1,35 @@
+import getUser from "@/lib/neynar/getNeynarUser";
 import { stack } from "@/lib/stack/client";
 import supabase from "@/lib/supabase/serverClient";
-import getUserTipInfo from "../tip/getUserTipInfo";
+import getChannelTipInfo from "../tip/getChannelTipInfo";
 
-async function executeChannelStake(info: Awaited<ReturnType<typeof getUserTipInfo>>) {
-  if (!info.channelTip) throw Error('Could not find channel');
+async function executeChannelStake(channelId: string, stakeAmount: number, fid: number) {
+  const user = await getUser(fid);
 
-  const { tip, tipperFid, allowableAmount: amount } = info;
-  const { channelAddress, channelId } = info.channelTip;
+  const balances: { amount: number }[] = await stack.getPoints(
+    user.verifications.map((verification: string) => verification)
+  );
+  const currentBalance = balances.reduce((prev, curr) => prev + curr.amount, 0);
+
+  const amount = Math.min(currentBalance, stakeAmount);
+
+  const info = await getChannelTipInfo(channelId, 0);
+  if (!info) throw Error('could not find channel');
+
+  const { channelAddress } = info;
 
   const { success } = await stack.track(
-    `channel_stake_from_${tipperFid}`,
+    `channel_stake_from_${fid}`,
     { account: channelAddress, points: amount }
   );
   if (!success) throw Error('Could not stack');
 
-  const daily_tip_allocation = tip.daily_tip_allocation - amount;
-  const remaining_tip_allocation = tip.remaining_tip_allocation - amount;
+  const { error } = await supabase
+    .from('stake_activity_log')
+    .insert({ fid, amount, channelId, channelAddress });
+  if (error) console.error('executeChannelStake', error);
 
-  const updates = await Promise.all([
-    supabase.from('tips').update({ remaining_tip_allocation, daily_tip_allocation }).eq('fid', tipperFid),
-    supabase.from('stake_activity_log').insert({ fid: tipperFid, amount, channelId, channelAddress }),
-  ]);
-  updates.map(({ error }, id) => error ? console.error({ error, id }) : undefined);
-
-  return { usedAmount: amount, dailyAmountRemaining: daily_tip_allocation };
+  return { usedAmount: amount, remainingBalance: currentBalance - amount };
 }
 
 export default executeChannelStake;

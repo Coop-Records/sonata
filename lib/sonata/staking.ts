@@ -3,14 +3,14 @@ async function executeStake(amount: number, signer_uuid: string, channelId: any)
   try {
     const response = await fetch('/api/channel/stake', {
       method: 'POST',
-      body: JSON.stringify({ signer_uuid, amount: amount.toString(), channelId })
+      body: JSON.stringify({ signer_uuid, amount, channelId })
     })
     if (!response.ok) throw Error(response.statusText);
 
     const data: {
       message: string;
       usedAmount: number;
-      dailyAmountRemaining: number;
+      remainingBalance: number;
     } = await response.json();
 
     return data;

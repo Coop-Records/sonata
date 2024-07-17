@@ -1,5 +1,5 @@
+import verifySignerUUID from '@/lib/neynar/verifySigner';
 import executeChannelStake from '@/lib/sonata/staking/executeChannelStake';
-import getUserTipInfo from '@/lib/sonata/tip/getUserTipInfo';
 import supabase from "@/lib/supabase/serverClient";
 import { NextRequest } from 'next/server';
 
@@ -29,10 +29,13 @@ export async function POST(req: NextRequest) {
   try {
     const { signer_uuid, amount: stakeAmount, channelId } = await req.json();
     if (!channelId) throw Error('channelId required');
+    if (!stakeAmount) throw Error('stakeAmount required');
+    if (!signer_uuid) throw Error('signer_uuid required');
 
-    const data = await executeChannelStake(
-      await getUserTipInfo(signer_uuid, stakeAmount, channelId)
-    );
+    const { status, fid } = await verifySignerUUID(signer_uuid);
+    if (!status) throw Error('Invalid Signer UUID');
+
+    const data = await executeChannelStake(channelId, stakeAmount, fid);
 
     return Response.json({ message: `Staked ${data.usedAmount} NOTES`, ...data });
   } catch (error) {

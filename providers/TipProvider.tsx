@@ -155,28 +155,24 @@ const TipProvider = ({ children }: any) => {
       toast({ description: 'Invalid signer', variant: 'destructive' });
       return;
     }
-    if (!dailyTipAllowance || amount > dailyTipAllowance) {
+    if (!balance || BigInt(amount) > balance) {
       toast({ description: 'Invalid entry', variant: 'destructive' });
       return;
     }
+    const res = await executeStake(amount, signer.signer_uuid, channelId);
 
-    const result = await executeStake(amount, signer.signer_uuid, channelId);
-    if (!result) {
+    if (!res) {
       toast({ description: 'Could not stake', variant: 'destructive' });
       return;
     }
-    const { usedAmount, dailyAmountRemaining } = result;
-
-    setDailyTipAllowance(BigInt(dailyAmountRemaining));
-    setRemainingTipAllocation(remainingTipAllocation! - BigInt(usedAmount));
-    setBalance(balance! - BigInt(usedAmount));
-    setUserStakedAmount(userStakedAmount + usedAmount);
+    setBalance(BigInt(res.remainingBalance));
+    setUserStakedAmount(userStakedAmount + res.usedAmount);
     setChannelDetails((details) => {
-      details.staking.staked += usedAmount;
+      details.staking.staked += res.usedAmount;
       return details;
     });
 
-    toast({ description: result.message });
+    toast({ description: res.message });
   };
 
   const channelUnStake = async (amount: number) => {
