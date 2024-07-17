@@ -23,14 +23,14 @@ const TipProvider = ({ children }: any) => {
   const [balance, setBalance] = useState<bigint>();
   const [dailyTipAllowance, setDailyTipAllowance] = useState<bigint>();
   const [remainingTipAllocation, setRemainingTipAllocation] = useState<bigint>();
-  const [userStakedAmount, setUserStakedAmount] = useState<bigint>(BigInt(0));
+  const [userStakedAmount, setUserStakedAmount] = useState(0);
   const [channelDetails, setChannelDetails] = useState({
     info: undefined as any,
-    balance: BigInt(0),
+    balance: 0,
     topSong: undefined as TrackMetadata | undefined,
     staking: {
       stakers: 0,
-      staked: BigInt(0),
+      staked: 0,
     },
   });
 
@@ -150,7 +150,7 @@ const TipProvider = ({ children }: any) => {
     return data;
   };
 
-  const channelStake = async (amount: bigint) => {
+  const channelStake = async (amount: number) => {
     if (!signer?.signer_uuid) {
       toast({ description: 'Invalid signer', variant: 'destructive' });
       return;
@@ -165,16 +165,20 @@ const TipProvider = ({ children }: any) => {
       toast({ description: 'Could not stake', variant: 'destructive' });
       return;
     }
-    setDailyTipAllowance(result.dailyAmountRemaining);
-    setRemainingTipAllocation((remainingTipAllocation ?? BigInt(0)) - amount);
-    setUserStakedAmount(userStakedAmount + amount);
-    setChannelDetails(({ staking, ...rest }) => ({
-      ...rest,
-      staking: { ...staking, staked: staking.staked + amount }
-    }));
+    const { usedAmount, dailyAmountRemaining } = result;
+
+    setDailyTipAllowance(BigInt(dailyAmountRemaining));
+    setRemainingTipAllocation(remainingTipAllocation! - BigInt(usedAmount));
+    setUserStakedAmount(userStakedAmount + usedAmount);
+    setChannelDetails((details) => {
+      details.staking.staked += usedAmount;
+      return details;
+    });
+
+    toast({ description: result.message });
   };
 
-  const channelUnStake = async (amount: bigint) => {
+  const channelUnStake = async (amount: number) => {
     if (!signer?.signer_uuid) {
       toast({ description: 'Invalid signer', variant: 'destructive' });
       return;

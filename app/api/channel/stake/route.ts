@@ -1,5 +1,5 @@
+import executeChannelStake from '@/lib/sonata/staking/executeChannelStake';
 import getUserTipInfo from '@/lib/sonata/tip/getUserTipInfo';
-import { stack } from '@/lib/stack/client';
 import supabase from "@/lib/supabase/serverClient";
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -30,30 +30,11 @@ export async function POST(req: NextRequest) {
     const { signer_uuid, amount: stakeAmount, channelId } = await req.json();
     if (!channelId) throw Error('channelId required');
 
-    const { allowableAmount: amount, channelTip, tip, tipperFid } =
-      await getUserTipInfo(signer_uuid, stakeAmount, channelId);
-
-    if (!channelTip) throw Error('Could not find channel');
-
-    const { channelAddress } = channelTip;
-    const { success } = await stack.track(
-      `channel_stake_from_${tipperFid}`, { account: channelAddress, points: amount }
+    const data = await executeChannelStake(
+      await getUserTipInfo(signer_uuid, stakeAmount, channelId)
     );
 
-    if (!success) throw Error('Could not stack');
-
-    const daily_tip_allocation = tip.daily_tip_allocation - amount;
-    const remaining_tip_allocation = tip.remaining_tip_allocation - amount;
-
-    const updates = await Promise.all([
-      supabase.from('tips').update({ remaining_tip_allocation, daily_tip_allocation }).eq('fid', tipperFid),
-      supabase.from('stake_activity_log').insert({ fid: tipperFid, amount, channelId, channelAddress }),
-    ]);
-    updates.map(({ error }, id) => error ? console.error({ error, id }) : undefined);
-
-    return NextResponse.json(
-      { message: `Staked ${amount} NOTES`, usedAmount: amount, dailyAmountRemaining: daily_tip_allocation }
-    );
+    return NextResponse.json({ message: `Staked ${data.usedAmount} NOTES`, ...data });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Failed';
     return NextResponse.json({ message, usedAmount: 0 }, { status: 500 });
