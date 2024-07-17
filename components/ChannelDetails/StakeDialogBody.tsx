@@ -1,6 +1,6 @@
 import formatNumber from "@/lib/formatNumber";
 import { cn } from "@/lib/utils";
-import { useTipProvider } from "@/providers/TipProvider";
+import { useStakeProvider } from "@/providers/StakeProvider";
 import Image from "next/image";
 import { useState } from "react";
 import { Button } from "../ui/button";
@@ -12,11 +12,11 @@ const tabs = [{ label: 'Stake', value: true }, { label: 'Unstake', value: false 
 function Body({ balance = 0, className = '', onStart = () => { }, onCompleted = () => { } }) {
   const [isStake, setIsStake] = useState(true);
   const [amount, setAmount] = useState<number>();
-  const { channelStake, channelUnStake } = useTipProvider();
+  const { channelStake, channelUnStake } = useStakeProvider();
 
   const processStaking = async () => {
     onStart();
-    await (isStake ? channelStake(amount) : channelUnStake(amount));
+    await (isStake ? channelStake(amount ?? 0) : channelUnStake(amount ?? 0));
     onCompleted();
   };
 

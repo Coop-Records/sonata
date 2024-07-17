@@ -9,8 +9,6 @@ import { useNeynarProvider } from './NeynarProvider';
 import { useToast } from '@/components/ui/use-toast';
 import claimAirdrop from '@/lib/sonata/claimAirdrop';
 import { supabaseClient } from '@/lib/supabase/client';
-import { executeStake, executeUnstake } from '@/lib/sonata/staking';
-import { TrackMetadata } from '@/types/Track';
 import { useParams } from 'next/navigation';
 
 const TipContext = createContext<any>(null);
@@ -18,21 +16,14 @@ const TipContext = createContext<any>(null);
 const TipProvider = ({ children }: any) => {
   const { channelId } = useParams();
   const { toast } = useToast();
+  const [airdropBalance, setAirdropBalance] = useState<bigint | undefined>(undefined);
+  const [balance, setBalance] = useState<bigint | undefined>(undefined);
+  const [dailyTipAllowance, setDailyTipAllowance] = useState<bigint | undefined>(undefined);
   const { user, signer } = useNeynarProvider();
-  const [airdropBalance, setAirdropBalance] = useState<bigint>();
-  const [balance, setBalance] = useState<bigint>();
-  const [dailyTipAllowance, setDailyTipAllowance] = useState<bigint>();
-  const [remainingTipAllocation, setRemainingTipAllocation] = useState<bigint>();
-  const [userStakedAmount, setUserStakedAmount] = useState(0);
-  const [channelDetails, setChannelDetails] = useState({
-    info: undefined as any,
-    balance: 0,
-    topSong: undefined as TrackMetadata | undefined,
-    staking: {
-      stakers: 0,
-      staked: 0,
-    },
-  });
+
+  const [remainingTipAllocation, setRemainingTipAllocation] = useState<bigint | undefined>(
+    undefined,
+  );
 
   useEffect(() => {
     if (isNil(user)) return;
@@ -150,51 +141,6 @@ const TipProvider = ({ children }: any) => {
     return data;
   };
 
-  const channelStake = async (amount: number) => {
-    if (!signer?.signer_uuid) {
-      toast({ description: 'Invalid signer', variant: 'destructive' });
-      return;
-    }
-    if (!balance || BigInt(amount) > balance) {
-      toast({ description: 'Invalid entry', variant: 'destructive' });
-      return;
-    }
-    const res = await executeStake(amount, signer.signer_uuid, channelId);
-
-    if (!res) {
-      toast({ description: 'Could not stake', variant: 'destructive' });
-      return;
-    }
-    setBalance(BigInt(res.remainingBalance));
-    setUserStakedAmount(userStakedAmount + res.usedAmount);
-    setChannelDetails((details) => {
-      details.staking.staked += res.usedAmount;
-      return details;
-    });
-
-    toast({ description: res.message });
-  };
-
-  const channelUnStake = async (amount: number) => {
-    if (!signer?.signer_uuid) {
-      toast({ description: 'Invalid signer', variant: 'destructive' });
-      return;
-    }
-    if (amount > userStakedAmount) {
-      toast({ description: 'Invalid entry', variant: 'destructive' });
-      return;
-    }
-
-    const result = await executeUnstake(amount, signer.signer_uuid, channelId);
-    if (!result) {
-      toast({ description: 'Could not unstake', variant: 'destructive' });
-      return;
-    }
-    // TODO
-    // update userStakedAmount
-    // update staking.staked
-  };
-
   const refreshBalances = async () => {
     getAirdropBalance();
     syncPoints();
@@ -214,18 +160,13 @@ const TipProvider = ({ children }: any) => {
     <TipContext.Provider
       value={{
         balance,
+        setBalance,
         tip,
         tipDegen,
         remainingTipAllocation,
         dailyTipAllowance,
         airdropBalance,
         handlePost,
-        channelStake,
-        channelUnStake,
-        channelDetails,
-        setChannelDetails,
-        userStakedAmount,
-        setUserStakedAmount
       }}
     >
       {children}

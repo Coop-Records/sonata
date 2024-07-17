@@ -1,6 +1,6 @@
 import getChannelDetails from "@/lib/sonata/getChannelDetails";
 import { useNeynarProvider } from "@/providers/NeynarProvider";
-import { useTipProvider } from "@/providers/TipProvider";
+import { useStakeProvider } from "@/providers/StakeProvider";
 import { useEffect, useMemo, useState } from "react";
 
 function useChannelDetails(channelId = '') {
@@ -10,7 +10,7 @@ function useChannelDetails(channelId = '') {
     setChannelDetails: setChannel,
     userStakedAmount,
     setUserStakedAmount
-  } = useTipProvider();
+  } = useStakeProvider();
   const [loading, setLoading] = useState(true);
 
   const moderators = useMemo(() => {
