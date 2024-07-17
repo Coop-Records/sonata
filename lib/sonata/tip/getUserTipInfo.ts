@@ -2,7 +2,7 @@ import supabase from '@/lib/supabase/serverClient';
 import verifySignerUUID from "../../neynar/verifySigner";
 import getChannelTipInfo from "./getChannelTipInfo";
 
-async function getUserTipInfo(signer_uuid = '', tipAmount = 0, referer = '') {
+async function getUserTipInfo(signer_uuid = '', tipAmount = 0, channelId = '') {
   const { status, fid: tipperFid } = await verifySignerUUID(signer_uuid);
   if (!status) throw Error('Invalid Signer UUID');
 
@@ -20,7 +20,7 @@ async function getUserTipInfo(signer_uuid = '', tipAmount = 0, referer = '') {
   );
   if (amount <= 0) throw Error('Already reached max NOTES');
 
-  const tipInfo = await getChannelTipInfo(referer, tipAmount);
+  const tipInfo = await getChannelTipInfo(channelId, tipAmount);
 
   return {
     tipperFid,
