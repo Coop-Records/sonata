@@ -1,7 +1,7 @@
 import executeChannelStake from '@/lib/sonata/staking/executeChannelStake';
 import getUserTipInfo from '@/lib/sonata/tip/getUserTipInfo';
 import supabase from "@/lib/supabase/serverClient";
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest) {
   const channelId = req.nextUrl.searchParams.get('channelId');
@@ -34,10 +34,10 @@ export async function POST(req: NextRequest) {
       await getUserTipInfo(signer_uuid, stakeAmount, channelId)
     );
 
-    return NextResponse.json({ message: `Staked ${data.usedAmount} NOTES`, ...data });
+    return Response.json({ message: `Staked ${data.usedAmount} NOTES`, ...data });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Failed';
-    return NextResponse.json({ message, usedAmount: 0 }, { status: 500 });
+    return Response.json({ message, usedAmount: 0 }, { status: 500 });
   }
 }
 
