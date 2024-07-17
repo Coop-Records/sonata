@@ -169,6 +169,7 @@ const TipProvider = ({ children }: any) => {
 
     setDailyTipAllowance(BigInt(dailyAmountRemaining));
     setRemainingTipAllocation(remainingTipAllocation! - BigInt(usedAmount));
+    setBalance(balance! - BigInt(usedAmount));
     setUserStakedAmount(userStakedAmount + usedAmount);
     setChannelDetails((details) => {
       details.staking.staked += usedAmount;
