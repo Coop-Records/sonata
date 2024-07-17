@@ -22,7 +22,7 @@ export default function ChannelFilter() {
           const active = currentFilter?.channel === option.value;
           return (
             <Link
-              href={active ? '/' : `/channel${option.label}`}
+              href={active ? '/' : `/channel/${option.value}`}
               onClick={() => handleClick(option.value)}
               key={option.value}
               className={cn(
