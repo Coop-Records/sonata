@@ -26,19 +26,19 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const referer = req.headers.get('referer') ?? '';
-
   try {
-    const { signer_uuid, amount: stakeAmount } = await req.json();
+    const { signer_uuid, amount: stakeAmount, channelId } = await req.json();
+    if (!channelId) throw Error('channelId required');
 
     const { allowableAmount: amount, channelTip, tip, tipperFid } =
-      await getUserTipInfo(signer_uuid, stakeAmount, referer);
+      await getUserTipInfo(signer_uuid, stakeAmount, channelId);
 
     if (!channelTip) throw Error('Could not find channel');
 
-    const { channelAddress, channelId } = channelTip;
-    const { success } =
-      await stack.track(`channel_stake_from_${tipperFid}`, { account: channelAddress, points: amount });
+    const { channelAddress } = channelTip;
+    const { success } = await stack.track(
+      `channel_stake_from_${tipperFid}`, { account: channelAddress, points: amount }
+    );
 
     if (!success) throw Error('Could not stack');
 

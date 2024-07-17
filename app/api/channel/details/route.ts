@@ -37,3 +37,7 @@ export async function GET(req: NextRequest) {
     return Response.json({ message: 'failed' }, { status: 400 });
   }
 }
+
+export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+export const revalidate = 0;

@@ -11,10 +11,12 @@ import claimAirdrop from '@/lib/sonata/claimAirdrop';
 import { supabaseClient } from '@/lib/supabase/client';
 import { executeStake, executeUnstake } from '@/lib/sonata/staking';
 import { TrackMetadata } from '@/types/Track';
+import { useParams } from 'next/navigation';
 
 const TipContext = createContext<any>(null);
 
 const TipProvider = ({ children }: any) => {
+  const { channelId } = useParams();
   const { toast } = useToast();
   const { user, signer } = useNeynarProvider();
   const [airdropBalance, setAirdropBalance] = useState<bigint>();
@@ -132,7 +134,13 @@ const TipProvider = ({ children }: any) => {
       return;
     }
 
-    const data = await executeTip(signer?.signer_uuid, amount, postHash, recipientFid);
+    const data = await executeTip(
+      signer?.signer_uuid,
+      amount,
+      postHash,
+      recipientFid,
+      Array.isArray(channelId) ? '' : channelId
+    );
     const message = data.message;
     const tipRemaining = data.tipRemaining;
 
@@ -152,12 +160,11 @@ const TipProvider = ({ children }: any) => {
       return;
     }
 
-    const result = await executeStake(amount, signer.signer_uuid);
+    const result = await executeStake(amount, signer.signer_uuid, channelId);
     if (!result) {
       toast({ description: 'Could not stake', variant: 'destructive' });
       return;
     }
-
     setDailyTipAllowance(result.dailyAmountRemaining);
     setRemainingTipAllocation((remainingTipAllocation ?? BigInt(0)) - amount);
     setUserStakedAmount(userStakedAmount + amount);
@@ -177,12 +184,11 @@ const TipProvider = ({ children }: any) => {
       return;
     }
 
-    const result = await executeUnstake(amount, signer.signer_uuid);
+    const result = await executeUnstake(amount, signer.signer_uuid, channelId);
     if (!result) {
       toast({ description: 'Could not unstake', variant: 'destructive' });
       return;
     }
-
     // TODO
     // update userStakedAmount
     // update staking.staked
