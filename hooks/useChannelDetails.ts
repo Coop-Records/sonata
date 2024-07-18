@@ -48,8 +48,7 @@ function useChannelDetails(channelId = '') {
     moderators,
     channel: channel,
     userStakedAmount,
-    loading,
-    signedIn: !!signer
+    loading
   };
 }
 

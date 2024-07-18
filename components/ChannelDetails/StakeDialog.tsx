@@ -3,24 +3,25 @@ import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Drawer, DrawerContent } from '@/components/ui/drawer';
 import formatNumber from '@/lib/formatNumber';
 import { useUi } from '@/providers/UiProvider';
+import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import Body from './StakeDialogBody';
-import { Loader2 } from 'lucide-react';
 
-function StakeDialog({ balance = 0, disabled = true }) {
-  const { isMobile } = useUi();
+function StakeDialog({ balance = 0 }) {
+  const { isMobile, checkLoggedIn } = useUi();
   const [isOpen, setIsOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
 
   const onStart = () => { setIsOpen(false); setIsProcessing(true) };
   const onCompleted = () => setIsProcessing(false);
+  const openDialog = () => { if (checkLoggedIn()) setIsOpen(true) };
 
   return (
     <>
       <div className='text-center'>
         <Button
-          disabled={isProcessing || disabled}
-          onClick={() => setIsOpen(true)}
+          disabled={isProcessing}
+          onClick={openDialog}
           className="h-auto min-w-48 rounded-full px-9 py-4 text-base font-normal">
           {isProcessing ? <Loader2 className='animate-spin' /> : 'STAKE NOTES'}
         </Button>
