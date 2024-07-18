@@ -160,6 +160,7 @@ const TipProvider = ({ children }: any) => {
     <TipContext.Provider
       value={{
         balance,
+        setBalance,
         tip,
         tipDegen,
         remainingTipAllocation,

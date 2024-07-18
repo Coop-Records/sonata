@@ -1,3 +1,4 @@
+import useChannelStake from "@/hooks/useChannelStake";
 import formatNumber from "@/lib/formatNumber";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -8,8 +9,16 @@ import StakeTabs from "./StakeTabs";
 
 const tabs = [{ label: 'Stake', value: true }, { label: 'Unstake', value: false }];
 
-function Body({ balance = 0, className = '' }) {
+function Body({ balance = 0, className = '', onStart = () => { }, onCompleted = () => { } }) {
   const [isStake, setIsStake] = useState(true);
+  const [amount, setAmount] = useState<number>();
+  const { stake, unstake } = useChannelStake();
+
+  const processStaking = async () => {
+    onStart();
+    await (isStake ? stake(amount ?? 0) : unstake(amount ?? 0));
+    onCompleted();
+  };
 
   return (
     <div className={cn('flex flex-col', className)}>
@@ -21,7 +30,9 @@ function Body({ balance = 0, className = '' }) {
             type="number"
             min={0}
             max={balance}
+            value={String(amount ?? '')}
             placeholder="0.0"
+            onChange={(e) => setAmount(Number(e.target.value))}
             className="h-auto grow border-none bg-transparent p-0 text-base/5 focus-visible:ring-0 focus-visible:ring-offset-0 [&::-webkit-inner-spin-button]:appearance-none"
           />
           <div className='flex gap-1'>
@@ -33,7 +44,10 @@ function Body({ balance = 0, className = '' }) {
         <h5 className='mt-4 text-right text-sm/4 font-semibold'>Balance: {formatNumber(balance)} NOTES</h5>
       </div>
 
-      <Button className="mx-auto h-auto w-[11.25rem] rounded-full p-4 text-base/5 font-normal">
+      <Button
+        disabled={!amount}
+        onClick={processStaking}
+        className="mx-auto h-auto w-[11.25rem] rounded-full p-4 text-base/5 font-normal">
         {isStake ? 'Stake' : 'Unstake'}
       </Button>
     </div>
