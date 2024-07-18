@@ -19,6 +19,7 @@ import { supabaseClient } from '@/lib/supabase/client';
 import fetchMetadata from '@/lib/fetchMetadata';
 import { usePlayer } from '@/providers/audio/PlayerProvider';
 import { useProfileProvider } from './ProfileProvider';
+import { useParams } from 'next/navigation';
 
 type FeedProviderType = {
   filter: FeedFilter;
@@ -35,6 +36,7 @@ type FeedProviderType = {
 const FeedContext = createContext<FeedProviderType>({} as any);
 
 const FeedProvider = ({ children }: { children: ReactNode }) => {
+  const { channelId } = useParams();
   const [filter, setFilter] = useState<FeedFilter>({});
   const [feed, setFeed] = useState<SupabasePost[]>([]);
   const [feedType, setFeedType] = useState<string>();
@@ -48,16 +50,11 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (userLoading) return;
-    if (profileFid) {
-      setFeedType(FeedType.Posts);
-      return;
-    }
-    if (user) {
-      setFeedType(FeedType.Following);
-    } else {
-      setFeedType(FeedType.Trending);
-    }
-  }, [userLoading, user, profileFid]);
+    if (channelId) setFeedType(FeedType.Trending);
+    else if (profileFid) setFeedType(FeedType.Posts);
+    else if (user) setFeedType(FeedType.Following);
+    else setFeedType(FeedType.Trending);
+  }, [userLoading, user, profileFid, channelId]);
 
   const updateFilter = (change: FeedFilter) => {
     setFilter((prev) => ({ ...prev, ...change }));
