@@ -6,10 +6,11 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import StakeTabs from "./StakeTabs";
+import formatNumber from "@/lib/formatNumber";
 
 const tabs = [{ label: 'Stake', value: true }, { label: 'Unstake', value: false }];
 
-function Body({ className = '', onStart = () => { }, onCompleted = () => { } }) {
+function Body({ className = '', stakedBalance = 0, onStart = () => { }, onCompleted = () => { } }) {
   const [isStake, setIsStake] = useState(true);
   const [amount, setAmount] = useState<number>();
   const { stake, unstake } = useChannelStake();
@@ -41,7 +42,9 @@ function Body({ className = '', onStart = () => { }, onCompleted = () => { } }) 
           </div>
         </label>
 
-        <h5 className='mt-4 text-right text-sm/4 font-semibold'>Balance: {formatBigInt(balance)} NOTES</h5>
+        <h5 className='mt-4 text-right text-sm/4 font-semibold'>
+          Balance: {isStake ? formatBigInt(balance) : formatNumber(stakedBalance)} NOTES
+        </h5>
       </div>
 
       <Button
