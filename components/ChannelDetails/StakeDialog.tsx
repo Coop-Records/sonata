@@ -33,13 +33,13 @@ function StakeDialog({ balance = 0 }) {
 
       <Dialog open={!isMobile && isOpen} onOpenChange={setIsOpen}>
         <DialogContent className='max-w-[709px] !rounded-3xl p-8'>
-          <Body balance={balance} onStart={onStart} onCompleted={onCompleted} className='gap-8' />
+          <Body stakedBalance={balance} onStart={onStart} onCompleted={onCompleted} className='gap-8' />
         </DialogContent>
       </Dialog>
 
       <Drawer open={isMobile && isOpen} onOpenChange={setIsOpen}>
         <DrawerContent>
-          <Body balance={balance} onStart={onStart} onCompleted={onCompleted} className='gap-6 p-6' />
+          <Body stakedBalance={balance} onStart={onStart} onCompleted={onCompleted} className='gap-6 p-6' />
         </DrawerContent>
       </Drawer>
     </>
