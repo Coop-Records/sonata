@@ -3,17 +3,15 @@ import { stack } from "@/lib/stack/client";
 import supabase from "@/lib/supabase/serverClient";
 import getChannelTipInfo from "../tip/getChannelTipInfo";
 
-async function executeChannelStake(channelId: string, stakeAmount: number, fid: number) {
+async function executeChannelStake(channelId: string, amount: number, fid: number) {
   const user = await getUser(fid);
   if (!user?.verifications?.[0]) throw Error('No user address found');
 
   const balances: { amount: number; address: string }[] = await stack.getPoints(
     user.verifications.map((verification: string) => verification)
   );
-  const balance = balances.find(balance => balance.amount >= stakeAmount);
-  if (!balance) throw Error('No balances found');
-
-  const amount = Math.min(balance.amount, stakeAmount);
+  const balance = balances?.find(balance => balance?.amount >= amount);
+  if (!balance?.amount || amount > balance.amount) throw Error('No balances found');
 
   const info = await getChannelTipInfo(channelId, 0);
   if (!info) throw Error('could not find channel');

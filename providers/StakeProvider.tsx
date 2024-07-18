@@ -68,15 +68,20 @@ const StakeProvider = ({ children }: any) => {
       toast({ description: 'Invalid entry', variant: 'destructive' });
       return;
     }
+    const res = await executeUnstake(amount, signer.signer_uuid, channelId);
 
-    const result = await executeUnstake(amount, signer.signer_uuid, channelId);
-    if (!result) {
+    if (!res) {
       toast({ description: 'Could not unstake', variant: 'destructive' });
       return;
     }
-    // TODO
-    // update userStakedAmount
-    // update staking.staked
+    const staking = channelDetails.staking;
+    staking.staked -= amount;
+
+    setChannelDetails({ ...channelDetails, staking });
+    setBalance(balance ?? BigInt(0) + BigInt(amount));
+    setUserStakedAmount(userStakedAmount - amount);
+
+    toast({ description: res.message });
   };
 
   return (

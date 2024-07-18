@@ -27,17 +27,17 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const { signer_uuid, amount: stakeAmount, channelId } = await req.json();
+    const { signer_uuid, amount, channelId } = await req.json();
     if (!channelId) throw Error('channelId required');
-    if (!stakeAmount) throw Error('stakeAmount required');
+    if (!isFinite(amount)) throw Error('stakeAmount required');
     if (!signer_uuid) throw Error('signer_uuid required');
 
     const { status, fid } = await verifySignerUUID(signer_uuid);
     if (!status) throw Error('Invalid Signer UUID');
 
-    const data = await executeChannelStake(channelId, stakeAmount, fid);
+    const data = await executeChannelStake(channelId, amount, fid);
 
-    return Response.json({ message: `Staked ${data.usedAmount} NOTES`, ...data });
+    return Response.json({ message: `Staked ${amount} NOTES`, ...data });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Failed';
     return Response.json({ message, usedAmount: 0 }, { status: 500 });
