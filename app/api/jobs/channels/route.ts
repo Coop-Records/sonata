@@ -6,7 +6,7 @@ import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
   const TOP_CHANNELS = 10;
-  const TIP_AMOUNT = 11100;
+  const TIP_AMOUNT = 11111;
 
   const authHeader = req.headers.get('authorization');
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
