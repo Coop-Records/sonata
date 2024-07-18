@@ -1,6 +1,6 @@
 import useChannelStake from "@/hooks/useChannelStake";
-import formatNumber from "@/lib/formatNumber";
-import { cn } from "@/lib/utils";
+import { cn, formatBigInt } from "@/lib/utils";
+import { useTipProvider } from "@/providers/TipProvider";
 import Image from "next/image";
 import { useState } from "react";
 import { Button } from "../ui/button";
@@ -9,10 +9,11 @@ import StakeTabs from "./StakeTabs";
 
 const tabs = [{ label: 'Stake', value: true }, { label: 'Unstake', value: false }];
 
-function Body({ balance = 0, className = '', onStart = () => { }, onCompleted = () => { } }) {
+function Body({ className = '', onStart = () => { }, onCompleted = () => { } }) {
   const [isStake, setIsStake] = useState(true);
   const [amount, setAmount] = useState<number>();
   const { stake, unstake } = useChannelStake();
+  const { balance } = useTipProvider();
 
   const processStaking = async () => {
     onStart();
@@ -29,7 +30,6 @@ function Body({ balance = 0, className = '', onStart = () => { }, onCompleted = 
           <Input
             type="number"
             min={0}
-            max={balance}
             value={String(amount ?? '')}
             placeholder="0.0"
             onChange={(e) => setAmount(Number(e.target.value))}
@@ -41,7 +41,7 @@ function Body({ balance = 0, className = '', onStart = () => { }, onCompleted = 
           </div>
         </label>
 
-        <h5 className='mt-4 text-right text-sm/4 font-semibold'>Balance: {formatNumber(balance)} NOTES</h5>
+        <h5 className='mt-4 text-right text-sm/4 font-semibold'>Balance: {formatBigInt(balance)} NOTES</h5>
       </div>
 
       <Button
