@@ -5,7 +5,7 @@ import Skeleton from "./Skeleton";
 import StakeDialog from "./StakeDialog";
 
 function ChannelDetails({ image = '', channelId = '' }) {
-  const { moderators, channel, userStakedAmount, loading, signedIn } = useChannelDetails(channelId);
+  const { moderators, channel, userStakedAmount, loading } = useChannelDetails(channelId);
 
   return (
     <div className='mb-8'>
@@ -24,7 +24,7 @@ function ChannelDetails({ image = '', channelId = '' }) {
 
             <DataPoints channel={channel} moderators={moderators} />
           </div>
-          <StakeDialog balance={userStakedAmount} disabled={!signedIn} />
+          <StakeDialog balance={userStakedAmount} />
         </div>
       )}
     </div>
