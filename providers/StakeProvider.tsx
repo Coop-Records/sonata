@@ -78,7 +78,7 @@ const StakeProvider = ({ children }: any) => {
     staking.staked -= amount;
 
     setChannelDetails({ ...channelDetails, staking });
-    setBalance(balance ?? BigInt(0) + BigInt(amount));
+    setBalance(balance + BigInt(amount));
     setUserStakedAmount(userStakedAmount - amount);
 
     toast({ description: res.message });
