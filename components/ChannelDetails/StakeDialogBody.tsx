@@ -1,6 +1,6 @@
+import useChannelStake from "@/hooks/useChannelStake";
 import formatNumber from "@/lib/formatNumber";
 import { cn } from "@/lib/utils";
-import { useStakeProvider } from "@/providers/StakeProvider";
 import Image from "next/image";
 import { useState } from "react";
 import { Button } from "../ui/button";
@@ -12,11 +12,11 @@ const tabs = [{ label: 'Stake', value: true }, { label: 'Unstake', value: false 
 function Body({ balance = 0, className = '', onStart = () => { }, onCompleted = () => { } }) {
   const [isStake, setIsStake] = useState(true);
   const [amount, setAmount] = useState<number>();
-  const { channelStake, channelUnStake } = useStakeProvider();
+  const { stake, unstake } = useChannelStake();
 
   const processStaking = async () => {
     onStart();
-    await (isStake ? channelStake(amount ?? 0) : channelUnStake(amount ?? 0));
+    await (isStake ? stake(amount ?? 0) : unstake(amount ?? 0));
     onCompleted();
   };
 
@@ -53,6 +53,5 @@ function Body({ balance = 0, className = '', onStart = () => { }, onCompleted = 
     </div>
   )
 }
-
 
 export default Body;
