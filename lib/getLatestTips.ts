@@ -21,7 +21,7 @@ export const getLatestTips = async (): Promise<NextResponse> => {
     );
   }
   const LIMIT = 11;
-  const MAX_SENDER_APPEARANCE = 2;
+  const MAX_SENDER_APPEARANCE = 1;
   const result = [];
   const senderCounts = new Map<string, number>();
 
