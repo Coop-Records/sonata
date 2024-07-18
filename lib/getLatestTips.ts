@@ -11,7 +11,7 @@ export const getLatestTips = async (): Promise<NextResponse> => {
     .from('tips_activity_log')
     .select('*')
     .order('created_at', { ascending: false })
-    .limit(11);
+    .limit(100);
 
   if (error) {
     return NextResponse.json(
@@ -20,8 +20,25 @@ export const getLatestTips = async (): Promise<NextResponse> => {
     );
   }
 
+  const LIMIT = 11;
+  const MAX_SENDER_APPEARANCE = 1;
+  const result = [];
+  const senderCounts = new Map<string, number>();
+
+  data.sort(() => Math.random() - 0.5);
+
+  for (const item of data) {
+    const count = senderCounts.get(item.sender) ?? 0;
+
+    if (count < MAX_SENDER_APPEARANCE) {
+      senderCounts.set(item.sender, count + 1);
+      result.push(item);
+
+      if (result.length >= LIMIT) break;
+    }
+  }
   return NextResponse.json(
-    { message: 'Latest tips retrieved successfully', tips: data },
+    { message: 'Latest tips retrieved successfully', tips: result },
     { status: 200 },
   );
 };
