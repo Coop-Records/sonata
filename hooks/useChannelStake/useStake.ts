@@ -1,18 +1,18 @@
 import { useToast } from "@/components/ui/use-toast";
-import { executeStake } from "@/lib/sonata/staking";
+import requestStake from "@/lib/sonata/staking/requestChannelStake";
 import { useNeynarProvider } from "@/providers/NeynarProvider";
 import { useStakeProvider } from "@/providers/StakeProvider";
 import { useTipProvider } from "@/providers/TipProvider";
 import { useParams } from "next/navigation";
 
-const useStake = () => {
+function useStake() {
   const { channelId } = useParams();
   const { toast } = useToast();
   const { signer } = useNeynarProvider();
   const { balance, setBalance } = useTipProvider();
   const { setChannelDetails, channelDetails, setUserStakedAmount, userStakedAmount } = useStakeProvider();
 
-  return async (amount: number) => {
+  const stake = async (amount: number) => {
     if (!signer?.signer_uuid) {
       toast({ description: 'Invalid signer', variant: 'destructive' });
       return;
@@ -21,7 +21,7 @@ const useStake = () => {
       toast({ description: 'Invalid entry', variant: 'destructive' });
       return;
     }
-    const res = await executeStake(amount, signer.signer_uuid, channelId);
+    const res = await requestStake(amount, signer.signer_uuid, channelId);
 
     if (!res) {
       toast({ description: 'Could not stake', variant: 'destructive' });
@@ -36,6 +36,7 @@ const useStake = () => {
 
     toast({ description: res.message });
   }
+  return { stake };
 };
 
 export default useStake;
