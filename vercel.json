@@ -22,7 +22,7 @@
     },
     {
       "path": "/api/jobs/channels",
-      "schedule": "0 0 * * FRI"
+      "schedule": "0 12 * * 5"
     }
   ]
 }
