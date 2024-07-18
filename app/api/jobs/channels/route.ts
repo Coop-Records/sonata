@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
   const stacks = await Promise.all(sortedChannels.map((channel: any) => {
     const address = channel?.addresses?.[0];
     if (!address)
-      return Promise.reject(`${channel.channelId} chanel address not found`);
+      return Promise.reject(`${channel.channelId} channel address not found`);
 
     return stack.track(`weekly_channel_tip_to_${address}`, {
       account: address, points: TIP_AMOUNT
