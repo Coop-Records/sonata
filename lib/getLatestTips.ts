@@ -13,17 +13,19 @@ export const getLatestTips = async (): Promise<NextResponse> => {
     .order('created_at', { ascending: false })
     .limit(100);
 
-
   if (error) {
     return NextResponse.json(
       { message: 'Error fetching latest tips', error: error.message },
       { status: 500 },
     );
   }
+
   const LIMIT = 11;
   const MAX_SENDER_APPEARANCE = 1;
   const result = [];
   const senderCounts = new Map<string, number>();
+
+  data.sort(() => Math.random() - 0.5);
 
   for (const item of data) {
     const count = senderCounts.get(item.sender) ?? 0;
