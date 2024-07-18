@@ -15,7 +15,7 @@ type tab = {
 export default function Tabs({ tabs, className = '' }: { tabs: tab[]; className?: string }) {
   const { feedType, setFeedType } = useFeedProvider();
   const { user } = useNeynarProvider();
-  const { username } = useParams();
+  const { username, channelId } = useParams();
 
   return (
     <ul className={cn('flex gap-4 md:gap-8', className)}>
@@ -25,7 +25,7 @@ export default function Tabs({ tabs, className = '' }: { tabs: tab[]; className?
             return tab.value === FeedType.Posts;
           }
           const isDisabled =
-            (tab.value === FeedType.Following && !user) || tab.value === FeedType.Posts;
+            (tab.value === FeedType.Following && (!user || channelId)) || tab.value === FeedType.Posts;
           return !isDisabled;
         })
         .map((tab, index) => {
