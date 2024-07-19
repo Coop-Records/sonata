@@ -17,8 +17,9 @@ function Body({ className = '', stakedBalance = 0, onStart = () => { }, onComple
   const { balance } = useTipProvider();
 
   const processStaking = async () => {
+    const safeAmount = Number(amount ?? 0);
     onStart();
-    await (isStake ? stake(amount ?? 0) : unstake(amount ?? 0));
+    await (isStake ? stake(safeAmount) : unstake(safeAmount));
     onCompleted();
   };
   const max = () => setAmount(isStake ? (balance ?? 0) : stakedBalance);
