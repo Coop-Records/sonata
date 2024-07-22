@@ -29,6 +29,7 @@ function useStake() {
     }
     const staking = channelDetails.staking;
     staking.staked += res.usedAmount;
+    if (userStakedAmount == 0) ++staking.stakers;
 
     setChannelDetails({ ...channelDetails, staking });
     setBalance(BigInt(res.remainingBalance));

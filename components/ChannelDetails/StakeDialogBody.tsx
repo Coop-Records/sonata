@@ -17,10 +17,12 @@ function Body({ className = '', stakedBalance = 0, onStart = () => { }, onComple
   const { balance } = useTipProvider();
 
   const processStaking = async () => {
+    const safeAmount = Number(amount ?? 0);
     onStart();
-    await (isStake ? stake(amount ?? 0) : unstake(amount ?? 0));
+    await (isStake ? stake(safeAmount) : unstake(safeAmount));
     onCompleted();
   };
+  const max = () => setAmount(isStake ? (balance ?? 0) : stakedBalance);
 
   return (
     <div className={cn('flex flex-col', className)}>
@@ -41,12 +43,13 @@ function Body({ className = '', stakedBalance = 0, onStart = () => { }, onComple
             <Image src='/images/notes.png' width={16} height={16} className='size-4' alt="notes" />
           </div>
         </label>
-
-        <h5 className='mt-4 text-right text-sm/4 font-semibold'>
-          Balance: {isStake ? formatBigInt(balance) : formatNumber(stakedBalance)} NOTES
-        </h5>
+        <div className="mt-4 flex items-center justify-end gap-2">
+          <Button variant='outline' onClick={max} className="py-4">MAX</Button>
+          <h5 className='text-sm/4 font-semibold'>
+            Balance: {isStake ? formatBigInt(balance) : formatNumber(stakedBalance)} NOTES
+          </h5>
+        </div>
       </div>
-
       <Button
         disabled={!amount}
         onClick={processStaking}

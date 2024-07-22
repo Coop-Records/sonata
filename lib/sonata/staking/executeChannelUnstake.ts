@@ -2,42 +2,37 @@ import getUser from "@/lib/neynar/getNeynarUser";
 import { stack } from "@/lib/stack/client";
 import supabase from "@/lib/supabase/serverClient";
 import getChannelTipInfo from "../tip/getChannelTipInfo";
+import getPoints from "../getStackPoints";
 
 async function executeChannelUnstake(channelId: string, amount: number, fid: number) {
+  const event = `channel_stake_${channelId}`;
+  const userEvent = `channel_stake_${channelId}_${fid}`;
+
   const user = await getUser(fid);
-  const userAddress: string | undefined = user?.verifications?.[0];
+  const userAddress: string = user?.verifications?.[0];
   if (!userAddress) throw Error('No user address found');
 
   const info = await getChannelTipInfo(channelId, 0);
   if (!info) throw Error('could not find channel');
 
   const { channelAddress } = info;
-  const channelStakeAmount = await stack.getPoints(channelAddress);
-  if (!isFinite(channelStakeAmount) || amount > channelStakeAmount) throw Error('Invalid amount');
 
-  const { error, data } = await supabase
-    .from('stake_activity_log')
-    .select('userStakeAmount:amount.sum()')
-    .eq('channelId', channelId)
-    .eq('fid', fid)
-    .single();
-  if (error) throw error;
+  const userStakeAmount = -await getPoints(user.verifications, userEvent);
 
-  const { userStakeAmount } = data;
-  if (!isFinite(userStakeAmount) || amount > userStakeAmount) throw Error('Invalid amount');
+  if (amount > userStakeAmount) throw Error('Invalid amount');
 
   const results = await Promise.all([
-    stack.track(`channel_stake_from_${channelAddress}`, { account: channelAddress, points: -amount }),
-    stack.track(`channel_stake_to_${fid}`, { account: userAddress, points: amount }),
+    stack.track(event, { account: channelAddress, points: -amount }),
+    stack.track(userEvent, { account: userAddress, points: amount }),
   ]);
-  if (results.some(res => !res.success)) throw Error('Could not stack');
+  results.forEach(res => { if (!res.success) throw Error(res.status) });
 
   const log = await supabase
     .from('stake_activity_log')
     .insert({ fid, amount: -amount, channelId, channelAddress });
   if (log.error) console.error('executeChannelStake', log.error);
 
-  return { unstakedAmount: amount, remainingStake: data.userStakeAmount - amount };
+  return { unstakedAmount: amount, remainingStake: userStakeAmount - amount };
 }
 
 export default executeChannelUnstake;

@@ -21,7 +21,9 @@ export async function GET(req: NextRequest) {
 
     return Response.json({ message: 'success', ...data });
   } catch (error) {
-    return Response.json({ message: 'failed' }, { status: 500 });
+    console.error(error);
+    const message = error instanceof Error ? error.message : 'failed';
+    return Response.json({ message }, { status: 500 });
   }
 }
 
@@ -39,6 +41,7 @@ export async function POST(req: NextRequest) {
 
     return Response.json({ message: `Staked ${amount} NOTES`, ...data });
   } catch (error) {
+    console.error(error);
     const message = error instanceof Error ? error.message : 'Failed';
     return Response.json({ message, usedAmount: 0 }, { status: 500 });
   }
