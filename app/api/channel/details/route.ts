@@ -34,7 +34,9 @@ export async function GET(req: NextRequest) {
       balance: balance.data?.balance ?? 0
     });
   } catch (error) {
-    return Response.json({ message: 'failed' }, { status: 400 });
+    console.error(error);
+    const message = error instanceof Error ? error.message : 'failed';
+    return Response.json({ message }, { status: 400 });
   }
 }
 
