@@ -21,7 +21,9 @@ export async function GET(req: NextRequest) {
 
     return Response.json({ message: 'success', ...data });
   } catch (error) {
-    return Response.json({ message: 'failed' }, { status: 500 });
+    console.error(error);
+    const message = error instanceof Error ? error.message : 'failed';
+    return Response.json({ message }, { status: 500 });
   }
 }
 

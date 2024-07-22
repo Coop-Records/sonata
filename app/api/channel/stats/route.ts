@@ -33,6 +33,7 @@ export async function GET(req: NextRequest) {
     return Response.json({ message: 'success', channels });
   } catch (error) {
     console.error('Error:', error);
-    return Response.json({ message: 'failed' }, { status: 400 });
+    const message = error instanceof Error ? error.message : 'failed';
+    return Response.json({ message }, { status: 400 });
   }
 }
