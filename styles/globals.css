@@ -83,3 +83,8 @@
       'calt' 1;
   }
 }
+
+/* target infinite scroller */
+#feed-container {
+  overflow-x: auto;
+}

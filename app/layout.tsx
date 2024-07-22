@@ -27,7 +27,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={sora.variable}>
       <body
-        className={`flex min-h-screen w-screen flex-col overflow-x-hidden font-sora ${backgroundColor}`}
+        className={`flex min-h-screen flex-col overflow-x-hidden font-sora ${backgroundColor}`}
       >
         <Providers>
           <div id="player-portal" className="pointer-events-none fixed left-0 top-0 opacity-0" />

@@ -49,7 +49,7 @@ export default function UpvoteDownvote({
     setShowUpvoteDropdown(false);
     if (amount === 0) return;
     const response = await tip(amount, cast.post_hash, cast.author.fid);
-    setTotal(response.totalTipOnPost ?? 0);
+    setTotal(response?.totalTipOnPost ?? total);
     setCustomTip('');
   };
 
