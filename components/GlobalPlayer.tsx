@@ -15,7 +15,7 @@ export default function GlobalPlayer() {
       data-type={metadata.type}
       className="sticky bottom-0 left-0 mt-auto w-screen space-y-6 overflow-hidden bg-white py-3 shadow-2xl shadow-black"
     >
-      <div className="container flex items-center gap-3">
+      <div className="container relative flex items-center gap-3">
         <div className="relative my-auto size-16 overflow-hidden rounded-lg shadow-md">
           <Image
             src={metadata.artworkUrl}
