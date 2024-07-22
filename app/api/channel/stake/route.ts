@@ -10,16 +10,14 @@ export async function GET(req: NextRequest) {
   try {
     if (!channelId || !fid) throw Error('channelId and fid required');
 
-    const { error, data } = await supabase
-      .from('stake_activity_log')
-      .select('stakedAmount:amount.sum()')
-      .eq('fid', fid)
-      .eq('channelId', channelId)
-      .single();
+    const { data, error } = await supabase.rpc('get_user_channel_staked_amount', {
+      p_fid: fid,
+      p_channelId: channelId
+    });
 
     if (error) throw error;
 
-    return Response.json({ message: 'success', ...data });
+    return Response.json({ message: 'success', stakedAmount: data });
   } catch (error) {
     console.error(error);
     const message = error instanceof Error ? error.message : 'failed';
