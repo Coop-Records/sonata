@@ -29,10 +29,11 @@ function useUnstake() {
     }
     const staking = channelDetails.staking;
     staking.staked -= amount;
+    if (res.remainingStake == 0) --staking.stakers;
 
     setChannelDetails({ ...channelDetails, staking });
     setBalance(balance + BigInt(amount));
-    setUserStakedAmount(userStakedAmount - amount);
+    setUserStakedAmount(res.remainingStake);
 
     toast({ description: res.message });
   };

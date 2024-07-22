@@ -20,7 +20,8 @@ export function formatDuration(duration: number) {
   }
   return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
-export const formatBigInt = (balance: bigint | string): string => {
+export const formatBigInt = (balance?: bigint | string): string => {
+  if(!balance) return '0';
   const formatter = new Intl.NumberFormat('en-US', {
     maximumFractionDigits: 1,
     notation: 'compact',

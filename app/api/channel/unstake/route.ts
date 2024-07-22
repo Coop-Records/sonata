@@ -16,6 +16,7 @@ export async function POST(req: NextRequest) {
 
     return Response.json({ message: `Unstaked ${amount} NOTES`, ...data });
   } catch (error) {
+    console.error(error);
     const message = error instanceof Error ? error.message : 'Failed';
     return Response.json({ message, usedAmount: 0 }, { status: 500 });
   }
