@@ -15,11 +15,9 @@ export async function GET(req: NextRequest) {
         .order('points', { ascending: false })
         .limit(1)
         .single(),
-      supabase
-        .from('channel_tips_activity_log')
-        .select('balance:amount.sum()')
-        .eq('channelId', channelId)
-        .single(),
+      supabase.rpc('get_channel_tips_balance', {
+        p_channelId: channelId
+      }),
       supabase
         .from('channel_stake_stats')
         .select('stakers,staked')
@@ -31,7 +29,7 @@ export async function GET(req: NextRequest) {
       message: 'success',
       topSong: topSong.data,
       staking: stakeStats.data,
-      balance: balance.data?.balance ?? 0
+      balance: balance.data ?? 0
     });
   } catch (error) {
     console.error(error);
