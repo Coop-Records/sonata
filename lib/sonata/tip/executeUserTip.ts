@@ -18,22 +18,21 @@ async function executeUserTip(
   if (error) throw error;
 
   const { allowableAmount: amount, tipperFid: sender, tip, channelTip } = tipInfo;
-  let receiverAmount = amount;
+  let receiverAmount = amount, tipperAmount = 0, channelAmount = 0;
   const stacks = [];
   const allUpdates = [];
 
   if (channelTip) {
-    const { channelAddress, channelAmount, channelId } = channelTip;
+    const { channelAddress, channelId } = channelTip;
+    receiverAmount -= channelAmount = channelTip.channelAmount;
     stacks.push(stack.track(`channel_tip_${channelId}`, { account: channelAddress, points: channelAmount }));
-    receiverAmount = amount - channelAmount;
-    allUpdates.push(supabase
-      .from('channel_tips_activity_log')
-      .insert({ sender, amount: channelAmount, post_hash: postHash, channelId, channelAddress })
-    );
+
+    allUpdates.push(supabase.from('channel_tips_activity_log').insert({
+      sender, amount: channelAmount, post_hash: postHash, channelId, channelAddress
+    }));
   }
   if (tipperWalletAddress) {
-    const tipperAmount = Math.floor(Number(amount) * .1);
-    receiverAmount = amount - tipperAmount;
+    receiverAmount -= tipperAmount = Math.floor(Number(amount) * .1);
     stacks.push(stack.track(`tip_cashback_${sender}`, { account: tipperWalletAddress, points: tipperAmount }));
   }
   stacks.unshift(stack.track(`tip_recipient_${receiver}`, { account: recipientWalletAddress, points: receiverAmount }));
@@ -54,7 +53,7 @@ async function executeUserTip(
 
   updates.map(({ error }, id) => error ? console.error({ error, id }) : undefined);
 
-  return { tipRemaining: daily_tip_allocation, totalTipOnPost };
+  return { tipRemaining: daily_tip_allocation, totalTipOnPost, tipperAmount, channelAmount };
 }
 
 export default executeUserTip;

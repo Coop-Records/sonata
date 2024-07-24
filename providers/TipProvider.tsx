@@ -114,14 +114,9 @@ const TipProvider = ({ children }: any) => {
       isNil(user) ||
       isNil(remainingTipAllocation) ||
       isEmpty(user.verifications) ||
-      isNil(signer) ||
-      isNil(signer?.signer_uuid)
+      isNil(signer)
     ) {
-      toast({
-        title: 'Unable to Tip',
-        description: 'Something went wrong',
-        variant: 'destructive',
-      });
+      toast({ description: 'Unable to Tip', variant: 'destructive' });
       return;
     }
 
@@ -132,12 +127,13 @@ const TipProvider = ({ children }: any) => {
       recipientFid,
       Array.isArray(channelId) ? '' : channelId
     );
-    const message = data.message;
-    const tipRemaining = data.tipRemaining;
-
-    setRemainingTipAllocation(BigInt(tipRemaining ?? remainingTipAllocation));
-    toast({ description: message });
-
+    if (!data) {
+      toast({ description: 'Unable to Tip', variant: 'destructive' });
+      return;
+    }
+    setRemainingTipAllocation(BigInt(data.tipRemaining));
+    setBalance((balance ?? BigInt(0)) + BigInt(data.tipperAmount));
+    toast({ description: data.message });
     return data;
   };
 

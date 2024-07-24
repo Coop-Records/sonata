@@ -7,7 +7,7 @@ const executeTip = async (
   postHash: string,
   recipientFid: number,
   channelId?: string
-): Promise<TipResponse> => {
+) => {
   try {
     if (isNil(signer_uuid)) throw Error('Invalid Signer');
     const res = await fetch('/api/tip', {
@@ -27,7 +27,7 @@ const executeTip = async (
     return data;
   } catch (error) {
     console.error(error);
-    return { message: 'Tip Failed', usedTip: 0, tipRemaining: 0, totalTipOnPost: 0 };
+    return undefined;
   }
 };
 

@@ -1,11 +1,11 @@
-import useChannelDetails from "@/hooks/useChannelDetails";
+import { useStakeProvider } from "@/providers/StakeProvider";
 import Image from "next/image";
 import DataPoints from "./DataPoints";
 import Skeleton from "./Skeleton";
 import StakeDialog from "./StakeDialog";
 
 function ChannelDetails({ image = '', channelId = '' }) {
-  const { moderators, channel, userStakedAmount, loading } = useChannelDetails(channelId);
+  const { loading, channelDetails: channel, userStakedAmount } = useStakeProvider();
 
   return (
     <div className='mb-8'>
@@ -22,7 +22,7 @@ function ChannelDetails({ image = '', channelId = '' }) {
             <h1 className='text-2xl font-semibold'>/{channelId}</h1>
             <h4 className='text-base font-normal text-[#141A1EB2] md:max-w-[600px]'>{channel.info?.description}</h4>
 
-            <DataPoints channel={channel} moderators={moderators} />
+            <DataPoints channel={channel} moderators={channel.moderators} />
           </div>
           <StakeDialog balance={userStakedAmount} />
         </div>
