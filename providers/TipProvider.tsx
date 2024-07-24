@@ -1,7 +1,6 @@
 import executeDegenTip from '@/lib/degen/executeDegenTip';
 import executeTip from '@/lib/sonata/executeTip';
 import getCurrentNotes from '@/lib/sonata/getCurrentNotes';
-import { TipResponse } from '@/types/TipResponse';
 import { isEmpty, isNil } from 'lodash';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Address } from 'viem';
@@ -99,7 +98,7 @@ const TipProvider = ({ children }: any) => {
       amount,
       postHash,
     );
-    const message = data.message;
+    const message = data?.message ?? 'Tip Failed';
     toast({ description: message });
 
     return data;
@@ -109,7 +108,7 @@ const TipProvider = ({ children }: any) => {
     amount: bigint,
     postHash: string,
     recipientFid: number,
-  ): Promise<TipResponse | undefined> => {
+  ) => {
     if (
       isNil(user) ||
       isNil(remainingTipAllocation) ||

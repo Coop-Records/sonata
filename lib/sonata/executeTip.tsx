@@ -27,7 +27,6 @@ const executeTip = async (
     return data;
   } catch (error) {
     console.error(error);
-    return undefined;
   }
 };
 
