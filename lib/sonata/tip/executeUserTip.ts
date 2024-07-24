@@ -2,10 +2,13 @@ import { stack } from "@/lib/stack/client";
 import supabase from '@/lib/supabase/serverClient';
 import getUserTipInfo from "./getUserTipInfo";
 
-type Fg = { recipientFid: number, recipientWalletAddress: string, tipperWalletAddress?: string };
 async function executeUserTip(
   postHash: string,
-  { recipientFid: receiver, recipientWalletAddress, tipperWalletAddress }: Fg,
+  {
+    recipientFid: receiver = 0,
+    recipientWalletAddress = '',
+    tipperWalletAddress = ''
+  },
   tipInfo: Awaited<ReturnType<typeof getUserTipInfo>>
 ) {
   const { error, data: post } = await supabase
