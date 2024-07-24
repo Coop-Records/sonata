@@ -1,4 +1,4 @@
-import getUsers from '@/lib/sonata/getUsers';
+import getBulkUsersByFid from '@/lib/neynar/getBulkUsersByFid';
 import executeUserTip from '@/lib/sonata/tip/executeUserTip';
 import getUserTipInfo from '@/lib/sonata/tip/getUserTipInfo';
 import { NextRequest, NextResponse } from 'next/server';
@@ -10,7 +10,7 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
 
   if (tipInfo.tipperFid === recipientFid) throw Error('Can not tip yourself');
 
-  const users: any[] = await getUsers([tipInfo.tipperFid, recipientFid]);
+  const users = await getBulkUsersByFid([tipInfo.tipperFid, recipientFid]);
   const recipientWalletAddress = users?.find(user => user.fid == recipientFid)?.verifications?.find(Boolean);
   const tipperWalletAddress = users?.find(user => user.fid == tipInfo.tipperFid)?.verifications?.find(Boolean);
 
