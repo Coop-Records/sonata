@@ -2,9 +2,10 @@ import { stack } from "@/lib/stack/client";
 import supabase from '@/lib/supabase/serverClient';
 import getUserTipInfo from "./getUserTipInfo";
 
+type Fg = { recipientFid: number, recipientWalletAddress: string, tipperWalletAddress?: string };
 async function executeUserTip(
   postHash: string,
-  { recipientFid: receiver, recipientWalletAddress }: any,
+  { recipientFid: receiver, recipientWalletAddress, tipperWalletAddress }: Fg,
   tipInfo: Awaited<ReturnType<typeof getUserTipInfo>>
 ) {
   const { error, data: post } = await supabase
@@ -15,22 +16,26 @@ async function executeUserTip(
 
   const { allowableAmount: amount, tipperFid: sender, tip, channelTip } = tipInfo;
   let receiverAmount = amount;
-  const stackCalls = [];
+  const stacks = [];
   const allUpdates = [];
 
   if (channelTip) {
     const { channelAddress, channelAmount, channelId } = channelTip;
-    stackCalls.push(stack.track(`channel_tip_from_${sender}`, { account: channelAddress, points: channelAmount }));
+    stacks.push(stack.track(`channel_tip_${channelId}`, { account: channelAddress, points: channelAmount }));
     receiverAmount = amount - channelAmount;
-    allUpdates.push(
-      supabase
-        .from('channel_tips_activity_log')
-        .insert({ sender, amount: channelAmount, post_hash: postHash, channelId, channelAddress })
+    allUpdates.push(supabase
+      .from('channel_tips_activity_log')
+      .insert({ sender, amount: channelAmount, post_hash: postHash, channelId, channelAddress })
     );
   }
-  stackCalls.unshift(stack.track(`tip_from_${sender}`, { account: recipientWalletAddress, points: receiverAmount }));
+  if (tipperWalletAddress) {
+    const tipperAmount = Math.floor(Number(amount) * .1);
+    receiverAmount = amount - tipperAmount;
+    stacks.push(stack.track(`tip_cashback_${sender}`, { account: tipperWalletAddress, points: tipperAmount }));
+  }
+  stacks.unshift(stack.track(`tip_recipient_${receiver}`, { account: recipientWalletAddress, points: receiverAmount }));
 
-  const [{ success }] = await Promise.all(stackCalls);
+  const [{ success }] = await Promise.all(stacks);
   if (!success) throw Error('Could not stack');
 
   const remaining_tip_allocation = tip.remaining_tip_allocation - amount;
