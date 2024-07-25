@@ -11,7 +11,7 @@ import { handle } from 'frog/next';
 import { serveStatic } from 'frog/serve-static';
 
 const NEYNAR_KEY = process.env.NEYNAR_API_KEY ?? 'NEYNAR_FROG_FM';
-const URL = process.env.NEXT_PUBLIC_FRAME_URL ?? 'https://sonata.tips';
+const URL = 'https://sonata.tips';
 
 const app = new Frog({
   basePath: '/api/frame',
