@@ -1,11 +1,7 @@
 import supabase from '@/lib/supabase/serverClient';
-import verifySignerUUID from "../../neynar/verifySigner";
 import getChannelTipInfo from "./getChannelTipInfo";
 
-async function getUserTipInfo(signer_uuid = '', tipAmount = 0, channelId = '') {
-  const { status, fid: tipperFid } = await verifySignerUUID(signer_uuid);
-  if (!status) throw Error('Invalid Signer UUID');
-
+async function getUserTipInfo(tipperFid: number, tipAmount = 0, channelId = '') {
   const tip = await supabase
     .from('tips')
     .select('remaining_tip_allocation, daily_tip_allocation')
