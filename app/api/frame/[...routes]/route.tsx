@@ -78,12 +78,3 @@ devtools(app, { serveStatic });
 
 export const GET = handle(app);
 export const POST = handle(app);
-
-/*
-  ABSA
-  Newcastle
-  GT Mnguni
-  632005
-  Savings
-  380-407-407-05
-*/
