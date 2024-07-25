@@ -1,55 +1,59 @@
 import getChannelDetails from "@/lib/sonata/getChannelDetails";
 import { useNeynarProvider } from "@/providers/NeynarProvider";
-import { useStakeProvider } from "@/providers/StakeProvider";
-import { useEffect, useMemo, useState } from "react";
+import { TrackMetadata } from "@/types/Track";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
-function useChannelDetails(channelId = '') {
+const DEFAULT_CHANNEL_DETAILS = {
+  info: undefined as any,
+  balance: 0,
+  moderators: [] as any[],
+  topSong: undefined as TrackMetadata | undefined,
+  staking: {
+    stakers: 0,
+    staked: 0,
+  },
+};
+
+function useChannelDetails() {
+  const channelId = useParams().channelId as string | undefined;
   const { signer } = useNeynarProvider();
-  const {
-    channelDetails: channel,
-    setChannelDetails: setChannel,
-    userStakedAmount,
-    setUserStakedAmount
-  } = useStakeProvider();
+
+  const [userStakedAmount, setUserStakedAmount] = useState(0);
+  const [channelDetails, setChannelDetails] = useState(DEFAULT_CHANNEL_DETAILS);
   const [loading, setLoading] = useState(true);
-
-  const moderators = useMemo(() => {
-    const users = [];
-    const info = channel.info;
-
-    !!info?.hosts?.[0] && users.push(info.hosts[0]);
-    !!info?.moderator && users.push(info.moderator);
-
-    return users;
-  }, [channel]);
 
   useEffect(() => {
     if (channelId) {
-      getChannelDetails(channelId, signer?.fid)
-        .then(data => {
-          setChannel({
-            info: data.info,
-            balance: data.balance ?? 0,
-            topSong: data.topSong,
-            staking: {
-              staked: data.staking?.staked ?? 0,
-              stakers: data.staking?.stakers ?? 0,
-            },
-          });
+      getChannelDetails(channelId, signer?.fid).then(data => {
+        const mods = [];
+        const info = data.info;
+        !!info?.hosts?.[0] && mods.push(info.hosts[0]);
+        !!info?.moderator && mods.push(info.moderator);
 
-          setUserStakedAmount(data.user?.stakedAmount ?? 0);
-        })
-        .finally(() => setLoading(false));
+        setChannelDetails({
+          info,
+          balance: data.balance ?? 0,
+          topSong: data.topSong,
+          moderators: mods,
+          staking: {
+            staked: data.staking?.staked ?? 0,
+            stakers: data.staking?.stakers ?? 0,
+          },
+        });
+
+        setUserStakedAmount(data.user?.stakedAmount ?? 0);
+      }).finally(() => setLoading(false));
     }
     return () => { setLoading(true); }
-  }, [channelId, signer?.fid, setChannel, setUserStakedAmount]);
+  }, [channelId, signer]);
 
   return {
-    moderators,
-    channel: channel,
-    userStakedAmount,
-    loading
+    loading, setLoading,
+    channelDetails, setChannelDetails,
+    userStakedAmount, setUserStakedAmount
   };
 }
 
 export default useChannelDetails;
+export { DEFAULT_CHANNEL_DETAILS };

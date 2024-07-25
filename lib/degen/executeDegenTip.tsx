@@ -6,7 +6,7 @@ const executeDegenTip = async (
   signer_uuid: string | undefined,
   amount: bigint,
   postHash: string,
-): Promise<TipResponse> => {
+) => {
   try {
     if (isNil(signer_uuid)) throw Error('Invalid Signer');
     const res = await fetch('/api/degenTip', {
@@ -25,7 +25,6 @@ const executeDegenTip = async (
     return data;
   } catch (error) {
     console.error(error);
-    return { message: 'Tip Failed', usedTip: 0, tipRemaining: 0, totalTipOnPost: 0 };
   }
 };
 

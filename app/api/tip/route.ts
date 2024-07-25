@@ -1,4 +1,4 @@
-import getUser from '@/lib/neynar/getNeynarUser';
+import getBulkUsersByFid from '@/lib/neynar/getBulkUsersByFid';
 import executeUserTip from '@/lib/sonata/tip/executeUserTip';
 import getUserTipInfo from '@/lib/sonata/tip/getUserTipInfo';
 import { NextRequest, NextResponse } from 'next/server';
@@ -10,12 +10,15 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
 
   if (tipInfo.tipperFid === recipientFid) throw Error('Can not tip yourself');
 
-  const recipientUser = await getUser(recipientFid);
-  const recipientWalletAddress = recipientUser?.verifications?.find(Boolean);
+  const users = await getBulkUsersByFid([tipInfo.tipperFid, recipientFid]);
+  const recipientWalletAddress = users?.find(user => user.fid == recipientFid)?.verifications?.find(Boolean);
+  const tipperWalletAddress = users?.find(user => user.fid == tipInfo.tipperFid)?.verifications?.find(Boolean);
 
   if (!recipientWalletAddress) throw Error('Invalid recipient');
 
-  const result = await executeUserTip(postHash, { recipientFid, recipientWalletAddress }, tipInfo);
+  const result = await executeUserTip(
+    postHash, { recipientFid, recipientWalletAddress, tipperWalletAddress }, tipInfo
+  );
 
   return NextResponse.json({
     message: `Tipped ${tipInfo.allowableAmount} NOTES`,

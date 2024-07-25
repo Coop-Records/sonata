@@ -4,7 +4,11 @@ import getUserTipInfo from "./getUserTipInfo";
 
 async function executeUserTip(
   postHash: string,
-  { recipientFid: receiver, recipientWalletAddress }: any,
+  {
+    recipientFid: receiver = 0,
+    recipientWalletAddress = '',
+    tipperWalletAddress = ''
+  },
   tipInfo: Awaited<ReturnType<typeof getUserTipInfo>>
 ) {
   const { error, data: post } = await supabase
@@ -14,23 +18,26 @@ async function executeUserTip(
   if (error) throw error;
 
   const { allowableAmount: amount, tipperFid: sender, tip, channelTip } = tipInfo;
-  let receiverAmount = amount;
-  const stackCalls = [];
+  let receiverAmount = amount, tipperAmount = 0, channelAmount = 0;
+  const stacks = [];
   const allUpdates = [];
 
   if (channelTip) {
-    const { channelAddress, channelAmount, channelId } = channelTip;
-    stackCalls.push(stack.track(`channel_tip_from_${sender}`, { account: channelAddress, points: channelAmount }));
-    receiverAmount = amount - channelAmount;
-    allUpdates.push(
-      supabase
-        .from('channel_tips_activity_log')
-        .insert({ sender, amount: channelAmount, post_hash: postHash, channelId, channelAddress })
-    );
-  }
-  stackCalls.unshift(stack.track(`tip_from_${sender}`, { account: recipientWalletAddress, points: receiverAmount }));
+    const { channelAddress, channelId } = channelTip;
+    receiverAmount -= channelAmount = channelTip.channelAmount;
+    stacks.push(stack.track(`channel_tip_${channelId}`, { account: channelAddress, points: channelAmount }));
 
-  const [{ success }] = await Promise.all(stackCalls);
+    allUpdates.push(supabase.from('channel_tips_activity_log').insert({
+      sender, amount: channelAmount, post_hash: postHash, channelId, channelAddress
+    }));
+  }
+  if (tipperWalletAddress) {
+    receiverAmount -= tipperAmount = Math.floor(Number(amount) * .1);
+    stacks.push(stack.track(`tip_cashback_${sender}`, { account: tipperWalletAddress, points: tipperAmount }));
+  }
+  stacks.unshift(stack.track(`tip_recipient_${receiver}`, { account: recipientWalletAddress, points: receiverAmount }));
+
+  const [{ success }] = await Promise.all(stacks);
   if (!success) throw Error('Could not stack');
 
   const remaining_tip_allocation = tip.remaining_tip_allocation - amount;
@@ -46,7 +53,7 @@ async function executeUserTip(
 
   updates.map(({ error }, id) => error ? console.error({ error, id }) : undefined);
 
-  return { tipRemaining: daily_tip_allocation, totalTipOnPost };
+  return { tipRemaining: daily_tip_allocation, totalTipOnPost, tipperAmount, channelAmount };
 }
 
 export default executeUserTip;

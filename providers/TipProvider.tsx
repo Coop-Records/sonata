@@ -1,7 +1,6 @@
 import executeDegenTip from '@/lib/degen/executeDegenTip';
 import executeTip from '@/lib/sonata/executeTip';
 import getCurrentNotes from '@/lib/sonata/getCurrentNotes';
-import { TipResponse } from '@/types/TipResponse';
 import { isEmpty, isNil } from 'lodash';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Address } from 'viem';
@@ -99,7 +98,7 @@ const TipProvider = ({ children }: any) => {
       amount,
       postHash,
     );
-    const message = data.message;
+    const message = data?.message ?? 'Tip Failed';
     toast({ description: message });
 
     return data;
@@ -109,19 +108,14 @@ const TipProvider = ({ children }: any) => {
     amount: bigint,
     postHash: string,
     recipientFid: number,
-  ): Promise<TipResponse | undefined> => {
+  ) => {
     if (
       isNil(user) ||
       isNil(remainingTipAllocation) ||
       isEmpty(user.verifications) ||
-      isNil(signer) ||
-      isNil(signer?.signer_uuid)
+      isNil(signer)
     ) {
-      toast({
-        title: 'Unable to Tip',
-        description: 'Something went wrong',
-        variant: 'destructive',
-      });
+      toast({ description: 'Unable to Tip', variant: 'destructive' });
       return;
     }
 
@@ -132,12 +126,13 @@ const TipProvider = ({ children }: any) => {
       recipientFid,
       Array.isArray(channelId) ? '' : channelId
     );
-    const message = data.message;
-    const tipRemaining = data.tipRemaining;
-
-    setRemainingTipAllocation(BigInt(tipRemaining ?? remainingTipAllocation));
-    toast({ description: message });
-
+    if (!data) {
+      toast({ description: 'Unable to Tip', variant: 'destructive' });
+      return;
+    }
+    setRemainingTipAllocation(BigInt(data.tipRemaining));
+    setBalance((balance ?? BigInt(0)) + BigInt(data.tipperAmount));
+    toast({ description: data.message });
     return data;
   };
 
