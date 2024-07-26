@@ -1,5 +1,5 @@
 'use client';
-import { FeedFilter, FeedType } from '@/types/Feed';
+import { FeedFilter, FeedStake, FeedType } from '@/types/Feed';
 import {
   ReactNode,
   createContext,
@@ -20,11 +20,13 @@ import fetchMetadata from '@/lib/fetchMetadata';
 import { usePlayer } from '@/providers/audio/PlayerProvider';
 import { useProfileProvider } from './ProfileProvider';
 import { useParams } from 'next/navigation';
+import getAllUserStakes from '@/lib/sonata/staking/getAllUserStakes';
 
 type FeedProviderType = {
   filter: FeedFilter;
   updateFilter: (change: FeedFilter) => void;
   feed: SupabasePost[];
+  feedStake: FeedStake[];
   feedType?: string;
   setFeedType: (feedType: string) => void;
   fetchMore: (start: number) => void;
@@ -39,6 +41,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const { channelId } = useParams();
   const [filter, setFilter] = useState<FeedFilter>({});
   const [feed, setFeed] = useState<SupabasePost[]>([]);
+  const [feedStake, setFeedStake] = useState<FeedStake[]>([]);
   const [feedType, setFeedType] = useState<string>();
   const [hasMore, setHasMore] = useState(true);
   const { user, loading: userLoading } = useNeynarProvider();
@@ -60,26 +63,33 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     setFilter((prev) => ({ ...prev, ...change }));
   };
 
-  const fetchMore = useCallback(
-    async (start: number) => {
-      if (!feedType) return;
-      setHasMore(true);
-      const { posts } = await fetchPosts(supabaseClient, filter, feedType, start, fid, profileFid);
-      if (!(posts && posts.length === fetchPostsLimit)) {
-        setHasMore(false);
-      }
-      setFeed((prev) => {
-        const mergedUnique = mergeArraysUniqueByPostHash(prev, posts);
-        if (profileFid) return mergedUnique.filter((feed) => feed.authorFid === profileFid);
-        return mergedUnique;
-      });
-    },
-    [feedType, filter, supabaseClient, fid, profileFid],
-  );
+  const fetchMore = useCallback(async (start: number) => {
+    if (!feedType) return;
+    setHasMore(true);
+
+    if (feedType === FeedType.Stakes) {
+      const stakes = await getAllUserStakes(user?.fid);
+
+      setFeedStake(stakes);
+      setHasMore(false);
+      return;
+    }
+
+    const { posts } = await fetchPosts(supabaseClient, filter, feedType, start, fid, profileFid);
+    if (!(posts && posts.length === fetchPostsLimit)) {
+      setHasMore(false);
+    }
+    setFeed((prev) => {
+      const mergedUnique = mergeArraysUniqueByPostHash(prev, posts);
+      if (profileFid) return mergedUnique.filter((feed) => feed.authorFid === profileFid);
+      return mergedUnique;
+    });
+  }, [feedType, filter, fid, profileFid, user]);
 
   useEffect(() => {
     const init = async () => {
       setFeed([]);
+      setFeedStake([]);
       await fetchMore(0);
     };
     init();
@@ -142,15 +152,11 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const value = {
-    filter,
-    updateFilter,
-    feed: filteredFeed,
-    feedType,
-    setFeedType,
-    fetchMore,
-    hasMore,
-    handleNext,
-    handlePrev,
+    filter, updateFilter,
+    feedStake, feed: filteredFeed,
+    feedType, setFeedType,
+    fetchMore, hasMore,
+    handleNext, handlePrev,
   };
 
   return <FeedContext.Provider value={value}>{children}</FeedContext.Provider>;

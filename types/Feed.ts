@@ -15,4 +15,12 @@ export enum FeedType {
   Recent = 'Recent',
   Following = 'Following',
   Posts = 'Posts',
+  Stakes = 'Stakes',
 }
+
+export interface FeedStake {
+  channelId: string;
+  description: string;
+  points: number;
+  icon: string;
+};

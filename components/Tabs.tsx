@@ -21,11 +21,10 @@ export default function Tabs({ tabs, className = '' }: { tabs: tab[]; className?
     <ul className={cn('flex gap-4 md:gap-8', className)}>
       {tabs
         .filter((tab) => {
-          if (username) {
-            return tab.value === FeedType.Posts;
-          }
-          const isDisabled =
-            (tab.value === FeedType.Following && (!user || channelId)) || tab.value === FeedType.Posts;
+          const userTabs = tab.value === FeedType.Posts || tab.value === FeedType.Stakes;
+          if (username) return userTabs;
+
+          const isDisabled = (tab.value === FeedType.Following && (!user || channelId)) || userTabs;
           return !isDisabled;
         })
         .map((tab, index) => {
