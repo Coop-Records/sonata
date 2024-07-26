@@ -11,6 +11,7 @@ import { useUi } from '@/providers/UiProvider';
 import { Badge } from './ui/badge';
 import { Input } from './ui/input';
 import { ArrowBigUp } from 'lucide-react';
+import { useStakeProvider } from '@/providers/StakeProvider';
 
 const defaultTips = {
   DEGEN: [10, 50, 100],
@@ -32,6 +33,7 @@ export default function UpvoteDownvote({
   className?: string;
 }) {
   const { user } = useNeynarProvider();
+  const { setChannelDetails } = useStakeProvider();
   const userFid = user?.fid;
   const castAuthorFid = cast.author?.fid;
   const isSelfPost = userFid === castAuthorFid;
@@ -51,6 +53,9 @@ export default function UpvoteDownvote({
     const response = await tip(amount, cast.post_hash, cast.author.fid);
     setTotal(response?.totalTipOnPost ?? total);
     setCustomTip('');
+    setChannelDetails(({ balance, ...rest }) => ({
+      ...rest, balance: balance + response.channelAmount
+    }));
   };
 
   const handleCustomUpvoteTip = () => {
