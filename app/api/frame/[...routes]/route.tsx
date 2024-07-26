@@ -11,23 +11,28 @@ import { handle } from 'frog/next';
 import { serveStatic } from 'frog/serve-static';
 
 const NEYNAR_KEY = process.env.NEYNAR_API_KEY ?? 'NEYNAR_FROG_FM';
-const URL = 'https://sonata.tips';
+const BASE_URL = 'https://sonata.tips';
 
 const app = new Frog({
   basePath: '/api/frame',
   title: 'Sonata Tip or Listen',
-  hub: neynarHub({ apiKey: NEYNAR_KEY })
+  hub: neynarHub({ apiKey: NEYNAR_KEY }),
+  unstable_metaTags: [
+    { property: 'of:version', content: 'vNext' },
+    { property: 'of:accepts:*', content: '*' },
+  ]
 });
 
 app.frame('/tip', async (c) => {
-  const { cast_url, recipient_fid } = c.req.query();
+  const { searchParams, search } = new URL(c.buttonValue ?? c.req.url);
+  const cast_url = searchParams.get('cast_url');
+  const recipient_fid = searchParams.get('recipient_fid');
   const match = cast_url?.match(/cast\/([^/]+)\/([^/]+)/);
-
-  let tipSuccess = false;
   const username = match?.[1];
   const castHash = match?.[2];
-  const amount = c?.frameData?.inputText;
   const image = username ? `/api/og-image/cast/${username}/${castHash}/0` : '/images/og.webp';
+  let tipSuccess = false;
+  const amount = c?.frameData?.inputText;
 
   if (amount) {
     try {
@@ -61,15 +66,18 @@ app.frame('/tip', async (c) => {
   }
 
   const actions = tipSuccess ?
-    [<Button.Reset>Reset</Button.Reset>] :
-    [<TextInput placeholder='Enter tip amount' />, <Button>Tip</Button>];
+    [<Button value={BASE_URL + search}>Add Tip</Button>] :
+    [
+      <TextInput placeholder='Enter tip amount' />,
+      <Button value={BASE_URL + search}>Tip</Button>
+    ];
 
   return c.res({
-    browserLocation: cast_url || URL,
-    image: URL + image,
+    browserLocation: cast_url || BASE_URL,
+    image: BASE_URL + image,
     intents: [
       ...actions,
-      <Button.Redirect location={cast_url || URL}>Listen</Button.Redirect>
+      <Button.Link href={cast_url || BASE_URL}>Listen</Button.Link>
     ]
   })
 });
