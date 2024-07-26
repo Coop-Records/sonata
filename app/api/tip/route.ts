@@ -1,4 +1,5 @@
 import getBulkUsersByFid from '@/lib/neynar/getBulkUsersByFid';
+import verifySignerUUID from '@/lib/neynar/verifySigner';
 import executeUserTip from '@/lib/sonata/tip/executeUserTip';
 import getUserTipInfo from '@/lib/sonata/tip/getUserTipInfo';
 import { NextRequest, NextResponse } from 'next/server';
@@ -6,7 +7,10 @@ import { NextRequest, NextResponse } from 'next/server';
 const getResponse = async (req: NextRequest): Promise<NextResponse> => {
   const { postHash, recipientFid, signer_uuid, tipAmount, channelId } = await req.json();
 
-  const tipInfo = await getUserTipInfo(signer_uuid, tipAmount, channelId);
+  const { status, fid: tipperFid } = await verifySignerUUID(signer_uuid);
+  if (!status) throw Error('Invalid Signer UUID');
+
+  const tipInfo = await getUserTipInfo(tipperFid, tipAmount, channelId);
 
   if (tipInfo.tipperFid === recipientFid) throw Error('Can not tip yourself');
 
