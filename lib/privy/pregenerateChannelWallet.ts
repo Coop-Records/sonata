@@ -2,7 +2,6 @@ import getIdentifier from "./getIdentifier";
 import privyClient from "./privyClient";
 
 function pregenerateEndpointWallet(endpoint: string) {
-  console.log('pregenerateEndpointWallet', endpoint);
   const body = {
     create_embedded_wallet: true,
     linked_accounts: [
