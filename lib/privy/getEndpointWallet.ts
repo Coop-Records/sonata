@@ -1,5 +1,5 @@
 import extractAddress from "./extractAddress";
-import pregenerateEndpointWallet from "./pregenerateChannelWallet";
+import pregenerateEndpointWallet from "./pregenerateEndpointWallet";
 
 const getEndpointWallet = async (endpoint: string) => {
     const response = await pregenerateEndpointWallet(endpoint);
