@@ -1,5 +1,3 @@
-import { PrivyClientOptions } from "@/types/Privy";
-
 const APP_ID = process.env.PRIVY_APP_ID!;
 const APP_SECRET = process.env.PRIVY_APP_SECRET!;
 
@@ -11,7 +9,7 @@ const headers = {
 
 const privyClient = (
   endpoint: string,
-  options: PrivyClientOptions = {}
+  options: any
 ) => fetch(
   'https://auth.privy.io/api/v1' + endpoint,
   {
