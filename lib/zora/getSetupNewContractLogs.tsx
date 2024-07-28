@@ -6,7 +6,7 @@ import {
 import { getPublicClient } from '../viem';
 import { Address } from 'viem';
 
-const getSetupNewContractLogs = async (creator: Address) => {
+const getSetupNewContractLogs = async (creator?: Address) => {
   const publicClient = getPublicClient(CHAIN_ID);
   const args = {} as any;
   if (creator) args.creator = creator;
