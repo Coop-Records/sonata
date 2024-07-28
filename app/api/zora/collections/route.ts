@@ -1,9 +1,12 @@
 import getSetupNewContractLogs from "@/lib/zora/getSetupNewContractLogs";
 import { formatLogs } from "./formatLogs";
+import { NextRequest } from "next/server";
+import { Address } from "viem";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const logs = await getSetupNewContractLogs()
+    const creator = new URL(request.url).searchParams.get('creator') as Address; 
+    const logs = await getSetupNewContractLogs(creator )
     const formattedLogs = formatLogs(logs);
     return Response.json({ message: 'success', data: formattedLogs });
   } catch (error) {
