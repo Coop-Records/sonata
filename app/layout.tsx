@@ -1,9 +1,7 @@
-import Providers from '@/providers';
 import { Sora } from 'next/font/google';
 import '../styles/globals.css';
 import { Analytics } from '@vercel/analytics/react';
 import { ReactNode } from 'react';
-import { Toaster } from '@/components/ui/toaster';
 import { headers } from 'next/headers';
 
 export const viewport = {
@@ -29,11 +27,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body
         className={`flex min-h-screen w-screen flex-col overflow-x-hidden font-sora ${backgroundColor}`}
       >
-        <Providers>
-          <div id="player-portal" className="pointer-events-none fixed left-0 top-0 opacity-0" />
-          {children}
-          <Toaster />
-        </Providers>
+        <div id="player-portal" className="pointer-events-none fixed left-0 top-0 opacity-0" />
+        {children}
         <Analytics />
       </body>
     </html>

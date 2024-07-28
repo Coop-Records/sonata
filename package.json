@@ -1,6 +1,6 @@
 {
-  "name": "sonata",
-  "version": "0.9.4",
+  "name": "onchain-magic-api",
+  "version": "0.0.1",
   "scripts": {
     "build": "rm -rf .next && next build",
     "dev": "next dev",
