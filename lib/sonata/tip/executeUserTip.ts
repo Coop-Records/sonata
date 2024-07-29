@@ -41,11 +41,10 @@ async function executeUserTip(
   if (!success) throw Error('Could not stack');
 
   const remaining_tip_allocation = tip.remaining_tip_allocation - amount;
-  const daily_tip_allocation = tip.daily_tip_allocation - amount;
   const totalTipOnPost = receiverAmount + post.points;
 
   allUpdates.push(
-    supabase.from('tips').update({ remaining_tip_allocation, daily_tip_allocation }).eq('fid', sender),
+    supabase.from('tips').update({ remaining_tip_allocation }).eq('fid', sender),
     supabase.from('posts').update({ points: totalTipOnPost }).eq('post_hash', postHash),
     supabase.from('tips_activity_log').insert({ sender, receiver, amount: receiverAmount, post_hash: postHash })
   )
@@ -53,7 +52,7 @@ async function executeUserTip(
 
   updates.map(({ error }, id) => error ? console.error({ error, id }) : undefined);
 
-  return { tipRemaining: daily_tip_allocation, totalTipOnPost, tipperAmount, channelAmount };
+  return { tipRemaining: remaining_tip_allocation, totalTipOnPost, tipperAmount, channelAmount };
 }
 
 export default executeUserTip;
