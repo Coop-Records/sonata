@@ -68,7 +68,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     setHasMore(true);
 
     if (feedType === FeedType.Stakes) {
-      const stakes = await getAllUserStakes(user?.fid);
+      const stakes = await getAllUserStakes(profileFid);
 
       setFeedStake(stakes);
       setHasMore(false);
@@ -84,7 +84,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
       if (profileFid) return mergedUnique.filter((feed) => feed.authorFid === profileFid);
       return mergedUnique;
     });
-  }, [feedType, filter, fid, profileFid, user]);
+  }, [feedType, filter, fid, profileFid]);
 
   useEffect(() => {
     const init = async () => {
