@@ -4,13 +4,13 @@ import DataPoints from "./DataPoints";
 import Skeleton from "./Skeleton";
 import StakeDialog from "./StakeDialog";
 
-function ChannelDetails({ image = '', channelId = '' }) {
-  const { loading, channelDetails: channel, userStakedAmount } = useStakeProvider();
+function ChannelDetails({ channelId = '' }) {
+  const { loading, channelDetails: channel, userStakedAmount, channelImage } = useStakeProvider();
 
   return (
     <div className='mb-8'>
       <Image
-        src={channel.info?.image_url ?? image}
+        src={channelImage}
         height={120}
         width={120}
         className='-mt-14 mb-4 size-[120px] rounded-full border-[5px] border-white object-cover max-md:hidden'

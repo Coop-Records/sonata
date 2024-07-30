@@ -1,7 +1,8 @@
+import { CHANNELS } from "@/lib/consts";
 import getChannelDetails from "@/lib/sonata/getChannelDetails";
+import { useFeedProvider } from "@/providers/FeedProvider";
 import { useNeynarProvider } from "@/providers/NeynarProvider";
 import { TrackMetadata } from "@/types/Track";
-import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const DEFAULT_CHANNEL_DETAILS = {
@@ -16,16 +17,19 @@ const DEFAULT_CHANNEL_DETAILS = {
 };
 
 function useChannelDetails() {
-  const channelId = useParams().channelId as string | undefined;
   const { signer } = useNeynarProvider();
-
+  const { filter } = useFeedProvider();
   const [userStakedAmount, setUserStakedAmount] = useState(0);
+  const [channelImage, setChannelImage] = useState('');
   const [channelDetails, setChannelDetails] = useState(DEFAULT_CHANNEL_DETAILS);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (channelId) {
-      getChannelDetails(channelId, signer?.fid).then(data => {
+    if (filter.channel) {
+      const image = CHANNELS.find(({ value }) => value === filter.channel)?.icon;
+      setChannelImage(image ?? '/images/placeholder.png');
+
+      getChannelDetails(filter.channel, signer?.fid).then(data => {
         const mods = [];
         const info = data.info;
         !!info?.hosts?.[0] && mods.push(info.hosts[0]);
@@ -46,9 +50,10 @@ function useChannelDetails() {
       }).finally(() => setLoading(false));
     }
     return () => { setLoading(true); }
-  }, [channelId, signer]);
+  }, [signer, filter]);
 
   return {
+    channelImage,
     loading, setLoading,
     channelDetails, setChannelDetails,
     userStakedAmount, setUserStakedAmount
