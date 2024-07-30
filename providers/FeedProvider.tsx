@@ -7,6 +7,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import { SupabasePost } from '@/types/SupabasePost';
@@ -44,6 +45,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const [feedStake, setFeedStake] = useState<FeedStake[]>([]);
   const [feedType, setFeedType] = useState<string>();
   const [hasMore, setHasMore] = useState(true);
+  const previousProfileFid = useRef<number>();
   const { user, loading: userLoading } = useNeynarProvider();
   const [player, dispatch] = usePlayer();
   const { profile } = useProfileProvider();
@@ -66,12 +68,15 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const fetchMore = useCallback(async (start: number) => {
     if (!feedType) return;
     setHasMore(true);
-
-    if (feedType === FeedType.Stakes) {
+    if (
+      feedType === FeedType.Stakes &&
+      previousProfileFid.current !== profileFid
+    ) {
       const stakes = await getAllUserStakes(profileFid);
 
       setFeedStake(stakes);
       setHasMore(false);
+      previousProfileFid.current = profileFid;
       return;
     }
 
