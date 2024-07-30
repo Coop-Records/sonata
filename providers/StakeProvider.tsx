@@ -3,6 +3,7 @@ import { createContext, Dispatch, SetStateAction, useContext } from 'react';
 import { useTipProvider } from './TipProvider';
 
 const StakeContext = createContext({
+  channelImage: '',
   balance: BigInt(0),
   loading: true,
   userStakedAmount: 0,

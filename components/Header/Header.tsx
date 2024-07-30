@@ -4,7 +4,7 @@ import SignInButton from '@/components/SignInButton';
 import Tabs from '@/components/Tabs';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { CHANNELS, tabs } from '@/lib/consts';
+import { tabs } from '@/lib/consts';
 import { cn } from '@/lib/utils';
 import { useFeedProvider } from '@/providers/FeedProvider';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
@@ -17,7 +17,7 @@ import { Separator } from '../ui/separator';
 import HomeButton from './HomeButton';
 import UserMenu from './UserMenu';
 import ChannelDetails from '../ChannelDetails';
-import { useMemo } from 'react';
+import { useStakeProvider } from '@/providers/StakeProvider';
 
 const Header = () => {
   const { user, loading: userLoading } = useNeynarProvider();
@@ -25,7 +25,7 @@ const Header = () => {
   const { menuOpen, setMenuOpen } = useUi();
   const { airdropBalance } = useTipProvider();
   const { username, hash, channelId } = useParams();
-  const channelImage = useMemo(() => CHANNELS.find(({ value }) => value === channelId)?.icon ?? '', [channelId]);
+  const { channelImage } = useStakeProvider();
 
   return (
     <header>
@@ -50,7 +50,7 @@ const Header = () => {
         </div>
       </div>
       <div className='container'>
-        {channelId && <ChannelDetails image={channelImage} channelId={channelId as string} />}
+        {channelId && <ChannelDetails channelId={channelId as string} />}
         {username && !hash && <Profile />}
         {feedType && (
           <Tabs tabs={tabs} className={!(username || channelId) ? 'justify-center' : ''} />
