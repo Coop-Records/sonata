@@ -1,5 +1,5 @@
 'use client';
-import { FeedFilter, FeedStake, FeedType } from '@/types/Feed';
+import { FeedFilter, FeedType } from '@/types/Feed';
 import {
   ReactNode,
   createContext,
@@ -7,7 +7,6 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
 import { SupabasePost } from '@/types/SupabasePost';
@@ -21,13 +20,11 @@ import fetchMetadata from '@/lib/fetchMetadata';
 import { usePlayer } from '@/providers/audio/PlayerProvider';
 import { useProfileProvider } from './ProfileProvider';
 import { useParams } from 'next/navigation';
-import getAllUserStakes from '@/lib/sonata/staking/getAllUserStakes';
 
 type FeedProviderType = {
   filter: FeedFilter;
   updateFilter: (change: FeedFilter) => void;
   feed: SupabasePost[];
-  feedStake: FeedStake[];
   feedType?: string;
   setFeedType: (feedType: string) => void;
   fetchMore: (start: number) => void;
@@ -42,10 +39,8 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const { channelId } = useParams();
   const [filter, setFilter] = useState<FeedFilter>({});
   const [feed, setFeed] = useState<SupabasePost[]>([]);
-  const [feedStake, setFeedStake] = useState<FeedStake[]>([]);
   const [feedType, setFeedType] = useState<string>();
   const [hasMore, setHasMore] = useState(true);
-  const previousProfileFid = useRef<number>();
   const { user, loading: userLoading } = useNeynarProvider();
   const [player, dispatch] = usePlayer();
   const { profile } = useProfileProvider();
@@ -68,17 +63,6 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const fetchMore = useCallback(async (start: number) => {
     if (!feedType) return;
     setHasMore(true);
-    if (
-      feedType === FeedType.Stakes &&
-      previousProfileFid.current !== profileFid
-    ) {
-      const stakes = await getAllUserStakes(profileFid);
-
-      setFeedStake(stakes);
-      setHasMore(false);
-      previousProfileFid.current = profileFid;
-      return;
-    }
 
     const { posts } = await fetchPosts(supabaseClient, filter, feedType, start, fid, profileFid);
     if (!(posts && posts.length === fetchPostsLimit)) {
@@ -91,14 +75,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     });
   }, [feedType, filter, fid, profileFid]);
 
-  useEffect(() => {
-    const init = async () => {
-      setFeed([]);
-      setFeedStake([]);
-      await fetchMore(0);
-    };
-    init();
-  }, [fetchMore]);
+  useEffect(() => { setFeed([]); fetchMore(0); }, [fetchMore]);
 
   const filteredFeed = useMemo(
     () =>
@@ -158,7 +135,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
 
   const value = {
     filter, updateFilter,
-    feedStake, feed: filteredFeed,
+    feed: filteredFeed,
     feedType, setFeedType,
     fetchMore, hasMore,
     handleNext, handlePrev,

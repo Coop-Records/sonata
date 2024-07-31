@@ -2,15 +2,15 @@ import { FeedStake } from "@/types/Feed";
 import { Channel } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 
 
-async function getAllUserStakes(fid: number | undefined) {
+async function getAllUserStakes(fid: number | undefined, signal?: AbortSignal) {
   try {
     if (!fid) throw 'fid required';
 
-    const response = await fetch(`/api/stake?fid=${fid}`);
+    const response = await fetch(`/api/stake?fid=${fid}`, { signal });
     const { data }: { data: FeedStake[] } = await response.json();
 
     const details = await Promise.all(data.map(({ channelId }) =>
-      fetch(`/api/neynar/getChannelDetails?channelId=${channelId}`)
+      fetch(`/api/neynar/getChannelDetails?channelId=${channelId}`, { signal })
         .then(res => res.json())
     ));
 
