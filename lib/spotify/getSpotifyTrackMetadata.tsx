@@ -2,19 +2,11 @@ import { TrackMetadata } from '@/types/Track';
 import getSpotifyTrackId from './getSpotifyTrackId';
 import { SupabasePost } from '@/types/SupabasePost';
 import getSoundcloudTrackMetadata from '../soundcloud/getSoundcloudTrackMetadata';
-import getYoutubeTrackMetadata from '@/lib/youtube/getYoutubeTrackMetadata';
 
 const getSpotifyTrackMetadata = async (url: string, cast: SupabasePost): Promise<TrackMetadata> => {
-  const youtubeLink = cast.alternativeEmbeds?.find((link) => link.includes('youtube.com'));
   const soundcloudLink = cast.alternativeEmbeds?.find((link) => link.includes('soundcloud.com'));
 
-  if (youtubeLink) {
-    return await getYoutubeTrackMetadata(youtubeLink, cast);
-  }
-
-  if (soundcloudLink) {
-    return await getSoundcloudTrackMetadata(soundcloudLink, cast);
-  }
+  if (soundcloudLink) return await getSoundcloudTrackMetadata(soundcloudLink, cast);
 
   const oEmbedUrl = `https://open.spotify.com/oembed?url=${encodeURIComponent(url)}`;
   const response = await fetch(oEmbedUrl);
