@@ -34,7 +34,7 @@ export async function GET() {
         const stake = stakes[ii];
         const event = fidEvents[ii];
 
-        if (event.points > 0 || event.points !== stake.amount) {
+        if (event.points > 0 || -event.points !== stake.amount) {
           console.error('Error:', `user ${fid},stack(${event.points}) !== supabase(${stake.amount})`);
           break;
         }
