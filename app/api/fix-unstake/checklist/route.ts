@@ -53,6 +53,7 @@ export async function GET() {
     return Response.json({
       changesCount: changes.length,
       countInSupabase: data.length,
+      events,
       changes,
       uniqueFids
     });
