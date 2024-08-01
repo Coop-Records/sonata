@@ -47,13 +47,15 @@ export async function GET() {
           break;
         }
 
+        const metadata = { fixUnstake: true };
+
         const results = await Promise.all([
           // unstaking in deprecated event
-          stack.track(`channel_stake_from_${stake.channelAddress}`, { account: stake.channelAddress, points: -stake.amount }),
-          stack.track(`channel_stake_to_${fid}`, { account: userAddress, points: stake.amount }),
+          stack.track(`channel_stake_from_${stake.channelAddress}`, { account: stake.channelAddress, points: -stake.amount, metadata }),
+          stack.track(`channel_stake_to_${fid}`, { account: userAddress, points: stake.amount, metadata }),
           // restake in new events
-          stack.track(`channel_stake_${stake.channelId}_${fid}`, { account: userAddress, points: -stake.amount }),
-          stack.track(`channel_stake_${stake.channelId}`, { account: stake.channelAddress, points: stake.amount })
+          stack.track(`channel_stake_${stake.channelId}_${fid}`, { account: userAddress, points: -stake.amount, metadata }),
+          stack.track(`channel_stake_${stake.channelId}`, { account: stake.channelAddress, points: stake.amount, metadata })
         ]);
 
         if (results.some(res => !res.success)) {
