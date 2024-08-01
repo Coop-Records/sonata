@@ -1,4 +1,3 @@
-// import { getLatestTips } from '@/lib/getLatestTips';
 import getUsers from '@/lib/sonata/getUsers';
 import { stack } from '@/lib/stack/client';
 import { supabaseClient } from '@/lib/supabase/client';
