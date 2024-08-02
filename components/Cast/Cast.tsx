@@ -10,7 +10,6 @@ import { TrackMetadata } from '@/types/Track';
 import Like from './Like';
 import Share from './Share';
 import { Separator } from '@/components/ui/separator';
-import { timeFromNow } from '@/lib/utils';
 import UpvoteDownvote from '../UpvoteDownvote';
 import { isNil } from 'lodash';
 import CollectButton from './CollectButton';
@@ -44,11 +43,11 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
   return (
     <div className="w-full space-y-4 ">
       <div className="flex gap-2">
-        <UserDetails user={author} hasHypersub={!isNil(cast.hypersub_subscribed_since)} />
-        <span className="text-sm leading-none text-muted-foreground">
-          {'• '}
-          {timeFromNow(cast.created_at)}
-        </span>
+        <UserDetails
+          user={author}
+          hasHypersub={!isNil(cast.hypersub_subscribed_since)}
+          createdAt={cast.created_at}
+        />
       </div>
 
       <MediaPlayer metadata={metadata} />
