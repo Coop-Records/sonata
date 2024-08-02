@@ -1,27 +1,8 @@
-import getAllChannels from "@/lib/privy/getAllChannels";
-import { stack } from "@/lib/stack/client";
+import getChannelWeeklyAirdropData from "@/lib/sonata/getChannelWeeklyAirdropData";
 
 export async function GET() {
-  const WEEKS_AGO = 5;
-
   try {
-    const wallets = await getAllChannels();
-
-    const channels = wallets.reduce((prev, curr) => {
-      const email = curr.linked_accounts.find(account => account.type == 'email');
-      const wallet = curr.linked_accounts.find(account => account.type === 'wallet');
-
-      if (email && wallet) prev.push(stack.getEvents({
-        event: `weekly_channel_tip_to_${wallet.address}`,
-        limit: WEEKS_AGO,
-        address: wallet.address
-      }).then(events => ({ channelId: email.address.split('@')[0], weeklyDrops: events })));
-
-      return prev;
-    }, [] as Promise<{ channelId: string; weeklyDrops: any }>[]);
-
-    const results = await Promise.all(channels);
-    const data = results.filter(result => !!result.weeklyDrops?.length);
+    const data = await getChannelWeeklyAirdropData();
 
     return Response.json({ message: 'success', data });
   } catch (error) {
