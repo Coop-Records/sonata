@@ -7,7 +7,7 @@ export async function GET() {
 
     let changesCount = 0;
     await forEachRecord(data, async (stake, event, userAddress) => {
-      const metadata = { fixUnstake: true };
+      const metadata = { fixUnstake: true, id: stake.id };
       const { channelAddress, fid, channelId, amount } = stake;
 
       const results = await Promise.all([

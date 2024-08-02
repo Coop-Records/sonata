@@ -37,15 +37,10 @@ export async function forEachRecord(
     const fidEvents = events[i].toReversed();
     const stakes = data.filter((row: any) => row.fid === fid);
 
-    // if (stakes.length !== fidEvents.length) {
-    //   console.error('Error:', `user ${fid}, events do match supabase records`);
-    //   continue;
-    // }
-
     const user = users.find(user => user.fid === fid)!;
     const userAddress = user.verifications[0];
 
-    for (let ii = 0; ii < stakes.length; ii++) {
+    for (let ii = 0; ii < fidEvents.length; ii++) {
       const stake = stakes[ii];
       const event = fidEvents[ii];
 

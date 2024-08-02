@@ -5,17 +5,16 @@ export async function GET() {
     const data = await retrieveRecords();
 
     const changes: any[] = [];
-    await forEachRecord(data, async (stake, event, userAddress) => {
-      userAddress;
+    await forEachRecord(data, async (stake, event) => {
       changes.push({
+        id: stake.id,
         fid: stake.fid,
+        eventName: event.event,
         channnelId: stake.channelId,
         supabaseAmount: stake.amount,
         legacyAmount: -event.points,
         supabaseTimestamp: stake.created_at,
         eventTimestamp: event.timestamp,
-        supabase: stake,
-        event,
       });
     });
 
