@@ -9,6 +9,7 @@ export const endpoints = [
   { apiType: 'GET', route: '/api/channel/details?channelId=<Farcaster Channel ID>' },
   { apiType: 'GET', route: '/api/channel/stats?apply_channel_filter=<Boolean>&only_channel_ids=<Boolean>' },
   { apiType: 'GET', route: '/api/channel/stake?channelId=<Farcaster Channel ID>&fid=<Farcaster ID>' },
+  { apiType: 'GET', route: '/api/channel/weeklyAirdrop' },
   { apiType: 'POST', route: '/api/channel/stake?channelId=<Farcaster Channel ID>&signer_uuid=<Farcaster UUID>&amount=<Number>' },
   { apiType: 'POST', route: '/api/channel/unstake?channelId=<Farcaster Channel ID>&signer_uuid=<Farcaster UUID>&amount=<Number>' },
   { apiType: 'GET', route: '/api/stake?fid=<Farcaster ID>' },
