@@ -45,6 +45,9 @@ export type PlayerAction =
       };
     }
   | {
+      type: 'STOP';
+    }
+  | {
       type: 'SEEK';
       payload: {
         position: number;
@@ -76,6 +79,7 @@ const initialState: Player = {
   loading: false,
   seekTo: null,
   feedId: -1,
+  metadata: undefined,
 };
 
 const PlayerContext = createContext<[Player, Dispatch<PlayerAction>]>([initialState, () => {}]);
@@ -102,6 +106,9 @@ const playerReducer = (state: Player, action: PlayerAction) => {
       const { id } = action.payload;
       if (state.metadata?.id !== id) return state;
       return { ...state, playing: false };
+    }
+    case 'STOP': {
+      return initialState;
     }
     case 'SEEK':
       return { ...state, seekTo: action.payload.position };
@@ -142,7 +149,7 @@ export default function PlayerProvider({ children }: { children: ReactNode }) {
     soundController,
     spotifyController,
     youtubeController,
-    zoraController
+    zoraController,
   ]);
 
   useEffect(() => {
