@@ -25,8 +25,8 @@ type FeedProviderType = {
   filter: FeedFilter;
   updateFilter: (change: FeedFilter) => void;
   feed: SupabasePost[];
-  feedType?: string;
-  setFeedType: (feedType: string) => void;
+  feedType?: FeedType;
+  setFeedType: (feedType: FeedType) => void;
   fetchMore: (start: number) => void;
   hasMore: boolean;
   handleNext: () => void;
@@ -39,7 +39,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const { channelId } = useParams();
   const [filter, setFilter] = useState<FeedFilter>({});
   const [feed, setFeed] = useState<SupabasePost[]>([]);
-  const [feedType, setFeedType] = useState<string>();
+  const [feedType, setFeedType] = useState<FeedType>();
   const [hasMore, setHasMore] = useState(true);
   const { user, loading: userLoading } = useNeynarProvider();
   const [player, dispatch] = usePlayer();
@@ -74,7 +74,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
         return mergedUnique;
       });
     },
-    [feedType, filter, supabaseClient, fid, profileFid],
+    [feedType, filter, fid, profileFid],
   );
 
   useEffect(() => {
