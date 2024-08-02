@@ -2,7 +2,6 @@ import getAllChannels from "@/lib/privy/getAllChannels";
 import { stack } from "@/lib/stack/client";
 
 async function getChannelWeeklyAirdropData() {
-  const WEEKS_AGO = 5;
 
   const wallets = await getAllChannels();
 
@@ -12,7 +11,6 @@ async function getChannelWeeklyAirdropData() {
 
     if (email && wallet) prev.push(stack.getEvents({
       event: `weekly_channel_tip_to_${wallet.address}`,
-      limit: WEEKS_AGO,
       address: wallet.address
     }).then(events => ({ channelId: email.address.split('@')[0], weeklyDrops: events })));
 
