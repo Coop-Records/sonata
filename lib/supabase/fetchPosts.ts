@@ -7,7 +7,7 @@ import getBaseQuery from './getBaseQuery';
 const fetchPosts = async (
   supabaseClient: SupabaseClient,
   filter: any,
-  feedType: string,
+  feedType: FeedType,
   start: number,
   fid?: number,
   profileFid?: number,
@@ -26,7 +26,7 @@ const fetchPosts = async (
     return { posts: [] };
   }
 
-  if (feedType !== FeedType.Following) {
+  if (![FeedType.Following, FeedType.Posts].includes(feedType)) {
     query.filter('author', 'cs', '{"power_badge": true}');
   }
 
