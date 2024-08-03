@@ -9,7 +9,7 @@ import { useParams } from 'next/navigation';
 type tab = {
   label: string;
   href?: string;
-  value: string;
+  value: FeedType;
 };
 
 export default function Tabs({ tabs, className = '' }: { tabs: tab[]; className?: string }) {
@@ -25,7 +25,8 @@ export default function Tabs({ tabs, className = '' }: { tabs: tab[]; className?
             return tab.value === FeedType.Posts;
           }
           const isDisabled =
-            (tab.value === FeedType.Following && (!user || channelId)) || tab.value === FeedType.Posts;
+            (tab.value === FeedType.Following && (!user || channelId)) ||
+            tab.value === FeedType.Posts;
           return !isDisabled;
         })
         .map((tab, index) => {

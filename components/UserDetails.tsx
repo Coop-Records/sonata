@@ -1,17 +1,20 @@
 import { User } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { cn } from '@/lib/utils';
+import { cn, timeFromNow } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
+import { SupabasePost } from '@/types/SupabasePost';
 
 export default function UserDetails({
   user,
   hasHypersub,
   className,
+  createdAt,
 }: {
   user: User;
   hasHypersub?: boolean;
   className?: string;
+  createdAt?: SupabasePost['created_at'];
 }) {
   return (
     <div className={cn('flex space-x-3', className)}>
@@ -22,7 +25,7 @@ export default function UserDetails({
         </Avatar>
       </Link>
       <div className="flex flex-col gap-1">
-        <div className="flex flex-row items-center align-middle">
+        <div className="flex flex-row items-center gap-1 align-middle">
           <a
             href={`/${user.username}`}
             target="_blank"
@@ -31,6 +34,12 @@ export default function UserDetails({
             {user.display_name}
           </a>
           {hasHypersub && <Image src="/images/hypersub.png" width={20} height={20} alt="" />}
+          {createdAt && (
+            <span className="text-sm leading-none text-muted-foreground">
+              {'• '}
+              {timeFromNow(createdAt)}
+            </span>
+          )}
         </div>
         <a
           href={`/${user.username}`}
