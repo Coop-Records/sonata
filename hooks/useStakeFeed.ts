@@ -3,7 +3,6 @@ import { FeedStake, FeedType } from "@/types/Feed";
 import { useEffect, useState } from "react";
 
 function useStakeFeed(feedType?: string, profileFid?: number) {
-  // const previousProfileFid = useRef<number>();
   const [loading, setLoading] = useState(false);
   const [feedStake, setFeedStake] = useState<FeedStake[]>([]);
 
