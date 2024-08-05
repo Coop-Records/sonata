@@ -25,8 +25,8 @@ type FeedProviderType = {
   filter: FeedFilter;
   updateFilter: (change: FeedFilter) => void;
   feed: SupabasePost[];
-  feedType?: string;
-  setFeedType: (feedType: string) => void;
+  feedType?: FeedType;
+  setFeedType: (feedType: FeedType) => void;
   fetchMore: (start: number) => void;
   hasMore: boolean;
   handleNext: () => void;
@@ -39,7 +39,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const { channelId } = useParams();
   const [filter, setFilter] = useState<FeedFilter>({});
   const [feed, setFeed] = useState<SupabasePost[]>([]);
-  const [feedType, setFeedType] = useState<string>();
+  const [feedType, setFeedType] = useState<FeedType>();
   const [hasMore, setHasMore] = useState(true);
   const { user, loading: userLoading } = useNeynarProvider();
   const [player, dispatch] = usePlayer();
@@ -60,20 +60,22 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     setFilter((prev) => ({ ...prev, ...change }));
   };
 
-  const fetchMore = useCallback(async (start: number) => {
-    if (!feedType) return;
-    setHasMore(true);
-
-    const { posts } = await fetchPosts(supabaseClient, filter, feedType, start, fid, profileFid);
-    if (!(posts && posts.length === fetchPostsLimit)) {
-      setHasMore(false);
-    }
-    setFeed((prev) => {
-      const mergedUnique = mergeArraysUniqueByPostHash(prev, posts);
-      if (profileFid) return mergedUnique.filter((feed) => feed.authorFid === profileFid);
-      return mergedUnique;
-    });
-  }, [feedType, filter, fid, profileFid]);
+  const fetchMore = useCallback(
+    async (start: number) => {
+      if (!feedType) return;
+      setHasMore(true);
+      const { posts } = await fetchPosts(supabaseClient, filter, feedType, start, fid, profileFid);
+      if (!(posts && posts.length === fetchPostsLimit)) {
+        setHasMore(false);
+      }
+      setFeed((prev) => {
+        const mergedUnique = mergeArraysUniqueByPostHash(prev, posts);
+        if (profileFid) return mergedUnique.filter((feed) => feed.authorFid === profileFid);
+        return mergedUnique;
+      });
+    },
+    [feedType, filter, fid, profileFid],
+  );
 
   useEffect(() => { setFeed([]); fetchMore(0); }, [fetchMore]);
 

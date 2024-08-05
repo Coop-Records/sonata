@@ -9,7 +9,7 @@ import { useParams } from 'next/navigation';
 type tab = {
   label: string;
   href?: string;
-  value: string;
+  value: FeedType;
 };
 
 export default function Tabs({ tabs, className = '' }: { tabs: tab[]; className?: string }) {
