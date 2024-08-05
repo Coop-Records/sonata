@@ -24,6 +24,7 @@ export const tabs = [
   { label: 'Trending', href: '/', value: FeedType.Trending },
   { label: 'Recent', href: '/recent', value: FeedType.Recent },
   { label: 'Posts', href: '#', value: FeedType.Posts },
+  { label: 'Stakes', href: '#', value: FeedType.Stakes },
 ];
 
 export const CHANNELS = [

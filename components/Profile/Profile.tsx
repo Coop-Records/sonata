@@ -5,7 +5,7 @@ import TopSong from './TopSong';
 import Followers from './Followers';
 
 const Profile = () => (
-  <section className="container mx-auto mb-4 mt-8 max-w-3xl space-y-4">
+  <section className="container mx-auto mb-4 mt-8 space-y-4">
     <BaseInfo />
     <div className="flex gap-4">
       <Songs />
