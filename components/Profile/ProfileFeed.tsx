@@ -1,8 +1,8 @@
 'use client';
 
 import Feeds from '@/app/(feeds)/feeds';
-import FeedStakes from '@/components/Feed/FeedStakes';
-import useStakeFeed from '@/hooks/useStakeFeed';
+import UserStakes from '@/components/UserStakes';
+import useUserStakes from '@/hooks/useUserStakes';
 import { useFeedProvider } from '@/providers/FeedProvider';
 import { useProfileProvider } from '@/providers/ProfileProvider';
 import { FeedType } from '@/types/Feed';
@@ -11,12 +11,12 @@ import { Loader2 } from 'lucide-react';
 export default function ProfileFeed() {
   const { feedType } = useFeedProvider();
   const { profile } = useProfileProvider();
-  const { loading, feedStake } = useStakeFeed(feedType, profile?.fid);
+  const { loading, userStakes } = useUserStakes(feedType, profile?.fid);
   const isStake = feedType === FeedType.Stakes;
 
   if (loading) return <Loader2 className='mx-auto size-8 animate-spin' />;
 
-  if (isStake) return <FeedStakes feed={feedStake} />;
+  if (isStake) return <UserStakes stakes={userStakes} />;
 
   return <Feeds />;
 }

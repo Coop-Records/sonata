@@ -17,10 +17,3 @@ export enum FeedType {
   Posts = 'Posts',
   Stakes = 'Stakes',
 }
-
-export interface FeedStake {
-  channelId: string;
-  description: string;
-  points: number;
-  icon: string;
-};
