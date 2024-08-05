@@ -1,29 +1,18 @@
 'use client';
-import { FeedFilter, FeedType } from '@/types/Feed';
-import {
-  ReactNode,
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { FeedType } from '@/types/Feed';
+import { ReactNode, createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { SupabasePost } from '@/types/SupabasePost';
 import findValidEmbed from '@/lib/findValidEmbed';
-import fetchPosts from '@/lib/supabase/fetchPosts';
 import mergeArraysUniqueByPostHash from '@/lib/mergeArraysUniqueByPostHash';
 import { useNeynarProvider } from './NeynarProvider';
 import { fetchPostsLimit } from '@/lib/consts';
-import { supabaseClient } from '@/lib/supabase/client';
 import fetchMetadata from '@/lib/fetchMetadata';
 import { usePlayer } from '@/providers/audio/PlayerProvider';
 import { useProfileProvider } from './ProfileProvider';
 import { useParams } from 'next/navigation';
+import qs from 'qs';
 
 type FeedProviderType = {
-  filter: FeedFilter;
-  updateFilter: (change: FeedFilter) => void;
   feed: SupabasePost[];
   feedType?: FeedType;
   setFeedType: (feedType: FeedType) => void;
@@ -37,7 +26,6 @@ const FeedContext = createContext<FeedProviderType>({} as any);
 
 const FeedProvider = ({ children }: { children: ReactNode }) => {
   const { channelId } = useParams();
-  const [filter, setFilter] = useState<FeedFilter>({});
   const [feed, setFeed] = useState<SupabasePost[]>([]);
   const [feedType, setFeedType] = useState<FeedType>();
   const [hasMore, setHasMore] = useState(true);
@@ -56,15 +44,15 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     else setFeedType(FeedType.Trending);
   }, [userLoading, user, profileFid, channelId]);
 
-  const updateFilter = (change: FeedFilter) => {
-    setFilter((prev) => ({ ...prev, ...change }));
-  };
-
   const fetchMore = useCallback(
     async (start: number) => {
       if (!feedType) return;
       setHasMore(true);
-      const { posts } = await fetchPosts(supabaseClient, filter, feedType, start, fid, profileFid);
+      const query = { feedType, start, channelId, viewerFid: fid, authorFid: profileFid };
+      const { posts }: { posts: SupabasePost[] } = await fetch(
+        `/api/feed?${qs.stringify(query)}`,
+      ).then((res) => res.json());
+
       if (!(posts && posts.length === fetchPostsLimit)) {
         setHasMore(false);
       }
@@ -74,7 +62,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
         return mergedUnique;
       });
     },
-    [feedType, filter, fid, profileFid],
+    [feedType, channelId, fid, profileFid],
   );
 
   useEffect(() => {
@@ -84,25 +72,6 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     };
     init();
   }, [fetchMore]);
-
-  const filteredFeed = useMemo(
-    () =>
-      feed.filter((cast) => {
-        const channelId = cast.channelId;
-
-        if (filter.channel) {
-          if (!(channelId && channelId.includes(filter.channel))) return false;
-        }
-
-        if (profileFid && cast.authorFid !== profileFid) return false;
-
-        const validEmbed = findValidEmbed(cast, { platform: filter.platform });
-        if (!validEmbed) return false;
-
-        return true;
-      }),
-    [feed, filter, profileFid],
-  );
 
   const playFeedId = async (feedIndex: number) => {
     const embed = findValidEmbed(feed[feedIndex]);
@@ -142,9 +111,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const value = {
-    filter,
-    updateFilter,
-    feed: filteredFeed,
+    feed,
     feedType,
     setFeedType,
     fetchMore,

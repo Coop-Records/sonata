@@ -1,28 +1,62 @@
-import fetchPosts from '@/lib/supabase/fetchPosts';
-import { supabaseClient } from '@/lib/supabase/client';
+'use server';
+import { SupabasePost } from '@/types/SupabasePost';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { fetchPostsLimit } from '@/lib/consts';
+import { FeedType } from '@/types/Feed';
+import getBaseQuery from './getBaseQuery';
 import findValidEmbed from '@/lib/findValidEmbed';
-import { FeedType, FeedFilter } from '@/types/Feed';
+import getFollowing from '@/lib/neynar/getFollowing';
 
-export async function getFeed(
-  channelId?: string | null,
-  feedType: FeedType = FeedType.Trending,
+const getFeed = async (
+  supabaseClient: SupabaseClient,
+  feedType: FeedType,
+  start: number,
+  channelId: string,
   viewerFid?: number,
-) {
-  const filter: FeedFilter = {};
-  if (channelId) {
-    filter.channel = channelId;
-  }
-
-  const { posts } = await fetchPosts(supabaseClient, filter, feedType, 0, viewerFid, 0, false);
-
-  const filteredPosts = posts.filter((post: any) => {
-    if (channelId && !(post.channelId && post.channelId.includes(channelId))) {
-      return false;
+  authorFid?: number,
+  limit: boolean = true,
+) => {
+  try {
+    const followingFids = [];
+    if (feedType === FeedType.Following) {
+      if (!viewerFid) {
+        throw new Error('Invalid viewerFid');
+      }
+      const following = await getFollowing(viewerFid);
+      followingFids.push(...following.map((user) => user.fid), viewerFid);
     }
 
-    const validEmbed = findValidEmbed(post);
-    return !!validEmbed;
-  });
+    const query = getBaseQuery(supabaseClient, feedType, followingFids);
 
-  return filteredPosts;
-}
+    if (!query) {
+      return { posts: [] };
+    }
+
+    if (![FeedType.Following, FeedType.Posts].includes(feedType)) {
+      query.filter('author', 'cs', '{"power_badge": true}');
+    }
+
+    if (channelId) {
+      query.eq('channelId', channelId);
+    }
+    if (authorFid) {
+      query.eq('authorFid', authorFid);
+    }
+    if (limit) query.range(start, start + fetchPostsLimit - 1);
+
+    let { data: posts } = await query.returns<SupabasePost[]>();
+    if (!posts) posts = [];
+
+    posts = posts.filter((post: any) => {
+      const validEmbed = findValidEmbed(post);
+      return !!validEmbed;
+    });
+
+    return posts;
+  } catch (error) {
+    console.error('Error fetching feed', error);
+    return [];
+  }
+};
+
+export default getFeed;
