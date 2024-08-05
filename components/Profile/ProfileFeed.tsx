@@ -14,9 +14,11 @@ export default function ProfileFeed() {
   const { loading, userStakes } = useUserStakes(feedType, profile?.fid);
   const isStake = feedType === FeedType.Stakes;
 
-  if (loading) return <Loader2 className='mx-auto size-8 animate-spin' />;
-
-  if (isStake) return <UserStakes stakes={userStakes} />;
-
-  return <Feeds />;
+  return (
+    <>
+      {loading ? <Loader2 className='mx-auto size-8 animate-spin' /> : (
+        isStake ? <UserStakes stakes={userStakes} /> : <Feeds />
+      )}
+    </>
+  );
 }
