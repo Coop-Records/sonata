@@ -77,7 +77,13 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     [feedType, filter, fid, profileFid],
   );
 
-  useEffect(() => { setFeed([]); fetchMore(0); }, [fetchMore]);
+  useEffect(() => {
+    const init = async () => {
+      setFeed([]);
+      await fetchMore(0);
+    };
+    init();
+  }, [fetchMore]);
 
   const filteredFeed = useMemo(
     () =>
@@ -136,11 +142,15 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const value = {
-    filter, updateFilter,
+    filter,
+    updateFilter,
     feed: filteredFeed,
-    feedType, setFeedType,
-    fetchMore, hasMore,
-    handleNext, handlePrev,
+    feedType,
+    setFeedType,
+    fetchMore,
+    hasMore,
+    handleNext,
+    handlePrev,
   };
 
   return <FeedContext.Provider value={value}>{children}</FeedContext.Provider>;
