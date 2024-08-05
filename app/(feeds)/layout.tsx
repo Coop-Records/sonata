@@ -13,11 +13,13 @@ import ProfileProvider from '@/providers/ProfileProvider';
 import { useParams } from 'next/navigation';
 import TipsList from '@/components/TipsList';
 import StakeProvider from '@/providers/StakeProvider';
+import { cn } from '@/lib/utils';
 
 export default function FeedLayout({ children }: { children: ReactNode }) {
   const { menuOpen, setMenuOpen } = useUi();
   const { username, channelId } = useParams();
   const { user } = useNeynarProvider();
+  const enableMaxWidth = !channelId && !username;
 
   return (
     <ProfileProvider>
@@ -46,7 +48,7 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
                     className="absolute left-0 top-0 size-full overflow-scroll pt-4"
                     id="feed-container"
                   >
-                    <div className="container mx-auto max-w-3xl space-y-6">
+                    <div className={cn("container mx-auto space-y-6", { "max-w-3xl": enableMaxWidth })}>
                       {user && !username && !channelId && <CreatePost />}
                       {children}
                     </div>

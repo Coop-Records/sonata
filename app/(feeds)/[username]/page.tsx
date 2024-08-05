@@ -1,7 +1,7 @@
 import { getFrameMetadata } from '@coinbase/onchainkit';
 import type { Metadata } from 'next';
 import { DEFAULT_FRAME, DESCRIPTION, TITLE, VERCEL_URL } from '@/lib/consts';
-import Feeds from '../feeds';
+import ProfileFeed from '@/components/Profile/ProfileFeed';
 
 const frameMetadata = { ...getFrameMetadata(DEFAULT_FRAME), 'of:accepts:xmtp': '2024-02-01' };
 
@@ -20,5 +20,5 @@ export const metadata: Metadata = {
 };
 
 export default function ProfileHome() {
-  return <Feeds />;
+  return <ProfileFeed />;
 }
