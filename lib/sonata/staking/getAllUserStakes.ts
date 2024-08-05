@@ -1,7 +1,6 @@
 import { FeedStake } from "@/types/Feed";
 import { Channel } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 
-
 async function getAllUserStakes(fid: number | undefined, signal?: AbortSignal) {
   try {
     if (!fid) throw 'fid required';
