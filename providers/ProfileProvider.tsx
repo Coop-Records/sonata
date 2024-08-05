@@ -28,13 +28,13 @@ const ProfileProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const init = async () => {
-      const data = await getNeynarProfile(username as string);
-      setProfile(data);
-      const response = await getFollowers(data.fid);
-      setFollowers(response.users);
-      const posts = await getUserSongs(data.fid);
-      setSongs(posts.songs);
+      const neynarProfile = await getNeynarProfile(username as string);
+      setProfile(neynarProfile);
+      const neynarFollowers = await getFollowers(neynarProfile.fid);
+      setFollowers(neynarFollowers);
+      const posts = await getUserSongs(neynarProfile.fid);
       if (posts.length <= 0) return;
+      setSongs(posts.songs);
       const topPost = posts.songs[0];
       const embed = findValidEmbed(topPost);
       const url = embed?.url;

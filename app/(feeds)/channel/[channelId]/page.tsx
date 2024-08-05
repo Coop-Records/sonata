@@ -7,6 +7,6 @@ export async function generateStaticParams() {
   });
 }
 
-export default function Channel({ params }: { params: { channelId: string } }) {
-  return <Feeds channelId={params.channelId} />;
+export default function Channel() {
+  return <Feeds />;
 }

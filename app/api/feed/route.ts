@@ -1,19 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { FeedType } from '@/types/Feed';
-import { getFeed } from '@/lib/feed/getFeed';
+import qs from 'qs';
+import getFeed from '@/lib/feed/getFeed';
+import { supabaseClient } from '@/lib/supabase/client';
 
 export async function GET(req: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url);
-    const feedType = searchParams.get('feedType') || FeedType.Trending;
-    const viewerFid = searchParams.get('viewerFid');
-    const channelId = searchParams.get('channelId');
+    const query = qs.parse(req.nextUrl.search.split('?')[1]);
+    const { feedType, start, channelId, viewerFid, authorFid } = query as {
+      feedType: FeedType;
+      start: string;
+      channelId: string;
+      viewerFid: string;
+      authorFid: string;
+    };
 
-    const filteredPosts = await getFeed(channelId, feedType as FeedType, Number(viewerFid));
-
-    return NextResponse.json({ posts: filteredPosts });
+    const posts = await getFeed(
+      supabaseClient,
+      feedType,
+      Number(start),
+      channelId,
+      Number(viewerFid),
+      Number(authorFid),
+    );
+    return NextResponse.json({ posts });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal Server Error', posts: [] }, { status: 500 });
   }
 }

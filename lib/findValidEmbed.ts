@@ -1,9 +1,8 @@
 import { SupabasePost } from '@/types/SupabasePost';
-import { FeedFilter } from '@/types/Feed';
 import { EmbedUrl } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import isValidUrl from './isValidUrl';
 
-export default function findValidEmbed(cast: SupabasePost, filter: FeedFilter = {}) {
+export default function findValidEmbed(cast: SupabasePost) {
   if (!cast || !cast.embeds) return null;
 
   const embeds = cast.embeds
@@ -20,8 +19,6 @@ export default function findValidEmbed(cast: SupabasePost, filter: FeedFilter = 
   const validEmbed = embeds.find((embed) => {
     if (!embed || !('url' in embed)) return false;
     const url = embed.url;
-    if (filter?.platform && !url.includes(filter.platform)) return false;
-
     return isValidUrl(url) || url?.includes('ipfs://');
   });
 
