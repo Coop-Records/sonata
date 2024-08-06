@@ -8,8 +8,8 @@ export interface ChannelStats {
   numberOfCurators: number;
   numberOfSongs: number;
   numberOfNotes?: number;
-  balance?: number;
-  staked?: number;
+  balance: number;
+  staked: number;
   addresses: string[]
 };
 

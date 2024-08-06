@@ -3,8 +3,9 @@ import { CHANNELS } from "../consts";
 import extractAddresses from "../privy/extractAddresses";
 import getAllChannels from "../privy/getAllChannels";
 import getPrivyIdentifier from "../privy/getIdentifier";
-import { supabaseClient } from "./client";
 import getStackPoints from "../sonata/getStackPoints";
+import { eventStakeChannel, eventTipChannel } from "../stack/events";
+import { supabaseClient } from "./client";
 
 async function getChannelStats(filterChannels = false) {
   const limit = 1000;
@@ -51,8 +52,8 @@ async function getChannelStats(filterChannels = false) {
       const addresses = wallet ? extractAddresses(wallet.linked_accounts) : [];
 
       if (addresses.length) {
-        balance = await getStackPoints(addresses, `channel_tip_${channelId}`);
-        staked = await getStackPoints(addresses, `channel_stake_${channelId}`);
+        balance = await getStackPoints(addresses, eventTipChannel(channelId));
+        staked = await getStackPoints(addresses, eventStakeChannel(channelId));
       }
 
       const channel: ChannelStats = {

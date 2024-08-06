@@ -1,19 +1,20 @@
 import { CHANNELS } from "@/lib/consts";
 import getUser from "@/lib/neynar/getNeynarUser";
 import { stack } from "@/lib/stack/client";
+import { eventStakeChannelFid } from "@/lib/stack/events";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
-  const fid = req.nextUrl.searchParams.get('fid');
-  if (!Number(fid)) throw Error('fid is required');
+  const fid = Number(req.nextUrl.searchParams.get('fid'));
+  if (!fid) throw Error('fid is required');
 
   try {
-    const user = await getUser(Number(fid));
+    const user = await getUser(fid);
 
     const points = await Promise.all(
       CHANNELS.map(channel => stack.pointsClient.getPoints({
         addresses: user.verifications,
-        filter: { event: `channel_stake_${channel.value}_${fid}` }
+        filter: { event: eventStakeChannelFid(channel.value, fid) }
       }))
     );
 
