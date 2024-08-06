@@ -33,9 +33,10 @@ app.frame('/tip', async (c) => {
 
   const castHash = post_hash?.substring(0, 8);
   const link = match ? `${BASE_URL}/cast/${username}/${castHash}` : BASE_URL;
-  const image = BASE_URL + (match ? `/api/og-image/cast/${username}/${castHash}/0` : '/images/og.webp');
+  const image = match ? `/api/og-image/cast/${username}/${castHash}/0` : '/images/og.webp';
 
   let tipSuccess = false;
+  let successParams = '/api/og-image/frame-tip-result?';
   const amount = c?.frameData?.inputText;
 
   if (amount) {
@@ -58,8 +59,16 @@ app.frame('/tip', async (c) => {
       const tipperWalletAddress = users?.find(user => user.fid == tipperFid)?.verifications?.find(Boolean);
 
       if (!recipientWalletAddress) throw Error('Invalid recipient');
-      await executeUserTip(post_hash, { recipientFid, recipientWalletAddress, tipperWalletAddress }, tipInfo);
+      const result = await executeUserTip(post_hash, { recipientFid, recipientWalletAddress, tipperWalletAddress }, tipInfo);
+
       tipSuccess = true;
+      successParams += new URLSearchParams({
+        sender: users[0].username,
+        receiver: users[1].username,
+        tipAmount: String(tipInfo.allowableAmount),
+        remainingAllowance: String(result.tipRemaining),
+        dailyAllowance: tipInfo.tip.daily_tip_allocation,
+      });
     } catch (error) {
       console.error(error);
       const message = error instanceof Error ? error.message : 'Could not process tip';
@@ -75,7 +84,7 @@ app.frame('/tip', async (c) => {
     ];
 
   return c.res({
-    image,
+    image: BASE_URL + tipSuccess ? successParams : image,
     browserLocation: link,
     intents: [
       ...actions,
