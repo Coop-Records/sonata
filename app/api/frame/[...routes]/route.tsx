@@ -11,37 +11,45 @@ import { handle } from 'frog/next';
 import { serveStatic } from 'frog/serve-static';
 
 const NEYNAR_KEY = process.env.NEYNAR_API_KEY ?? 'NEYNAR_FROG_FM';
-const URL = 'https://sonata.tips';
+const BASE_URL = 'https://sonata.tips';
 
 const app = new Frog({
   basePath: '/api/frame',
   title: 'Sonata Tip or Listen',
-  hub: neynarHub({ apiKey: NEYNAR_KEY })
+  hub: neynarHub({ apiKey: NEYNAR_KEY }),
+  verify: true,
+  unstable_metaTags: [
+    { property: 'of:version', content: 'vNext' },
+    { property: 'of:accepts:*', content: '*' },
+  ]
 });
 
 app.frame('/tip', async (c) => {
-  const { cast_url, recipient_fid } = c.req.query();
-  const match = cast_url?.match(/cast\/([^/]+)\/([^/]+)/);
+  const { searchParams, search } = new URL(c.buttonValue ?? c.req.url);
+  const username = searchParams.get('username');
+  const post_hash = searchParams.get('post_hash');
+  const recipient_fid = searchParams.get('recipient_fid');
+  const match = !!(username && post_hash && recipient_fid);
+
+  const castHash = post_hash?.substring(0, 8);
+  const link = match ? `${BASE_URL}/cast/${username}/${castHash}` : BASE_URL;
+  const image = match ? `/api/og-image/cast/${username}/${castHash}/0` : '/images/og.webp';
 
   let tipSuccess = false;
-  const username = match?.[1];
-  const castHash = match?.[2];
+  let successParams = '/api/og-image/frame-tip-result?';
   const amount = c?.frameData?.inputText;
-  const image = username ? `/api/og-image/cast/${username}/${castHash}/0` : '/images/og.webp';
 
   if (amount) {
     try {
       const tipAmount = Number(amount);
-      if (!match) throw Error('Could not retrieve cast data');
-      else if (!c.verified || !username) throw Error('Could not authenticate user');
+      if (!c.verified) throw Error('Could not authenticate user');
+      else if (!match) throw Error('Hash and fid required');
       else if (!recipient_fid) throw Error('No recipient found');
       else if (isNaN(tipAmount)) throw Error('Must be a number');
       else if (tipAmount <= 0) throw Error('Invalid entry');
 
       const tipperFid = c?.frameData?.fid as number;
       const recipientFid = Number(recipient_fid);
-      const postHash = c?.frameData?.castId?.hash as string;
-
       if (tipperFid === recipientFid) throw Error('Can not tip yourself');
 
       const tipInfo = await getUserTipInfo(tipperFid, tipAmount);
@@ -51,25 +59,36 @@ app.frame('/tip', async (c) => {
       const tipperWalletAddress = users?.find(user => user.fid == tipperFid)?.verifications?.find(Boolean);
 
       if (!recipientWalletAddress) throw Error('Invalid recipient');
+      const result = await executeUserTip(post_hash, { recipientFid, recipientWalletAddress, tipperWalletAddress }, tipInfo);
 
-      await executeUserTip(postHash, { recipientFid, recipientWalletAddress, tipperWalletAddress }, tipInfo);
       tipSuccess = true;
+      successParams += new URLSearchParams({
+        sender: users[0].username,
+        receiver: users[1].username,
+        tipAmount: String(tipInfo.allowableAmount),
+        remainingAllowance: String(result.tipRemaining),
+        dailyAllowance: tipInfo.tip.daily_tip_allocation,
+      });
     } catch (error) {
+      console.error(error);
       const message = error instanceof Error ? error.message : 'Could not process tip';
       return c.error({ message });
     }
   }
 
   const actions = tipSuccess ?
-    [<Button.Reset>Reset</Button.Reset>] :
-    [<TextInput placeholder='Enter tip amount' />, <Button>Tip</Button>];
+    [<Button value={BASE_URL + search}>Add Tip</Button>] :
+    [
+      <TextInput placeholder='Enter tip amount' />,
+      <Button value={BASE_URL + search}>Tip</Button>
+    ];
 
   return c.res({
-    browserLocation: cast_url || URL,
-    image: URL + image,
+    image: BASE_URL + tipSuccess ? successParams : image,
+    browserLocation: link,
     intents: [
       ...actions,
-      <Button.Redirect location={cast_url || URL}>Listen</Button.Redirect>
+      <Button.Link href={link}>Listen</Button.Link>
     ]
   })
 });
