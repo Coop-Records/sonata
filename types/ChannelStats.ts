@@ -7,7 +7,7 @@ export interface ChannelStats {
   channelId: string;
   numberOfCurators: number;
   numberOfSongs: number;
-  numberOfNotes?: number;
+  totalNotes: number;
   balance: number;
   staked: number;
   addresses: string[]

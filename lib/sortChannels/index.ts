@@ -5,7 +5,7 @@ import rankItems from "./rankChannels";
 
 function sortChannels(channelStats: ChannelStats[]) {
   const criteria: RankCriterion[] = [
-    { name: 'numberOfNotes', weight: .333 },
+    { name: 'totalNotes', weight: .333 },
     { name: 'numberOfSongs', weight: .333 },
     { name: 'numberOfCurators', weight: .333 },
   ];
