@@ -5,6 +5,7 @@ import getAllChannels from "../privy/getAllChannels";
 import getPrivyIdentifier from "../privy/getIdentifier";
 import { supabaseClient } from "./client";
 import getStackPoints from "../sonata/getStackPoints";
+import serverClient from "./serverClient";
 
 async function getChannelStats(filterChannels = false) {
   const limit = 1000;
@@ -46,13 +47,19 @@ async function getChannelStats(filterChannels = false) {
 
   const channels = await Promise.all(
     Object.keys(entries).map(async channelId => {
-      let balance = 0, staked = 0;
+      let balance = 0, staked = 0, stakers = 0;
       const wallet = wallets.find(wallet => wallet.linked_accounts?.some(account => account.address === getPrivyIdentifier(channelId)));
       const addresses = wallet ? extractAddresses(wallet.linked_accounts) : [];
 
       if (addresses.length) {
         balance = await getStackPoints(addresses, `channel_tip_${channelId}`);
-        staked = await getStackPoints(addresses, `channel_stake_${channelId}`);
+        const { data, error } = await serverClient
+          .from('channel_stake_stats')
+          .select('stakers,staked')
+          .eq('channelId', channelId)
+          .single();
+
+        if (!error) { stakers = data.stakers; staked = data.staked }
       }
 
       const channel: ChannelStats = {
@@ -62,6 +69,7 @@ async function getChannelStats(filterChannels = false) {
         totalNotes: balance + staked,
         balance,
         staked,
+        stakers,
         addresses,
       };
       return channel;
