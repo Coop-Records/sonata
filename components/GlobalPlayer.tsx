@@ -3,8 +3,10 @@ import { usePlayer } from '@/providers/audio/PlayerProvider';
 import Image from 'next/image';
 import Scrubber from '@/components/Scrubber';
 import PlayerButtons from './PlayerButtons';
+import { useUi } from '@/providers/UiProvider';
 
 export default function GlobalPlayer() {
+  const { isMobile } = useUi();
   const [player] = usePlayer();
   const { metadata } = player;
 
@@ -35,12 +37,12 @@ export default function GlobalPlayer() {
         <div className="absolute left-1/4 w-full">
           <div className="ml-6 flex max-w-2xl grow flex-col items-center gap-1">
             {metadata && <PlayerButtons metadata={metadata} />}
-            <Scrubber className="w-full max-md:hidden" />
+            {!isMobile && <Scrubber className="w-full" />}
           </div>
         </div>
       </div>
 
-      <Scrubber className="container md:hidden" />
+      {isMobile && <Scrubber className="container" />}
     </div>
   );
 }
