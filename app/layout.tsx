@@ -5,6 +5,23 @@ import { Analytics } from '@vercel/analytics/react';
 import { ReactNode } from 'react';
 import { Toaster } from '@/components/ui/toaster';
 import { headers } from 'next/headers';
+import { DEFAULT_FRAME, DESCRIPTION, TITLE, VERCEL_URL } from '@/lib/consts';
+import { getFrameMetadata } from '@coinbase/onchainkit';
+import { Metadata } from 'next';
+const frameMetadata = { ...getFrameMetadata(DEFAULT_FRAME), 'of:accepts:xmtp': '2024-02-01' };
+
+export const metadata: Metadata = {
+  title: TITLE,
+  description: DESCRIPTION,
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    images: `${VERCEL_URL}/images/og.png`,
+  },
+  other: {
+    ...frameMetadata,
+  },
+};
 
 export const viewport = {
   width: 'device-width',
@@ -26,9 +43,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
   return (
     <html lang="en" className={sora.variable}>
-      <body
-        className={`flex min-h-screen flex-col overflow-x-hidden font-sora ${backgroundColor}`}
-      >
+      <body className={`flex min-h-screen flex-col overflow-x-hidden font-sora ${backgroundColor}`}>
         <Providers>
           <div id="player-portal" className="pointer-events-none fixed left-0 top-0 opacity-0" />
           {children}
