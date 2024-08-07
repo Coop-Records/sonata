@@ -1,6 +1,11 @@
 import { ChannelAccumulator, ChannelStats } from "@/types/ChannelStats";
 import { CHANNELS } from "../consts";
+import extractAddresses from "../privy/extractAddresses";
+import getAllChannels from "../privy/getAllChannels";
+import getPrivyIdentifier from "../privy/getIdentifier";
 import { supabaseClient } from "./client";
+import getStackPoints from "../sonata/getStackPoints";
+import serverClient from "./serverClient";
 
 async function getChannelStats(filterChannels = false) {
   const limit = 1000;
@@ -10,7 +15,7 @@ async function getChannelStats(filterChannels = false) {
   do {
     const query = supabaseClient
       .from('posts')
-      .select('channelId, post_hash, authorFid, points')
+      .select('channelId, post_hash, authorFid')
       .range(offset, offset + limit - 1);
 
     if (filterChannels) {
@@ -27,12 +32,10 @@ async function getChannelStats(filterChannels = false) {
       if (!entries[channelId]) entries[channelId] = {
         uniquePosts: new Set,
         uniqueAuthors: new Set,
-        notes: 0
       };
 
       entries[channelId].uniqueAuthors.add(post.authorFid);
       entries[channelId].uniquePosts.add(post.post_hash);
-      entries[channelId].notes += post.points;
     });
 
     if (posts.length < limit) break;
@@ -40,16 +43,38 @@ async function getChannelStats(filterChannels = false) {
 
   } while (offset);
 
-  const channels = Object.keys(entries).map(channelId => {
-    const channel: ChannelStats = {
-      channelId,
-      numberOfCurators: entries[channelId].uniqueAuthors.size,
-      numberOfSongs: entries[channelId].uniquePosts.size,
-    };
-    channel.numberOfNotes = entries[channelId].notes;
+  const wallets = await getAllChannels();
 
-    return channel;
-  });
+  const channels = await Promise.all(
+    Object.keys(entries).map(async channelId => {
+      let balance = 0, staked = 0, stakers = 0;
+      const wallet = wallets.find(wallet => wallet.linked_accounts?.some(account => account.address === getPrivyIdentifier(channelId)));
+      const addresses = wallet ? extractAddresses(wallet.linked_accounts) : [];
+
+      if (addresses.length) {
+        balance = await getStackPoints(addresses, `channel_tip_${channelId}`);
+        const { data, error } = await serverClient
+          .from('channel_stake_stats')
+          .select('stakers,staked')
+          .eq('channelId', channelId)
+          .single();
+
+        if (!error) { stakers = data.stakers; staked = data.staked }
+      }
+
+      const channel: ChannelStats = {
+        channelId,
+        numberOfCurators: entries[channelId].uniqueAuthors.size,
+        numberOfSongs: entries[channelId].uniquePosts.size,
+        totalNotes: balance + staked,
+        balance,
+        staked,
+        stakers,
+        addresses,
+      };
+      return channel;
+    })
+  );
 
   return channels;
 }
