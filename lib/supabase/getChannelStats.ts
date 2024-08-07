@@ -59,7 +59,7 @@ async function getChannelStats(filterChannels = false) {
         channelId,
         numberOfCurators: entries[channelId].uniqueAuthors.size,
         numberOfSongs: entries[channelId].uniquePosts.size,
-        numberOfNotes: balance + staked,
+        totalNotes: balance + staked,
         balance,
         staked,
         addresses,
