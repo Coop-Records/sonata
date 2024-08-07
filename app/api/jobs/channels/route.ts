@@ -1,35 +1,49 @@
+import processChannelReward from "@/lib/sonata/channelWeeklyAirdrop/processChannelReward";
+import processStakersReward from "@/lib/sonata/channelWeeklyAirdrop/processStakersReward";
 import sortChannels from "@/lib/sortChannels";
 import { stack } from "@/lib/stack/client";
+import { eventTipChannel } from "@/lib/stack/events";
 import getChannelStats from "@/lib/supabase/getChannelStats";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
   const TOP_CHANNELS = 10;
-  const TIP_AMOUNT = 11111;
+  const AIRDROP_AMOUNT = 5555;
+  const TIP_PERCENTAGE = .1;
 
   const authHeader = req.headers.get('authorization');
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return Response.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
-  const channelStats = await getChannelStats(true);
-  const sortedChannels = sortChannels(channelStats);
-  sortedChannels.splice(TOP_CHANNELS);
+  try {
+    const channelStats = await getChannelStats(true);
+    const sortedChannels = sortChannels(channelStats);
+    sortedChannels.splice(TOP_CHANNELS);
 
-  const stacks = await Promise.all(sortedChannels.map((channel: any) => {
-    const address = channel?.addresses?.[0];
-    if (!address)
-      return Promise.reject(`${channel.channelId} channel address not found`);
+    await Promise.all(
+      sortedChannels.map(async (channel) => {
+        const channelId = channel.channelId;
+        const { account } = await processChannelReward(channel, AIRDROP_AMOUNT);
 
-    return stack.track(`weekly_channel_tip_to_${address}`, {
-      account: address, points: TIP_AMOUNT
-    });
-  }));
+        if (!channel.staked) return;
 
-  if (stacks.some(res => !res.success))
-    return Response.json({ message: 'failed', stacks }, { status: 500 });
+        const TIP_REWARDS = Math.ceil(channel.balance * TIP_PERCENTAGE);
+        const TOTAL_REWARDS = AIRDROP_AMOUNT + TIP_REWARDS;
 
-  return Response.json({ message: 'success', topChannels: sortedChannels });
+        await processStakersReward(TOTAL_REWARDS, channelId);
+
+        if (!TIP_REWARDS) return;
+
+        const result = await stack.track(eventTipChannel(channelId), { account, points: -TIP_REWARDS });
+        if (!result.success) console.error(`${channelId} tip deduction failed`);
+      })
+    );
+
+    return Response.json({ message: 'success', topChannels: sortedChannels });
+  } catch (error) {
+    return Response.json(error, { status: 500 });
+  }
 }
 
 export const dynamic = 'force-dynamic';
