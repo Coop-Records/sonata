@@ -29,3 +29,5 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Internal Server Error', posts: [] }, { status: 500 });
   }
 }
+
+export const revalidate = 0;
