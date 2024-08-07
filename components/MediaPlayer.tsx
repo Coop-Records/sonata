@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-import Scrubber from '@/components/Scrubber';
 
 type MediaPlayerProps = {
   metadata?: TrackMetadata;
@@ -41,7 +40,7 @@ export default function MediaPlayer({ metadata }: MediaPlayerProps) {
         currentTrack && player.loading && 'animate-pulse',
       )}
     >
-      <div className="relative my-auto aspect-square w-16 shrink-0 overflow-hidden rounded-lg shadow-md">
+      <div className="relative my-auto aspect-square w-12 shrink-0 overflow-hidden rounded-lg shadow-md">
         {metadata?.artworkUrl ? (
           <Image
             src={metadata.artworkUrl}
@@ -70,7 +69,6 @@ export default function MediaPlayer({ metadata }: MediaPlayerProps) {
             <Skeleton className="h-2 w-12 rounded-sm" />
           )}
         </div>
-        {currentTrack && !player.loading && <Scrubber className="mt-auto max-md:hidden" />}
       </div>
       <div className="my-auto">
         <Button
