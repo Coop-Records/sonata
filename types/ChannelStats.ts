@@ -10,6 +10,7 @@ export interface ChannelStats {
   totalNotes: number;
   balance: number;
   staked: number;
+  stakers: number;
   addresses: string[]
 };
 

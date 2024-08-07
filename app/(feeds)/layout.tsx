@@ -48,7 +48,9 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
                     className="absolute left-0 top-0 size-full overflow-scroll pt-4"
                     id="feed-container"
                   >
-                    <div className={cn("container mx-auto space-y-6", { "max-w-3xl": enableMaxWidth })}>
+                    <div
+                      className={cn('container mx-auto space-y-6', { 'max-w-3xl': enableMaxWidth })}
+                    >
                       {user && !username && !channelId && <CreatePost />}
                       {children}
                     </div>

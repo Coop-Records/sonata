@@ -4,8 +4,8 @@ import extractAddresses from "../privy/extractAddresses";
 import getAllChannels from "../privy/getAllChannels";
 import getPrivyIdentifier from "../privy/getIdentifier";
 import getStackPoints from "../sonata/getStackPoints";
-import { eventStakeChannel, eventTipChannel } from "../stack/events";
-import { supabaseClient } from "./client";
+import { eventTipChannel } from "../stack/events";
+import supabase from "./serverClient";
 
 async function getChannelStats(filterChannels = false) {
   const limit = 1000;
@@ -13,7 +13,7 @@ async function getChannelStats(filterChannels = false) {
   const entries = {} as ChannelAccumulator;
 
   do {
-    const query = supabaseClient
+    const query = supabase
       .from('posts')
       .select('channelId, post_hash, authorFid')
       .range(offset, offset + limit - 1);
@@ -47,13 +47,19 @@ async function getChannelStats(filterChannels = false) {
 
   const channels = await Promise.all(
     Object.keys(entries).map(async channelId => {
-      let balance = 0, staked = 0;
+      let balance = 0, staked = 0, stakers = 0;
       const wallet = wallets.find(wallet => wallet.linked_accounts?.some(account => account.address === getPrivyIdentifier(channelId)));
       const addresses = wallet ? extractAddresses(wallet.linked_accounts) : [];
 
       if (addresses.length) {
         balance = await getStackPoints(addresses, eventTipChannel(channelId));
-        staked = await getStackPoints(addresses, eventStakeChannel(channelId));
+        const { data, error } = await supabase
+          .from('channel_stake_stats')
+          .select('stakers,staked')
+          .eq('channelId', channelId)
+          .single();
+
+        if (!error) { stakers = data.stakers; staked = data.staked }
       }
 
       const channel: ChannelStats = {
@@ -61,9 +67,8 @@ async function getChannelStats(filterChannels = false) {
         numberOfCurators: entries[channelId].uniqueAuthors.size,
         numberOfSongs: entries[channelId].uniquePosts.size,
         totalNotes: balance + staked,
-        balance,
-        staked,
-        addresses,
+        balance, staked,
+        stakers, addresses,
       };
       return channel;
     })
