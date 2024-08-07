@@ -1,4 +1,3 @@
-import combinePrivyAccountWithChannelStats from "@/lib/privy/combineAccountsWithStats";
 import sortChannels from "@/lib/sortChannels";
 import { stack } from "@/lib/stack/client";
 import getChannelStats from "@/lib/supabase/getChannelStats";
@@ -14,8 +13,7 @@ export async function GET(req: NextRequest) {
   }
 
   const channelStats = await getChannelStats(true);
-  const channelStatsWithAddresses = await combinePrivyAccountWithChannelStats(channelStats);
-  const sortedChannels = sortChannels(channelStatsWithAddresses);
+  const sortedChannels = sortChannels(channelStats);
   sortedChannels.splice(TOP_CHANNELS);
 
   const stacks = await Promise.all(sortedChannels.map((channel: any) => {
