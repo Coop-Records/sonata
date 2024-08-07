@@ -1,4 +1,4 @@
-import getChannelWeeklyAirdropData from "@/lib/sonata/getChannelWeeklyAirdropData";
+import getChannelWeeklyAirdropData from "@/lib/sonata/channelWeeklyAirdrop/getChannelWeeklyAirdropData";
 
 export async function GET() {
   try {
