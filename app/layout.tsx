@@ -18,7 +18,6 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     images: `${VERCEL_URL}/images/og.png`,
   },
-  // icons: [`${VERCEL_URL}/images/logo2.png`],
   other: {
     ...frameMetadata,
   },
