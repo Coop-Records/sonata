@@ -27,7 +27,7 @@ export default function BalanceInfo() {
         </span>
       </div>
       {airdropBalance > 0 ? (
-        <div className="flex items-center flex-wrap gap-[3px]">
+        <div className="flex flex-wrap gap-[3px]">
           <span>Airdrop:</span>
           <span className='flex whitespace-nowrap'>
             {`${!isNil(airdropBalance) ? formatBigInt(BigInt(airdropBalance)) : '-'}`}
