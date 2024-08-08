@@ -17,7 +17,7 @@ async function executeChannelUnstake(channelId: string, amount: number, fid: num
 
   const { channelAddress } = info;
 
-  const userStakeAmount = -await getPoints(user.verifications, userEvent);
+  const userStakeAmount = Math.abs(await getPoints(user.verifications, userEvent));
 
   if (amount > userStakeAmount) throw Error('Invalid amount');
 

@@ -26,41 +26,36 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
       <FeedProvider>
         <StakeProvider>
           <TipsList />
-          <div className="flex grow flex-col">
+          <div className="flex grow">
             <meta property="of:accepts:xmtp" content="2024-02-01" />
-            <div className="flex grow">
-              <nav className="md:hidden">
-                <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
-                  <SheetContent side="left">
-                    <Sidebar />
-                  </SheetContent>
-                </Sheet>
-              </nav>
+            <nav className="md:hidden">
+              <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
+                <SheetContent side="left">
+                  <Sidebar />
+                </SheetContent>
+              </Sheet>
+            </nav>
 
-              <nav className="shadow-xl max-md:hidden">
-                <Sidebar />
-              </nav>
+            <nav className="shadow-xl max-md:hidden">
+              <Sidebar />
+            </nav>
 
-              <main className="flex grow flex-col">
-                <Header />
-                <div className="relative min-h-[600px] grow">
-                  <div
-                    className="absolute left-0 top-0 size-full overflow-scroll pt-4"
-                    id="feed-container"
-                  >
-                    <div
-                      className={cn('container mx-auto space-y-6', { 'max-w-3xl': enableMaxWidth })}
-                    >
-                      {user && !username && !channelId && <CreatePost />}
-                      {children}
-                    </div>
-                  </div>
+            <main className="flex grow flex-col">
+              <Header />
+              <div className="mt-4 h-0 grow overflow-y-scroll">
+                <div
+                  className={cn('flex flex-col gap-6 container min-h-full', {
+                    'max-w-3xl': enableMaxWidth,
+                  })}
+                  id="feed-container"
+                >
+                  {user && !username && !channelId && <CreatePost />}
+                  {children}
                 </div>
-              </main>
-            </div>
-
-            <GlobalPlayer />
+              </div>
+            </main>
           </div>
+          <GlobalPlayer />
         </StakeProvider>
       </FeedProvider>
     </ProfileProvider>

@@ -19,9 +19,9 @@ export async function GET(req: NextRequest) {
 
     const channelPoints = CHANNELS.map((channel, i) => ({
       channelId: channel.value,
-      points: -points[i]?.allocations?.reduce(
+      points: Math.abs(points[i]?.allocations?.reduce(
         (total: any, curr: any) => total + curr?.points, 0
-      ),
+      )),
     }));
 
     return Response.json({

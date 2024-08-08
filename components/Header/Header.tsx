@@ -18,25 +18,43 @@ import HomeButton from './HomeButton';
 import UserMenu from './UserMenu';
 import ChannelDetails from '../ChannelDetails';
 import { useStakeProvider } from '@/providers/StakeProvider';
+import { useProfileProvider } from '@/providers/ProfileProvider';
 
 const Header = () => {
   const { user, loading: userLoading } = useNeynarProvider();
   const { feedType } = useFeedProvider();
   const { menuOpen, setMenuOpen } = useUi();
   const { airdropBalance } = useTipProvider();
-  const { username, hash, channelId } = useParams();
+  const { username, channelId } = useParams();
   const { channelImage } = useStakeProvider();
+  const { profile } = useProfileProvider();
 
   return (
     <header>
       <div
-        style={channelId ? { backgroundImage: `url("${channelImage}")`, boxShadow: 'inset 0 0 0 1000px #141a1eb2' } : undefined}
-        className={channelId ? 'h-[10.75rem] bg-cover bg-center bg-no-repeat pt-12' : 'pt-2 md:pt-6'}>
-        <div className='container flex items-center justify-between md:justify-end'>
-          <Button variant="link" className={cn("p-0 text-5xl md:hidden", channelId && 'text-white')}>
+        style={
+          channelId
+            ? {
+                backgroundImage: `url("${channelImage}")`,
+                boxShadow: 'inset 0 0 0 1000px #141a1eb2',
+              }
+            : undefined
+        }
+        className={cn(
+          'mb-1',
+          channelId ? 'h-[10.75rem] bg-cover bg-center bg-no-repeat pt-12' : 'pt-2 md:pt-6',
+        )}
+      >
+        <div className="container flex items-center justify-between md:justify-end">
+          <Button
+            variant="link"
+            className={cn('p-0 text-5xl md:hidden', channelId && 'text-white')}
+          >
             <HamburgerMenuIcon onClick={() => setMenuOpen(!menuOpen)} className="size-6" />
           </Button>
-          {(username || channelId) && <HomeButton className={cn('mr-auto max-md:hidden', channelId && 'text-white')} />}
+          {(username || channelId) && (
+            <HomeButton className={cn('mr-auto max-md:hidden', channelId && 'text-white')} />
+          )}
           {userLoading ? (
             <Skeleton className="size-9 rounded-full" />
           ) : user ? (
@@ -49,9 +67,9 @@ const Header = () => {
           )}
         </div>
       </div>
-      <div className='container'>
+      <div className="container">
         {channelId && <ChannelDetails channelId={channelId as string} />}
-        {username && !hash && <Profile />}
+        {profile && <Profile />}
         {feedType && (
           <Tabs tabs={tabs} className={!(username || channelId) ? 'justify-center' : ''} />
         )}

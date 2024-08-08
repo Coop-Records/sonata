@@ -31,18 +31,18 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const [hasMore, setHasMore] = useState(true);
   const { user, loading: userLoading } = useNeynarProvider();
   const [player, dispatch] = usePlayer();
-  const { profile } = useProfileProvider();
+  const { profile, loading: profileLoading, error: profileError } = useProfileProvider();
 
   const fid = user?.fid;
   const profileFid = profile?.fid;
 
   useEffect(() => {
-    if (userLoading) return;
+    if (userLoading || profileLoading || profileError) return;
     if (channelId) setFeedType(FeedType.Trending);
     else if (profileFid) setFeedType(FeedType.Posts);
     else if (user) setFeedType(FeedType.Following);
     else setFeedType(FeedType.Trending);
-  }, [userLoading, user, profileFid, channelId]);
+  }, [userLoading, profileLoading, profileError, user, profileFid, channelId]);
 
   const fetchMore = useCallback(
     async (start: number) => {
