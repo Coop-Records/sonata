@@ -43,12 +43,3 @@ export async function GET(req: NextRequest) {
     return Response.json({ message }, { status: 400 });
   }
 }
-
-// {
-//   fid: 12,
-//   verifications:[],
-//   hyperSub: true,
-//   hyperSubDate: true,
-//   powerBadge: true,
-//   allowance: 0,
-// }
