@@ -8,6 +8,7 @@ import { headers } from 'next/headers';
 import { DEFAULT_FRAME, DESCRIPTION, TITLE, VERCEL_URL } from '@/lib/consts';
 import { getFrameMetadata } from '@coinbase/onchainkit';
 import { Metadata } from 'next';
+import { cn } from '@/lib/utils';
 const frameMetadata = { ...getFrameMetadata(DEFAULT_FRAME), 'of:accepts:xmtp': '2024-02-01' };
 
 export const metadata: Metadata = {
@@ -43,7 +44,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
   return (
     <html lang="en" className={sora.variable}>
-      <body className={`flex min-h-screen flex-col overflow-x-hidden font-sora ${backgroundColor}`}>
+      <body
+        className={cn('flex min-h-screen flex-col overflow-x-hidden font-sora', backgroundColor)}
+      >
         <Providers>
           <div id="player-portal" className="pointer-events-none fixed left-0 top-0 opacity-0" />
           {children}
