@@ -15,33 +15,26 @@ const getFeed = async (
   viewerFid?: number,
   authorFid?: number,
   limit: boolean = true,
-) => {
+): Promise<SupabasePost[]> => {
   try {
     const followingFids = [];
     if (feedType === FeedType.Following) {
-      if (!viewerFid) {
-        throw new Error('Invalid viewerFid');
-      }
+      if (!viewerFid) throw new Error('Invalid viewerFid');
+
       const following = await getFollowing(viewerFid);
       followingFids.push(...following.map((user) => user.fid), viewerFid);
     }
 
     const query = getBaseQuery(supabaseClient, feedType, followingFids);
 
-    if (!query) {
-      return { posts: [] };
-    }
+    if (!query) return [];
 
     if (![FeedType.Following, FeedType.Posts].includes(feedType)) {
       query.filter('author', 'cs', '{"power_badge": true}');
     }
 
-    if (channelId) {
-      query.eq('channelId', channelId);
-    }
-    if (authorFid) {
-      query.eq('authorFid', authorFid);
-    }
+    if (channelId) query.eq('channelId', channelId);
+    if (authorFid) query.eq('authorFid', authorFid);
     if (limit) query.range(start, start + fetchPostsLimit - 1);
 
     let { data: posts } = await query.returns<SupabasePost[]>();
