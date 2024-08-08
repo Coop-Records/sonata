@@ -10,8 +10,8 @@ export async function GET(req: NextRequest) {
 
   try {
     let user: any = null;
-    if (fid) user = await getUser(Number(fid));
     if (username) user = await getUserByUsername(username);
+    else if (fid) user = await getUser(Number(fid));
     if (!user) throw Error('username or fid required');
 
     const allBalances = await checkAddressBalances(user.verifications);
@@ -24,15 +24,16 @@ export async function GET(req: NextRequest) {
       if (hyperSub) break;
     }
 
-    const { data } = await supabase.from('tips').select('*').eq('fid', user.fid);
+    const { data } = await supabase.from('tips').select('*').eq('fid', user.fid).single();
 
     return Response.json({
       mesage: 'success',
       data: {
         fid: user.fid,
+        username: user.username,
         hyperSub,
+        powerBadge: user.powerBadge ?? false,
         verifications: user.verifications,
-        powerBadge: user.powerBadge,
         db: data
       }
     });
