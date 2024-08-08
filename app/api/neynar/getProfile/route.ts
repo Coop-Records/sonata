@@ -11,7 +11,7 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
     const profile = await getUserByUsername(username);
     return NextResponse.json(profile, { status: 200 });
   } catch (error: any) {
-    return NextResponse.json({ errors: 'Something went wrong' }, { status: 400 });
+    return NextResponse.json({ error: 'Something went wrong' }, { status: 400 });
   }
 };
 
