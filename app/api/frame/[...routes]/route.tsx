@@ -14,6 +14,7 @@ const NEYNAR_KEY = process.env.NEYNAR_API_KEY ?? 'NEYNAR_FROG_FM';
 const BASE_URL = 'https://sonata.tips';
 
 const app = new Frog({
+  browserLocation:'/',
   basePath: '/api/frame',
   title: 'Sonata Tip or Listen',
   hub: neynarHub({ apiKey: NEYNAR_KEY }),
@@ -23,6 +24,8 @@ const app = new Frog({
     { property: 'of:accepts:*', content: '*' },
   ]
 });
+
+export const runtime = 'edge';
 
 app.frame('/tip', async (c) => {
   const { searchParams, search } = new URL(c.buttonValue ?? c.req.url);
@@ -84,7 +87,7 @@ app.frame('/tip', async (c) => {
     ];
 
   return c.res({
-    image: BASE_URL + tipSuccess ? successParams : image,
+    image: BASE_URL + (tipSuccess ? successParams : image),
     browserLocation: link,
     intents: [
       ...actions,
