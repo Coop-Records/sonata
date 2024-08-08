@@ -15,6 +15,7 @@ type ProfileProviderType = {
   songs: SupabasePost[];
   topSongMetadata: TrackMetadata | null;
   followers: NeynarUserData[];
+  loading: boolean;
 };
 
 const ProfileContext = createContext<ProfileProviderType>({} as any);
@@ -25,9 +26,19 @@ const ProfileProvider = ({ children }: { children: ReactNode }) => {
   const [songs, setSongs] = useState<SupabasePost[]>([]);
   const [topSongMetadata, setTopSongMetadata] = useState<TrackMetadata | null>(null);
   const [followers, setFollowers] = useState<NeynarUserData[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const init = async () => {
+      if (!username) {
+        setProfile(null);
+        setFollowers([]);
+        setSongs([]);
+        setTopSongMetadata(null);
+        setLoading(false);
+        return;
+      }
+
       const neynarProfile = await getNeynarProfile(username as string);
       setProfile(neynarProfile);
       const neynarFollowers = await getFollowers(neynarProfile.fid);
@@ -48,17 +59,11 @@ const ProfileProvider = ({ children }: { children: ReactNode }) => {
       }
     };
 
-    if (!username) {
-      setProfile(null);
-      setFollowers([]);
-      setSongs([]);
-      setTopSongMetadata(null);
-      return;
-    }
-    init();
+    init().finally(() => setLoading(false));
   }, [username]);
 
   const value = {
+    loading,
     profile,
     songs,
     topSongMetadata,
