@@ -1,6 +1,8 @@
+import getUser from '@/lib/neynar/getNeynarUser';
 import verifySignerUUID from '@/lib/neynar/verifySigner';
+import getStackPoints from '@/lib/sonata/getStackPoints';
 import executeChannelStake from '@/lib/sonata/staking/executeChannelStake';
-import supabase from "@/lib/supabase/serverClient";
+import { eventStakeChannelFid } from '@/lib/stack/events';
 import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest) {
@@ -10,14 +12,14 @@ export async function GET(req: NextRequest) {
   try {
     if (!channelId || !fid) throw Error('channelId and fid required');
 
-    const { data, error } = await supabase.rpc('get_user_channel_staked_amount', {
-      p_fid: fid,
-      p_channelId: channelId
-    });
+    const user = await getUser(Number(fid));
 
-    if (error) throw error;
+    const stakedAmount = -await getStackPoints(
+      user.verifications,
+      eventStakeChannelFid(channelId, user.fid)
+    );
 
-    return Response.json({ message: 'success', stakedAmount: data });
+    return Response.json({ message: 'success', stakedAmount });
   } catch (error) {
     console.error(error);
     const message = error instanceof Error ? error.message : 'failed';
