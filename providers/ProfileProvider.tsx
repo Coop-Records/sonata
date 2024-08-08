@@ -16,6 +16,7 @@ type ProfileProviderType = {
   topSongMetadata: TrackMetadata | null;
   followers: NeynarUserData[];
   loading: boolean;
+  error: Error | null;
 };
 
 const ProfileContext = createContext<ProfileProviderType>({} as any);
@@ -27,19 +28,25 @@ const ProfileProvider = ({ children }: { children: ReactNode }) => {
   const [topSongMetadata, setTopSongMetadata] = useState<TrackMetadata | null>(null);
   const [followers, setFollowers] = useState<NeynarUserData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     const init = async () => {
+      setError(null);
+      setProfile(null);
+      setFollowers([]);
+      setSongs([]);
+      setTopSongMetadata(null);
+
       if (!username) {
-        setProfile(null);
-        setFollowers([]);
-        setSongs([]);
-        setTopSongMetadata(null);
-        setLoading(false);
         return;
       }
 
       const neynarProfile = await getNeynarProfile(username as string);
+      if (neynarProfile.error) {
+        setError(new Error('Profile not found'));
+        return;
+      }
       setProfile(neynarProfile);
       const neynarFollowers = await getFollowers(neynarProfile.fid);
       setFollowers(neynarFollowers);
@@ -59,11 +66,13 @@ const ProfileProvider = ({ children }: { children: ReactNode }) => {
       }
     };
 
+    setLoading(true);
     init().finally(() => setLoading(false));
   }, [username]);
 
   const value = {
     loading,
+    error,
     profile,
     songs,
     topSongMetadata,
@@ -73,12 +82,12 @@ const ProfileProvider = ({ children }: { children: ReactNode }) => {
   return <ProfileContext.Provider value={value}>{children}</ProfileContext.Provider>;
 };
 
-export const useProfileProvider = () => {
+export function useProfileProvider() {
   const context = useContext(ProfileContext);
   if (!context) {
     throw new Error('useProfileProvider must be used within a ProfileProvider');
   }
   return context;
-};
+}
 
 export default ProfileProvider;

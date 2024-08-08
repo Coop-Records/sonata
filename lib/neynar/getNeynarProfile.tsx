@@ -17,7 +17,7 @@ const getNeynarProfile = async (username: string) => {
     return data;
   } catch (error) {
     console.error(error);
-    return [];
+    return null;
   }
 };
 
