@@ -1,17 +1,18 @@
 import { Staker } from "@/types/Stake";
 
 export default function calculateStakersReward(users: Staker[], totalAmount: number) {
+  const DAYS_PAST_A_WEEK = 8;
+  const DAYS_IN_SECONDS = 1000 * 3600 * 24;
   const currentDate = new Date();
 
   const userScores = users.map(user => {
-    let investedDays = 8;
+    let investedDays = DAYS_PAST_A_WEEK;
 
     if (user.earliest_week_stake) {
-      console.log('earliest_week_stake', user.earliest_week_stake);
       const stakedDate = new Date(user.earliest_week_stake);
-      investedDays = Math.floor((currentDate.getTime() - stakedDate.getTime()) / (1000 * 3600 * 24));
+      investedDays = Math.floor((currentDate.getTime() - stakedDate.getTime()) / DAYS_IN_SECONDS);
     }
-    const days = Math.min(investedDays, 8);
+    const days = Math.min(investedDays, DAYS_PAST_A_WEEK);
     const score = user.amount * (days + 1);
 
     return { fid: user.fid, score };

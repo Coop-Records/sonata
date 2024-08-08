@@ -1,5 +1,5 @@
 import getBulkUsersByFid from "@/lib/neynar/getBulkUsersByFid";
-import { eventAirdropChannelFid } from "@/lib/stack/events";
+import { eventAirdropStaker } from "@/lib/stack/events";
 import { Staker } from "@/types/Stake";
 import calculateStakersReward from "./calculateStakersReward";
 import { stack } from "@/lib/stack/client";
@@ -16,7 +16,7 @@ async function processStakersReward(amount: number, channelId: string) {
 
   const processUserRewards = rewards.map(({ reward, fid }) => {
     const account = users.find(user => user.fid == fid)!.verifications[0];
-    return stack.track(eventAirdropChannelFid(channelId, fid), { account, points: reward });
+    return stack.track(eventAirdropStaker(channelId, fid), { account, points: reward });
   });
   const results = await Promise.all(processUserRewards);
 

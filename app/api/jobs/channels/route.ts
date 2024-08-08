@@ -9,7 +9,6 @@ import { NextRequest } from "next/server";
 export async function GET(req: NextRequest) {
   const TOP_CHANNELS = 10;
   const AIRDROP_AMOUNT = 5555;
-  const TIP_PERCENTAGE = .1;
 
   const authHeader = req.headers.get('authorization');
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
@@ -28,14 +27,12 @@ export async function GET(req: NextRequest) {
 
         if (!channel.staked) return;
 
-        const TIP_REWARDS = Math.ceil(channel.balance * TIP_PERCENTAGE);
-        const TOTAL_REWARDS = AIRDROP_AMOUNT + TIP_REWARDS;
+        const TOTAL_REWARDS = AIRDROP_AMOUNT + channel.balance;
 
         await processStakersReward(TOTAL_REWARDS, channelId);
 
-        if (!TIP_REWARDS) return;
-
-        const result = await stack.track(eventTipChannel(channelId), { account, points: -TIP_REWARDS });
+        if (!channel.balance) return;
+        const result = await stack.track(eventTipChannel(channelId), { account, points: -channel.balance });
         if (!result.success) console.error(`${channelId} tip deduction failed`);
       })
     );
