@@ -8,8 +8,7 @@ async function processChannelReward({ channelId, addresses }: ChannelStats, poin
   let account = addresses?.[0];
   if (!account) {
     const result = await pregenerateChannelWallet(channelId);
-    const wallet = await result.json();
-    account = extractAddresses(wallet.linked_accounts)[0];
+    account = extractAddresses(result.linked_accounts)[0];
   }
   const result = await stack.track(eventAirdropChannel(channelId), { account, points });
   if (!result.success) throw Error(`${channelId} processChannelReward failed`);
