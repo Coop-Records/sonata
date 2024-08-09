@@ -1,5 +1,5 @@
-import processChannelReward from "@/lib/sonata/channelWeeklyAirdrop/processChannelReward";
-import processStakersReward from "@/lib/sonata/channelWeeklyAirdrop/processStakersReward";
+import distributeChannelStakerWeeklyAirdropAndTips from "@/lib/sonata/channelWeeklyAirdrop/distributeChannelStakerWeeklyAirdropAndTips";
+import distributeChannelWeeklyAirdrop from "@/lib/sonata/channelWeeklyAirdrop/distributeChannelWeeklyAirdrop";
 import sortChannels from "@/lib/sortChannels";
 import { stack } from "@/lib/stack/client";
 import { eventTipChannel } from "@/lib/stack/events";
@@ -8,7 +8,7 @@ import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
   const TOP_CHANNELS = 10;
-  const AIRDROP_AMOUNT = 5555;
+  const AIRDROP_AMOUNT = Math.floor(11111 / 2);
 
   if (process.env.NODE_ENV === 'production') {
     const authHeader = req.headers.get('authorization');
@@ -25,15 +25,16 @@ export async function GET(req: NextRequest) {
     await Promise.all(
       sortedChannels.map(async (channel) => {
         const channelId = channel.channelId;
-        const { account } = await processChannelReward(channel, AIRDROP_AMOUNT);
+        const { account } = await distributeChannelWeeklyAirdrop(channel, AIRDROP_AMOUNT);
 
         if (!channel.staked) return;
 
-        const TOTAL_REWARDS = AIRDROP_AMOUNT + channel.balance;
-        await processStakersReward(TOTAL_REWARDS, channelId);
+        const TIPS = Math.floor(channel.balance / 2);
+        const DROP_AND_TIPS = AIRDROP_AMOUNT + TIPS;
+        await distributeChannelStakerWeeklyAirdropAndTips(DROP_AND_TIPS, channelId);
 
-        if (!channel.balance) return;
-        const result = await stack.track(eventTipChannel(channelId), { account, points: -channel.balance });
+        if (!TIPS) return;
+        const result = await stack.track(eventTipChannel(channelId), { account, points: -TIPS });
         if (!result.success) console.error(`${channelId} tip deduction failed`);
       })
     );

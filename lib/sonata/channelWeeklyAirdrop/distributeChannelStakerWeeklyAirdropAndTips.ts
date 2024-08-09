@@ -4,7 +4,7 @@ import calculateStakersReward from "./calculateStakersReward";
 import { stack } from "@/lib/stack/client";
 import supabase from "@/lib/supabase/serverClient";
 
-async function processStakersReward(amount: number, channelId: string) {
+async function distributeChannelStakerWeeklyAirdropAndTips(amount: number, channelId: string) {
   const { error, data } = await supabase
     .rpc('get_distinct_stakers_in_channel', { channel_id: channelId });
   if (error) throw error;
@@ -19,9 +19,9 @@ async function processStakersReward(amount: number, channelId: string) {
   const results = await Promise.all(processUserRewards);
 
   if (results.some(result => !result.success))
-    throw Error(`${channelId} processStakersReward failed`);
+    throw Error(`${channelId} distributeChannelStakerWeeklyAirdropAndTips failed`);
 
   return { success: true, stakersCount: data.length };
 }
 
-export default processStakersReward;
+export default distributeChannelStakerWeeklyAirdropAndTips;

@@ -8,7 +8,7 @@ export default async function calculateStakersReward(
 ) {
   const results = await getStakerScores(users, channelId);
 
-  const userScores = results.filter(user => user !== null);
+  const userScores = results.filter(user => user !== null) as { fid: number; score: number }[];
   const totalScore = userScores.reduce((sum, user) => sum + user.score, 0);
 
   const rewards = userScores.map(user => {
