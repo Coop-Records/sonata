@@ -10,9 +10,11 @@ export async function GET(req: NextRequest) {
   const TOP_CHANNELS = 10;
   const AIRDROP_AMOUNT = 5555;
 
-  const authHeader = req.headers.get('authorization');
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return Response.json({ message: 'Unauthorized' }, { status: 401 });
+  if (process.env.NODE_ENV === 'production') {
+    const authHeader = req.headers.get('authorization');
+    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+      return Response.json({ message: 'Unauthorized' }, { status: 401 });
+    }
   }
 
   try {
@@ -28,7 +30,6 @@ export async function GET(req: NextRequest) {
         if (!channel.staked) return;
 
         const TOTAL_REWARDS = AIRDROP_AMOUNT + channel.balance;
-
         await processStakersReward(TOTAL_REWARDS, channelId);
 
         if (!channel.balance) return;
@@ -39,6 +40,7 @@ export async function GET(req: NextRequest) {
 
     return Response.json({ message: 'success', topChannels: sortedChannels });
   } catch (error) {
+    console.error(error);
     return Response.json(error, { status: 500 });
   }
 }

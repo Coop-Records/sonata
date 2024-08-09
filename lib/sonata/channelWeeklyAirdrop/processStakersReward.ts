@@ -1,18 +1,16 @@
 import getBulkUsersByFid from "@/lib/neynar/getBulkUsersByFid";
 import { eventAirdropStaker } from "@/lib/stack/events";
-import { Staker } from "@/types/Stake";
 import calculateStakersReward from "./calculateStakersReward";
 import { stack } from "@/lib/stack/client";
 import supabase from "@/lib/supabase/serverClient";
 
 async function processStakersReward(amount: number, channelId: string) {
   const { error, data } = await supabase
-    .rpc('get_users_channel_stake_and_week_date', { channel_id: channelId })
-    .select<'*', Staker>('*');
+    .rpc('get_ditinct_stakers_in_channel', { channel_id: channelId });
   if (error) throw error;
 
-  const users = await getBulkUsersByFid(data.map(({ fid }) => fid));
-  const rewards = calculateStakersReward(data, amount);
+  const users = await getBulkUsersByFid(data);
+  const rewards = await calculateStakersReward(users, channelId, amount);
 
   const processUserRewards = rewards.map(({ reward, fid }) => {
     const account = users.find(user => user.fid == fid)!.verifications[0];
