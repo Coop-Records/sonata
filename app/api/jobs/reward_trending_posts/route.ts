@@ -1,4 +1,5 @@
 import { stack } from '@/lib/stack/client';
+import { eventTrendingReward } from '@/lib/stack/events';
 import { createClient } from '@supabase/supabase-js';
 import { isNil } from 'lodash';
 import { NextResponse } from 'next/server';
@@ -19,7 +20,7 @@ const getResponse = async (): Promise<NextResponse> => {
     const verifications = post.verifications;
     if (!isNil(verifications) && verifications.length > 0) {
       const authorWallet = verifications[0];
-      stack.track(`trending_reward_${authorWallet}`, {
+      stack.track(eventTrendingReward(authorWallet), {
         account: authorWallet,
         points: TIP_AWARD_PER,
       });
