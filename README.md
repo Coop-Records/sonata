@@ -1,4 +1,4 @@
-# onchain magic API
+# myco API
 
 ## Authors
 
