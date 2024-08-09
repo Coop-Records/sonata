@@ -10,3 +10,7 @@ export const ZORA_FEE_RECIPIENTS = [
   '0xecfc2ee50409e459c554a2b0376f882ce916d853',
   '0x7bf90111ad7c22bec9e9dff8a01a44713cc1b1b6',
 ] as Address[];
+export const DEMO_ADDRESS = '0x33912a0d6bEFf5Fb8e5B70688CE858D5e7E8104E' as Address;
+
+// stack event names
+export const EVENT_ZORA_REWARDS = 'zora+rewards';
