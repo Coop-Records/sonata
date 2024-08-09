@@ -1,9 +1,8 @@
 import dayjs from "dayjs";
 import { stack } from "./client";
+import { StackEvent } from "@/types/Stack";
 
-interface StackEvent { event: string; address: string; timestamp: string; points: number };
-
-async function getDaysEvents(event: string, daysago = 7) {
+async function getDaysEvents(event: string, daysAgo = 7) {
   let offset = 0;
   const limit = 100;
   const today = new Date();
@@ -15,7 +14,7 @@ async function getDaysEvents(event: string, daysago = 7) {
     for (const event of results) {
       const days = dayjs(today).diff(event.timestamp, "days", true);
 
-      if (days > daysago) break mainLoop;
+      if (days > daysAgo) break mainLoop;
       events.push(event);
     }
 

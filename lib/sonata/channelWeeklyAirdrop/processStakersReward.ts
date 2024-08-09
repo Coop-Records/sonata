@@ -6,7 +6,7 @@ import supabase from "@/lib/supabase/serverClient";
 
 async function processStakersReward(amount: number, channelId: string) {
   const { error, data } = await supabase
-    .rpc('get_ditinct_stakers_in_channel', { channel_id: channelId });
+    .rpc('get_distinct_stakers_in_channel', { channel_id: channelId });
   if (error) throw error;
 
   const users = await getBulkUsersByFid(data);

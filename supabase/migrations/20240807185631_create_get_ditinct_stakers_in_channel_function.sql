@@ -1,5 +1,5 @@
 CREATE
-OR REPLACE FUNCTION get_ditinct_stakers_in_channel (channel_id TEXT) RETURNS BIGINT[] AS $$
+OR REPLACE FUNCTION get_distinct_stakers_in_channel (channel_id TEXT) RETURNS BIGINT[] AS $$
 BEGIN
     RETURN (
         SELECT ARRAY_AGG(DISTINCT fid)
