@@ -3,7 +3,7 @@ import { stack } from "./client";
 import { StackEvent } from "@/types/Stack";
 
 async function getDaysEvents(event: string, daysAgo = 7) {
-  let offset = 0;
+  let offset: number | null = 0;
   const limit = 100;
   const today = new Date();
   const events: StackEvent[] = [];
@@ -18,9 +18,9 @@ async function getDaysEvents(event: string, daysAgo = 7) {
       events.push(event);
     }
 
-    if (results.length < limit) break;
     offset += 100;
-  } while (true);
+    if (results.length < limit) offset = null;
+  } while (offset !== null);
 
   return events;
 }
