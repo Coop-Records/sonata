@@ -1,5 +1,5 @@
 const ApiPageHeader = () => (
-  <div className="w-1/2 rounded-lg bg-gray-200 p-8 shadow">
+  <div className="w-3/4 rounded-lg bg-gray-200 p-8 shadow md:w-1/2">
     <div className="font-bold">API</div>
     <div>
       Developers wanting to build on top of Onchain Magic can utilize the following public APIs.

@@ -7,7 +7,6 @@ import useEndpointScores from '@/hooks/useEndpointScores';
 const ApiPage = () => {
   const { endpoints } = useEndpointScores();
 
-  console.log(endpoints);
   return (
     <div className="flex min-h-screen flex-col items-center justify-center space-y-4 bg-gray-100">
       <ApiPageHeader />
