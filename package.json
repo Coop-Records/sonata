@@ -1,5 +1,5 @@
 {
-  "name": "onchain-magic-api",
+  "name": "myco-api",
   "version": "0.0.1",
   "scripts": {
     "build": "rm -rf .next && next build",
