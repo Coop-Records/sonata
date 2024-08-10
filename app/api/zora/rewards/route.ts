@@ -14,7 +14,6 @@ export async function GET(request: NextRequest) {
     const address = new URL(request.url).searchParams.get('address') as Address; 
     const events = getEvents(address, EVENT_ZORA_REWARDS);
     const startBlock = await getBlock({ blockTag: 'earliest' });
-    console.log("SWEETS START BLOCK", startBlock);
     const logs = await getRewardsDepositLogs(address, startBlock.number, startBlock.number + MAX_BLOCK_RANGE);
     const response = parseEventLogs({ 
       abi, 
