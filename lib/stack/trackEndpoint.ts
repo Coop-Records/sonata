@@ -1,12 +1,12 @@
 import getEndpointWallet from "@/lib/privy/getEndpointWallet";
-import { stack } from "@/lib/stack/client";
+import track from "./track";
 
 const trackEndpoint = async (endpoint: string) => {
     const wallet = await getEndpointWallet(endpoint)
-    await stack.track(endpoint, {
+    await track(endpoint, {
         points: 1,
         account: wallet
-    });
+    })
     return wallet
 }
 

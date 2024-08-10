@@ -14,9 +14,13 @@ export const DEMO_ADDRESS = '0x33912a0d6bEFf5Fb8e5B70688CE858D5e7E8104E' as Addr
 
 // viem
 export const INITIAL_BLOCK_RANGE = 1_000_000n;
-export const MAX_RETRIES = 5;
+export const MAX_RETRIES = 3;
 export const MIN_BLOCK_RANGE = 1000n;
 export const MAX_RECORDS_THRESHOLD = 5000;
 
 // stack event names
 export const EVENT_ZORA_REWARDS = 'zora+rewards';
+export const EVENT_ZORA_REWARDS_CREATOR = 'zora+rewards+creator';
+export const EVENT_ZORA_REWARDS_MINT_REFERRAL = 'zora+rewards+mint';
+export const EVENT_ZORA_REWARDS_CREATE_REFERRAL = 'zora+rewards+create';
+export const EVENT_ZORA_REWARDS_FIRST_MINTER = 'zora+rewards+first';
