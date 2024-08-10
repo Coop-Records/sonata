@@ -1,6 +1,6 @@
 import {
   CHAIN_ID,
-  MAX_BLOCK_RANGE,
+  INITIAL_BLOCK_RANGE,
   MAX_RECORDS_THRESHOLD,
   MAX_RETRIES,
   MIN_BLOCK_RANGE,
@@ -9,13 +9,14 @@ import { protocolRewardsAddress, protocolRewardsABI } from '@zoralabs/protocol-d
 import { getPublicClient } from '../viem';
 import { Address } from 'viem';
 
-const getRewardsDepositLogs = async (address: Address, fromBlock: bigint, toBlock: bigint) => {
+const getRewardsDepositLogs = async (address: Address, fromBlock: bigint) => {
   const publicClient = getPublicClient(CHAIN_ID);
   const argOptions = ['creator', 'mintReferral', 'createReferral'];
 
   let logs = [] as any;
   let retries = 0;
-  let currentBlockRange = MAX_BLOCK_RANGE;
+  let currentBlockRange = INITIAL_BLOCK_RANGE;
+  let toBlock = fromBlock + currentBlockRange;
 
   while (logs.length === 0 && retries < MAX_RETRIES) {
     const logPromises = argOptions.map((argOption) =>

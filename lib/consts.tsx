@@ -13,7 +13,7 @@ export const ZORA_FEE_RECIPIENTS = [
 export const DEMO_ADDRESS = '0x33912a0d6bEFf5Fb8e5B70688CE858D5e7E8104E' as Address;
 
 // viem
-export const MAX_BLOCK_RANGE = 1_000_000n;
+export const INITIAL_BLOCK_RANGE = 1_000_000n;
 export const MAX_RETRIES = 5;
 export const MIN_BLOCK_RANGE = 1000n;
 export const MAX_RECORDS_THRESHOLD = 5000;
