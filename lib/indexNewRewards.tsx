@@ -7,7 +7,8 @@ import { bulkTrack } from '@/lib/stack/bulkTrack';
 import { Address } from 'viem';
 
 const indexNewRewards = async (address: Address, rewards: any) => {
-  const lastIndexedBlock = BigInt(rewards.events[0].metadata.blockNumber);
+  const lastIndexedBlockNumber = rewards?.events?.[0]?.metadata?.blockNumber;
+  const lastIndexedBlock = lastIndexedBlockNumber ? BigInt(lastIndexedBlockNumber) : false;
   const startBlock = lastIndexedBlock || (await getBlock({ blockTag: 'earliest' })).number;
   const latestBlock = await getBlock({ blockTag: 'latest' });
   const rangeTo = startBlock + INITIAL_BLOCK_RANGE;
