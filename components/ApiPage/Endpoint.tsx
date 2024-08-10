@@ -7,14 +7,7 @@ const Endpoint = ({ endpoint }: any) => (
       <div className="text-xs">{endpoint.route}</div>
     </div>
     <div className="flex items-center gap-3">
-      <Button
-        onClick={() => {
-          console.log('SWEETS endpoint', endpoint);
-          window.open(endpoint.demo || endpoint.route);
-        }}
-      >
-        Try it
-      </Button>
+      <Button onClick={() => window.open(endpoint.demo || endpoint.route)}>Try it</Button>
       {endpoint.score && <div className="text-xs">{endpoint.score} points</div>}
     </div>
   </div>

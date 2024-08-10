@@ -7,7 +7,6 @@ export async function GET(request: NextRequest) {
   try {
     await trackEndpoint(EVENT_ZORA_REWARDS)
     const address = new URL(request.url).searchParams.get('address') as Address; 
-    console.log("SWEETS ADDRESS", address);
     return Response.json({ message: 'success', address });
   } catch (error) {
     console.error('Error:', error);
