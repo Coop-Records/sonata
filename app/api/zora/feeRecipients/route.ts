@@ -1,5 +1,5 @@
 import { ZORA_FEE_RECIPIENTS } from "@/lib/consts";
-import trackEndpoint from "@/lib/trackEndpoint";
+import trackEndpoint from "@/lib/stack/trackEndpoint";
 
 export async function GET() {
   try {

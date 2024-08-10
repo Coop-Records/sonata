@@ -1,4 +1,4 @@
-import trackEndpoint from "@/lib/trackEndpoint";
+import trackEndpoint from "@/lib/stack/trackEndpoint";
 import getLeaderboardData from "./getLeaderboardData";
 
 export async function GET() {
