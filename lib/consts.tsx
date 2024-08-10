@@ -11,7 +11,12 @@ export const ZORA_FEE_RECIPIENTS = [
   '0x7bf90111ad7c22bec9e9dff8a01a44713cc1b1b6',
 ] as Address[];
 export const DEMO_ADDRESS = '0x33912a0d6bEFf5Fb8e5B70688CE858D5e7E8104E' as Address;
-export const MAX_BLOCK_RANGE = 5_000_000n;
+
+// viem
+export const MAX_BLOCK_RANGE = 1_000_000n;
+export const MAX_RETRIES = 5;
+export const MIN_BLOCK_RANGE = 1000n;
+export const MAX_RECORDS_THRESHOLD = 5000;
 
 // stack event names
 export const EVENT_ZORA_REWARDS = 'zora+rewards';
