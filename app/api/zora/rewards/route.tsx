@@ -14,7 +14,6 @@ export async function GET(request: NextRequest) {
     await trackEndpoint(EVENT_ZORA_REWARDS);
     const address = new URL(request.url).searchParams.get('address') as Address;
     const rewards = await getRewardsPoints(address);
-    console.log('SWEETS rewards', rewards);
     const lastIndexedBlock = BigInt(rewards.events[0].metadata.blockNumber);
     const startBlock = lastIndexedBlock || (await getBlock({ blockTag: 'earliest' })).number;
     const latestBlock = await getBlock({ blockTag: 'latest' });
@@ -24,7 +23,6 @@ export async function GET(request: NextRequest) {
     const logs = await getRewardsDepositLogs(address, startBlock, toBlock);
     if (logs?.length > 0) {
       const trackingEvents = logsToStack(logs);
-      console.log('SWEETS trackingEvents', trackingEvents);
       await bulkTrack(formatBigIntValues(trackingEvents));
     }
     return Response.json({
