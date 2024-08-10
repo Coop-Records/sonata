@@ -13,7 +13,7 @@ export async function bulkTrack(events: any[]) {
   const response = await fetch(API_URL, {
     method: 'POST',
     headers: headers,
-    body: JSON.stringify(events.splice(0, 99)),
+    body: JSON.stringify(events.slice(0, 99)),
   });
 
   if (!response.ok) {
