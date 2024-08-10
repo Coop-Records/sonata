@@ -4,18 +4,19 @@ import trackEndpoint from '@/lib/stack/trackEndpoint';
 import { EVENT_ZORA_REWARDS } from '@/lib/consts';
 import getRewardsPoints from '@/lib/stack/getRewardsPoints';
 import indexNewRewards from '@/lib/indexNewRewards';
+import formatBigIntValues from '@/lib/formatBigIntValues';
 
 export async function GET(request: NextRequest) {
   try {
     await trackEndpoint(EVENT_ZORA_REWARDS);
     const address = new URL(request.url).searchParams.get('address') as Address;
     const rewards = await getRewardsPoints(address);
-    const isFinished = await indexNewRewards(address, rewards);
+    const newLogs = await indexNewRewards(address);
     return Response.json({
       message: 'success',
       address,
       ...rewards,
-      isFinished,
+      newLogs: formatBigIntValues(newLogs),
     });
   } catch (error) {
     console.error('Error:', error);
