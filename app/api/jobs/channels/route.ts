@@ -25,8 +25,8 @@ export async function GET(req: NextRequest) {
 
     const results = await Promise.all(sortedChannels.map(async (channel) => {
       const channelId = channel.channelId;
-      const balance = await getDaysChannelTotalTips(channelId);
 
+      const balance = channel.staked ? await getDaysChannelTotalTips(channelId) : 0;
       const TIPS = channel.staked ? Math.floor(balance / 2) : 0;
       const CHANNEL_AIRDROP = channel.staked ? Math.floor(AIRDROP_AMOUNT / 2) : AIRDROP_AMOUNT;
       const STAKERS_AIRDROP = channel.staked ? TIPS + CHANNEL_AIRDROP : 0;
