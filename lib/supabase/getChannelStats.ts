@@ -3,9 +3,9 @@ import { CHANNELS } from "../consts";
 import extractAddresses from "../privy/extractAddresses";
 import getAllChannels from "../privy/getAllChannels";
 import getPrivyIdentifier from "../privy/getIdentifier";
-import { supabaseClient } from "./client";
 import getStackPoints from "../sonata/getStackPoints";
-import serverClient from "./serverClient";
+import { eventStakeChannel, eventTipChannel } from "../stack/events";
+import supabase from "./serverClient";
 
 async function getChannelStats(filterChannels = false) {
   const limit = 1000;
@@ -13,7 +13,7 @@ async function getChannelStats(filterChannels = false) {
   const entries = {} as ChannelAccumulator;
 
   do {
-    const query = supabaseClient
+    const query = supabase
       .from('posts')
       .select('channelId, post_hash, authorFid')
       .range(offset, offset + limit - 1);
@@ -52,14 +52,15 @@ async function getChannelStats(filterChannels = false) {
       const addresses = wallet ? extractAddresses(wallet.linked_accounts) : [];
 
       if (addresses.length) {
-        balance = await getStackPoints(addresses, `channel_tip_${channelId}`);
-        const { data, error } = await serverClient
+        balance = await getStackPoints(addresses, eventTipChannel(channelId));
+        staked = await getStackPoints(addresses, eventStakeChannel(channelId));
+        const { data, error } = await supabase
           .from('channel_stake_stats')
-          .select('stakers,staked')
+          .select('stakers')
           .eq('channelId', channelId)
           .single();
 
-        if (!error) { stakers = data.stakers; staked = data.staked }
+        if (!error) { stakers = data.stakers }
       }
 
       const channel: ChannelStats = {
@@ -67,10 +68,8 @@ async function getChannelStats(filterChannels = false) {
         numberOfCurators: entries[channelId].uniqueAuthors.size,
         numberOfSongs: entries[channelId].uniquePosts.size,
         totalNotes: balance + staked,
-        balance,
-        staked,
-        stakers,
-        addresses,
+        balance, staked,
+        stakers, addresses,
       };
       return channel;
     })
