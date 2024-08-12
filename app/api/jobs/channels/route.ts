@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
   const TOP_CHANNELS = 10;
   const AIRDROP_AMOUNT = Math.floor(11111 / 2);
 
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NEXT_PUBLIC_VERCEL_ENV === 'production') {
     const authHeader = req.headers.get('authorization');
     if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
       return Response.json({ message: 'Unauthorized' }, { status: 401 });
@@ -26,6 +26,7 @@ export async function GET(req: NextRequest) {
       sortedChannels.map(async (channel) => {
         const channelId = channel.channelId;
         const { account } = await distributeChannelWeeklyAirdrop(channel, AIRDROP_AMOUNT);
+        console.log('distributeChannelWeeklyAirdrop', channelId, AIRDROP_AMOUNT);
 
         if (!channel.staked) return;
 
@@ -36,6 +37,7 @@ export async function GET(req: NextRequest) {
         if (!TIPS) return;
         const result = await stack.track(eventTipChannel(channelId), { account, points: -TIPS });
         if (!result.success) console.error(`${channelId} tip deduction failed`);
+        console.log('distributeChannelTip', channelId, TIPS);
       })
     );
 

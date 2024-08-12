@@ -11,6 +11,7 @@ async function distributeChannelStakerWeeklyAirdropAndTips(amount: number, chann
 
   const users = await getBulkUsersByFid(data);
   const rewards = await calculateStakersReward(users, channelId, amount);
+  console.log(`channel ${channelId} stakers of ${amount}`, rewards);
 
   const processUserRewards = rewards.map(({ reward, fid }) => {
     const account = users.find(user => user.fid == fid)!.verifications[0];
