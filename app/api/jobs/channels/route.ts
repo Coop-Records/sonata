@@ -5,6 +5,7 @@ import { stack } from "@/lib/stack/client";
 import { eventTipChannel } from "@/lib/stack/events";
 import getDaysChannelTotalTips from "@/lib/stack/getDaysChannelTotalTips";
 import getChannelStats from "@/lib/supabase/getChannelStats";
+import supabase from "@/lib/supabase/serverClient";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -36,7 +37,10 @@ export async function GET(req: NextRequest) {
       if (STAKERS_AIRDROP) await distributeChannelStakerWeeklyAirdropAndTips(STAKERS_AIRDROP, channelId);
 
       if (TIPS) {
-        const result = await stack.track(eventTipChannel(channelId), { account, points: -TIPS });
+        const [result] = await Promise.all([
+          stack.track(eventTipChannel(channelId), { account, points: -TIPS }),
+          supabase.from('channel_tips_activity_log').insert({ amount: -TIPS, channelId, channelAddress: account })
+        ]);
         if (!result.success) console.error(`${channelId} tip deduction failed`);
         console.log('distributeChannelTip', channelId, TIPS);
       }

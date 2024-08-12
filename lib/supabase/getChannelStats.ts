@@ -4,7 +4,7 @@ import extractAddresses from "../privy/extractAddresses";
 import getAllChannels from "../privy/getAllChannels";
 import getPrivyIdentifier from "../privy/getIdentifier";
 import getStackPoints from "../sonata/getStackPoints";
-import { eventTipChannel } from "../stack/events";
+import { eventStakeChannel, eventTipChannel } from "../stack/events";
 import supabase from "./serverClient";
 
 async function getChannelStats(filterChannels = false) {
@@ -53,13 +53,14 @@ async function getChannelStats(filterChannels = false) {
 
       if (addresses.length) {
         balance = await getStackPoints(addresses, eventTipChannel(channelId));
+        staked = await getStackPoints(addresses, eventStakeChannel(channelId));
         const { data, error } = await supabase
           .from('channel_stake_stats')
-          .select('stakers,staked')
+          .select('stakers')
           .eq('channelId', channelId)
           .single();
 
-        if (!error) { stakers = data.stakers; staked = data.staked }
+        if (!error) { stakers = data.stakers }
       }
 
       const channel: ChannelStats = {
