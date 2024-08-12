@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
       const channelId = channel.channelId;
 
       const balance = channel.staked ? await getDaysChannelTotalTips(channelId, 7) : 0;
-      const TIPS = channel.staked && balance > 0 ? Math.floor(balance / 2) : 0;
+      const TIPS = channel.staked && (balance > 0) ? Math.floor(balance / 2) : 0;
       const CHANNEL_AIRDROP = channel.staked ? Math.floor(AIRDROP_AMOUNT / 2) : AIRDROP_AMOUNT;
       const STAKERS_AIRDROP = channel.staked ? TIPS + CHANNEL_AIRDROP : 0;
 
@@ -61,3 +61,5 @@ export async function GET(req: NextRequest) {
 }
 
 export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+export const revalidate = 0;
