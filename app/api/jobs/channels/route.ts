@@ -22,28 +22,33 @@ export async function GET(req: NextRequest) {
     const sortedChannels = sortChannels(channelStats);
     sortedChannels.splice(TOP_CHANNELS);
 
-    await Promise.all(
-      sortedChannels.map(async (channel) => {
-        const channelId = channel.channelId;
-        const { account } = await distributeChannelWeeklyAirdrop(
-          channel,
-          channel.staked ? Math.floor(AIRDROP_AMOUNT / 2) : AIRDROP_AMOUNT
-        );
+    const results = await Promise.all(sortedChannels.map(async (channel) => {
+      const AIRDROP_AMOUNT_SHARE = channel.staked ? Math.floor(AIRDROP_AMOUNT / 2) : AIRDROP_AMOUNT;
+      const TIPS = Math.floor(channel.balance / 2);
+      const channelId = channel.channelId;
 
-        if (!channel.staked) return;
+      const { account } = await distributeChannelWeeklyAirdrop(channel, AIRDROP_AMOUNT_SHARE);
 
-        const TIPS = Math.floor(channel.balance / 2);
-        const DROP_AND_TIPS = Math.floor(AIRDROP_AMOUNT / 2) + TIPS;
-        await distributeChannelStakerWeeklyAirdropAndTips(DROP_AND_TIPS, channelId);
+      if (channel.staked) await distributeChannelStakerWeeklyAirdropAndTips(
+        AIRDROP_AMOUNT_SHARE + TIPS,
+        channelId
+      );
 
-        if (!TIPS) return;
+      if (TIPS) {
         const result = await stack.track(eventTipChannel(channelId), { account, points: -TIPS });
         if (!result.success) console.error(`${channelId} tip deduction failed`);
         console.log('distributeChannelTip', channelId, TIPS);
-      })
-    );
+      }
 
-    return Response.json({ message: 'success', topChannels: sortedChannels });
+      return {
+        channelId,
+        channelAirdropAmount: AIRDROP_AMOUNT_SHARE,
+        channelTips: TIPS,
+        stakersAirdropAmount: AIRDROP_AMOUNT_SHARE + TIPS
+      };
+    }));
+
+    return Response.json({ message: 'success', topChannels: results });
   } catch (error) {
     console.error(error);
     return Response.json(error, { status: 500 });
