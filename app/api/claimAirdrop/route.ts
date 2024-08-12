@@ -1,5 +1,6 @@
 import verifySignerUUID from '@/lib/neynar/verifySigner';
 import { stack } from '@/lib/stack/client';
+import { eventAirdrop } from '@/lib/stack/events';
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -24,7 +25,7 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
   const airdropAmount = await callRedeemAirdrop(wallet_address);
 
   if (airdropAmount > 0) {
-    await stack.track(`airdrop`, { account: wallet_address, points: airdropAmount });
+    await stack.track(eventAirdrop(), { account: wallet_address, points: airdropAmount });
   }
 
   return NextResponse.json(

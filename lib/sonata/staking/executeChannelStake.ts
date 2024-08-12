@@ -1,12 +1,13 @@
 import getUser from "@/lib/neynar/getNeynarUser";
 import { stack } from "@/lib/stack/client";
+import { eventStakeChannel, eventStakeChannelFid } from "@/lib/stack/events";
 import supabase from "@/lib/supabase/serverClient";
-import getChannelTipInfo from "../tip/getChannelTipInfo";
 import getPoints from "../getStackPoints";
+import getChannelTipInfo from "../tip/getChannelTipInfo";
 
 async function executeChannelStake(channelId: string, amount: number, fid: number) {
-  const event = `channel_stake_${channelId}`;
-  const userEvent = `channel_stake_${channelId}_${fid}`;
+  const event = eventStakeChannel(channelId);
+  const userEvent = eventStakeChannelFid(channelId, fid);
 
   const user = await getUser(fid);
   const userAddress: string = user?.verifications?.[0];
