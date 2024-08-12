@@ -23,16 +23,14 @@ export async function GET(req: NextRequest) {
     sortedChannels.splice(TOP_CHANNELS);
 
     const results = await Promise.all(sortedChannels.map(async (channel) => {
-      const AIRDROP_AMOUNT_SHARE = channel.staked ? Math.floor(AIRDROP_AMOUNT / 2) : AIRDROP_AMOUNT;
       const TIPS = Math.floor(channel.balance / 2);
+      const CHANNEL_AIRDROP = channel.staked ? Math.floor(AIRDROP_AMOUNT / 2) : AIRDROP_AMOUNT;
+      const STAKERS_AIRDROP = channel.staked ? TIPS + CHANNEL_AIRDROP : 0;
       const channelId = channel.channelId;
 
-      const { account } = await distributeChannelWeeklyAirdrop(channel, AIRDROP_AMOUNT_SHARE);
+      const { account } = await distributeChannelWeeklyAirdrop(channel, CHANNEL_AIRDROP);
 
-      if (channel.staked) await distributeChannelStakerWeeklyAirdropAndTips(
-        AIRDROP_AMOUNT_SHARE + TIPS,
-        channelId
-      );
+      if (STAKERS_AIRDROP) await distributeChannelStakerWeeklyAirdropAndTips(STAKERS_AIRDROP, channelId);
 
       if (TIPS) {
         const result = await stack.track(eventTipChannel(channelId), { account, points: -TIPS });
@@ -42,9 +40,9 @@ export async function GET(req: NextRequest) {
 
       return {
         channelId,
-        channelAirdropAmount: AIRDROP_AMOUNT_SHARE,
+        channelAirdropAmount: CHANNEL_AIRDROP,
         channelTips: TIPS,
-        stakersAirdropAmount: channel.staked ? AIRDROP_AMOUNT_SHARE + TIPS : 0
+        stakersAirdropAmount: STAKERS_AIRDROP
       };
     }));
 
