@@ -8,7 +8,7 @@ import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
   const TOP_CHANNELS = 10;
-  const AIRDROP_AMOUNT = Math.floor(11111 / 2);
+  const AIRDROP_AMOUNT = 11111;
 
   if (process.env.NEXT_PUBLIC_VERCEL_ENV === 'production') {
     const authHeader = req.headers.get('authorization');
@@ -25,13 +25,15 @@ export async function GET(req: NextRequest) {
     await Promise.all(
       sortedChannels.map(async (channel) => {
         const channelId = channel.channelId;
-        const { account } = await distributeChannelWeeklyAirdrop(channel, AIRDROP_AMOUNT);
-        console.log('distributeChannelWeeklyAirdrop', channelId, AIRDROP_AMOUNT);
+        const { account } = await distributeChannelWeeklyAirdrop(
+          channel,
+          channel.staked ? Math.floor(AIRDROP_AMOUNT / 2) : AIRDROP_AMOUNT
+        );
 
         if (!channel.staked) return;
 
         const TIPS = Math.floor(channel.balance / 2);
-        const DROP_AND_TIPS = AIRDROP_AMOUNT + TIPS;
+        const DROP_AND_TIPS = Math.floor(AIRDROP_AMOUNT / 2) + TIPS;
         await distributeChannelStakerWeeklyAirdropAndTips(DROP_AND_TIPS, channelId);
 
         if (!TIPS) return;
