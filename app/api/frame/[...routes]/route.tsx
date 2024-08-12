@@ -36,11 +36,12 @@ app.frame('/tip', async (c) => {
     const castUrl = `${BASE_URL}/cast/${username}/${postHash}`;
 
     return c.res({
+      action: `${BASE_URL}/api/frame/execute-tip`,
       image: `${BASE_URL}/api/og-image/cast/${username}/${postHash}/0`,
       browserLocation: castUrl,
       intents: [
         <TextInput placeholder="Enter tip amount" />,
-        <Button action={`${BASE_URL}/api/frame/execute-tip`}>Tip</Button>,
+        <Button>Tip</Button>,
         <Button.Link href={castUrl}>Listen</Button.Link>,
       ],
     });
