@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
         channelId,
         channelAirdropAmount: AIRDROP_AMOUNT_SHARE,
         channelTips: TIPS,
-        stakersAirdropAmount: AIRDROP_AMOUNT_SHARE + TIPS
+        stakersAirdropAmount: channel.staked ? AIRDROP_AMOUNT_SHARE + TIPS : 0
       };
     }));
 
