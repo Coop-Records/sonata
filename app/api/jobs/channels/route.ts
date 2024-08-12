@@ -3,6 +3,7 @@ import distributeChannelWeeklyAirdrop from "@/lib/sonata/channelWeeklyAirdrop/di
 import sortChannels from "@/lib/sortChannels";
 import { stack } from "@/lib/stack/client";
 import { eventTipChannel } from "@/lib/stack/events";
+import getDaysChannelTotalTips from "@/lib/stack/getDaysChannelTotalTips";
 import getChannelStats from "@/lib/supabase/getChannelStats";
 import { NextRequest } from "next/server";
 
@@ -23,10 +24,12 @@ export async function GET(req: NextRequest) {
     sortedChannels.splice(TOP_CHANNELS);
 
     const results = await Promise.all(sortedChannels.map(async (channel) => {
-      const TIPS = channel.staked ? Math.floor(channel.balance / 2) : 0;
+      const channelId = channel.channelId;
+      const balance = await getDaysChannelTotalTips(channelId);
+
+      const TIPS = channel.staked ? Math.floor(balance / 2) : 0;
       const CHANNEL_AIRDROP = channel.staked ? Math.floor(AIRDROP_AMOUNT / 2) : AIRDROP_AMOUNT;
       const STAKERS_AIRDROP = channel.staked ? TIPS + CHANNEL_AIRDROP : 0;
-      const channelId = channel.channelId;
 
       const { account } = await distributeChannelWeeklyAirdrop(channel, CHANNEL_AIRDROP);
 
