@@ -6,10 +6,8 @@ import executeUserTip from '@/lib/sonata/tip/executeUserTip';
 import getUserTipInfo from '@/lib/sonata/tip/getUserTipInfo';
 import getCastByHash from '@/lib/supabase/getCastByHash';
 import { Button, Frog, TextInput } from 'frog';
-import { devtools } from 'frog/dev';
 import { neynar as neynarHub } from 'frog/hubs';
 import { handle } from 'frog/next';
-import { serveStatic } from 'frog/serve-static';
 
 const NEYNAR_KEY = process.env.NEYNAR_API_KEY ?? 'NEYNAR_FROG_FM';
 
@@ -119,8 +117,6 @@ app.frame('/execute-tip', async (c) => {
     return c.error({ message });
   }
 });
-
-devtools(app, { serveStatic });
 
 export const GET = handle(app);
 export const POST = handle(app);
