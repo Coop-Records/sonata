@@ -88,7 +88,8 @@ app.frame('/execute-tip', async (c) => {
       ?.verifications?.find(Boolean);
 
     if (!recipientWalletAddress) throw Error('Invalid recipient');
-    const result = await executeUserTip(
+
+    await executeUserTip(
       existingPost.post_hash,
       { recipientFid, recipientWalletAddress, tipperWalletAddress },
       tipInfo,
@@ -98,15 +99,7 @@ app.frame('/execute-tip', async (c) => {
     const castUrl = `${BASE_URL}/cast/${username}/${postHash}`;
 
     return c.res({
-      image:
-        `${BASE_URL}/api/og-image/frame-tip-result?` +
-        new URLSearchParams({
-          sender: users[0].username,
-          receiver: users[1].username,
-          tipAmount: String(tipInfo.allowableAmount),
-          remainingAllowance: String(result.tipRemaining),
-          dailyAllowance: tipInfo.tip.daily_tip_allocation,
-        }),
+      image: `${BASE_URL}/api/og-image/cast/${username}/${postHash}/0`,
       intents: [
         <Button action={`${BASE_URL}/api/frame/tip?post_hash=${postHash}`}>Add Tip</Button>,
         <Button.Link href={castUrl}>Listen</Button.Link>,
