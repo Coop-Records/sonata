@@ -2804,10 +2804,10 @@ fraction.js@^4.3.7:
   resolved "https://registry.npmjs.org/fraction.js/-/fraction.js-4.3.7.tgz"
   integrity sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==
 
-frog@^0.15.1:
-  version "0.15.2"
-  resolved "https://registry.yarnpkg.com/frog/-/frog-0.15.2.tgz#0f19d0936b70246a748cf041c5a85fdabe6c819c"
-  integrity sha512-YbDUQWpsigMv/Uwmkk2xLW/tKaC/UaGmdAUEs2WpYSfhHxTvp3U7Kktk+7Dn2UVzevvhAMB9uGy/r4GGZjF9DQ==
+frog@^0.16.0:
+  version "0.16.0"
+  resolved "https://registry.yarnpkg.com/frog/-/frog-0.16.0.tgz#0e63db113f393594eb2412e91d51a01db24fab72"
+  integrity sha512-wkrmDalIYX7IBwqEqZuITyt8x8Igs5dQLWwsQQ5vHHQDM3meQ8Iy7OFbN7ENZc42KXqKCux6J+pSxru09iGWqA==
   dependencies:
     "@bufbuild/protobuf" "^1.7.2"
     "@hono/node-server" "^1.11.2"
