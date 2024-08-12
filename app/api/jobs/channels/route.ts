@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
     sortedChannels.splice(TOP_CHANNELS);
 
     const results = await Promise.all(sortedChannels.map(async (channel) => {
-      const TIPS = Math.floor(channel.balance / 2);
+      const TIPS = channel.staked ? Math.floor(channel.balance / 2) : 0;
       const CHANNEL_AIRDROP = channel.staked ? Math.floor(AIRDROP_AMOUNT / 2) : AIRDROP_AMOUNT;
       const STAKERS_AIRDROP = channel.staked ? TIPS + CHANNEL_AIRDROP : 0;
       const channelId = channel.channelId;
