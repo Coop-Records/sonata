@@ -1,4 +1,5 @@
 import { stack } from "@/lib/stack/client";
+import { eventTipCashback, eventTipChannel, eventTipRecipient } from "@/lib/stack/events";
 import supabase from '@/lib/supabase/serverClient';
 import getUserTipInfo from "./getUserTipInfo";
 
@@ -25,7 +26,7 @@ async function executeUserTip(
   if (channelTip) {
     const { channelAddress, channelId } = channelTip;
     receiverAmount -= channelAmount = channelTip.channelAmount;
-    stacks.push(stack.track(`channel_tip_${channelId}`, { account: channelAddress, points: channelAmount }));
+    stacks.push(stack.track(eventTipChannel(channelId), { account: channelAddress, points: channelAmount }));
 
     allUpdates.push(supabase.from('channel_tips_activity_log').insert({
       sender, amount: channelAmount, post_hash: postHash, channelId, channelAddress
@@ -33,9 +34,9 @@ async function executeUserTip(
   }
   if (tipperWalletAddress) {
     receiverAmount -= tipperAmount = Math.floor(Number(amount) * .1);
-    stacks.push(stack.track(`tip_cashback_${sender}`, { account: tipperWalletAddress, points: tipperAmount }));
+    stacks.push(stack.track(eventTipCashback(sender), { account: tipperWalletAddress, points: tipperAmount }));
   }
-  stacks.unshift(stack.track(`tip_recipient_${receiver}`, { account: recipientWalletAddress, points: receiverAmount }));
+  stacks.unshift(stack.track(eventTipRecipient(receiver), { account: recipientWalletAddress, points: receiverAmount }));
 
   const [{ success }] = await Promise.all(stacks);
   if (!success) throw Error('Could not stack');
