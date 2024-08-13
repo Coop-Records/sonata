@@ -25,6 +25,7 @@ const executeDegenTip = async (
     return data;
   } catch (error) {
     console.error(error);
+    return { error: 'Unable to tip' };
   }
 };
 

@@ -8,12 +8,10 @@ import { useNeynarProvider } from './NeynarProvider';
 import { useToast } from '@/components/ui/use-toast';
 import claimAirdrop from '@/lib/sonata/claimAirdrop';
 import { supabaseClient } from '@/lib/supabase/client';
-import { useParams } from 'next/navigation';
 
 const TipContext = createContext<any>(null);
 
 const TipProvider = ({ children }: any) => {
-  const { channelId } = useParams();
   const { toast } = useToast();
   const [airdropBalance, setAirdropBalance] = useState<bigint | undefined>(undefined);
   const [balance, setBalance] = useState<bigint | undefined>(undefined);
@@ -98,17 +96,17 @@ const TipProvider = ({ children }: any) => {
       amount,
       postHash,
     );
-    const message = data?.message ?? 'Tip Failed';
+    if ('error' in data) {
+      toast({ description: data.error, variant: 'destructive' });
+      return;
+    }
+    const message = data.message;
     toast({ description: message });
 
     return data;
   };
 
-  const tip = async (
-    amount: bigint,
-    postHash: string,
-    recipientFid: number,
-  ) => {
+  const tip = async (amount: bigint, postHash: string) => {
     if (
       isNil(user) ||
       isNil(remainingTipAllocation) ||
@@ -119,15 +117,10 @@ const TipProvider = ({ children }: any) => {
       return;
     }
 
-    const data = await executeTip(
-      signer?.signer_uuid,
-      amount,
-      postHash,
-      recipientFid,
-      Array.isArray(channelId) ? '' : channelId
-    );
-    if (!data) {
-      toast({ description: 'Unable to Tip', variant: 'destructive' });
+    const data = await executeTip(signer?.signer_uuid, amount, postHash);
+
+    if ('error' in data) {
+      toast({ description: data.error, variant: 'destructive' });
       return;
     }
     setRemainingTipAllocation(BigInt(data.tipRemaining));
