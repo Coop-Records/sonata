@@ -1,14 +1,9 @@
 import fetchMetadata from './fetchMetadata';
 import findValidEmbed from './findValidEmbed';
-import { supabaseClient } from './supabase/client';
+import getCastByHash from './supabase/getCastByHash';
 
-export async function getEmbedAndMetadata(fullHash: string) {
-  const { data: cast } = await supabaseClient
-    .from('posts')
-    .select('*')
-    .eq('post_hash', fullHash)
-    .single();
-
+export async function getEmbedAndMetadata(hash: string) {
+  const cast = await getCastByHash(hash);
   const embed = findValidEmbed(cast);
   const url: any = embed?.url;
   const metadata = await fetchMetadata(url, cast);
