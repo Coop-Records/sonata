@@ -1,4 +1,4 @@
-import formatNumber from "@/lib/formatNumber";
+import formatNumber from '@/lib/formatNumber';
 
 interface Props {
   sender: string;
@@ -6,10 +6,12 @@ interface Props {
   daily: number | string;
   tipAmount: number | string;
   remaining: number | string;
-};
+}
+
+const logoUrl = 'https://sonata.tips/images/notes.jpg';
+const Logo = () => <img src={logoUrl} alt="" height={30} width={30} />;
 
 function FrameTipResponse(props: Props) {
-  const logo2 = 'https://sonata.tips/images/logo2.png';
   return (
     <div
       style={{
@@ -19,11 +21,12 @@ function FrameTipResponse(props: Props) {
         display: 'flex',
         alignItems: 'center',
         border: '1px solid #eaeaea',
-        textTransform: 'uppercase'
-      }}>
-      <img src='https://sonata.tips/images/notes.jpg' alt='' tw="w-[40%]" />
+        textTransform: 'uppercase',
+      }}
+    >
+      <img src={logoUrl} tw="w-2/5" />
 
-      <div tw="size-full flex flex-col">
+      <div tw="grow flex flex-col">
         <h1 tw="underline">Success</h1>
 
         <h1 tw="mt-0 mb-5">Tip by @{props.sender}</h1>
@@ -34,7 +37,7 @@ function FrameTipResponse(props: Props) {
             <h1 tw="m-0">allowance</h1>
             <div tw="flex items-center">
               <h1 tw="m-0">{formatNumber(props.daily)}</h1>
-              <img src={logo2} alt='' height={25} width={25} />
+              <Logo />
             </div>
           </div>
 
@@ -45,14 +48,14 @@ function FrameTipResponse(props: Props) {
 
             <div tw="flex items-center">
               <h1 tw="m-0">{formatNumber(props.remaining)}</h1>
-              <img src={logo2} alt='' height={25} width={25} />
+              <Logo />
             </div>
           </div>
         </div>
 
         <div tw="flex items-center">
           <h1>used amount: {formatNumber(props.tipAmount)}</h1>
-          <img src={logo2} alt='' height={25} width={25} />
+          <Logo />
         </div>
       </div>
     </div>
