@@ -47,7 +47,8 @@ export default function SongPage() {
           <Button
             className="w-9 h-auto p-0 text-muted-foreground outline-none hover:bg-transparent"
             onClick={handleShare}
-            variant="ghost">
+            variant="ghost"
+            title="share">
             <ShareIcon />
           </Button>
         </div>
