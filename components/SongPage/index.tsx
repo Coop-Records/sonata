@@ -37,7 +37,7 @@ export default function SongPage() {
     return decodeURI(`${link}?${query}`);
   }, []);
 
-  const handleShare = () => copy(buildUrl());
+  const handleShare = () => copy(window.location.href);
 
   return (
     <main className="flex grow items-center justify-center">
@@ -47,7 +47,8 @@ export default function SongPage() {
           <Button
             className="w-9 h-auto p-0 text-muted-foreground outline-none hover:bg-transparent"
             onClick={handleShare}
-            variant="ghost">
+            variant="ghost"
+            title="share">
             <ShareIcon />
           </Button>
         </div>
