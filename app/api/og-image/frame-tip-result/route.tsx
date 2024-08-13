@@ -11,13 +11,8 @@ export async function GET(req: NextRequest) {
   const daily = req.nextUrl.searchParams.get('dailyAllowance');
   const remaining = req.nextUrl.searchParams.get('remainingAllowance');
 
-  if (
-    !sender ||
-    !receiver ||
-    !tipAmount ||
-    !daily ||
-    !remaining
-  ) return Response.json({ message: 'missing required fields' }, { status: 400 });
+  if (!(sender && receiver && tipAmount && daily && remaining))
+    return Response.json({ message: 'missing required fields' }, { status: 400 });
 
   return new ImageResponse(
     (
@@ -32,6 +27,10 @@ export async function GET(req: NextRequest) {
     {
       width: 1200,
       height: 630,
+      headers: {
+        'Cache-Control': 'max-age=0',
+        'CDN-Cache-Control': 'max-age=0',
+      },
     },
   );
 }
