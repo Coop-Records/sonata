@@ -8,6 +8,9 @@ export default async function getCastByHash(hash: string) {
     .like('post_hash', `${hash}%`)
     .single<SupabasePost>();
 
-  if (error) console.error('Error fetching cast:', error);
+  if (error || !data) {
+    console.error('Error fetching cast:', error);
+    throw new Error('Cast not found');
+  }
   return data;
 }
