@@ -38,9 +38,9 @@ export default function SongPage() {
   }, []);
 
   const handleShare = async () => {
-    const link = buildUrl();
+    const url = buildUrl();
     try {
-      await navigator.clipboard.writeText(link);
+      await navigator.clipboard.writeText(url);
       toast({ title: 'Copied!', description: 'URL copied to clipboard.' });
     } catch (error) {
       console.error('Failed to copy URL to clipboard:', error);
@@ -55,7 +55,8 @@ export default function SongPage() {
           <Button
             className="w-9 h-auto p-0 text-muted-foreground outline-none hover:bg-transparent"
             onClick={handleShare}
-            variant="ghost">
+            variant="ghost"
+            title="share">
             <ShareIcon />
           </Button>
         </div>
