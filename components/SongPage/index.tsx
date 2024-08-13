@@ -1,19 +1,19 @@
+import useCopyToClipboard from "@/hooks/useCopyToClipboard";
+import fetchMetadata from "@/lib/fetchMetadata";
+import isValidUrl from "@/lib/isValidUrl";
+import { TrackMetadata } from "@/types/Track";
 import { Separator } from "@radix-ui/react-separator";
 import { ShareIcon } from "lucide-react";
 import { useParams, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import MediaPlayer from "../MediaPlayer";
 import { Button } from "../ui/button";
-import { useToast } from "../ui/use-toast";
-import { TrackMetadata } from "@/types/Track";
-import fetchMetadata from "@/lib/fetchMetadata";
-import isValidUrl from "@/lib/isValidUrl";
 
 export default function SongPage() {
-  const { toast } = useToast();
   const songLink = useParams().songLink as string[];
   const searchParams = useSearchParams();
   const [metadata, setMetadata] = useState<TrackMetadata>();
+  const { copy } = useCopyToClipboard();
 
   useEffect(() => {
     const trackUrl = buildUrl();
@@ -37,15 +37,7 @@ export default function SongPage() {
     return decodeURI(`${link}?${query}`);
   }, []);
 
-  const handleShare = async () => {
-    const link = buildUrl();
-    try {
-      await navigator.clipboard.writeText(link);
-      toast({ title: 'Copied!', description: 'URL copied to clipboard.' });
-    } catch (error) {
-      console.error('Failed to copy URL to clipboard:', error);
-    }
-  };
+  const handleShare = () => copy(buildUrl());
 
   return (
     <main className="flex grow items-center justify-center">
