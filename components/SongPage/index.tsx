@@ -1,7 +1,7 @@
 import { Separator } from "@radix-ui/react-separator";
 import { ShareIcon } from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useParams, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import MediaPlayer from "../MediaPlayer";
 import { Button } from "../ui/button";
 import { useToast } from "../ui/use-toast";
@@ -11,23 +11,36 @@ import isValidUrl from "@/lib/isValidUrl";
 
 export default function SongPage() {
   const { toast } = useToast();
-  const trackUrl = useSearchParams().get('trackUrl');
+  const songLink = useParams().songLink as string[];
+  const searchParams = useSearchParams();
   const [metadata, setMetadata] = useState<TrackMetadata>();
 
   useEffect(() => {
-    if (!trackUrl) return;
+    const trackUrl = buildUrl();
     if (!isValidUrl(trackUrl)) return;
 
     fetchMetadata(
       trackUrl,
       { id: 1, alternativeEmbeds: [] } as any
     ).then(setMetadata);
-  }, [trackUrl]);
+  }, []);
+
+  const buildUrl = useCallback(() => {
+    let link = '';
+    const query = searchParams.toString();
+
+    if (songLink.length == 1) link = songLink[0];
+    else link = songLink[0].replaceAll('%3A', ':') + '//' + songLink.slice(1).join('/');
+
+    if (!query) return link;
+
+    return decodeURI(`${link}?${query}`);
+  }, []);
 
   const handleShare = async () => {
-    if (!metadata) return;
+    const link = buildUrl();
     try {
-      await navigator.clipboard.writeText(metadata.url);
+      await navigator.clipboard.writeText(link);
       toast({ title: 'Copied!', description: 'URL copied to clipboard.' });
     } catch (error) {
       console.error('Failed to copy URL to clipboard:', error);
