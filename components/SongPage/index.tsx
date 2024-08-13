@@ -8,8 +8,11 @@ import { useParams, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import MediaPlayer from "../MediaPlayer";
 import { Button } from "../ui/button";
+import { supabaseClient } from "@/lib/supabase/client";
+import { useToast } from "../ui/use-toast";
 
 export default function SongPage() {
+  const { toast } = useToast();
   const songLink = useParams().songLink as string[];
   const searchParams = useSearchParams();
   const [metadata, setMetadata] = useState<TrackMetadata>();
@@ -37,7 +40,21 @@ export default function SongPage() {
     return decodeURI(`${link}?${query}`);
   }, []);
 
-  const handleShare = () => copy(buildUrl());
+  const handleShare = async () => {
+    const link = buildUrl();
+    try {
+      const { data, error } = await supabaseClient.rpc('search_posts_embeds', {
+        search_string: link,
+        limit_per_row: 1
+      }).select('*').single();
+
+      if (error) throw error;
+
+      copy(`${window.location.origin}/cast/${data.author.username}/${data.post_hash.slice(0, 8)}`);
+    } catch {
+      toast({ title: 'Copy failed', description: 'Song not found in Sonata.' });
+    }
+  };
 
   return (
     <main className="flex grow items-center justify-center">
