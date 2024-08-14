@@ -1,42 +1,14 @@
 import useCopyToClipboard from "@/hooks/useCopyToClipboard";
-import fetchMetadata from "@/lib/fetchMetadata";
-import isValidUrl from "@/lib/isValidUrl";
-import { TrackMetadata } from "@/types/Track";
+import { useSongPageProvider } from "@/providers/SongPageProvider";
 import { Separator } from "@radix-ui/react-separator";
 import { ShareIcon } from "lucide-react";
-import { useParams, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
 import MediaPlayer from "../MediaPlayer";
 import { Button } from "../ui/button";
 import SongAlternatives from "./Alternatives";
 
 export default function SongPage() {
-  const songLink = useParams().songLink as string[];
-  const searchParams = useSearchParams();
-  const [metadata, setMetadata] = useState<TrackMetadata>();
+  const { metadata } = useSongPageProvider();
   const { copy } = useCopyToClipboard();
-
-  useEffect(() => {
-    const trackUrl = buildUrl();
-    if (!isValidUrl(trackUrl)) return;
-
-    fetchMetadata(
-      trackUrl,
-      { id: 1, alternativeEmbeds: [] } as any
-    ).then(setMetadata);
-  }, []);
-
-  const buildUrl = useCallback(() => {
-    let link = '';
-    const query = searchParams.toString();
-
-    if (songLink.length == 1) link = songLink[0];
-    else link = songLink[0].replaceAll('%3A', ':') + '//' + songLink.slice(1).join('/');
-    if (!query) return link;
-
-    return decodeURI(`${link}?${query}`);
-  }, []);
-
   const handleShare = () => copy(window.location.href);
 
   return (
@@ -53,7 +25,7 @@ export default function SongPage() {
           </Button>
         </div>
         <Separator className="bg-muted h-px" />
-        <SongAlternatives trackUrl={buildUrl()} />
+        <SongAlternatives />
       </div>
     </main>
   )
