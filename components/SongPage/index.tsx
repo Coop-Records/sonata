@@ -8,6 +8,7 @@ import { useParams, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import MediaPlayer from "../MediaPlayer";
 import { Button } from "../ui/button";
+import SongAlternatives from "./Alternatives";
 
 export default function SongPage() {
   const songLink = useParams().songLink as string[];
@@ -21,7 +22,7 @@ export default function SongPage() {
 
     fetchMetadata(
       trackUrl,
-      { id: 1, alternativeEmbeds: [] } as any
+      { id: (new Date()).getTime(), alternativeEmbeds: [] } as any
     ).then(setMetadata);
   }, []);
 
@@ -31,7 +32,6 @@ export default function SongPage() {
 
     if (songLink.length == 1) link = songLink[0];
     else link = songLink[0].replaceAll('%3A', ':') + '//' + songLink.slice(1).join('/');
-
     if (!query) return link;
 
     return decodeURI(`${link}?${query}`);
@@ -53,6 +53,7 @@ export default function SongPage() {
           </Button>
         </div>
         <Separator className="bg-muted h-px" />
+        <SongAlternatives trackUrl={buildUrl()} />
       </div>
     </main>
   )
