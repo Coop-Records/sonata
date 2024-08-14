@@ -9,6 +9,7 @@ import { useCallback, useEffect, useState } from "react";
 import MediaPlayer from "../MediaPlayer";
 import { Button } from "../ui/button";
 import SongAlternatives from "./Alternatives";
+import { uniqueId } from "lodash";
 
 export default function SongPage() {
   const songLink = useParams().songLink as string[];
@@ -22,7 +23,7 @@ export default function SongPage() {
 
     fetchMetadata(
       trackUrl,
-      { id: 1, alternativeEmbeds: [] } as any
+      { id: (new Date()).getTime(), alternativeEmbeds: [] } as any
     ).then(setMetadata);
   }, []);
 
