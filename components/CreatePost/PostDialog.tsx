@@ -15,8 +15,10 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useUi } from '@/providers/UiProvider';
+import Dropdown from './Dropdown';
+import useCreateDialog from '@/hooks/useCreateModal';
 
-export default function PostDialog({ handleTextChange, onPost, isOpen, setIsOpen }: any) {
+export default function PostDialog({ handleChannelSelect, channelValue, handleTextChange, onPost, isOpen, setIsOpen }: any) {
   const { isMobile } = useUi();
   return (
     <>
@@ -34,9 +36,12 @@ export default function PostDialog({ handleTextChange, onPost, isOpen, setIsOpen
             className="w-full border-none bg-muted outline-none"
             placeholder="https://www.sound.xyz/xcelencia/cancun-ft-tarot"
           />
-          <Button className="h-auto rounded-full px-8" onClick={onPost}>
-            Cast
-          </Button>
+          <div className='flex gap-2'>
+            <Dropdown handleSelect={handleChannelSelect} value={channelValue} className='z-50' />
+            <Button className="h-auto rounded-full px-8" onClick={onPost}>
+              Cast
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
 
