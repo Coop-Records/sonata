@@ -49,7 +49,7 @@ const SongPageProvider = ({ children }: any) => {
 
     fetchMetadata(
       trackUrl,
-      { id: 1, alternativeEmbeds: [] } as any
+      { id: (new Date()).getTime(), alternativeEmbeds: [] } as any
     ).then(setMetadata);
 
     (async () => {
