@@ -9,7 +9,6 @@ import { useCallback, useEffect, useState } from "react";
 import MediaPlayer from "../MediaPlayer";
 import { Button } from "../ui/button";
 import SongAlternatives from "./Alternatives";
-import { uniqueId } from "lodash";
 
 export default function SongPage() {
   const songLink = useParams().songLink as string[];
