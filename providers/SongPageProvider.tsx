@@ -1,4 +1,5 @@
 import useSongPage from '@/hooks/useSongPage';
+import { SupabasePost } from '@/types/SupabasePost';
 import { TrackMetadata } from '@/types/Track';
 import { createContext, useContext } from 'react';
 
@@ -7,9 +8,13 @@ const SongContext = createContext<{
   alternatives: { [key: string]: string };
   totalNotes?: number;
   songLink: string;
+  posts: SupabasePost[];
+  postsLoading: boolean;
 }>({
   alternatives: {},
   songLink: '',
+  posts:[],
+  postsLoading: true
 });
 
 const SongPageProvider = ({ children }: any) => {

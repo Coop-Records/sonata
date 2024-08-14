@@ -11,5 +11,5 @@ export default function useSongPage() {
 
   const totalNotes = loading ? undefined : posts.reduce((prev, curr) => prev + (curr.points ?? 0), 0);
 
-  return { songLink, totalNotes, metadata, alternatives };
+  return { songLink, totalNotes, metadata, alternatives, posts, postsLoading: loading };
 }
