@@ -16,7 +16,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useUi } from '@/providers/UiProvider';
 import Dropdown from './Dropdown';
-import useCreateDialog from '@/hooks/useCreateModal';
 
 export default function PostDialog({ handleChannelSelect, channelValue, handleTextChange, onPost, isOpen, setIsOpen }: any) {
   const { isMobile } = useUi();
