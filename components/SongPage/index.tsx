@@ -5,6 +5,7 @@ import { ShareIcon } from "lucide-react";
 import MediaPlayer from "../MediaPlayer";
 import { Button } from "../ui/button";
 import SongAlternatives from "./Alternatives";
+import TotalNotes from "./TotalNotes";
 
 export default function SongPage() {
   const { metadata } = useSongPageProvider();
@@ -15,7 +16,8 @@ export default function SongPage() {
     <main className="flex grow items-center justify-center">
       <div className="w-full space-y-4 ">
         <MediaPlayer metadata={metadata} />
-        <div className="flex justify-end">
+        <div className="flex justify-between">
+          <TotalNotes />
           <Button
             className="w-9 h-auto p-0 text-muted-foreground outline-none hover:bg-transparent"
             onClick={handleShare}

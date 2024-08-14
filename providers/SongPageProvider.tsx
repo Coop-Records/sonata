@@ -1,8 +1,12 @@
 import fetchMetadata from '@/lib/fetchMetadata';
 import isValidUrl from '@/lib/isValidUrl';
+import { supabaseClient } from '@/lib/supabase/client';
 import { TrackMetadata } from '@/types/Track';
+import { isEmpty } from 'lodash';
 import { useParams, useSearchParams } from 'next/navigation';
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+
+type TObject = { [key: string]: string };
 
 const platformIcons = {
   spotify: '/images/spotify.png',
@@ -11,25 +15,36 @@ const platformIcons = {
 };
 
 const SongContext = createContext<{
-  metadata: undefined | TrackMetadata;
-  alternatives: { [key: string]: string };
-  platformIcons: { [key: string]: string };
-  url: string;
+  metadata?: TrackMetadata;
+  alternatives: TObject;
+  platformIcons: TObject;
+  totalNotes?: number;
+  trackUrl: string;
 }>({
-  metadata: undefined,
   alternatives: {},
-  url: '',
+  trackUrl: '',
   platformIcons: {},
 });
 
 const SongPageProvider = ({ children }: any) => {
   const searchParams = useSearchParams();
   const songLink = useParams().songLink as string[];
-  const [alternatives, setAlternative] = useState({});
+  const [alternatives, setAlternative] = useState<TObject>({});
   const [metadata, setMetadata] = useState<TrackMetadata>();
+  const [totalNotes, setTotalNotes] = useState<number>();
+
+  const trackUrl = useMemo(() => {
+    let link = '';
+    const query = searchParams.toString();
+
+    if (songLink.length == 1) link = songLink[0];
+    else link = songLink[0].replaceAll('%3A', ':') + '//' + songLink.slice(1).join('/');
+    if (!query) return link;
+
+    return decodeURI(`${link}?${query}`);
+  }, []);
 
   useEffect(() => {
-    const trackUrl = buildUrl();
     if (!isValidUrl(trackUrl)) return;
 
     fetchMetadata(
@@ -53,19 +68,19 @@ const SongPageProvider = ({ children }: any) => {
     })();
   }, []);
 
-  const buildUrl = useCallback(() => {
-    let link = '';
-    const query = searchParams.toString();
+  useEffect(() => {
+    if (isEmpty(alternatives)) return;
 
-    if (songLink.length == 1) link = songLink[0];
-    else link = songLink[0].replaceAll('%3A', ':') + '//' + songLink.slice(1).join('/');
-    if (!query) return link;
-
-    return decodeURI(`${link}?${query}`);
-  }, []);
+    const embeds = Object.values(alternatives).concat(trackUrl);
+    supabaseClient
+      .rpc('total_posts_points_of_embeds', { search_embeds: embeds })
+      .then(({ data }) => {
+        if (data) setTotalNotes(data);
+      });
+  }, [alternatives]);
 
   return (
-    <SongContext.Provider value={{ url: buildUrl(), alternatives, metadata, platformIcons }}>
+    <SongContext.Provider value={{ trackUrl, alternatives, metadata, platformIcons, totalNotes }}>
       {children}
     </SongContext.Provider>
   );
