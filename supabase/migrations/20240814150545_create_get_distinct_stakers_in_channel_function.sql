@@ -15,6 +15,7 @@ BEGIN
                 FROM unnest(search_embeds) AS term
                 WHERE embed LIKE '%' || term || '%'
             )
-    );
+    )
+    ORDER BY posts.points DESC;
 END;
 $$ LANGUAGE plpgsql;
