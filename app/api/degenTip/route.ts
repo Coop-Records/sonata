@@ -36,7 +36,10 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
 };
 
 export async function POST(req: NextRequest): Promise<Response> {
-  return getResponse(req);
+  return getResponse(req).catch((error) => {
+    const message = error instanceof Error ? error.message : 'Unable to Tip';
+    return NextResponse.json({ error: message }, { status: 400 });
+  });
 }
 
 async function callAllocateDegenTip(tipAmount: number, postHashInput: string) {
