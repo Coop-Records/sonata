@@ -5,6 +5,7 @@ import { ShareIcon } from "lucide-react";
 import MediaPlayer from "../MediaPlayer";
 import { Button } from "../ui/button";
 import SongAlternatives from "./Alternatives";
+import SongPostsFeed from "./SongPostsFeed";
 import TotalNotes from "./TotalNotes";
 
 export default function SongPage() {
@@ -14,7 +15,7 @@ export default function SongPage() {
 
   return (
     <main className="flex grow items-center justify-center">
-      <div className="w-full space-y-4 ">
+      <div className="w-full space-y-4">
         <MediaPlayer metadata={metadata} />
         <div className="flex justify-between">
           <TotalNotes />
@@ -28,6 +29,7 @@ export default function SongPage() {
         </div>
         <Separator className="bg-muted h-px" />
         <SongAlternatives />
+        <SongPostsFeed />
       </div>
     </main>
   )
