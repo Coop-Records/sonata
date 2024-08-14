@@ -110,6 +110,12 @@ export const CONTENT_PLATFORMS = [
   { url: 'zora.co/collect', title: 'zora' },
 ] as const;
 
+export const PLATFORM_ICONS: Record<string, string> = {
+  spotify: '/images/spotify.png',
+  youtube: '/images/youtube.svg',
+  soundcloud: '/images/soundcloud.png'
+};
+
 export const ZORA_TO_VIEM = {
   arb: 'arbitrum',
   base: 'base',

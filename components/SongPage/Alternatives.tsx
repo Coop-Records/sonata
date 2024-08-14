@@ -3,9 +3,10 @@ import { capitalize, isEmpty } from "lodash";
 import Image from "next/image";
 import Link from "next/link";
 import AlternativesSkeleton from "./AlternativesSkeleton";
+import { PLATFORM_ICONS } from "@/lib/consts";
 
 export default function SongAlternatives() {
-  const { alternatives, platformIcons } = useSongPageProvider();
+  const { alternatives } = useSongPageProvider();
 
   return (
     <div className="flex flex-wrap gap-4">
@@ -18,7 +19,7 @@ export default function SongAlternatives() {
             href={`${window.location.origin}/song/${value}`}
             className="w-28 hover:opacity-80"
             key={key}>
-            <Image alt={key} width={42} height={42} src={platformIcons[key]} className="mx-auto" />
+            <Image alt={key} width={42} height={42} src={PLATFORM_ICONS[key]} className="mx-auto" />
             <p className="text-center text-sm">{capitalize(key)}</p>
           </Link>
         ))
