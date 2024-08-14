@@ -54,7 +54,9 @@ const SongPageProvider = ({ children }: any) => {
 
     (async () => {
       const response = await fetch(`/api/songLink/fetchLink?trackUrl=${encodeURIComponent(trackUrl)}`);
+      if (!response.ok) return;
       const data = await response.json();
+      if (!data) return;
 
       setAlternative(() => {
         const platforms: any = {};
