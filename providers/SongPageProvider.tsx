@@ -71,13 +71,12 @@ const SongPageProvider = ({ children }: any) => {
   }, []);
 
   useEffect(() => {
-    if (isEmpty(alternatives)) return;
-
     const embeds = Object.values(alternatives).concat(trackUrl);
     supabaseClient
       .rpc('total_posts_points_of_embeds', { search_embeds: embeds })
-      .then(({ data }) => {
-        if (data) setTotalNotes(data);
+      .then(({ data, error }) => {
+        if (error) setTotalNotes(0);
+        if (typeof data == 'number') setTotalNotes(data);
       });
   }, [alternatives]);
 
