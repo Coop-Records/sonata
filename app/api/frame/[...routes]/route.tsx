@@ -1,10 +1,8 @@
 /* eslint-disable react/jsx-key */
 /** @jsxImportSource frog/jsx */
 
-import getBulkUsersByFid from '@/lib/neynar/getBulkUsersByFid';
 import executeUserTip from '@/lib/sonata/tip/executeUserTip';
-import getUserTipInfo from '@/lib/sonata/tip/getUserTipInfo';
-import getCastByHash from '@/lib/supabase/getCastByHash';
+import getPostByHash from '@/lib/supabase/getPostByHash';
 import { Button, Frog, TextInput } from 'frog';
 import { neynar as neynarHub } from 'frog/hubs';
 import { handle } from 'frog/next';
@@ -29,7 +27,7 @@ app.frame('/tip', async (c) => {
 
   try {
     if (!postHash) throw Error('Post hash needed');
-    const existingPost = await getCastByHash(postHash);
+    const existingPost = await getPostByHash(postHash);
     if (!existingPost) throw Error('Cast not found');
 
     const username = existingPost.author.username;
@@ -56,6 +54,7 @@ app.frame('/execute-tip', async (c) => {
     return c.error({ message: 'Invalid method' });
   }
   const { origin: BASE_URL } = new URL(c.url);
+  const tipperFid = c?.frameData?.fid as number;
 
   try {
     const frameUrl = c?.frameData?.url;
@@ -65,48 +64,28 @@ app.frame('/execute-tip', async (c) => {
     const postHash = searchParams.get('post_hash');
     if (!postHash) throw Error('Post hash needed');
 
-    const tipAmount = Number(c?.frameData?.inputText);
-    if (isNaN(tipAmount)) throw Error('Must be a number');
-    if (tipAmount <= 0) throw Error('Invalid tip entry');
     if (!c.verified) throw Error('Could not authenticate user');
 
-    const existingPost = await getCastByHash(postHash);
-    if (!existingPost) throw Error('Cast not found');
+    const amount = Number(c?.frameData?.inputText);
 
-    const recipientFid = existingPost.author.fid;
-    const tipperFid = c?.frameData?.fid as number;
-    if (tipperFid === recipientFid) throw Error('Can not tip yourself');
+    const { post, sender, receiver, tipRemaining, dailyAllowance } = await executeUserTip({
+      postHash,
+      tipperFid,
+      amount,
+    });
 
-    const tipInfo = await getUserTipInfo(tipperFid, tipAmount);
-    const users = await getBulkUsersByFid([tipperFid, recipientFid]);
-
-    const recipientWalletAddress = users
-      ?.find((user) => user.fid == recipientFid)
-      ?.verifications?.find(Boolean);
-    const tipperWalletAddress = users
-      ?.find((user) => user.fid == tipperFid)
-      ?.verifications?.find(Boolean);
-
-    if (!recipientWalletAddress) throw Error('Invalid recipient');
-
-    const result = await executeUserTip(
-      existingPost.post_hash,
-      { recipientFid, recipientWalletAddress, tipperWalletAddress },
-      tipInfo,
-    );
-
-    const username = existingPost.author.username;
+    const username = post.author.username;
     const castUrl = `${BASE_URL}/cast/${username}/${postHash}`;
 
     return c.res({
       image:
         `${BASE_URL}/api/og-image/frame-tip-result?` +
         new URLSearchParams({
-          sender: users[0].username,
-          receiver: users[1].username,
-          tipAmount: String(tipInfo.allowableAmount),
-          remainingAllowance: String(result.tipRemaining),
-          dailyAllowance: tipInfo.tip.daily_tip_allocation,
+          sender: sender.username,
+          receiver: receiver.username,
+          tipAmount: String(amount),
+          remainingAllowance: String(tipRemaining),
+          dailyAllowance,
         }),
       intents: [
         <Button action={`${BASE_URL}/api/frame/tip?post_hash=${postHash}`}>Add Tip</Button>,
