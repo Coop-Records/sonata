@@ -42,15 +42,12 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
 
             <main className="flex grow flex-col">
               <Header />
-              <div className="mt-4 h-0 grow overflow-y-scroll">
-                <div
-                  className={cn('flex flex-col gap-6 container min-h-full', {
-                    'max-w-3xl': enableMaxWidth,
-                  })}
-                  id="feed-container"
-                >
-                  {user && !username && !channelId && <CreatePost />}
-                  {children}
+              <div className="mt-4 h-[500px] grow">
+                <div id="feed-container" className='size-full'>
+                  <div className={cn('container space-y-6', { 'max-w-3xl': enableMaxWidth })}>
+                    {user && !username && !channelId && <CreatePost />}
+                    {children}
+                  </div>
                 </div>
               </div>
             </main>
