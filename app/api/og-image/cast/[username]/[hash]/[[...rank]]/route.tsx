@@ -49,6 +49,10 @@ export async function GET(
           weight: 600,
         },
       ],
+      headers: {
+        'Cache-Control': 'no-cache, no-store, max-age=0',
+        'CDN-Cache-Control': 'max-age=0',
+      },
     },
   );
 }

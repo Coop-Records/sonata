@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
       width: 1200,
       height: 630,
       headers: {
-        'Cache-Control': 'max-age=0',
+        'Cache-Control': 'no-cache, no-store, max-age=0',
         'CDN-Cache-Control': 'max-age=0',
       },
     },

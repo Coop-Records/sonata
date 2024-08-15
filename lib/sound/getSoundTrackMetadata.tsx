@@ -1,11 +1,15 @@
 import { TrackMetadata } from '@/types/Track';
 import { SupabasePost } from '@/types/SupabasePost';
 import extractSoundArtistAndTrack from './extractSoundArtistAndTrack';
-import getReleaseInfo from './getReleaseInfo';
+import fetchSoundGraphQL from './fetchSoundGraphQL';
+import { MINTED_RELEASE_QUERY } from './queries';
 
 const getSoundTrackMetadata = async (url: string, cast: SupabasePost) => {
   const { artist, trackName } = extractSoundArtistAndTrack(url);
-  const releaseInfo = await getReleaseInfo(artist, trackName);
+  const { mintedRelease: releaseInfo } = await fetchSoundGraphQL(MINTED_RELEASE_QUERY, {
+    soundHandle: artist,
+    releaseSlug: trackName,
+  });
 
   return {
     id: releaseInfo.id,
