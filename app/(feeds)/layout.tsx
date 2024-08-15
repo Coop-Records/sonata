@@ -42,7 +42,7 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
 
             <main className="flex grow flex-col">
               <Header />
-              <div className="mt-4 h-0 grow overflow-y-scroll">
+              <div className="mt-4 h-0 grow overflow-y-scroll max-sm:w-screen">
                 <div
                   className={cn('flex flex-col gap-6 container min-h-full', {
                     'max-w-3xl': enableMaxWidth,
