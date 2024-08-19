@@ -1,14 +1,13 @@
 import getAllUserStakes from "@/lib/sonata/staking/getAllUserStakes";
-import { FeedType } from "@/types/Feed";
 import { UserStake } from "@/types/Stake";
 import { useEffect, useState } from "react";
 
-function useUserStakes(feedType?: string, profileFid?: number) {
+function useUserStakes(tab: string | null, profileFid?: number) {
   const [loading, setLoading] = useState(false);
   const [userStakes, setUserStakes] = useState<UserStake[]>([]);
 
   useEffect(() => {
-    if (feedType !== FeedType.Stakes) return;
+    if (tab !== 'stakes') return;
     const controller = new AbortController();
     setLoading(true);
     getAllUserStakes(profileFid, controller.signal)
@@ -16,7 +15,7 @@ function useUserStakes(feedType?: string, profileFid?: number) {
       .finally(() => setLoading(false));
 
     return () => { setUserStakes([]); controller.abort() };
-  }, [feedType, profileFid]);
+  }, [tab, profileFid]);
 
   return { userStakes, loading };
 }
