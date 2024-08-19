@@ -57,7 +57,7 @@ async function executeUserTip({
     );
   }
 
-  const [receiver, sender] = await getBulkUsersByFid([tipperFid, recipientFid]);
+  const [sender, receiver] = await getBulkUsersByFid([tipperFid, recipientFid]);
   const recipientWalletAddress = receiver?.verifications?.find(Boolean);
   if (!recipientWalletAddress) throw Error('Invalid recipient');
   const tipperWalletAddress = sender?.verifications?.find(Boolean);
