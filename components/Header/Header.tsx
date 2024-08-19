@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { tabs } from '@/lib/consts';
 import { cn } from '@/lib/utils';
-import { useFeedProvider } from '@/providers/FeedProvider';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { useTipProvider } from '@/providers/TipProvider';
 import { useUi } from '@/providers/UiProvider';
@@ -19,15 +18,26 @@ import UserMenu from './UserMenu';
 import ChannelDetails from '../ChannelDetails';
 import { useStakeProvider } from '@/providers/StakeProvider';
 import { useProfileProvider } from '@/providers/ProfileProvider';
+import { FeedType } from '@/types/Feed';
+import { useMemo } from 'react';
 
 const Header = () => {
   const { user, loading: userLoading } = useNeynarProvider();
-  const { feedType } = useFeedProvider();
   const { menuOpen, setMenuOpen } = useUi();
   const { airdropBalance } = useTipProvider();
   const { username, channelId } = useParams();
   const { channelImage } = useStakeProvider();
   const { profile } = useProfileProvider();
+
+  const filteredTabs = useMemo(() => {
+    return tabs.filter(tab => {
+      const userTabs = tab.value === FeedType.Posts || tab.value === 'stakes';
+      if (username) return userTabs;
+
+      const isDisabled = (tab.value === FeedType.Following && (!user || channelId)) || userTabs;
+      return !isDisabled;
+    })
+  }, [username, channelId, user]);
 
   return (
     <header>
@@ -35,9 +45,9 @@ const Header = () => {
         style={
           channelId
             ? {
-                backgroundImage: `url("${channelImage}")`,
-                boxShadow: 'inset 0 0 0 1000px #141a1eb2',
-              }
+              backgroundImage: `url("${channelImage}")`,
+              boxShadow: 'inset 0 0 0 1000px #141a1eb2',
+            }
             : undefined
         }
         className={cn(
@@ -70,9 +80,7 @@ const Header = () => {
       <div className="container">
         {channelId && <ChannelDetails channelId={channelId as string} />}
         {profile && <Profile />}
-        {feedType && (
-          <Tabs tabs={tabs} className={!(username || channelId) ? 'justify-center' : ''} />
-        )}
+        <Tabs tabs={filteredTabs} className={!(username || channelId) ? 'justify-center' : ''} />
         <Separator className="-mt-px bg-grey-light" />
       </div>
     </header>

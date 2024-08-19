@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
+import Link from 'next/link';
 
 export default function UserMenu() {
   const { user, signOut } = useNeynarProvider();
@@ -23,9 +24,9 @@ export default function UserMenu() {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="mr-2 min-w-52" alignOffset={100}>
-        <a href={`/${user?.username}`}>
+        <Link href={`/${user?.username}`}>
           <DropdownMenuItem className="cursor-pointer">{user?.display_name} </DropdownMenuItem>
-        </a>
+        </Link>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={signOut} className="cursor-pointer">
           Logout
