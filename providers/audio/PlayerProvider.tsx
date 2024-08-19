@@ -1,18 +1,13 @@
 import {
-  Dispatch,
-  ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useReducer,
+  Dispatch, ReactNode,
+  createContext, useContext,
+  useEffect, useMemo, useReducer,
 } from 'react';
 import { useSoundcloud } from './SoundcloudProvider';
 import { useSpotify } from './SpotifyProvider';
 import { TrackMetadata } from '@/types/Track';
-import { useSound } from './SoundProvider';
 import { useYoutube } from './YoutubeProvider';
-import { useZoraProvider } from './ZoraProvider';
+import { useHTMLAudioProvider } from './HTMLAudioProvider';
 
 type Player = {
   playing: boolean;
@@ -124,25 +119,23 @@ export default function PlayerProvider({ children }: { children: ReactNode }) {
   const [player, dispatch] = useReducer(playerReducer, initialState);
   const { metadata } = player;
   const scController = useSoundcloud(dispatch);
-  const soundController = useSound(dispatch);
   const spotifyController = useSpotify(dispatch);
   const youtubeController = useYoutube(dispatch);
-  const zoraController = useZoraProvider(dispatch);
+  const htmlAudioController = useHTMLAudioProvider(dispatch)
 
   const currentController = useMemo(() => {
     if (metadata?.type === 'soundcloud') return scController;
-    if (metadata?.type === 'soundxyz') return soundController;
+    if (metadata?.type === 'soundxyz') return htmlAudioController;
     if (metadata?.type === 'spotify') return spotifyController;
     if (metadata?.type === 'youtube') return youtubeController;
-    if (metadata?.type === 'zora') return zoraController;
+    if (metadata?.type === 'zora') return htmlAudioController;
     return null;
   }, [
     metadata?.type,
     scController,
-    soundController,
     spotifyController,
     youtubeController,
-    zoraController
+    htmlAudioController,
   ]);
 
   useEffect(() => {
