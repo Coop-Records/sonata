@@ -3,11 +3,13 @@ import { FrameMetadataType } from '@coinbase/onchainkit';
 import { zeroAddress } from 'viem';
 
 export const REFFERAL_ADDRESS = '0x07089a002832CF8EAcE9f381651D6155dEB4DE0d';
-export const FEE = .1;
+export const FEE = 0.1;
 export const TITLE = 'Sonata';
 export const DESCRIPTION = 'Discover music on Farcaster';
 export const FARCASTER_ID_REGISTRY = '0x00000000fc6c5f01fc30151999387bb99a9f489b';
-export const VERCEL_URL = process.env.NEXT_PUBLIC_FRAME_URL || 'http://localhost:3000';
+export const VERCEL_URL = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : 'http://localhost:3000';
 export const DEFAULT_FRAME = {
   image: {
     src: `https://framerusercontent.com/images/UjSwC7tz1DFYsxiMeKvEI6K7eo.png`,
@@ -15,6 +17,8 @@ export const DEFAULT_FRAME = {
   postUrl: `${VERCEL_URL}/api/frame`,
 } as FrameMetadataType;
 export const FRAME_INPUT_PLACEHOLDER = '0x... or .eth';
+
+export const LOGO_URL = `${VERCEL_URL}/images/notes.png`;
 
 export const SOUND_FACTORY = '0x0000000000aec84F5BFc2af15EAfb943bf4e3522';
 export const REFERRAL = process.env.NEXT_PUBLIC_REFERRAL || zeroAddress;
@@ -113,7 +117,7 @@ export const CONTENT_PLATFORMS = [
 export const PLATFORM_ICONS: Record<string, string> = {
   spotify: '/images/spotify.png',
   youtube: '/images/youtube.svg',
-  soundcloud: '/images/soundcloud.png'
+  soundcloud: '/images/soundcloud.png',
 };
 
 export const ZORA_TO_VIEM = {

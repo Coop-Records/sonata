@@ -1,39 +1,22 @@
-import getUserByUsername from './neynar/getNeynarUserByUsername';
 import { getChannelData } from './getChannelData';
 import { getEmbedAndMetadata } from './getEmbedAndMetadata';
-import { replaceSpecialCharacters } from './replaceSpecialCharacters';
 import { formatPoints } from './formatPoints';
 
-export async function getDataForCastOg(username: string, hash: any) {
-  const encodedUsername = replaceSpecialCharacters(username);
-
-  const userProfile = await getUserByUsername(username);
-  const profilePfp = userProfile?.pfp?.url;
-
+export async function getDataForCastOg(hash: any) {
   const { cast, metadata } = await getEmbedAndMetadata(hash);
-  const channelData = getChannelData(cast?.channelId);
+
+  const channelData = getChannelData(cast.channelId);
 
   const channelLabel = channelData?.label || '/sonata';
   const channelIcon = channelData?.icon || 'https://i.imgur.com/Xa4LjYA.jpeg';
 
-  const points = formatPoints(cast?.points);
-
-  const soraSemiBold = fetch(new URL('/public/Sora-SemiBold.ttf', import.meta.url)).then((res) =>
-    res.arrayBuffer(),
-  );
-
-  const soraNormal = fetch(new URL('/public/Sora-Regular.ttf', import.meta.url)).then((res) =>
-    res.arrayBuffer(),
-  );
+  const points = formatPoints(cast.points);
 
   return {
-    encodedUsername,
-    profilePfp,
+    cast,
     metadata,
     channelLabel,
     channelIcon,
     points,
-    soraSemiBold,
-    soraNormal,
   };
 }
