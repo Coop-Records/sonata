@@ -15,7 +15,7 @@ const PlayerButtons = ({ metadata }: PlayerButtonProps) => {
   const { handleNext, handlePrev } = useFeedProvider();
 
   useEffect(() => {
-    if (player.position !== 0 && player.position > player.duration - 1000) {
+    if (player.position !== 0 && player.position >= player.duration) {
       handleNext();
     }
   }, [player.position]);
