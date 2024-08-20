@@ -7,10 +7,10 @@ import mergeArraysUniqueByPostHash from '@/lib/mergeArraysUniqueByPostHash';
 import { useNeynarProvider } from './NeynarProvider';
 import { fetchPostsLimit } from '@/lib/consts';
 import fetchMetadata from '@/lib/fetchMetadata';
-import { usePlayer } from '@/providers/audio/PlayerProvider';
 import { useProfileProvider } from './ProfileProvider';
 import { useParams, useSearchParams } from 'next/navigation';
 import qs from 'qs';
+import usePlayerActions from '@/hooks/usePlayerActions';
 
 type FeedProviderType = {
   feed: SupabasePost[];
@@ -18,8 +18,6 @@ type FeedProviderType = {
   setFeedType: (feedType: FeedType) => void;
   fetchMore: (start: number) => void;
   hasMore: boolean;
-  handleNext: () => void;
-  handlePrev: () => void;
 };
 
 const FeedContext = createContext<FeedProviderType>({} as any);
@@ -31,7 +29,8 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const [feedType, setFeedType] = useState<FeedType>();
   const [hasMore, setHasMore] = useState(true);
   const { user, loading: userLoading } = useNeynarProvider();
-  const [player, dispatch] = usePlayer();
+  const { dispatch, onNext, onPrevious, onEnd } = usePlayerActions();
+
   const { profile, loading: profileLoading, error: profileError } = useProfileProvider();
 
   const fid = user?.fid;
@@ -90,37 +89,26 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const handleNext = async () => {
-    const feedIndex = feed.findIndex((feedObj: SupabasePost) => feedObj.id === player.feedId);
+  useEffect(() => {
+    const eventHandler = ({ detail }: any, direction: 0 | 1) => {
+      if (!detail) return;
+      const index = feed.findIndex(({ id }) => id == detail.feedId);
 
-    if (feedIndex > -1) {
-      if (feedIndex + 1 < feed.length) {
-        playFeedId(feedIndex + 1);
-      }
-      return;
-    }
-    playFeedId(0);
-  };
+      if (direction) { if (index < feed.length - 1) playFeedId(index + 1) }
+      else { if (index > 0) playFeedId(index - 1) };
+    };
 
-  const handlePrev = async () => {
-    const feedIndex = feed.findIndex((feedObj: SupabasePost) => feedObj.id === player.feedId);
-    if (feedIndex > -1) {
-      if (feedIndex && feedIndex > 0) {
-        playFeedId(feedIndex - 1);
-      }
-      return;
-    }
-    playFeedId(0);
-  };
+    const onNextCleanup = onNext((e) => eventHandler(e, 1));
+    const onEndCleanup = onEnd((e) => eventHandler(e, 1));
+    const onPreviousCleanup = onPrevious((e) => eventHandler(e, 0));
+
+    return () => { onPreviousCleanup(); onNextCleanup(); onEndCleanup(); }
+  });
 
   const value = {
-    feed,
-    feedType,
+    feed, feedType,
     setFeedType,
-    fetchMore,
-    hasMore,
-    handleNext,
-    handlePrev,
+    fetchMore, hasMore,
   };
 
   return <FeedContext.Provider value={value}>{children}</FeedContext.Provider>;

@@ -8,6 +8,7 @@ import { useSpotify } from './SpotifyProvider';
 import { TrackMetadata } from '@/types/Track';
 import { useYoutube } from './YoutubeProvider';
 import { useHTMLAudioProvider } from './HTMLAudioProvider';
+import { EPlayer, GlobalPlayerId } from '@/types/GlobalPlayer';
 
 type Player = {
   playing: boolean;
@@ -21,48 +22,48 @@ type Player = {
 
 export type PlayerAction =
   | {
-      type: 'PLAY';
-      payload: {
-        metadata: TrackMetadata;
-        feedId: number;
-      };
-    }
-  | {
-      type: 'RESUME';
-      payload: {
-        id: string;
-      };
-    }
-  | {
-      type: 'PAUSE';
-      payload: {
-        id: string;
-      };
-    }
-  | {
-      type: 'SEEK';
-      payload: {
-        position: number;
-      };
-    }
-  | {
-      type: 'SEEKED';
-    }
-  | {
-      type: 'PROGRESS';
-      payload: {
-        position: number;
-      };
-    }
-  | {
-      type: 'SET_DURATION';
-      payload: {
-        duration: number;
-      };
-    }
-  | {
-      type: 'LOADED';
+    type: 'PLAY';
+    payload: {
+      metadata: TrackMetadata;
+      feedId: number;
     };
+  }
+  | {
+    type: 'RESUME';
+    payload: {
+      id: string;
+    };
+  }
+  | {
+    type: 'PAUSE';
+    payload: {
+      id: string;
+    };
+  }
+  | {
+    type: 'SEEK';
+    payload: {
+      position: number;
+    };
+  }
+  | {
+    type: 'SEEKED';
+  }
+  | {
+    type: 'PROGRESS';
+    payload: {
+      position: number;
+    };
+  }
+  | {
+    type: 'SET_DURATION';
+    payload: {
+      duration: number;
+    };
+  }
+  | {
+    type: 'LOADED';
+  };
 
 const initialState: Player = {
   playing: false,
@@ -73,7 +74,7 @@ const initialState: Player = {
   feedId: -1,
 };
 
-const PlayerContext = createContext<[Player, Dispatch<PlayerAction>]>([initialState, () => {}]);
+const PlayerContext = createContext<[Player, Dispatch<PlayerAction>]>([initialState, () => { }]);
 
 const playerReducer = (state: Player, action: PlayerAction) => {
   switch (action.type) {
@@ -158,6 +159,15 @@ export default function PlayerProvider({ children }: { children: ReactNode }) {
     currentController.seek(player.seekTo);
     dispatch({ type: 'SEEKED' });
   }, [player.seekTo, currentController]);
+
+  useEffect(() => {
+    if (player.position !== 0 && player.position >= player.duration) {
+      dispatch({ type: 'PAUSE', payload: { id: metadata!.id } });
+
+      const event = new CustomEvent(EPlayer.End, { detail: metadata });
+      document.getElementById(GlobalPlayerId)?.dispatchEvent(event);
+    }
+  }, [player.position, player.duration, metadata]);
 
   return <PlayerContext.Provider value={[player, dispatch]}>{children}</PlayerContext.Provider>;
 }

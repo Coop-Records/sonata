@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Scrubber from '@/components/Scrubber';
 import PlayerButtons from './PlayerButtons';
 import { useUi } from '@/providers/UiProvider';
+import { GlobalPlayerId } from '@/types/GlobalPlayer';
 
 export default function GlobalPlayer() {
   const { isMobile } = useUi();
@@ -16,7 +17,7 @@ export default function GlobalPlayer() {
     <div
       data-type={metadata.type}
       className="sticky bottom-0 left-0 mt-auto w-screen space-y-6 overflow-hidden bg-white py-3 shadow-2xl shadow-black"
-    >
+      id={GlobalPlayerId}>
       <div className="container relative flex items-center gap-3">
         <div className="relative my-auto size-16 overflow-hidden rounded-lg shadow-md">
           <Image
@@ -36,7 +37,7 @@ export default function GlobalPlayer() {
         </div>
         <div className="absolute left-1/4 w-full">
           <div className="ml-6 flex max-w-2xl grow flex-col items-center gap-1">
-            {metadata && <PlayerButtons metadata={metadata} />}
+            {metadata && <PlayerButtons />}
             {!isMobile && <Scrubber className="w-full" />}
           </div>
         </div>
