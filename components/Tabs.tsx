@@ -1,45 +1,39 @@
 'use client';
+import useQueryParams from '@/hooks/useQueryParams';
+import useTabs from '@/hooks/useTabs';
 import { cn } from '@/lib/utils';
-import { useFeedProvider } from '@/providers/FeedProvider';
-import { useNeynarProvider } from '@/providers/NeynarProvider';
-import { FeedType } from '@/types/Feed';
-import { Button } from '@/components/ui/button';
-import { useParams } from 'next/navigation';
+import Tab from './Tab';
 
-type tab = {
-  label: string;
-  href?: string;
-  value: FeedType;
+interface Props {
+  tabs: {
+    label: string;
+    href?: string;
+    value: string;
+  }[];
+  className?: string;
+  onChange?: (value: string) => void;
 };
 
-export default function Tabs({ tabs, className = '' }: { tabs: tab[]; className?: string }) {
-  const { feedType, setFeedType } = useFeedProvider();
-  const { user } = useNeynarProvider();
-  const { username, channelId } = useParams();
+export default function Tabs({ tabs, className = '', onChange }: Props) {
+  const { setQueryParam } = useQueryParams();
+  const { activeTab, setActiveTab } = useTabs(tabs);
+
+  const onTabChange = (value: string, index: number) => {
+    if (onChange) onChange(value);
+    setActiveTab(index);
+    setQueryParam('tab', value);
+  };
 
   return (
     <ul className={cn('flex gap-4 md:gap-8', className)}>
-      {tabs
-        .filter((tab) => {
-          const userTabs = tab.value === FeedType.Posts || tab.value === FeedType.Stakes;
-          if (username) return userTabs;
-
-          const isDisabled = (tab.value === FeedType.Following && (!user || channelId)) || userTabs;
-          return !isDisabled;
-        })
-        .map((tab, index) => {
-          return (
-            <li className={cn(feedType === tab.value && 'border-b-2 border-black')} key={index}>
-              <Button
-                variant="ghost"
-                className="p-0 text-sm font-bold hover:bg-transparent md:text-lg"
-                onClick={() => setFeedType(tab.value)}
-              >
-                {tab.label}
-              </Button>
-            </li>
-          );
-        })}
+      {tabs.map((tab, index) => (
+        <Tab
+          tab={tab}
+          key={index}
+          className={cn(activeTab === index && 'border-b-2 border-black')}
+          onClick={() => onTabChange(tab.value, index)}
+        />
+      ))}
     </ul>
   );
 }

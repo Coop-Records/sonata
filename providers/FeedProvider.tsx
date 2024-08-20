@@ -9,7 +9,7 @@ import { fetchPostsLimit } from '@/lib/consts';
 import fetchMetadata from '@/lib/fetchMetadata';
 import { usePlayer } from '@/providers/audio/PlayerProvider';
 import { useProfileProvider } from './ProfileProvider';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import qs from 'qs';
 
 type FeedProviderType = {
@@ -26,6 +26,7 @@ const FeedContext = createContext<FeedProviderType>({} as any);
 
 const FeedProvider = ({ children }: { children: ReactNode }) => {
   const { channelId } = useParams();
+  const tab = useSearchParams().get('tab');
   const [feed, setFeed] = useState<SupabasePost[]>([]);
   const [feedType, setFeedType] = useState<FeedType>();
   const [hasMore, setHasMore] = useState(true);
@@ -38,11 +39,13 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (userLoading || profileLoading || profileError) return;
-    if (channelId) setFeedType(FeedType.Trending);
+    if (tab && Object.values(FeedType).includes(tab as FeedType)) {
+      setFeedType(tab as FeedType);
+    } else if (channelId) setFeedType(FeedType.Trending);
     else if (profileFid) setFeedType(FeedType.Posts);
     else if (user) setFeedType(FeedType.Following);
     else setFeedType(FeedType.Trending);
-  }, [userLoading, profileLoading, profileError, user, profileFid, channelId]);
+  }, [userLoading, profileLoading, profileError, user, profileFid, channelId, tab]);
 
   const fetchMore = useCallback(
     async (start: number) => {
