@@ -54,7 +54,7 @@ export const useSpotify = (dispatch: Dispatch<PlayerAction>) => {
     if (!embedController) return;
     embedController.addListener('playback_update', (e: any) => {
       const {
-        data: { isPaused, isBuffering, position },
+        data: { isPaused, isBuffering, position, duration },
       } = e;
       const loading = embedController.loading;
       const currentSrc = embedController.iframeElement.src;
@@ -69,7 +69,7 @@ export const useSpotify = (dispatch: Dispatch<PlayerAction>) => {
       }
       dispatch({ type: 'PROGRESS', payload: { position } });
       if (position === 0) {
-        dispatch({ type: 'SET_DURATION', payload: { duration: 30 * 1000 } });
+        dispatch({ type: 'SET_DURATION', payload: { duration } });
       }
     });
 
