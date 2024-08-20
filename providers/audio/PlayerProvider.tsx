@@ -8,7 +8,6 @@ import { useSpotify } from './SpotifyProvider';
 import { TrackMetadata } from '@/types/Track';
 import { useYoutube } from './YoutubeProvider';
 import { useHTMLAudioProvider } from './HTMLAudioProvider';
-import { EPlayer, GlobalPlayerId } from '@/types/GlobalPlayer';
 
 type Player = {
   playing: boolean;
@@ -159,15 +158,6 @@ export default function PlayerProvider({ children }: { children: ReactNode }) {
     currentController.seek(player.seekTo);
     dispatch({ type: 'SEEKED' });
   }, [player.seekTo, currentController]);
-
-  useEffect(() => {
-    if (player.position !== 0 && player.position >= player.duration) {
-      dispatch({ type: 'PAUSE', payload: { id: metadata!.id } });
-
-      const event = new CustomEvent(EPlayer.End, { detail: metadata });
-      document.getElementById(GlobalPlayerId)?.dispatchEvent(event);
-    }
-  }, [player.position, player.duration, metadata]);
 
   return <PlayerContext.Provider value={[player, dispatch]}>{children}</PlayerContext.Provider>;
 }

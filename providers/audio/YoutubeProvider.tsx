@@ -75,7 +75,7 @@ export const useYoutube = (dispatch: Dispatch<PlayerAction>) => {
         dispatch({ type: 'SET_DURATION', payload: { duration } });
       }
       if (event.data === api.PlayerState.ENDED) {
-        dispatch({ type: 'PROGRESS', payload: { position: duration } });
+        dispatch({ type: 'PROGRESS', payload: { position: duration + 500 } });
       }
     });
   }, [player, dispatch, api]);

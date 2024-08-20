@@ -1,35 +1,45 @@
 import { Button } from '@/components/ui/button';
 import { usePlayer } from '@/providers/audio/PlayerProvider';
-import { EPlayer, GlobalPlayerId } from '@/types/GlobalPlayer';
+import { useFeedProvider } from '@/providers/FeedProvider';
+import { TrackMetadata } from '@/types/Track';
 import Image from 'next/image';
-import { useCallback } from 'react';
+import { useEffect } from 'react';
 import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';
 
-const PlayerButtons = () => {
+type PlayerButtonProps = {
+  metadata?: TrackMetadata;
+};
+
+const PlayerButtons = ({ metadata }: PlayerButtonProps) => {
   const [player, dispatch] = usePlayer();
-  const metadata = player.metadata;
+  const { handleNext, handlePrev } = useFeedProvider();
 
-  const handleDirection = useCallback((id: 1 | 0) => {
-    const eId = id ? EPlayer.Next : EPlayer.Prev;
-    const event = new CustomEvent(eId, { detail: metadata });
-    document.getElementById(GlobalPlayerId)?.dispatchEvent(event);
-  }, [metadata]);
+  useEffect(() => {
+    if (player.position !== 0 && player.position >= player.duration) {
+      handleNext();
+    }
+  }, [player.position]);
 
-  const handleAction = () => {
-    if (metadata) dispatch({
-      type: player.playing ? 'PAUSE' : 'RESUME',
-      payload: { id: metadata.id }
-    })
+  const handlePlay = () => {
+    {
+      metadata && dispatch({ type: 'RESUME', payload: { id: metadata.id } });
+    }
+  };
+
+  const handlePause = () => {
+    {
+      metadata && dispatch({ type: 'PAUSE', payload: { id: metadata.id } });
+    }
   };
 
   return (
     <div className="flex items-center">
-      <Button onClick={() => handleDirection(0)} className="bg-white">
+      <Button onClick={handlePrev} className="bg-white">
         <Image src="/images/skip-back.png" width={22} height={22} alt="" />
       </Button>
 
       <Button
-        onClick={handleAction}
+        onClick={player.playing ? handlePause : handlePlay}
         variant="ghost"
         className="rounded-full p-0"
       >
@@ -39,7 +49,7 @@ const PlayerButtons = () => {
           <MdPlayCircle className="text-4xl" />
         )}
       </Button>
-      <Button onClick={() => handleDirection(1)} className="bg-white">
+      <Button onClick={handleNext} className="bg-white">
         <Image src="/images/skip-forward.png" width={22} height={22} alt="" />
       </Button>
     </div>
