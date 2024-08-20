@@ -40,7 +40,7 @@ function FrameContainer({ children }: { children: ReactNode }) {
             'linear-gradient(180deg, rgba(49, 102, 218, 0.2) 0%, rgba(49, 102, 218, 0) 30%)',
         }}
       />
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '30px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '30px', gap: '4px' }}>
         <img src={LOGO_URL} height={16} width={16} />
         <span style={{ fontWeight: '600' }}>Sonata</span>
       </div>
@@ -130,7 +130,7 @@ app.frame('/', async (c) => {
               <span
                 style={{ marginTop: '8px', fontSize: '10px', color: 'rgba(255, 255, 255, 0.6)' }}
               >
-                Notes Collected
+                NOTES Collected
               </span>
             </div>
           </div>
