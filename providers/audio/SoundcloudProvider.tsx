@@ -56,6 +56,13 @@ export const useSoundcloud = (dispatch: Dispatch<PlayerAction>) => {
   useEffect(() => {
     if (!widget) return;
     widget.bind(api.Widget.Events.READY, () => {
+
+      widget.bind(api.Widget.Events.FINISH, () => {
+        widget?.getDuration((duration: number) => dispatch({
+          type: 'PROGRESS', payload: { position: duration }
+        }));
+      });
+
       widget.bind(api.Widget.Events.PLAY_PROGRESS, (position: any) => {
         dispatch({ type: 'PROGRESS', payload: { position: position.currentPosition } });
       });
@@ -74,10 +81,13 @@ export const useSoundcloud = (dispatch: Dispatch<PlayerAction>) => {
     (src: string) => {
       widget.load(src, {
         callback() {
-          widget.getDuration((duration: number) => {
-            dispatch({ type: 'SET_DURATION', payload: { duration } });
-          });
           dispatch({ type: 'LOADED' });
+          widget.getCurrentSound(({ playable, duration }: any) => {
+            dispatch({ type: 'SET_DURATION', payload: { duration } });
+            if (!playable) dispatch({
+              type: 'PROGRESS', payload: { position: duration }
+            });
+          });
         },
       });
     },
