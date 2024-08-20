@@ -81,10 +81,13 @@ export const useSoundcloud = (dispatch: Dispatch<PlayerAction>) => {
     (src: string) => {
       widget.load(src, {
         callback() {
-          widget.getDuration((duration: number) => {
-            dispatch({ type: 'SET_DURATION', payload: { duration } });
-          });
           dispatch({ type: 'LOADED' });
+          widget.getCurrentSound(({ playable, duration }: any) => {
+            dispatch({ type: 'SET_DURATION', payload: { duration } });
+            if (!playable) dispatch({
+              type: 'PROGRESS', payload: { position: duration }
+            });
+          });
         },
       });
     },
