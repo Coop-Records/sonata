@@ -1,12 +1,16 @@
+import { EmbeddedCast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
+
 export default async function createPostReply(
   signer_uuid: string,
   parent_hash: string,
   message: string,
+  embeds?: EmbeddedCast[],
 ) {
   const body = JSON.stringify({
     signer_uuid,
     text: message,
     parent: parent_hash,
+    embeds,
   });
   const options = {
     method: 'POST',
