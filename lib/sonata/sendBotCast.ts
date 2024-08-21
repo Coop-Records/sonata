@@ -8,6 +8,7 @@ async function sendBotCast(cast: Cast) {
     BOT_SIGNER_UUID,
     cast.hash,
     `This song is now available on @sonatatips where you earn NOTES when people tip you.\n\nSee you over there!\n\nhttps://sonata.tips/cast/${cast.author.username}/${cast.hash.substring(0, 8)}`,
+    [{ url: `https://www.sonata.tips/api/frame?post_hash=${cast.hash.substring(0, 8)}` }],
   );
 
   return { success: true };
