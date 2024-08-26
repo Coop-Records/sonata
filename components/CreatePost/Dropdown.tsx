@@ -35,7 +35,7 @@ const Dropdown = ({ handleSelect, className, value }: Props) => {
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
         <button
-          className="w-[4.25rem] rounded-full flex gap-1 items-center justify-center px-2 py-1 text-shadowgreen border border-[#D7D6D5] outline-none hover:opacity-80"
+          className="flex items-center justify-center gap-1 rounded-[6.25rem] border border-[#D7D6D5] px-2 py-1 text-shadowgreen outline-none hover:opacity-80"
           title='channel selector'
           aria-label="channel selector">
           {typeof selected == 'number' ? (
@@ -53,17 +53,17 @@ const Dropdown = ({ handleSelect, className, value }: Props) => {
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          className={cn("max-h-[350px] overflow-y-scroll scrollbar-thin bg-white rounded-md py-2 shadow-md", className)}
+          className={cn("max-h-[350px] overflow-y-scroll scrollbar-thin bg-white rounded-[0.75rem] py-2 shadow-md", className)}
           sideOffset={10}>
           <DropdownMenu.Item
-            className="text-sm/4 font-semibold flex gap-2 items-center cursor-pointer select-none outline-none px-4 py-2 hover:bg-grey-light"
+            className="flex cursor-pointer select-none items-center gap-2 px-4 py-2 text-sm/4 font-semibold outline-none hover:bg-grey-light"
             onSelect={() => onSelect(undefined)}>
             <Globe size={24} />
             /none
           </DropdownMenu.Item>
           {menuItems.map((item, i) => (
             <DropdownMenu.Item
-              className="text-sm/4 font-semibold flex gap-2 items-center cursor-pointer select-none outline-none px-4 py-2 hover:bg-grey-light"
+              className="flex cursor-pointer select-none items-center gap-2 px-4 py-2 text-sm/4 font-semibold outline-none hover:bg-grey-light"
               onSelect={() => onSelect(i)}
               key={item.value}>
               <Image alt={item.label} src={item.icon} width={24} height={24} className='size-6 rounded-full' />

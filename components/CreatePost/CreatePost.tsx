@@ -1,44 +1,44 @@
-import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import useCreateDialog from '@/hooks/useCreateModal';
 import { useUi } from '@/providers/UiProvider';
-import Dropdown from './Dropdown';
+import { ChevronRight } from 'lucide-react';
 import PostDialog from './PostDialog';
+import PostInput from './PostInput';
 
 export default function CreatePost() {
   const { checkLoggedIn } = useUi();
-  const { handlePost, isPostDialogOpen, setIsPostDialogOpen, setEmbedUrl, embedUrl, setChannelId, channelId } =
-    useCreateDialog();
+  const dialog = useCreateDialog();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const handleClick = () => {
     if (!checkLoggedIn()) return;
-    if (embedUrl) {
-      handlePost();
-      return;
-    }
-    setIsPostDialogOpen(true);
+
+    if (dialog.embedUrl) dialog.handlePost();
+    else dialog.setIsPostDialogOpen(true);
   };
 
   return (
     <div className="flex items-center gap-2">
-      <form className="flex grow items-center justify-between rounded-[100px] bg-grey-light px-4 py-2" onSubmit={handleSubmit}>
-        <Input
-          value={embedUrl}
-          className="border-none bg-transparent text-shadowgreen placeholder:text-shadowgreen focus-visible:ring-0 focus-visible:ring-offset-0"
-          placeholder="Share SoundCloud, Sound or Spotify links here!"
-          onChange={(e) => setEmbedUrl(e.target.value)}
-        />
-        <Dropdown handleSelect={setChannelId} value={channelId} />
-      </form>
+      <PostInput
+        placeholder='What are you listening to?'
+        value={dialog.embedUrl}
+        onChange={(e) => dialog.setEmbedUrl(e.target.value)}
+        action={
+          <Button
+            className="flex h-auto items-center gap-2 rounded-full bg-gray-500 px-4 py-2 text-white"
+            onClick={handleClick}>
+            Cast
+            <ChevronRight size={16} />
+          </Button>
+        }
+      />
 
       <PostDialog
-        channelValue={channelId}
-        handleChannelSelect={setChannelId}
-        handleTextChange={(e: any) => setEmbedUrl(e.target.value)}
-        onPost={handlePost}
-        isOpen={isPostDialogOpen}
-        setIsOpen={setIsPostDialogOpen}
+        handleTextChange={(e: any) => dialog.setEmbedUrl(e.target.value)}
+        onPost={dialog.handlePost}
+        isOpen={dialog.isPostDialogOpen}
+        setIsOpen={dialog.setIsPostDialogOpen}
+        channelId={dialog.channelId}
+        setChannelId={dialog.setChannelId}
       />
     </div>
   );

@@ -16,7 +16,7 @@ const useCreateDialog = () => {
 
   const handlePost = () => {
     if (!isValidUrl(embedUrl)) {
-      toast({ description: `Sound / Soundcloud / Spotify only` });
+      toast({ description: `Sound / Soundcloud / Spotify / Youtube only` });
       return;
     }
     if (!signer?.signer_uuid) return;
