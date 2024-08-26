@@ -1,24 +1,22 @@
 import { AudioController } from '@/types/AudioController';
 import {
-  Dispatch,
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState
+  Dispatch, createContext,
+  useContext, useEffect,
+  useMemo, useState
 } from 'react';
 import { PlayerAction } from './PlayerProvider';
 
-const ZoraContext = createContext<HTMLAudioElement | null>(null);
+const defaultAudio = typeof Audio !== "undefined" ? new Audio : null;
+const AudioContext = createContext(defaultAudio);
 
-export function ZoraProvider({ children }: { children: React.ReactNode }) {
-  const [audio] = useState(typeof Audio !== "undefined" ? new Audio : null);
+export function HTMLAudioProvider({ children }: { children: React.ReactNode }) {
+  const [audio] = useState(defaultAudio);
 
-  return <ZoraContext.Provider value={audio}>{children}</ZoraContext.Provider>;
+  return <AudioContext.Provider value={audio}>{children}</AudioContext.Provider>;
 }
 
-export const useZoraProvider = (dispatch: Dispatch<PlayerAction>): AudioController => {
-  const audio = useContext(ZoraContext)!;
+export const useHTMLAudioProvider = (dispatch: Dispatch<PlayerAction>): AudioController => {
+  const audio = useContext(AudioContext)!;
 
   useEffect(() => {
     const ontimeupdate = () => {

@@ -68,9 +68,14 @@ export const useYoutube = (dispatch: Dispatch<PlayerAction>) => {
         return;
       }
       clearInterval(progressPoll);
+
+      const duration = player.getDuration() * 1000;
       if (event.data === api.PlayerState.CUED) {
         dispatch({ type: 'LOADED' });
-        dispatch({ type: 'SET_DURATION', payload: { duration: player.getDuration() * 1000 } });
+        dispatch({ type: 'SET_DURATION', payload: { duration } });
+      }
+      if (event.data === api.PlayerState.ENDED) {
+        dispatch({ type: 'PROGRESS', payload: { position: duration + 500 } });
       }
     });
   }, [player, dispatch, api]);

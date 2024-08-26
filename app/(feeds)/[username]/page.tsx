@@ -1,12 +1,20 @@
 'use client';
-import ProfileFeed from '@/components/Profile/ProfileFeed';
+import Loader from '@/components/Loader';
+import UserStakes from '@/components/UserStakes';
+import useUserStakes from '@/hooks/useUserStakes';
 import { useProfileProvider } from '@/providers/ProfileProvider';
-import { notFound } from 'next/navigation';
+import { notFound, useSearchParams } from 'next/navigation';
+import Feeds from '../feeds';
 
 export default function ProfileHome() {
-  const { error } = useProfileProvider();
-  if (error) {
-    notFound();
-  }
-  return <ProfileFeed />;
+  const { error, profile } = useProfileProvider();
+  if (error) notFound();
+
+  const tab = useSearchParams().get('tab');
+  const { loading, userStakes } = useUserStakes(tab, profile?.fid);
+
+  if (tab === 'stakes')
+    return loading ? <Loader /> : <UserStakes stakes={userStakes} />;
+
+  return <Feeds />;
 }

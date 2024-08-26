@@ -57,7 +57,7 @@ async function executeUserTip({
     );
   }
 
-  const [receiver, sender] = await getBulkUsersByFid([tipperFid, recipientFid]);
+  const [sender, receiver] = await getBulkUsersByFid([tipperFid, recipientFid]);
   const recipientWalletAddress = receiver?.verifications?.find(Boolean);
   if (!recipientWalletAddress) throw Error('Invalid recipient');
   const tipperWalletAddress = sender?.verifications?.find(Boolean);
@@ -86,7 +86,7 @@ async function executeUserTip({
 
   allUpdates.push(
     supabase.from('tips').update({ remaining_tip_allocation }).eq('fid', tipperFid),
-    supabase.from('posts').update({ points: totalTipOnPost }).eq('post_hash', postHash),
+    supabase.from('posts').update({ points: totalTipOnPost }).eq('post_hash', post.post_hash),
     supabase.from('tips_activity_log').insert({
       sender: tipperFid,
       receiver: recipientFid,

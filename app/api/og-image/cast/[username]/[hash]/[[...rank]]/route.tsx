@@ -9,7 +9,7 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { username: string; hash: string; rank: string } },
 ) {
-  const { username, hash, rank } = params;
+  const { hash, rank } = params;
 
   const {
     encodedUsername,
@@ -20,7 +20,7 @@ export async function GET(
     points,
     soraSemiBold,
     soraNormal,
-  }: any = await getDataForCastOg(username, hash);
+  }: any = await getDataForCastOg(hash);
 
   return new ImageResponse(
     (
@@ -49,6 +49,10 @@ export async function GET(
           weight: 600,
         },
       ],
+      headers: {
+        'Cache-Control': 'no-cache, no-store, max-age=0',
+        'CDN-Cache-Control': 'max-age=0',
+      },
     },
   );
 }

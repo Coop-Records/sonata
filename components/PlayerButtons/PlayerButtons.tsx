@@ -3,6 +3,7 @@ import { usePlayer } from '@/providers/audio/PlayerProvider';
 import { useFeedProvider } from '@/providers/FeedProvider';
 import { TrackMetadata } from '@/types/Track';
 import Image from 'next/image';
+import { useParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';
 
@@ -11,33 +12,28 @@ type PlayerButtonProps = {
 };
 
 const PlayerButtons = ({ metadata }: PlayerButtonProps) => {
+  const { hash, songLink } = useParams();
   const [player, dispatch] = usePlayer();
   const { handleNext, handlePrev } = useFeedProvider();
+  const id = metadata?.id;
+  const showActions = !(hash || songLink);
 
   useEffect(() => {
-    if (player.position !== 0 && player.position > player.duration - 1000) {
-      handleNext();
+    if (player.position !== 0 && player.position >= player.duration) {
+      if (showActions) handleNext(); else handlePause();
     }
   }, [player.position]);
 
-  const handlePlay = () => {
-    {
-      metadata && dispatch({ type: 'RESUME', payload: { id: metadata.id } });
-    }
-  };
-
-  const handlePause = () => {
-    {
-      metadata && dispatch({ type: 'PAUSE', payload: { id: metadata.id } });
-    }
-  };
+  const handlePlay = () => id && dispatch({ type: 'RESUME', payload: { id } });
+  const handlePause = () => id && dispatch({ type: 'PAUSE', payload: { id } });
 
   return (
     <div className="flex items-center">
-      <Button onClick={handlePrev} className="bg-white">
-        <Image src="/images/skip-back.png" width={22} height={22} alt="" />
-      </Button>
-
+      {showActions && (
+        <Button onClick={handlePrev} className="bg-white">
+          <Image src="/images/skip-back.png" width={22} height={22} alt="" />
+        </Button>
+      )}
       <Button
         onClick={player.playing ? handlePause : handlePlay}
         variant="ghost"
@@ -49,9 +45,11 @@ const PlayerButtons = ({ metadata }: PlayerButtonProps) => {
           <MdPlayCircle className="text-4xl" />
         )}
       </Button>
-      <Button onClick={handleNext} className="bg-white">
-        <Image src="/images/skip-forward.png" width={22} height={22} alt="" />
-      </Button>
+      {showActions && (
+        <Button onClick={handleNext} className="bg-white">
+          <Image src="/images/skip-forward.png" width={22} height={22} alt="" />
+        </Button>
+      )}
     </div>
   );
 };
