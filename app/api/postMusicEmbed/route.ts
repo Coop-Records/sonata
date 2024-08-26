@@ -5,9 +5,12 @@ import { NextRequest } from 'next/server';
 
 const getResponse = async (req: NextRequest) => {
   const body = await req.json();
-  const { signer_uuid, url } = body;
+  const { signer_uuid, url, channel_id } = body;
 
-  const data = await postMusicEmbed(signer_uuid, url);
+  if (!(signer_uuid && url)) return Response
+    .json({ message: 'signer_uuid & url required' }, { status: 400 });
+
+  const data = await postMusicEmbed(signer_uuid, url, channel_id);
 
   if (!data?.success || !data?.cast?.hash) {
     return Response.json({ message: 'casting failed' }, { status: 400 });

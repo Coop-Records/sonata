@@ -9,18 +9,19 @@ import { useState } from 'react';
 const useCreateDialog = () => {
   const { signer } = useNeynarProvider();
   const [embedUrl, setEmbedUrl] = useState<string>('');
+  const [channelId, setChannelId] = useState<string>();
   const [isPostDialogOpen, setIsPostDialogOpen] = useState<boolean>(false);
   const { toast } = useToast();
   const router = useRouter();
 
   const handlePost = () => {
     if (!isValidUrl(embedUrl)) {
-      toast({ description: `Sound / Soundcloud / Spotify only` });
+      toast({ description: `Sound / Soundcloud / Spotify / Youtube only` });
       return;
     }
     if (!signer?.signer_uuid) return;
 
-    callPostApi(signer.signer_uuid, embedUrl).then(
+    callPostApi(signer.signer_uuid, embedUrl, channelId).then(
       async res => {
         toast({ description: 'Posted!!!' });
         if (res.status == 307) {
@@ -40,7 +41,12 @@ const useCreateDialog = () => {
     setIsPostDialogOpen(true);
   };
 
-  return { handleClick, handlePost, isPostDialogOpen, setIsPostDialogOpen, embedUrl, setEmbedUrl };
+  return {
+    handleClick, handlePost,
+    isPostDialogOpen, setIsPostDialogOpen,
+    embedUrl, setEmbedUrl,
+    channelId, setChannelId
+  };
 };
 
 export default useCreateDialog;
