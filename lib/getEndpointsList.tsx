@@ -1,4 +1,5 @@
 export const endpoints = [
+  { apiType: 'GET', route: '/api/song/market?songLink=<Song Link>' },
   { apiType: 'GET', route: '/api/feed' },
   { apiType: 'GET', route: '/api/feed?feedType=Recent' },
   { apiType: 'GET', route: '/api/feed?feedType=Trending' },
