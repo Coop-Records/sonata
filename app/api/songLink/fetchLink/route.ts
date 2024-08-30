@@ -1,23 +1,13 @@
+import getSongLinks from '@/lib/songLink/getSongLinks';
 import { NextRequest, NextResponse } from 'next/server';
 
 const getResponse = async (req: NextRequest): Promise<NextResponse> => {
   const url = req.nextUrl;
   const trackUrl = url.searchParams.get('trackUrl');
   if (!trackUrl) return NextResponse.json({ errors: 'Missing trackUrl' }, { status: 422 });
-  const endpoint = `https://api.song.link/v1-alpha.1/links?url=${trackUrl}&userCountry=US&songIfSingle=true`;
-  const headers = {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-  } as any;
 
   try {
-    const response = await fetch(endpoint, {
-      method: 'GET',
-      headers: headers,
-    });
-
-    const data = await response.json();
-
+    const {response, data} = await getSongLinks(trackUrl) as any
     if (response.ok) {
       if (data.errors) {
         console.error('SongLink Errors:', data.errors);
