@@ -12,7 +12,6 @@ const fetchSongMarketForPost = async (post: any): Promise<any> => {
         },
       );
       const result = await response.json();
-      console.log('Song market creation result:', result);
       return result;
     } catch (error) {
       console.error('Error creating song market:', error);
