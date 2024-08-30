@@ -5,6 +5,7 @@ import getCastByHash from '@/lib/supabase/getPostByHash';
 import getChannelTipInfo from './getChannelTipInfo';
 import getBulkUsersByFid from '@/lib/neynar/getBulkUsersByFid';
 import getAllowance from '@/lib/supabase/getAllowance';
+import fetchSongMarketForPost from './fetchSongMarketForPost';
 
 async function executeUserTip({
   postHash,
@@ -97,6 +98,9 @@ async function executeUserTip({
   const updates = await Promise.all(allUpdates);
 
   updates.map(({ error }, id) => (error ? console.error({ error, id }) : undefined));
+
+  const {totalNotes} = await fetchSongMarketForPost(post);
+  console.log('totalNotes', totalNotes);
 
   return {
     tipRemaining: remaining_tip_allocation,
