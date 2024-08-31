@@ -1476,10 +1476,18 @@
     rxjs "^7.8.0"
     undici "^5.8.1"
 
-"@zoralabs/protocol-deployments@^0.1.13":
-  version "0.1.13"
-  resolved "https://registry.yarnpkg.com/@zoralabs/protocol-deployments/-/protocol-deployments-0.1.13.tgz#e64e46a4b339b43de4f413ae7b5244cc0c3d3caa"
-  integrity sha512-pAJ+rr7Q6RsulTl2EB+osUJMldGx+Sj/XfrkfOQsScL/RQlu+H6sL0sRVdaG3VLWVd9ua8szIRSeJ+RqwEZNyg==
+"@zoralabs/protocol-deployments@^0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@zoralabs/protocol-deployments/-/protocol-deployments-0.3.2.tgz#c8f8240f1f4b72d6a137aad1b9bc32125cc6dcc3"
+  integrity sha512-ZL8SN4qKIgo4+VugWzkP8RC7RO80dAPss93IMsW0Nv94l6w6CPURGDPCepCkYsEAdYU0aaIGb5CaAS/Frs5w6g==
+
+"@zoralabs/protocol-sdk@^0.9.6":
+  version "0.9.6"
+  resolved "https://registry.yarnpkg.com/@zoralabs/protocol-sdk/-/protocol-sdk-0.9.6.tgz#cad02869b981f8d95e82b1abe53b92109ceef354"
+  integrity sha512-uHEY5DIvGFT1vVnmpamCFRZRoKn1L4bVdjxt3V2IGCEE8KmSYz3SVgL1Po/mxsvWQ1WmyW16jk3tJ9L1XxDv1A==
+  dependencies:
+    "@zoralabs/protocol-deployments" "^0.3.2"
+    abitype "^1.0.2"
 
 abitype@0.9.8:
   version "0.9.8"
@@ -1495,6 +1503,11 @@ abitype@1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/abitype/-/abitype-1.0.5.tgz#29d0daa3eea867ca90f7e4123144c1d1270774b6"
   integrity sha512-YzDhti7cjlfaBhHutMaboYB21Ha3rXR9QTkNJFzYC4kC8YclaiwPBBBJY8ejFdu2wnJeZCVZSMlQJ7fi8S6hsw==
+
+abitype@^1.0.2:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/abitype/-/abitype-1.0.6.tgz#76410903e1d88e34f1362746e2d407513c38565b"
+  integrity sha512-MMSqYh4+C/aVqI2RQaWqbvI4Kxo5cQV40WQ4QFtDnNzCkqChm8MuENhElmynZlO0qUy/ObkEUaXtKqYnx1Kp3A==
 
 acorn-jsx@^5.3.2:
   version "5.3.2"
@@ -4980,6 +4993,21 @@ vaul@^0.9.1:
   dependencies:
     "@radix-ui/react-dialog" "^1.0.4"
 
+viem@2.x:
+  version "2.21.1"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.21.1.tgz#7d07e4302297d1b44b4c97b8fece3b6ebb73b1ef"
+  integrity sha512-nlIc2LLS6aqkngULS9UJ2Sg3nHKAgF9bbpDUwjUoAUBijd69mrCWPBXQ8jmbzcx12uZUfd9Nc//CHgSVZiMwyg==
+  dependencies:
+    "@adraffy/ens-normalize" "1.10.0"
+    "@noble/curves" "1.4.0"
+    "@noble/hashes" "1.4.0"
+    "@scure/bip32" "1.4.0"
+    "@scure/bip39" "1.3.0"
+    abitype "1.0.5"
+    isows "1.0.4"
+    webauthn-p256 "0.0.5"
+    ws "8.17.1"
+
 viem@^1.19.9:
   version "1.21.4"
   resolved "https://registry.npmjs.org/viem/-/viem-1.21.4.tgz"
@@ -5009,7 +5037,7 @@ viem@^2.7.10:
     webauthn-p256 "0.0.5"
     ws "8.17.1"
 
-viem@^2.7.12, viem@^2.7.14, viem@^2.9.17:
+viem@^2.7.12, viem@^2.7.14:
   version "2.9.17"
   resolved "https://registry.npmjs.org/viem/-/viem-2.9.17.tgz"
   integrity sha512-xMQ4JhgR1fPXQYagEeSsq9lmKXXooHP2gcnowb0eJRq3NTheyzpVBtMuH8DZnnWT4aeFepZktqSXlFul+Ou5Xg==
