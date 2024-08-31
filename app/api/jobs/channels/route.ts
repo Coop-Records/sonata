@@ -37,11 +37,10 @@ export async function GET(req: NextRequest) {
       if (STAKERS_AIRDROP) await distributeChannelStakerWeeklyAirdropAndTips(STAKERS_AIRDROP, channelId);
 
       if (TIPS) {
-        const [result] = await Promise.all([
+        await Promise.all([
           stack.track(eventTipChannel(channelId), { account, points: -TIPS }),
           supabase.from('channel_tips_activity_log').insert({ amount: -TIPS, channelId, channelAddress: account })
         ]);
-        if (!result.success) console.error(`${channelId} tip deduction failed`);
         console.log('distributeChannelTip', channelId, TIPS);
       }
 
