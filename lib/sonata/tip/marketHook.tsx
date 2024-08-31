@@ -11,8 +11,10 @@ const marketHook = async (post: SupabasePost) => {
   if (totalNotes < MINIMUM_NOTES_FOR_SONG_MARKET) return;
   const response = await createSongToken();
   if (!response) return;
-  const { newTokenId } = response.parameters.args;
-  await trackSetupNewToken(Number(newTokenId));
+  const { newTokenId } = response;
+  console.log('SWEETS TOKENID', newTokenId);
+
+  await trackSetupNewToken(Number(newTokenId), songLinks, post);
 };
 
 export default marketHook;
