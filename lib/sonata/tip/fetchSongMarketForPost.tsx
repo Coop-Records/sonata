@@ -1,7 +1,8 @@
 import { VERCEL_URL } from '@/lib/consts';
 import findValidEmbed from '@/lib/findValidEmbed';
+import { SupabasePost } from '@/types/SupabasePost';
 
-const fetchSongMarketForPost = async (post: any): Promise<any> => {
+const fetchSongMarketForPost = async (post: SupabasePost): Promise<any> => {
   const songLink = findValidEmbed(post)?.url;
   if (songLink) {
     try {

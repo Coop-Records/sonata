@@ -32,7 +32,8 @@
     "@vercel/analytics": "^1.2.2",
     "@vercel/og": "^0.6.2",
     "@xmtp/frames-validator": "^0.5.2",
-    "@zoralabs/protocol-deployments": "^0.1.13",
+    "@zoralabs/protocol-deployments": "^0.3.2",
+    "@zoralabs/protocol-sdk": "^0.9.6",
     "bufferutil": "^4.0.8",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
@@ -55,7 +56,7 @@
     "usehooks-ts": "^3.1.0",
     "utf-8-validate": "^6.0.3",
     "vaul": "^0.9.1",
-    "viem": "^2.9.17",
+    "viem": "2.x",
     "ws": "^8.16.0"
   },
   "devDependencies": {

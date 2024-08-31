@@ -1,7 +1,10 @@
 import { FeedType } from '@/types/Feed';
 import { FrameMetadataType } from '@coinbase/onchainkit';
 import { zeroAddress } from 'viem';
+import { base, baseSepolia } from 'viem/chains';
 
+export const IS_TEST = process.env.NEXT_PUBLIC_TEST === 'true';
+export const CHAIN = IS_TEST ? baseSepolia : base;
 export const REFFERAL_ADDRESS = '0x07089a002832CF8EAcE9f381651D6155dEB4DE0d';
 export const FEE = 0.1;
 export const TITLE = 'Sonata';
