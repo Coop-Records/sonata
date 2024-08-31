@@ -6,7 +6,6 @@ import { MINIMUM_NOTES_FOR_SONG_MARKET } from '@/lib/consts';
 const marketHook = async (post: SupabasePost) => {
   const { totalNotes } = await fetchSongMarketForPost(post);
   console.log('totalNotes', totalNotes);
-
   if (totalNotes < MINIMUM_NOTES_FOR_SONG_MARKET) return;
   await createSongToken();
 };
