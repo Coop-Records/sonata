@@ -19,6 +19,13 @@ const trackSetupNewToken = async (tokenId: number) => {
     if (!result?.success) {
       throw new Error('Failed to track SetupNewToken event');
     }
+
+    await stack.setIdentity(account, {
+      identity: 'El Día De Mi Suerte',
+      pfpUrl: 'https://i.ytimg.com/vi/mXZRB_al3fs/default.jpg',
+      externalUrl: 'https://sonata.tips/song/https://www.youtube.com/watch?v=mXZRB_al3fs',
+    });
+
     return result;
   } catch (error) {
     console.error('Error tracking SetupNewToken event:', error);
