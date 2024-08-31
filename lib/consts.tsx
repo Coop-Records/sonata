@@ -1,10 +1,8 @@
 import { FeedType } from '@/types/Feed';
 import { FrameMetadataType } from '@coinbase/onchainkit';
-import { zeroAddress } from 'viem';
+import { Address, zeroAddress } from 'viem';
 import { base, baseSepolia } from 'viem/chains';
 
-export const IS_TEST = process.env.NEXT_PUBLIC_TEST === 'true';
-export const CHAIN = IS_TEST ? baseSepolia : base;
 export const REFFERAL_ADDRESS = '0x07089a002832CF8EAcE9f381651D6155dEB4DE0d';
 export const FEE = 0.1;
 export const TITLE = 'Sonata';
@@ -134,3 +132,9 @@ export const ZORA_TO_VIEM = {
 } as const;
 
 export type ZoraChains = keyof typeof ZORA_TO_VIEM;
+
+// SONG MARKETS
+export const IS_TEST = process.env.NEXT_PUBLIC_TEST === 'true';
+export const CHAIN = IS_TEST ? baseSepolia : base;
+export const SONG_MARKET_CONTRACT = '0xc05c4d631a8e0fdaa2d2cea1dba3727351eeb73e' as Address;
+export const MINIMUM_NOTES_FOR_SONG_MARKET = 100000;
