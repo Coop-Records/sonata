@@ -19,7 +19,7 @@ async function distributeChannelStakerWeeklyAirdropAndTips(amount: number, chann
   });
   const results = await Promise.all(processUserRewards);
 
-  if (results.some(result => !result.success))
+  if (results.some(result => result && 'success' in result && !result.success))
     throw Error(`${channelId} distributeChannelStakerWeeklyAirdropAndTips failed`);
 
   return { success: true, stakersCount: data.length };
