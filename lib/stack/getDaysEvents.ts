@@ -1,15 +1,23 @@
 import dayjs from "dayjs";
 import { stack } from "./client";
-import { StackEvent } from "@/types/Stack";
+import { Event } from "@stackso/js-core";
 
 async function getDaysEvents(event: string, daysAgo = 7) {
   let offset: number | null = 0;
   const limit = 100;
   const today = new Date();
-  const events: StackEvent[] = [];
+  const events: Event[] = [];
 
   mainLoop: do {
-    const results: StackEvent[] = await stack.getEvents({ event, offset, limit });
+    const results: Event[] = await stack.getEvents({
+      query: stack.eventsQuery()
+        .where({
+          eventType: event,
+        })
+        .limit(limit)
+        .offset(offset)
+        .build()
+    });
 
     for (const event of results) {
       const days = dayjs(today).diff(event.timestamp, "days", true);
