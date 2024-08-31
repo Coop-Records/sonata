@@ -11,7 +11,7 @@ async function distributeChannelWeeklyAirdrop({ channelId, addresses }: ChannelS
     account = extractAddresses(result.linked_accounts)[0];
   }
   const result = await stack.track(eventAirdropChannel(channelId), { account, points });
-  if (!result.success) throw Error(`${channelId} distributeChannelWeeklyAirdrop failed`);
+  if (!result?.success) throw Error(`${channelId} distributeChannelWeeklyAirdrop failed`);
 
   return { account, success: true };
 }

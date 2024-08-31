@@ -1,6 +1,7 @@
 import getAllChannels from "@/lib/privy/getAllChannels";
 import { stack } from "@/lib/stack/client";
 import { eventAirdropChannel } from "@/lib/stack/events";
+import { getAddress } from "viem";
 
 async function getChannelWeeklyAirdropData() {
   const wallets = await getAllChannels();
@@ -13,8 +14,12 @@ async function getChannelWeeklyAirdropData() {
       const channelId = email.address.split('@')[0];
 
       prev.push(stack.getEvents({
-        event: eventAirdropChannel(channelId),
-        address: wallet.address
+        query: stack.eventsQuery()
+          .where({
+            eventType: eventAirdropChannel(channelId),
+            associatedAccount: getAddress(wallet.address),
+          })
+          .build()
       }).then(events => ({ channelId, weeklyDrops: events })));
     }
 

@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
           stack.track(eventTipChannel(channelId), { account, points: -TIPS }),
           supabase.from('channel_tips_activity_log').insert({ amount: -TIPS, channelId, channelAddress: account })
         ]);
-        if (!result.success) console.error(`${channelId} tip deduction failed`);
+        if (!result?.success) console.error(`${channelId} tip deduction failed`);
         console.log('distributeChannelTip', channelId, TIPS);
       }
 

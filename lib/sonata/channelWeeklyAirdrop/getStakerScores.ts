@@ -14,13 +14,12 @@ function getStakerScores(users: User[], channelId: string) {
     const points = await getStackPoints(user.verifications, event);
     if (points >= 0) return null;
     const events = await getDaysEvents(event);
-
     const multiplier = events.reduceRight((prev, event, index) => {
-      if (index === 0) prev.date = events[0].timestamp;
+      if (index === 0) prev.date = events[0].timestamp.toISOString();
       const days = dayjs(event.timestamp).diff(prev.date, 'days', false);
 
       if (days > 0) {
-        prev.date = event.timestamp;
+        prev.date = event.timestamp.toISOString();
         prev.score += prev.points * ((1 + DAILY_APR) ** days);
       }
 

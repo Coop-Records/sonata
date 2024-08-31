@@ -1158,10 +1158,10 @@
     fflate "^0.7.3"
     string.prototype.codepointat "^0.2.1"
 
-"@stackso/js-core@^0.2.30":
-  version "0.2.30"
-  resolved "https://registry.npmjs.org/@stackso/js-core/-/js-core-0.2.30.tgz"
-  integrity sha512-T8va1lge2VStgoPHE2T2mO6iTjp7Y/BHfE7kCj9BmMEfpwy0G7pJlTFgniuyVlB5XSgMi+3tPcZsMvz2Ss1ZfQ==
+"@stackso/js-core@^0.4.16":
+  version "0.4.16"
+  resolved "https://registry.yarnpkg.com/@stackso/js-core/-/js-core-0.4.16.tgz#99ff7b40b1b1b822e25a670ffabe0f6cd6150a3f"
+  integrity sha512-gx5kqUUx3OpM3+wPWOM9zr9906HFpdZf0CfIxj684D5uwbrV75GVbm/rZI89wzF/c7x2jj0Lv5TK4sHAMJeNww==
   dependencies:
     axios "^1.6.2"
     viem "^2.7.12"
