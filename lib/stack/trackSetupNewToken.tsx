@@ -8,8 +8,6 @@ const trackSetupNewToken = async (tokenId: number) => {
   try {
     const account = generateTokenAddress(tokenId);
     console.log('Token Address:', account);
-    const leaderboard = await stack.getLeaderboard();
-    console.log('Leaderboard:', leaderboard);
 
     const result = await stack.track('SetupNewToken', {
       account,
