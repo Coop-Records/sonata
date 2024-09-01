@@ -46,7 +46,7 @@ export async function GET(req: NextRequest) {
       ? {
           tokenId: matchedEvent.metadata.tokenId,
           chainId: matchedEvent.metadata.chainId,
-          address: matchedEvent.address,
+          address: matchedEvent.metadata.collection,
           songLinks: matchedEvent.metadata.songLinks,
         }
       : null;
