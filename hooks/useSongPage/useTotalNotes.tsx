@@ -13,6 +13,7 @@ const useTotalNotes = (songLink: string) => {
           throw new Error('Failed to fetch total notes');
         }
         const data = await response.json();
+        console.log('SWEETS DATA', data);
         setTotalNotes(data.totalNotes);
       } catch (error) {
         console.error('Error fetching total notes:', error);
