@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseClient } from '@/lib/supabase/client';
 import getSongLinks from '@/lib/songLink/getSongLinks';
 import formatSongLinks from '@/lib/songLink/formatSongLinks';
+import { songMarketStack } from '@/lib/stack/client';
 
 export async function GET(req: NextRequest) {
   const songLink = req.nextUrl.searchParams.get('songLink');
@@ -16,6 +17,18 @@ export async function GET(req: NextRequest) {
     const totalNotes = Array.isArray(posts)
       ? posts.reduce((prev, curr) => prev + (curr.points ?? 0), 0)
       : 0;
+
+    // Query for SetupNewToken events
+    const setupNewTokenEvents = await songMarketStack.getEvents({
+      query: songMarketStack
+        .eventsQuery()
+        .where({
+          eventType: 'SetupNewToken',
+        })
+        .limit(20)
+        .build(),
+    });
+    console.log('SWEETS setupNewTokenEvents', setupNewTokenEvents);
     return NextResponse.json({ totalNotes, songLinks });
   } catch (error) {
     console.error('Error in /api/song/market:', error);
