@@ -1,10 +1,9 @@
 import normalizeEmbedUrl from '../sonata/song/normalizeEmbedUrl';
+import { CONTENT_PLATFORMS } from '../consts';
 
 const filterStackSongLinks = (songLinks: string[]) => {
-  const allowedDomains = ['spotify.com', 'soundcloud.com', 'youtube.com', 'zora.co', 'sound.xyz'];
-
   return songLinks
-    .filter((link) => allowedDomains.some((domain) => link.includes(domain)))
+    .filter((link) => CONTENT_PLATFORMS.some((platform) => link.includes(platform.url)))
     .map((link) => normalizeEmbedUrl(link));
 };
 
