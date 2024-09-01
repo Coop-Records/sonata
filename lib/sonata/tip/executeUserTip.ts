@@ -99,7 +99,6 @@ async function executeUserTip({
 
   updates.map(({ error }, id) => (error ? console.error({ error, id }) : undefined));
 
-  console.log("SWEETS marketHook", post)
   await marketHook(post);
   
   return {
