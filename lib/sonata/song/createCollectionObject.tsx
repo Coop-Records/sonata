@@ -1,3 +1,4 @@
+import { REFFERAL_ADDRESS } from '@/lib/consts';
 import { SetupNewTokenEvent } from './findMatchingEvent';
 
 export interface CollectionObject {
