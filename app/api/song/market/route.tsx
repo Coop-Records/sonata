@@ -29,7 +29,31 @@ export async function GET(req: NextRequest) {
         .build(),
     });
     console.log('SWEETS setupNewTokenEvents', setupNewTokenEvents);
-    return NextResponse.json({ totalNotes, songLinks });
+    // Find the latest matching event
+    const matchedEvent = setupNewTokenEvents.find((event) => {
+      console.log('event.metadata.songLinks', event.metadata?.songLinks);
+      console.log('songLinks', songLinks);
+
+      return (
+        event.metadata?.songLinks &&
+        Array.isArray(event.metadata.songLinks) &&
+        event.metadata.songLinks.some((link: string) =>
+          songLinks.some((sl) => link.includes(sl.split('?')[0])),
+        )
+      );
+    });
+    const collection = matchedEvent
+      ? {
+          tokenId: matchedEvent.metadata.tokenId,
+          chainId: matchedEvent.metadata.chainId,
+          address: matchedEvent.address,
+          songLinks: matchedEvent.metadata.songLinks,
+        }
+      : null;
+
+    console.log('matchedEvent', matchedEvent);
+
+    return NextResponse.json({ totalNotes, songLinks, collection });
   } catch (error) {
     console.error('Error in /api/song/market:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
