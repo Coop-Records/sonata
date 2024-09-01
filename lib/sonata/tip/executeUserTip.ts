@@ -20,7 +20,6 @@ async function executeUserTip({
   if (amount <= 0) throw Error('Invalid amount');
 
   const post = await getCastByHash(postHash);
-  console.log("SWEETS post", post)
   const recipientFid = post?.authorFid || post?.author?.fid;
   if (tipperFid === recipientFid) throw Error('Can not tip yourself');
   const channelId = post.channelId;
@@ -41,21 +40,12 @@ async function executeUserTip({
   const allUpdates = [];
 
   const channelTip = await getChannelTipInfo(channelId, amount);
-  console.log("SWEETS CHANNEL TIP", channelTip)
   if (channelTip) {
     const { channelAddress, channelId } = channelTip;
-    console.log("SWEETS receiverAmount", receiverAmount)
-
     receiverAmount -= channelAmount = channelTip.channelAmount;
-  console.log("SWEETS channelId", channelId)
-  console.log("SWEETS channelAddress", channelAddress)
-  console.log("SWEETS channelAmount", channelAmount)
-
     stacks.push(
       stack.track(eventTipChannel(channelId), { account: channelAddress, points: channelAmount }),
     );
-
-
     allUpdates.push(
       supabase.from('channel_tips_activity_log').insert({
         sender: tipperFid,
@@ -66,9 +56,6 @@ async function executeUserTip({
       }),
     );
   }
-  console.log("SWEETS getBulkUsersByFid", tipperFid)
-  console.log("SWEETS recipientFid", recipientFid)
-
   const [sender, receiver] = await getBulkUsersByFid([tipperFid, recipientFid]);
   const recipientWalletAddress = receiver?.verifications?.find(Boolean);
   if (!recipientWalletAddress) throw Error('Invalid recipient');
