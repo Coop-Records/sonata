@@ -3,7 +3,6 @@ import { supabaseClient } from '@/lib/supabase/client';
 import getSongLinks from '@/lib/songLink/getSongLinks';
 import formatSongLinks from '@/lib/songLink/formatSongLinks';
 import getSongMarketCollection from '@/lib/sonata/song/getSongMarketCollection';
-import { songMarketStack } from '@/lib/stack/client';
 
 export async function GET(req: NextRequest) {
   const songLink = req.nextUrl.searchParams.get('songLink');
@@ -20,8 +19,6 @@ export async function GET(req: NextRequest) {
       : 0;
 
     const collection = await getSongMarketCollection(songLinks);
-    const leaderboard = await songMarketStack.getLeaderboard();
-    console.log('SWEETS leaderboard', leaderboard.pointSystem);
 
     return NextResponse.json({ totalNotes, songLinks, collection });
   } catch (error) {
