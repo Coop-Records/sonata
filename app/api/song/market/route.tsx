@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseClient } from '@/lib/supabase/client';
 import getSongLinks from '@/lib/songLink/getSongLinks';
 import formatSongLinks from '@/lib/songLink/formatSongLinks';
-import { songMarketStack } from '@/lib/stack/client';
-import { REFFERAL_ADDRESS } from '@/lib/consts';
+import getSongMarketCollection from '@/lib/sonata/song/getSongMarketCollection';
 
 export async function GET(req: NextRequest) {
   const songLink = req.nextUrl.searchParams.get('songLink');
@@ -19,40 +18,7 @@ export async function GET(req: NextRequest) {
       ? posts.reduce((prev, curr) => prev + (curr.points ?? 0), 0)
       : 0;
 
-    // Query for SetupNewToken events
-    const setupNewTokenEvents = await songMarketStack.getEvents({
-      query: songMarketStack
-        .eventsQuery()
-        .where({
-          eventType: 'SetupNewToken',
-        })
-        .limit(20)
-        .build(),
-    });
-    console.log('SWEETS setupNewTokenEvents', setupNewTokenEvents);
-    // Find the latest matching event
-    const matchedEvent = setupNewTokenEvents.find((event) => {
-      console.log('event.metadata.songLinks', event.metadata?.songLinks);
-      console.log('songLinks', songLinks);
-
-      return (
-        event.metadata?.songLinks &&
-        Array.isArray(event.metadata.songLinks) &&
-        event.metadata.songLinks.some((link: string) =>
-          songLinks.some((sl) => link.includes(sl.split('?')[0])),
-        )
-      );
-    });
-    const collection = matchedEvent
-      ? {
-          tokenId: matchedEvent.metadata.tokenId,
-          chainId: matchedEvent.metadata.chainId,
-          address: matchedEvent.metadata.collection,
-          zora: `https://testnet.zora.co/collect/bsep:${matchedEvent.metadata.collection}/${matchedEvent.metadata.tokenId}?referrer=${REFFERAL_ADDRESS}`,
-        }
-      : null;
-
-    console.log('matchedEvent', matchedEvent);
+    const collection = await getSongMarketCollection(songLinks);
 
     return NextResponse.json({ totalNotes, songLinks, collection });
   } catch (error) {
