@@ -16,8 +16,6 @@ async function trackSetupNewToken(account: string, tokenId: number, songLinks: s
     collection: SONG_MARKET_CONTRACT,
   };
   const result = await songMarketStack.track('SetupNewToken', { account, points: 1, metadata });
-  const leaderboard = await songMarketStack.getLeaderboard();
-  console.log('SWEETS leaderboard', leaderboard);
   if (!result?.success) {
     throw new Error('Failed to track SetupNewToken event');
   }
