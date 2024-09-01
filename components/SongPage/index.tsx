@@ -39,7 +39,10 @@ export default function SongPage() {
           {collection?.zora ? (
             <Button onClick={() => window.open(collection?.zora, '_blank')}>Buy on Zora</Button>
           ) : (
-            <Progress value={progressPercentage} className="w-full" />
+            <Progress
+              value={progressPercentage > 100 ? 100 : progressPercentage}
+              className="w-full"
+            />
           )}
         </div>
         <Separator className="h-px bg-muted" />

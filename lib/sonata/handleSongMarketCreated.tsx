@@ -3,13 +3,20 @@ import { generateTokenAddress } from '../generateTokenAddress';
 import fetchMetadata from '../fetchMetadata';
 import setSongMarketIdentity from '../stack/setSongMarketIdentity';
 import trackSetupNewToken from '../stack/trackSetupNewToken';
+import normalizeEmbedUrl from './song/normalizeEmbedUrl';
 
 async function handleSongMarketCreated(tokenId: number, songLinks: string[], post: SupabasePost) {
   const account = generateTokenAddress(tokenId);
   try {
     const trackResult = await trackSetupNewToken(account, tokenId, songLinks);
+    console.log('SWEETS trackResult', trackResult);
+
     const songMetadata = await fetchMetadata(songLinks[0], post);
-    await setSongMarketIdentity(account, songMetadata, songLinks[0]);
+    console.log('SWEETS account', account);
+    console.log('SWEETS songMetadata', songMetadata);
+    const songLink = normalizeEmbedUrl(songLinks[0]);
+    console.log('SWEETS songLink', songLink);
+    await setSongMarketIdentity(account, songMetadata, songLink);
     return trackResult;
   } catch (error) {
     console.error('Error tracking SetupNewToken event:', error);

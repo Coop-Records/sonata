@@ -4,12 +4,16 @@ import { isNil } from 'lodash';
 import { NextRequest, NextResponse } from 'next/server';
 
 const getResponse = async (req: NextRequest): Promise<NextResponse> => {
+  console.log("SWEETS starting /api/tip")
+
   const { postHash, signer_uuid, tipAmount } = await req.json();
 
   if (isNil(signer_uuid)) throw Error('Invalid Signer');
 
   const { status, fid: tipperFid } = await verifySignerUUID(signer_uuid);
   if (!status) throw Error('Invalid Signer UUID');
+
+  console.log("SWEETS starting executeUserTip")
 
   const result = await executeUserTip({
     postHash,
