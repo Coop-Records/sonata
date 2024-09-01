@@ -13,7 +13,6 @@ const useSongMarket = (songLink: string) => {
           throw new Error('Failed to fetch total notes');
         }
         const data = await response.json();
-        console.log('SWEETS data', data);
         setSongMarket(data);
       } catch (error) {
         console.error('Error fetching total notes:', error);
