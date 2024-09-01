@@ -8,7 +8,6 @@ async function handleSongMarketCreated(tokenId: number, songLinks: string[], pos
   const account = generateTokenAddress(tokenId);
   try {
     const trackResult = await trackSetupNewToken(account, tokenId, songLinks);
-    console.log('SWEETS TRACK INCLUDES METADATA???', trackResult);
     const songMetadata = await fetchMetadata(songLinks[0], post);
     await setSongMarketIdentity(account, songMetadata, songLinks[0]);
     return trackResult;
