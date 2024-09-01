@@ -2,7 +2,7 @@ import getAllPostsForSongLink from "@/lib/sonata/song/getAllPostsForSongLink";
 import { SupabasePost } from "@/types/SupabasePost";
 import { useEffect, useState } from "react";
 
-export default function useSongCasts(songLink: string, alternatives: Record<string, string>) {
+export default function useSongCasts(songLink: string) {
   const [posts, setPosts] = useState<SupabasePost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -11,7 +11,7 @@ export default function useSongCasts(songLink: string, alternatives: Record<stri
       if (Array.isArray(response.posts)) setPosts(response.posts);
       setLoading(false);
     })
-  }, [alternatives, songLink]);
+  }, [songLink]);
 
   return { posts, loading };
 }
