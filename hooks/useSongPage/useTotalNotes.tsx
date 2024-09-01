@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
-const useTotalNotes = (songLink: string) => {
-  const [totalNotes, setTotalNotes] = useState<number | undefined>(undefined);
+const useSongMarket = (songLink: string) => {
+  const [songMarket, setSongMarket] = useState<any>({});
 
   useEffect(() => {
     if (!songLink) return;
@@ -13,17 +13,18 @@ const useTotalNotes = (songLink: string) => {
           throw new Error('Failed to fetch total notes');
         }
         const data = await response.json();
-        setTotalNotes(data.totalNotes);
+        console.log('SWEETS data', data);
+        setSongMarket(data);
       } catch (error) {
         console.error('Error fetching total notes:', error);
-        setTotalNotes(undefined);
+        setSongMarket({});
       }
     };
 
     fetchTotalNotes();
   }, [songLink]);
 
-  return { totalNotes };
+  return { ...songMarket };
 };
 
-export default useTotalNotes;
+export default useSongMarket;

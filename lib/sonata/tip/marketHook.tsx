@@ -7,8 +7,11 @@ import handleSongMarketCreated from '../handleSongMarketCreated';
 const marketHook = async (post: SupabasePost) => {
   const { totalNotes, songLinks } = await fetchSongMarketForPost(post);
   const precheckApproved = totalNotes >= MINIMUM_NOTES_FOR_SONG_MARKET;
+  console.log('SWEETS precheckApproved', precheckApproved);
   if (!precheckApproved) return;
   const response = await createSongToken();
+  console.log('SWEETS response', response);
+
   if (!response) return;
   const { newTokenId } = response;
   await handleSongMarketCreated(Number(newTokenId), songLinks, post);

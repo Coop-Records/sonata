@@ -11,10 +11,10 @@ import { Progress } from '../ui/progress';
 import { MINIMUM_NOTES_FOR_SONG_MARKET } from '@/lib/consts';
 
 export default function SongPage() {
-  const { metadata, totalNotes } = useSongPageProvider();
+  const { metadata, totalNotes, collection } = useSongPageProvider();
   const { copy } = useCopyToClipboard();
   const handleShare = () => copy(window.location.href);
-
+  console.log('SWEETS collection', collection);
   const progressPercentage = totalNotes ? (totalNotes / MINIMUM_NOTES_FOR_SONG_MARKET) * 100 : 0;
   const formattedPercentage = progressPercentage.toFixed(2);
 
@@ -37,7 +37,11 @@ export default function SongPage() {
               <ShareIcon />
             </Button>
           </div>
-          <Progress value={progressPercentage} className="w-full" />
+          {collection?.zora ? (
+            <Button onClick={() => window.open(collection?.zora, '_blank')}>Buy on Zora</Button>
+          ) : (
+            <Progress value={progressPercentage} className="w-full" />
+          )}
         </div>
         <Separator className="h-px bg-muted" />
         <SongAlternatives />

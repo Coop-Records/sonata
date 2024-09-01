@@ -9,7 +9,7 @@ export default function useSongPage() {
   const { alternatives } = useSongAlternatives(songLink);
   const { metadata } = useSongMetadata(songLink);
   const { posts, loading } = useSongCasts(songLink, alternatives);
-  const {totalNotes} = useTotalNotes(songLink);
+  const songMarket = useTotalNotes(songLink);
 
-  return { songLink, totalNotes, metadata, alternatives, posts, postsLoading: loading };
+  return { songLink, ...songMarket, metadata, alternatives, posts, postsLoading: loading };
 }
