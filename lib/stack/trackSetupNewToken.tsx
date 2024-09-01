@@ -10,9 +10,12 @@ interface TrackMetadata {
 }
 
 async function trackSetupNewToken(account: string, tokenId: number, songLinks: string[]) {
+  const allowedDomains = ['spotify.com', 'soundcloud.com', 'youtube.com', 'zora.co', 'sound.xyz'];
   const metadata: TrackMetadata = {
     tokenId,
-    songLinks: [normalizeEmbedUrl(songLinks[0])],
+    songLinks: songLinks
+      .filter((link) => allowedDomains.some((domain) => link.includes(domain)))
+      .map((link) => normalizeEmbedUrl(link)),
     chainId: CHAIN.id,
     collection: SONG_MARKET_CONTRACT,
   };
