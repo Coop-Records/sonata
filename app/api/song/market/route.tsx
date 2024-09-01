@@ -3,6 +3,7 @@ import { supabaseClient } from '@/lib/supabase/client';
 import getSongLinks from '@/lib/songLink/getSongLinks';
 import formatSongLinks from '@/lib/songLink/formatSongLinks';
 import { songMarketStack } from '@/lib/stack/client';
+import { REFFERAL_ADDRESS } from '@/lib/consts';
 
 export async function GET(req: NextRequest) {
   const songLink = req.nextUrl.searchParams.get('songLink');
@@ -47,7 +48,7 @@ export async function GET(req: NextRequest) {
           tokenId: matchedEvent.metadata.tokenId,
           chainId: matchedEvent.metadata.chainId,
           address: matchedEvent.metadata.collection,
-          songLinks: matchedEvent.metadata.songLinks,
+          zora: `https://testnet.zora.co/collect/bsep:${matchedEvent.metadata.collection}/${matchedEvent.metadata.tokenId}?referrer=${REFFERAL_ADDRESS}`,
         }
       : null;
 
