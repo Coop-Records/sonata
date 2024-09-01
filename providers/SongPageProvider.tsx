@@ -7,24 +7,21 @@ const SongContext = createContext<{
   metadata?: TrackMetadata;
   alternatives: { [key: string]: string };
   totalNotes?: number;
+  collection?: any;
   songLink: string;
   posts: SupabasePost[];
   postsLoading: boolean;
 }>({
   alternatives: {},
   songLink: '',
-  posts:[],
-  postsLoading: true
+  posts: [],
+  postsLoading: true,
 });
 
 const SongPageProvider = ({ children }: any) => {
   const data = useSongPage();
 
-  return (
-    <SongContext.Provider value={data}>
-      {children}
-    </SongContext.Provider>
-  );
+  return <SongContext.Provider value={data}>{children}</SongContext.Provider>;
 };
 
 export const useSongPageProvider = () => {

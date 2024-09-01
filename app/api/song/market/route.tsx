@@ -10,9 +10,8 @@ export async function GET(req: NextRequest) {
   try {
     const { data: alternatives } = await getSongLinks(songLink);
     const songLinks = formatSongLinks(songLink, alternatives);
-    const embeds = Object.values(alternatives).concat(songLink);
     const { data: posts } = await supabaseClient
-      .rpc('get_posts_by_embeds', { search_embeds: embeds })
+      .rpc('get_posts_by_embeds', { search_embeds: songLinks })
       .select('*');
     const totalNotes = Array.isArray(posts)
       ? posts.reduce((prev, curr) => prev + (curr.points ?? 0), 0)
