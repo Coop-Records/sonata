@@ -14,7 +14,6 @@ export default function SongPage() {
   const { metadata, totalNotes, collection } = useSongPageProvider();
   const { copy } = useCopyToClipboard();
   const handleShare = () => copy(window.location.href);
-  console.log('SWEETS collection', collection);
   const progressPercentage = totalNotes ? (totalNotes / MINIMUM_NOTES_FOR_SONG_MARKET) * 100 : 0;
   const formattedPercentage = progressPercentage.toFixed(2);
 
