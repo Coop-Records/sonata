@@ -9,13 +9,8 @@ async function handleSongMarketCreated(tokenId: number, songLinks: string[], pos
   const account = generateTokenAddress(tokenId);
   try {
     const trackResult = await trackSetupNewToken(account, tokenId, songLinks);
-    console.log('SWEETS trackResult', trackResult);
-
     const songMetadata = await fetchMetadata(songLinks[0], post);
-    console.log('SWEETS account', account);
-    console.log('SWEETS songMetadata', songMetadata);
     const songLink = normalizeEmbedUrl(songLinks[0]);
-    console.log('SWEETS songLink', songLink);
     await setSongMarketIdentity(account, songMetadata, songLink);
     return trackResult;
   } catch (error) {
