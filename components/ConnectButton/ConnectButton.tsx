@@ -10,7 +10,7 @@ const ConnectButton = () => {
     return <Button disabled>Connected</Button>;
   }
 
-  return <Button onClick={login}>Connect Wallet</Button>;
+  return <Button onClick={login}>Connect</Button>;
 };
 
 export default ConnectButton;
