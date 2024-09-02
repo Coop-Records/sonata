@@ -13,7 +13,6 @@ export async function GET(req: NextRequest) {
     const metadata = await fetchMetadata(songLink, { id: 1 } as SupabasePost);
     const external_url = `${VERCEL_URL}/song/${encodeURIComponent(songLink)}`;
     const animation_url = `https://test-sonata.vercel.app/song/${encodeURIComponent(songLink)}`;
-    console.log('SWEETS animation_url', animation_url);
     const response = {
       external_url,
       name: metadata.trackName,
