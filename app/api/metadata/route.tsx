@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
       external_url,
       name: metadata.trackName,
       image: metadata.artworkUrl,
-      description: `Listen on sonata: ${external_url}`,
+      description: `Listen to ${metadata.trackName} ${metadata.artistName && `by ${metadata.artistName} `}on Sonata - ${external_url}`,
     };
     return NextResponse.json(response, { status: 200 });
   } catch (error) {
