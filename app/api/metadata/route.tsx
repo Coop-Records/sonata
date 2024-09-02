@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fetchMetadata from '@/lib/fetchMetadata';
 import { SupabasePost } from '@/types/SupabasePost';
+import { VERCEL_URL } from '@/lib/consts';
 
 export async function GET(req: NextRequest) {
   const songLink = req.nextUrl.searchParams.get('songLink');
@@ -10,10 +11,19 @@ export async function GET(req: NextRequest) {
 
   try {
     const metadata = await fetchMetadata(songLink, { id: 1 } as SupabasePost);
+    const external_url = `${VERCEL_URL}/song/${encodeURIComponent(songLink)}`;
+    const animation_url = `https://test-sonata.vercel.app/song/${encodeURIComponent(songLink)}`;
+    console.log('SWEETS animation_url', animation_url);
     const response = {
-      external_url: `https://sonata.tips/song/${encodeURIComponent(songLink)}`,
+      external_url,
       name: metadata.trackName,
       image: metadata.artworkUrl,
+      description: `song market on sonata: ${external_url}`,
+      animation_url,
+      content: {
+        mime: 'application/zip',
+        uri: animation_url,
+      },
     };
     return NextResponse.json(response, { status: 200 });
   } catch (error) {
