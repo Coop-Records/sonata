@@ -4,9 +4,10 @@ import NeynarProvider from '@/providers/NeynarProvider';
 import AudioProvider from './audio';
 import TipProvider from './TipProvider';
 import UiProvider from './UiProvider';
+import PrivyProvider from './PrivyProvider';
 
-export default function Providers({ children }: { children: React.ReactNode }) {
-  return (
+const Providers = ({ children }: { children: React.ReactNode }) => (
+  <PrivyProvider>
     <NeynarProvider>
       <TipProvider>
         <UiProvider>
@@ -14,5 +15,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         </UiProvider>
       </TipProvider>
     </NeynarProvider>
-  );
-}
+  </PrivyProvider>
+);
+
+export default Providers;

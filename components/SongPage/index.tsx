@@ -9,6 +9,8 @@ import SongPostsFeed from './SongPostsFeed';
 import TotalNotes from './TotalNotes';
 import { Progress } from '../ui/progress';
 import { MINIMUM_NOTES_FOR_SONG_MARKET } from '@/lib/consts';
+import ConnectButton from '../ConnectButton';
+import CollectButton from './CollectButton';
 
 export default function SongPage() {
   const { metadata, totalNotes, collection } = useSongPageProvider();
@@ -37,7 +39,7 @@ export default function SongPage() {
             </Button>
           </div>
           {collection?.zora ? (
-            <Button onClick={() => window.open(collection?.zora, '_blank')}>Buy on Zora</Button>
+            <CollectButton />
           ) : (
             <Progress
               value={progressPercentage > 100 ? 100 : progressPercentage}
@@ -45,6 +47,7 @@ export default function SongPage() {
             />
           )}
         </div>
+
         <Separator className="h-px bg-muted" />
         <SongAlternatives />
         <SongPostsFeed />
