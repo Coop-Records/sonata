@@ -2,13 +2,14 @@ import { CHAIN, SONG_MARKET_CONTRACT } from '../consts';
 import getSongMarketWalletClient from '../viem/getSongMarketWalletClient';
 import creatorClient from './getCreatorClient';
 
-const createSongToken = async () => {
+const createSongToken = async (songLink: string) => {
   const walletClient = getSongMarketWalletClient(CHAIN);
   const account = walletClient.account;
+  const tokenMetadataURI = `https://test-sonata.vercel.app/api/metadata?songLink=${songLink}`;
   const zoraResponse = await creatorClient.create1155OnExistingContract({
     contractAddress: SONG_MARKET_CONTRACT,
     token: {
-      tokenMetadataURI: 'ipfs://bafkreibmzv3cry5ojsltgfk7tgvy7xawr3tmnqv3kvmn543zyddia3o35e',
+      tokenMetadataURI,
     },
     account: account.address,
   });
