@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { Address } from 'viem';
 import trackEndpoint from '@/lib/stack/trackEndpoint';
-import getZoraProfileScore from '@/lib/zora/getZoraProfileScore';
+import getZoraProfileScore from '@/lib/zora/score/getZoraProfileScore';
 import { EVENT_ZORA_SCORE } from '@/lib/consts';
 import getZoraScore from '@/lib/zora/score/getZoraScore';
 

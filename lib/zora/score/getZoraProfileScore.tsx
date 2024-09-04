@@ -1,5 +1,5 @@
 import { Address } from 'viem';
-import getZoraProfile from './getZoraProfile';
+import getZoraProfile from '../getZoraProfile';
 
 async function getZoraProfileScore(address: Address) {
   const profile = await getZoraProfile(address);
