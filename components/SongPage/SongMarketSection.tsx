@@ -13,13 +13,16 @@ const SongMarketSection = () => {
   const handleShare = () => copy(window.location.href);
   const progressPercentage = totalNotes ? (totalNotes / MINIMUM_NOTES_FOR_SONG_MARKET) * 100 : 0;
   const formattedPercentage = progressPercentage.toFixed(2);
+  const tokenCreated = Boolean(collection?.zora);
 
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <TotalNotes />
-          <span className="text-sm text-muted-foreground">({formattedPercentage}%)</span>
+          {!tokenCreated && (
+            <span className="text-sm text-muted-foreground">({formattedPercentage}%)</span>
+          )}
         </div>
         <Button
           className="h-auto w-9 p-0 text-muted-foreground outline-none hover:bg-transparent"
@@ -30,7 +33,7 @@ const SongMarketSection = () => {
           <ShareIcon />
         </Button>
       </div>
-      {collection?.zora ? (
+      {tokenCreated ? (
         <CollectButton />
       ) : (
         <Progress value={progressPercentage > 100 ? 100 : progressPercentage} className="w-full" />
