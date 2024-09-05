@@ -1,4 +1,4 @@
-import { CHAIN, SONG_MARKET_CONTRACT } from '../consts';
+import { CHAIN, MIN_MINTS_FOR_SONG_MARKET, SONG_MARKET_CONTRACT, ZORA_MINT_FEE } from '../consts';
 import getSongMarketWalletClient from '../viem/getSongMarketWalletClient';
 import creatorClient from './getCreatorClient';
 
@@ -10,6 +10,13 @@ const createSongToken = async (songLink: string) => {
     contractAddress: SONG_MARKET_CONTRACT,
     token: {
       tokenMetadataURI,
+      salesConfig: {
+        type: 'timed',
+        marketCountdown: BigInt(24 * 60 * 60),
+        erc20Name: 'sonata song market',
+        erc20Symbol: 'SONG',
+        minimumMarketEth: MIN_MINTS_FOR_SONG_MARKET * ZORA_MINT_FEE,
+      },
     },
     account: account.address,
   });
