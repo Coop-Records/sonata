@@ -24,7 +24,7 @@ async function executeChannelStake(channelId: string, amount: number, fid: numbe
     stack.track(event, { account: channelAddress, points: amount }),
     stack.track(userEvent, { account: userAddress, points: -amount }),
   ]);
-  results.forEach(res => { if (!res.success) throw Error(res.status) });
+  results.forEach(res => { if (!res?.success) throw Error(res?.status) });
 
   const { error } = await supabase
     .from('stake_activity_log')

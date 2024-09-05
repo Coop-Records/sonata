@@ -1,18 +1,16 @@
-import { User } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { cn, timeFromNow } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 import { SupabasePost } from '@/types/SupabasePost';
+import { SupabaseUser } from '@/types/SupabaseUser';
 
 export default function UserDetails({
   user,
-  hasHypersub,
   className,
   createdAt,
 }: {
-  user: User;
-  hasHypersub?: boolean;
+  user: SupabaseUser;
   className?: string;
   createdAt?: SupabasePost['created_at'];
 }) {
@@ -33,7 +31,7 @@ export default function UserDetails({
           >
             {user.display_name}
           </a>
-          {hasHypersub && <Image src="/images/hypersub.png" width={20} height={20} alt="" />}
+          {user.power_badge && <Image src="/images/hypersub.png" width={20} height={20} alt="" />}
           {createdAt && (
             <span className="text-sm leading-none text-muted-foreground">
               {'• '}

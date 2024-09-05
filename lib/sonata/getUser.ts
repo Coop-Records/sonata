@@ -1,3 +1,5 @@
+import { SupabaseUser } from '@/types/SupabaseUser';
+
 export default async function getUser(fid: number) {
   const options = {
     method: 'GET',
@@ -11,7 +13,7 @@ export default async function getUser(fid: number) {
 
     const response = await fetch(`/api/neynar/getUser?${queryParams}`, options);
     const { users } = await response.json();
-    return users[0];
+    return users[0] as SupabaseUser;
   } catch (error) {
     console.error(error);
     return { error };
