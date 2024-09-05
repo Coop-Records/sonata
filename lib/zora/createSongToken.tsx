@@ -1,4 +1,10 @@
-import { CHAIN, MIN_MINTS_FOR_SONG_MARKET, SONG_MARKET_CONTRACT, ZORA_MINT_FEE } from '../consts';
+import {
+  CHAIN,
+  MIN_MINTS_FOR_SONG_MARKET,
+  REFFERAL_ADDRESS,
+  SONG_MARKET_CONTRACT,
+  ZORA_MINT_FEE,
+} from '../consts';
 import getSongMarketWalletClient from '../viem/getSongMarketWalletClient';
 import creatorClient from './getCreatorClient';
 
@@ -9,6 +15,7 @@ const createSongToken = async (songLink: string) => {
   const zoraResponse = await creatorClient.create1155OnExistingContract({
     contractAddress: SONG_MARKET_CONTRACT,
     token: {
+      createReferral: REFFERAL_ADDRESS,
       tokenMetadataURI,
       salesConfig: {
         type: 'timed',
