@@ -1,9 +1,7 @@
-import { StackEventAPI } from "@/types/Stack";
-
 const API_URL = 'https://track.stack.so/event';
 const API_KEY = process.env.STACK_API_KEY as string;
 
-export async function bulkTrack(events: StackEventAPI[]) {
+export async function bulkTrack(events: any[]) {
   if (!Array.isArray(events) || events.length === 0) {
     throw new Error('Events array is required and must not be empty.');
   }
@@ -15,7 +13,7 @@ export async function bulkTrack(events: StackEventAPI[]) {
   const response = await fetch(API_URL, {
     method: 'POST',
     headers: headers,
-    body: JSON.stringify(events.slice(0, 100)),
+    body: JSON.stringify(events.slice(0, 99)),
   });
 
   if (!response.ok) {
