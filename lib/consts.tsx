@@ -19,7 +19,7 @@ export const MIN_BLOCK_RANGE = 1000n;
 export const MAX_RECORDS_THRESHOLD = 5000;
 
 // stack event names
-export const EVENT_SETUP_NEW_TOKEN = 'zora+tokens+setup_new_token';
+export const EVENT_SETUP_NEW_TOKEN = 'SetupNewToken';
 export const EVENT_ZORA_TOKENS = 'zora+tokens';
 export const EVENT_ZORA_REWARDS = 'zora+rewards';
 export const EVENT_ZORA_SCORE = 'zora+score';
