@@ -1,6 +1,7 @@
 import { createContext, useContext, useCallback, useState, useEffect } from 'react';
-import { Signer, User } from '@neynar/nodejs-sdk/build/neynar-api/v2';
+import { Signer } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import getUser from '@/lib/sonata/getUser';
+import { SupabaseUser } from '@/types/SupabaseUser';
 
 const clientId = process.env.NEXT_PUBLIC_NEYNAR_CLIENT_ID;
 const loginUrl = 'https://app.neynar.com/login';
@@ -11,7 +12,7 @@ type NeynarContextType = {
   signer: Signer | null;
   signIn: () => void;
   signOut: () => void;
-  user?: User;
+  user?: SupabaseUser;
   loading: boolean;
 };
 
@@ -35,7 +36,7 @@ const NeynarProvider = ({ children }: any) => {
     return null;
   });
 
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<SupabaseUser>();
   const [loading, setLoading] = useState(true);
 
   const signIn = useCallback(() => {
@@ -71,6 +72,9 @@ const NeynarProvider = ({ children }: any) => {
         setUser(undefined);
       } else {
         const user = await getUser(signer.fid);
+        if ('error' in user) {
+          throw new Error('Error fetching user');
+        }
         setUser(user);
       }
       setLoading(false);

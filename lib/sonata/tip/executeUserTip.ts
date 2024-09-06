@@ -78,8 +78,8 @@ async function executeUserTip({
     }),
   );
 
-  const [{ success }] = await Promise.all(stacks);
-  if (!success) throw Error('Could not stack');
+  const [result] = await Promise.all(stacks);
+  if (!result?.success) throw Error('Could not stack');
 
   const remaining_tip_allocation = balanceData.remaining_tip_allocation - amount;
   const totalTipOnPost = receiverAmount + (post.points ?? 0);
