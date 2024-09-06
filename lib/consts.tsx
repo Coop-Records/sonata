@@ -30,3 +30,6 @@ export const EVENT_ZORA_REWARDS_FIRST_MINTER = 'zora+rewards+first';
 
 // zora score
 export const FOLLOWERS_PERFECT = 55555;
+
+// stack point systems
+export const TOKEN_INDEXER_POINT_ID = 3340
