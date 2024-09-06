@@ -1,7 +1,6 @@
 import { EVENT_SETUP_NEW_TOKEN, EVENT_ZORA_TOKENS } from '@/lib/consts';
 import { stack } from '@/lib/stack/client';
 import trackEndpoint from '@/lib/stack/trackEndpoint';
-import { SetupNewTokenStackEvent } from '@/types/Stack';
 import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest) {
@@ -12,7 +11,7 @@ export async function GET(req: NextRequest) {
     const creatorAddress = req.nextUrl.searchParams.get('creatorAddress');
     if (creatorAddress) query.address = creatorAddress;
 
-    const tokens: SetupNewTokenStackEvent[] = await stack.getEvents(query);
+    const tokens= await stack.getEvents(query);
 
     return Response.json({ tokens })
   } catch (error) {
