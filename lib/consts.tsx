@@ -33,3 +33,4 @@ export const FOLLOWERS_PERFECT = 55555;
 
 // stack point systems
 export const TOKEN_INDEXER_POINT_ID = 3340
+export const REWARDS_DEPOSIT_POINT_SYSTEM_ID = 3078

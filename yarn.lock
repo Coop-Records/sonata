@@ -714,10 +714,10 @@
     "@noble/hashes" "~1.4.0"
     "@scure/base" "~1.1.6"
 
-"@stackso/js-core@^0.3.4":
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/@stackso/js-core/-/js-core-0.3.4.tgz#a4d0f99edfbb12a0df628423b8bcf346c74a69b9"
-  integrity sha512-vwQtElnUUc2oNnHRAm+CUU3AnKvmL1D5Tmrp97stqqbvWwlhz+XOJ8K2Pjwzx+JNx5HoXTmNIIaLHBzrT9F9XA==
+"@stackso/js-core@^0.4.16":
+  version "0.4.16"
+  resolved "https://registry.yarnpkg.com/@stackso/js-core/-/js-core-0.4.16.tgz#99ff7b40b1b1b822e25a670ffabe0f6cd6150a3f"
+  integrity sha512-gx5kqUUx3OpM3+wPWOM9zr9906HFpdZf0CfIxj684D5uwbrV75GVbm/rZI89wzF/c7x2jj0Lv5TK4sHAMJeNww==
   dependencies:
     axios "^1.6.2"
     viem "^2.7.12"
