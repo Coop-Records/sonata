@@ -1,7 +1,9 @@
 import { EVENT_SETUP_NEW_TOKEN, EVENT_ZORA_TOKENS } from '@/lib/consts';
-import { stack } from '@/lib/stack/client';
+import { createStackClient } from '@/lib/stack/client';
 import trackEndpoint from '@/lib/stack/trackEndpoint';
 import { NextRequest } from 'next/server';
+
+const stack = createStackClient(3340)
 
 export async function GET(req: NextRequest) {
   try {
