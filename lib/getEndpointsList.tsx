@@ -1,6 +1,12 @@
-import { DEMO_ADDRESS, EVENT_ZORA_REWARDS, EVENT_ZORA_SCORE } from './consts';
+import { DEMO_ADDRESS, EVENT_ZORA_REWARDS, EVENT_ZORA_SCORE, EVENT_ZORA_TOKENS } from './consts';
 
 export const endpoints = [
+  {
+    apiType: 'GET',
+    route: '/api/zora/tokens?creatorAddress={ADDRESS}',
+    stack: EVENT_ZORA_TOKENS,
+    demo: `/api/zora/tokens?creatorAddress=${DEMO_ADDRESS}`,
+  },
   {
     apiType: 'GET',
     route: '/api/zora/collections?creator={ADDRESS}',

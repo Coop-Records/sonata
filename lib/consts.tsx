@@ -19,7 +19,7 @@ export const MIN_BLOCK_RANGE = 1000n;
 export const MAX_RECORDS_THRESHOLD = 5000;
 
 // stack event names
-export const EVENT_SETUP_NEW_TOKEN = 'SetupNewToken';
+export const EVENT_UPDATED_PERMISSIONS = 'UpdatedPermissions';
 export const EVENT_ZORA_TOKENS = 'zora+tokens';
 export const EVENT_ZORA_REWARDS = 'zora+rewards';
 export const EVENT_ZORA_SCORE = 'zora+score';
@@ -32,5 +32,5 @@ export const EVENT_ZORA_REWARDS_FIRST_MINTER = 'zora+rewards+first';
 export const FOLLOWERS_PERFECT = 55555;
 
 // stack point systems
-export const TOKEN_INDEXER_POINT_ID = 3340
-export const REWARDS_DEPOSIT_POINT_SYSTEM_ID = 3078
+export const TOKEN_INDEXER_POINT_ID = 3372;
+export const REWARDS_DEPOSIT_POINT_SYSTEM_ID = 3078;

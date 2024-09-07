@@ -9,7 +9,8 @@ const useEndpointScores = () => {
     const init = async () => {
       try {
         const endpointsWithScores = await getEndpointsWithScores();
-        setEndpoints(endpointsWithScores);
+        const sortedEndpoints = endpointsWithScores.sort((a, b) => b.score - a.score);
+        setEndpoints(sortedEndpoints);
       } catch (error) {
         console.error('Error fetching leaderboard data:', error);
       }
