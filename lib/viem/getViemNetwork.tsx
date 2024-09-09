@@ -8,31 +8,31 @@ import {
   baseSepolia,
   optimismSepolia,
   base,
-} from "viem/chains"
+} from 'viem/chains';
 
 const getViemNetwork = (chainId: number) => {
   switch (chainId) {
     case mainnet.id:
-      return mainnet
+      return mainnet;
     case polygon.id:
-      return polygon
+      return polygon;
     case base.id:
-      return base
+      return base;
     case optimism.id:
-      return optimism
+      return optimism;
     case goerli.id:
-      return goerli
+      return goerli;
     case polygonMumbai.id:
-      return polygonMumbai
+      return polygonMumbai;
     case sepolia.id:
-      return sepolia
+      return sepolia;
     case baseSepolia.id:
-      return baseSepolia
+      return baseSepolia;
     case optimismSepolia.id:
-      return optimismSepolia
+      return optimismSepolia;
     default:
-      return mainnet
+      return mainnet;
   }
-}
+};
 
-export default getViemNetwork
+export default getViemNetwork;

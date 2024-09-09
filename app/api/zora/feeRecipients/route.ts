@@ -1,9 +1,9 @@
-import { ZORA_FEE_RECIPIENTS } from "@/lib/consts";
-import trackEndpoint from "@/lib/stack/trackEndpoint";
+import { ZORA_FEE_RECIPIENTS } from '@/lib/consts';
+import trackEndpoint from '@/lib/stack/trackEndpoint';
 
 export async function GET() {
   try {
-    await trackEndpoint("zora+feeRecipients")
+    await trackEndpoint('zora+feeRecipients');
     return Response.json({ message: 'success', data: ZORA_FEE_RECIPIENTS });
   } catch (error) {
     console.error('Error:', error);

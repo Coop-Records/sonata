@@ -1,14 +1,14 @@
 type ConvertBigInt<T> = T extends bigint
   ? string
   : T extends Array<infer U>
-  ? Array<ConvertBigInt<U>>
-  : T extends object
-  ? { [K in keyof T]: ConvertBigInt<T[K]> }
-  : T;
+    ? Array<ConvertBigInt<U>>
+    : T extends object
+      ? { [K in keyof T]: ConvertBigInt<T[K]> }
+      : T;
 
 function formatBigIntValues<T>(input: T): ConvertBigInt<T> {
   if (typeof input === 'bigint') {
-    return input.toString()  as ConvertBigInt<T>;
+    return input.toString() as ConvertBigInt<T>;
   } else if (Array.isArray(input)) {
     return input.map(formatBigIntValues) as ConvertBigInt<T>;
   } else if (typeof input === 'object' && input !== null) {
@@ -17,6 +17,6 @@ function formatBigIntValues<T>(input: T): ConvertBigInt<T> {
     ) as ConvertBigInt<T>;
   }
   return input as ConvertBigInt<T>;
-};
+}
 
 export default formatBigIntValues;

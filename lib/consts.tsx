@@ -21,6 +21,7 @@ export const MAX_RECORDS_THRESHOLD = 5000;
 // stack event names
 export const EVENT_UPDATED_PERMISSIONS = 'UpdatedPermissions';
 export const EVENT_ZORA_TOKENS = 'zora+tokens';
+export const EVENT_ZORA_COLLECTIONS = 'zora+collections';
 export const EVENT_ZORA_REWARDS = 'zora+rewards';
 export const EVENT_ZORA_SCORE = 'zora+score';
 export const EVENT_ZORA_REWARDS_CREATOR = 'zora+rewards+creator';
