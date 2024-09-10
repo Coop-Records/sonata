@@ -7,7 +7,7 @@ import {
 } from '@/lib/consts';
 import { createStackClient } from '@/lib/stack/client';
 import { TOKEN_EVENT_TYPE } from '@/types/token';
-import { base } from 'viem/chains';
+import getChainId from '@/lib/getChainId';
 
 const stack = createStackClient(TOKEN_INDEXER_POINT_ID);
 
@@ -34,11 +34,16 @@ export async function GET(request: NextRequest) {
       return acc;
     }, {});
 
-    const collections = Object.values(aggregatedData).map((collection: any) => ({
-      tokensCreated: collection.points,
-      address: collection.metadata.collection,
-      chainId: base.id,
-    }));
+    const collections = Object.values(aggregatedData).map((collection: any) => {
+      const chain = collection.metadata.uniqueId.split('-')[0];
+      const chainId = getChainId(chain);
+
+      return {
+        tokensCreated: collection.points,
+        address: collection.metadata.collection,
+        chainId,
+      };
+    });
     return Response.json({ collections });
   } catch (error) {
     console.error('Error:', error);
