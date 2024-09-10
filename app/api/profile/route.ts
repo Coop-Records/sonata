@@ -1,5 +1,6 @@
 import { EVENT_ZORA_PROFILE } from "@/lib/consts";
 import trackEndpoint from "@/lib/stack/trackEndpoint";
+import verfiySubscription from "@/lib/verfiySubscription";
 import getZoraProfile from "@/lib/zora/getZoraProfile";
 import { NextRequest } from "next/server";
 
@@ -11,8 +12,9 @@ export async function GET(req: NextRequest) {
     if (!address) throw Error("address is required")
 
     const zoraProfile = await getZoraProfile(address)
+    const isPro = await verfiySubscription(address as any)
 
-    return Response.json({ message: 'success', zoraProfile });
+    return Response.json({ message: 'success', zoraProfile, isPro });
   } catch (e) {
     const message = (e as { message?: string })?.message ?? "failed"
     return Response.json({ message }, { status: 400 });
