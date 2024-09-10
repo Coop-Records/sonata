@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
     }, {});
 
     const collections = Object.values(aggregatedData).map((collection: any) => ({
-      tokenCreated: collection.points,
+      tokensCreated: collection.points,
       address: collection.metadata.collection,
       chainId: base.id,
     }));
