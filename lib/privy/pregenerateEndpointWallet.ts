@@ -1,5 +1,5 @@
-import getIdentifier from "./getIdentifier";
-import privyClient from "./privyClient";
+import getIdentifier from './getIdentifier';
+import privyClient from './privyClient';
 
 function pregenerateEndpointWallet(endpoint: string) {
   const body = {
@@ -7,12 +7,12 @@ function pregenerateEndpointWallet(endpoint: string) {
     linked_accounts: [
       {
         address: getIdentifier(endpoint),
-        type: "email"
-      }
+        type: 'email',
+      },
     ],
   };
 
   return privyClient('/users', { body });
-};
+}
 
 export default pregenerateEndpointWallet;
