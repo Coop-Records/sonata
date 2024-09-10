@@ -4,7 +4,7 @@ import { SetupNewTokenEvent } from './findMatchingEvent';
 export interface CollectionObject {
   tokenId: string;
   chainId: number;
-  address: string;
+  address: `0x${string}`;
   zora: string;
 }
 

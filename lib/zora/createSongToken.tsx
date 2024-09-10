@@ -6,7 +6,7 @@ import {
   ZORA_MINT_FEE,
 } from '../consts';
 import getSongMarketWalletClient from '../viem/getSongMarketWalletClient';
-import creatorClient from './getCreatorClient';
+import creatorClient from './creatorClient';
 
 const createSongToken = async (songLink: string) => {
   try {

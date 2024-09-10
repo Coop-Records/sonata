@@ -4,7 +4,7 @@ export interface SetupNewTokenEvent {
   metadata: {
     tokenId: string;
     chainId: number;
-    collection: string;
+    collection: `0x${string}`;
     songLinks: string[];
   };
 }
