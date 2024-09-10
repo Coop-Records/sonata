@@ -27,6 +27,7 @@ export const EVENT_ZORA_REWARDS_CREATOR = 'zora+rewards+creator';
 export const EVENT_ZORA_REWARDS_MINT_REFERRAL = 'zora+rewards+mint';
 export const EVENT_ZORA_REWARDS_CREATE_REFERRAL = 'zora+rewards+create';
 export const EVENT_ZORA_REWARDS_FIRST_MINTER = 'zora+rewards+first';
+export const EVENT_ZORA_PROFILE = 'zora+profile';
 
 // zora score
 export const FOLLOWERS_PERFECT = 55555;
