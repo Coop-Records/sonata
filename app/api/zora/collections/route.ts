@@ -7,6 +7,7 @@ import {
 } from '@/lib/consts';
 import { createStackClient } from '@/lib/stack/client';
 import { TOKEN_EVENT_TYPE } from '@/types/token';
+import { base } from 'viem/chains';
 
 const stack = createStackClient(TOKEN_INDEXER_POINT_ID);
 
@@ -34,8 +35,9 @@ export async function GET(request: NextRequest) {
     }, {});
 
     const collections = Object.values(aggregatedData).map((collection: any) => ({
-      points: collection.points,
-      collection: collection.metadata.collection,
+      tokenCreated: collection.points,
+      address: collection.metadata.collection,
+      chainId: base.id,
     }));
     return Response.json({ collections });
   } catch (error) {
