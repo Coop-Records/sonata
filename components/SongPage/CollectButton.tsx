@@ -12,13 +12,8 @@ const CollectButton = () => {
 
   const isLoading = feeLoading || minting;
 
-  const handleCollect = async () => {
-    const hash = await mint();
-    console.log(hash);
-  };
-
   return (
-    <Button onClick={handleCollect} disabled={isLoading}>
+    <Button onClick={mint} disabled={isLoading}>
       {isLoading ? (
         <Loader />
       ) : (

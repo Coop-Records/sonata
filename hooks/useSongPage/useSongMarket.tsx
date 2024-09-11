@@ -23,8 +23,7 @@ const useSongMarket = (songLink: string) => {
     fetchTotalNotes();
   }, [songLink]);
 
-  const { totalNotes, songLinks, collection } = songMarket;
-  return { totalNotes, songLinks, collection };
+  return { ...songMarket };
 };
 
 export default useSongMarket;

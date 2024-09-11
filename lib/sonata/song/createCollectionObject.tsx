@@ -1,10 +1,11 @@
 import { REFFERAL_ADDRESS } from '@/lib/consts';
 import { SetupNewTokenEvent } from './findMatchingEvent';
+import { Address } from 'viem';
 
 export interface CollectionObject {
   tokenId: string;
   chainId: number;
-  address: `0x${string}`;
+  address: Address;
   zora: string;
 }
 
