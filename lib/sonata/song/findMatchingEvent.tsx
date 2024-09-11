@@ -1,10 +1,11 @@
 import setupNewTokenEventMatchesSong from '@/lib/stack/setupNewTokenEventMatchesSong';
+import { Address } from 'viem';
 
 export interface SetupNewTokenEvent {
   metadata: {
     tokenId: string;
     chainId: number;
-    collection: string;
+    collection: Address;
     songLinks: string[];
   };
 }
