@@ -10,7 +10,6 @@ import { PopoverTrigger } from '@radix-ui/react-popover';
 import { useUi } from '@/providers/UiProvider';
 import { Badge } from './ui/badge';
 import { Input } from './ui/input';
-import { ArrowBigUp } from 'lucide-react';
 import { useStakeProvider } from '@/providers/StakeProvider';
 import Icon from './ui/icon';
 
