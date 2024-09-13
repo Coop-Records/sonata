@@ -38,8 +38,6 @@ export default function MediaPlayer({ metadata }: MediaPlayerProps) {
   const channel = menuItems.filter((item) => item.value === metadata?.channelId);
   const channelLogo = channel.length > 0 && channel[0].icon;
 
-  console.log('ZIAD', channelLogo);
-
   return (
     <div
       data-type={metadata?.type}
