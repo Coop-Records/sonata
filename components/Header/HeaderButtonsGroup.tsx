@@ -21,7 +21,7 @@ const HeaderButtonsGroup = ({ className = '' }) => {
       )}
       {userLoading ? (
         <Skeleton className="size-9 rounded-full" />
-      ) : !user ? (
+      ) : user ? (
         <div className="flex items-center gap-2">
           {airdropBalance > 0 && <ClaimAirdropButton />}
           <UserMenu />
