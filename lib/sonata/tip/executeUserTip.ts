@@ -1,7 +1,7 @@
 import { stack } from '@/lib/stack/client';
 import { eventTipCashback, eventTipChannel, eventTipRecipient } from '@/lib/stack/events';
 import supabase from '@/lib/supabase/serverClient';
-import getCastByHash from '@/lib/supabase/getPostByHash';
+import getCastByHash from '@/lib/supabase/getCastByHash';
 import getChannelTipInfo from './getChannelTipInfo';
 import getBulkUsersByFid from '@/lib/neynar/getBulkUsersByFid';
 import getAllowance from '@/lib/supabase/getAllowance';
@@ -98,6 +98,11 @@ async function executeUserTip({
 
   updates.map(({ error }, id) => (error ? console.error({ error, id }) : undefined));
 
+<<<<<<< Updated upstream
+=======
+  await marketHook(post);
+
+>>>>>>> Stashed changes
   return {
     tipRemaining: remaining_tip_allocation,
     totalTipOnPost,

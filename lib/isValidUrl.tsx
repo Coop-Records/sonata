@@ -5,6 +5,7 @@ const isValidUrl = (url: string) => {
   else if (url.includes('sound.xyz') && !url.match(/(\/post\/)|(\/playlist\/)/)) valid = true;
   else if (url.match(/^https:\/\/www.youtube.com\/watch\?v=(.+)$/)) valid = true;
   else if (url.match(/^https:\/\/youtu\.be\/(.+)$/)) valid = true;
+  else if (url?.includes('ipfs://')) valid = true;
 
   return valid;
 };

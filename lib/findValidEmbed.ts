@@ -19,7 +19,7 @@ export default function findValidEmbed(cast: SupabasePost) {
   const validEmbed = embeds.find((embed) => {
     if (!embed || !('url' in embed)) return false;
     const url = embed.url;
-    return isValidUrl(url) || url?.includes('ipfs://');
+    return isValidUrl(url);
   });
 
   return validEmbed as EmbedUrl;

@@ -1,7 +1,7 @@
 import { SupabasePost } from '@/types/SupabasePost';
 import { supabaseClient } from './client';
 
-export default async function getPostByHash(hash: string) {
+export default async function getCastByHash(hash: string) {
   const { data, error } = await supabaseClient
     .from('posts')
     .select('*')
