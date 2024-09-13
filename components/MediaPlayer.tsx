@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils';
 import { usePlayer } from '@/providers/audio/PlayerProvider';
 import { TrackMetadata } from '@/types/Track';
 import Image from 'next/image';
-import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';
+import { MdPauseCircle } from 'react-icons/md';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import Icon from './ui/icon';
