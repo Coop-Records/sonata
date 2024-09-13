@@ -1,6 +1,10 @@
 import createPost from './createPost';
 
-export default async function postMusicEmbed(signer_uuid: string, url: string, channel_id?: string) {
+export default async function postMusicEmbed(
+  signer_uuid: string,
+  url: string,
+  channel_id?: string,
+) {
   try {
     const body: any = {
       signer_uuid,

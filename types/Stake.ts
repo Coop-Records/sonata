@@ -3,4 +3,4 @@ export interface UserStake {
   description: string;
   points: number;
   icon: string;
-};
+}

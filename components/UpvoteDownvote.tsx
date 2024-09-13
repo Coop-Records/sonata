@@ -54,7 +54,8 @@ export default function UpvoteDownvote({
     setTotal(response?.totalTipOnPost ?? total);
     setCustomTip('');
     setChannelDetails(({ balance, ...rest }) => ({
-      ...rest, balance: balance + (response?.channelAmount ?? 0)
+      ...rest,
+      balance: balance + (response?.channelAmount ?? 0),
     }));
   };
 

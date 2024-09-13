@@ -1,6 +1,6 @@
-import { Address } from "viem";
-import supabaseServerClient from "../supabase/serverClient";
-import checkAddressBalances from "./checkAddressBalances";
+import { Address } from 'viem';
+import supabaseServerClient from '../supabase/serverClient';
+import checkAddressBalances from './checkAddressBalances';
 
 async function processTipsBatch(fids: { fid: number; wallet_address: Address }[]) {
   const allBalances = await checkAddressBalances(fids.map((fid) => fid.wallet_address));

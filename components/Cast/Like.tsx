@@ -16,11 +16,7 @@ export default function Like({ cast }: { cast: SupabasePost }) {
   const { checkLoggedIn } = useUi();
 
   useEffect(() => {
-    if (signer?.fid) hasUserLikedCast(
-      cast.post_hash,
-      signer.fid
-    ).then(liked => setLiked(liked));
-
+    if (signer?.fid) hasUserLikedCast(cast.post_hash, signer.fid).then((liked) => setLiked(liked));
   }, [cast.post_hash, signer?.fid]);
 
   const handleClick = async () => {

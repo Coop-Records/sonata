@@ -1,4 +1,4 @@
-import { REFFERAL_ADDRESS } from "./consts";
+import { REFFERAL_ADDRESS } from './consts';
 
 export default function findCollectibleUrlInCastEmbeds(embeds: string[]) {
   try {
@@ -15,5 +15,7 @@ export default function findCollectibleUrlInCastEmbeds(embeds: string[]) {
         return link.toString();
       }
     }
-  } catch { return; }
+  } catch {
+    return;
+  }
 }

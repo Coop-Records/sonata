@@ -1,4 +1,4 @@
-import { User } from "@neynar/nodejs-sdk/build/neynar-api/v2";
+import { User } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 
 async function getBulkUsersByFid(fids: number[] | string) {
   const options = {

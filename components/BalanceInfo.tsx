@@ -14,24 +14,24 @@ export default function BalanceInfo() {
 
       <div className="flex flex-wrap gap-[3px]">
         <span>Daily Allowance:</span>
-        <span className='flex whitespace-nowrap'>
+        <span className="flex whitespace-nowrap">
           {`${!isNil(remainingTipAllocation) ? formatBigInt(BigInt(remainingTipAllocation)) : '-'}${dailyTipAllowance ? ` / ${formatBigInt(BigInt(dailyTipAllowance))}` : ''}`}
-          <Image src="/images/notes.png" className='size-5' width={20} height={20} alt="" />
+          <Image src="/images/notes.png" className="size-5" width={20} height={20} alt="" />
         </span>
       </div>
       <div className="flex flex-wrap gap-[3px]">
         <span>Total Balance:</span>
-        <span className='flex whitespace-nowrap'>
+        <span className="flex whitespace-nowrap">
           {`${!isNil(balance) ? formatBigInt(BigInt(balance)) : '-'}`}
-          <Image src="/images/notes.png" className='size-5' width={20} height={20} alt="" />
+          <Image src="/images/notes.png" className="size-5" width={20} height={20} alt="" />
         </span>
       </div>
       {airdropBalance > 0 ? (
         <div className="flex flex-wrap gap-[3px]">
           <span>Airdrop:</span>
-          <span className='flex whitespace-nowrap'>
+          <span className="flex whitespace-nowrap">
             {`${!isNil(airdropBalance) ? formatBigInt(BigInt(airdropBalance)) : '-'}`}
-            <Image src="/images/notes.png" className='size-5' width={20} height={20} alt="" />
+            <Image src="/images/notes.png" className="size-5" width={20} height={20} alt="" />
           </span>
         </div>
       ) : (

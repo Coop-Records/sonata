@@ -18,7 +18,7 @@ export default function MobileMenu({ isSingleCast = false }: { isSingleCast?: bo
         <Image src="/images/notes.png" width={20} height={20} alt="" />
         <span className="font-semibold">Sonata</span>
       </Link>
-      <HomeButton className='mb-2 md:hidden' />
+      <HomeButton className="mb-2 md:hidden" />
       {user && <UserDetails className="mb-8 md:hidden" user={user} />}
       <BalanceInfo />
       <a

@@ -98,7 +98,7 @@ async function executeUserTip({
   updates.map(({ error }, id) => (error ? console.error({ error, id }) : undefined));
 
   await marketHook(post);
-  
+
   return {
     tipRemaining: remaining_tip_allocation,
     totalTipOnPost,

@@ -1,11 +1,11 @@
-import { ChannelStats } from "@/types/ChannelStats";
-import extractAddresses from "../privy/extractAddresses";
-import getAllChannels from "../privy/getAllChannels";
-import getPrivyIdentifier from "../privy/getIdentifier";
-import getStackPoints from "../sonata/getStackPoints";
-import { eventStakeChannel, eventTipChannel } from "../stack/events";
-import getChannelAuthorsAndPosts from "./getChannelAuthorsAndPosts";
-import supabase from "./serverClient";
+import { ChannelStats } from '@/types/ChannelStats';
+import extractAddresses from '../privy/extractAddresses';
+import getAllChannels from '../privy/getAllChannels';
+import getPrivyIdentifier from '../privy/getIdentifier';
+import getStackPoints from '../sonata/getStackPoints';
+import { eventStakeChannel, eventTipChannel } from '../stack/events';
+import getChannelAuthorsAndPosts from './getChannelAuthorsAndPosts';
+import supabase from './serverClient';
 
 async function getChannelStats(filterChannels = false) {
   const entries = await getChannelAuthorsAndPosts(filterChannels);
@@ -13,9 +13,15 @@ async function getChannelStats(filterChannels = false) {
   const wallets = await getAllChannels();
 
   const channels = await Promise.all(
-    Object.keys(entries).map(async channelId => {
-      let balance = 0, staked = 0, stakers = 0;
-      const wallet = wallets.find(wallet => wallet.linked_accounts?.some(account => account.address === getPrivyIdentifier(channelId)));
+    Object.keys(entries).map(async (channelId) => {
+      let balance = 0,
+        staked = 0,
+        stakers = 0;
+      const wallet = wallets.find((wallet) =>
+        wallet.linked_accounts?.some(
+          (account) => account.address === getPrivyIdentifier(channelId),
+        ),
+      );
       const addresses = wallet ? extractAddresses(wallet.linked_accounts) : [];
 
       if (addresses.length) {
@@ -27,7 +33,9 @@ async function getChannelStats(filterChannels = false) {
           .eq('channelId', channelId)
           .single();
 
-        if (!error) { stakers = data.stakers }
+        if (!error) {
+          stakers = data.stakers;
+        }
       }
 
       const channel: ChannelStats = {
@@ -35,11 +43,13 @@ async function getChannelStats(filterChannels = false) {
         numberOfCurators: entries[channelId].uniqueAuthors.size,
         numberOfSongs: entries[channelId].uniquePosts.size,
         totalNotes: balance + staked,
-        balance, staked,
-        stakers, addresses,
+        balance,
+        staked,
+        stakers,
+        addresses,
       };
       return channel;
-    })
+    }),
   );
 
   return channels;

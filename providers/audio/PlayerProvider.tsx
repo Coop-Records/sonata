@@ -1,7 +1,11 @@
 import {
-  Dispatch, ReactNode,
-  createContext, useContext,
-  useEffect, useMemo, useReducer,
+  Dispatch,
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
 } from 'react';
 import { useSoundcloud } from './SoundcloudProvider';
 import { useSpotify } from './SpotifyProvider';
@@ -21,48 +25,48 @@ type Player = {
 
 export type PlayerAction =
   | {
-    type: 'PLAY';
-    payload: {
-      metadata: TrackMetadata;
-      feedId: number;
+      type: 'PLAY';
+      payload: {
+        metadata: TrackMetadata;
+        feedId: number;
+      };
+    }
+  | {
+      type: 'RESUME';
+      payload: {
+        id: string;
+      };
+    }
+  | {
+      type: 'PAUSE';
+      payload: {
+        id: string;
+      };
+    }
+  | {
+      type: 'SEEK';
+      payload: {
+        position: number;
+      };
+    }
+  | {
+      type: 'SEEKED';
+    }
+  | {
+      type: 'PROGRESS';
+      payload: {
+        position: number;
+      };
+    }
+  | {
+      type: 'SET_DURATION';
+      payload: {
+        duration: number;
+      };
+    }
+  | {
+      type: 'LOADED';
     };
-  }
-  | {
-    type: 'RESUME';
-    payload: {
-      id: string;
-    };
-  }
-  | {
-    type: 'PAUSE';
-    payload: {
-      id: string;
-    };
-  }
-  | {
-    type: 'SEEK';
-    payload: {
-      position: number;
-    };
-  }
-  | {
-    type: 'SEEKED';
-  }
-  | {
-    type: 'PROGRESS';
-    payload: {
-      position: number;
-    };
-  }
-  | {
-    type: 'SET_DURATION';
-    payload: {
-      duration: number;
-    };
-  }
-  | {
-    type: 'LOADED';
-  };
 
 const initialState: Player = {
   playing: false,
@@ -73,7 +77,7 @@ const initialState: Player = {
   feedId: -1,
 };
 
-const PlayerContext = createContext<[Player, Dispatch<PlayerAction>]>([initialState, () => { }]);
+const PlayerContext = createContext<[Player, Dispatch<PlayerAction>]>([initialState, () => {}]);
 
 const playerReducer = (state: Player, action: PlayerAction) => {
   switch (action.type) {
@@ -121,7 +125,7 @@ export default function PlayerProvider({ children }: { children: ReactNode }) {
   const scController = useSoundcloud(dispatch);
   const spotifyController = useSpotify(dispatch);
   const youtubeController = useYoutube(dispatch);
-  const htmlAudioController = useHTMLAudioProvider(dispatch)
+  const htmlAudioController = useHTMLAudioProvider(dispatch);
 
   const currentController = useMemo(() => {
     if (metadata?.type === 'soundcloud') return scController;
@@ -130,13 +134,7 @@ export default function PlayerProvider({ children }: { children: ReactNode }) {
     if (metadata?.type === 'youtube') return youtubeController;
     if (metadata?.type === 'zora') return htmlAudioController;
     return null;
-  }, [
-    metadata?.type,
-    scController,
-    spotifyController,
-    youtubeController,
-    htmlAudioController,
-  ]);
+  }, [metadata?.type, scController, spotifyController, youtubeController, htmlAudioController]);
 
   useEffect(() => {
     if (!metadata?.url || !currentController) return;

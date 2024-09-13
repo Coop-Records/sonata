@@ -7,7 +7,7 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
   if (!trackUrl) return NextResponse.json({ errors: 'Missing trackUrl' }, { status: 422 });
 
   try {
-    const {response, data} = await getSongLinks(trackUrl) as any
+    const { response, data } = (await getSongLinks(trackUrl)) as any;
     if (response.ok) {
       if (data.errors) {
         console.error('SongLink Errors:', data.errors);

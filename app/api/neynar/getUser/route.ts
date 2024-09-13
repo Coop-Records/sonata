@@ -15,7 +15,7 @@ export async function GET(req: NextRequest): Promise<Response> {
   }
 
   try {
-    const users = await getBulkUsersByFid(fids)
+    const users = await getBulkUsersByFid(fids);
     return Response.json({ users });
   } catch (error) {
     console.error(error);

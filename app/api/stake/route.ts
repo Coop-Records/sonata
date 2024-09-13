@@ -1,8 +1,8 @@
-import { CHANNELS } from "@/lib/consts";
-import getUser from "@/lib/neynar/getNeynarUser";
-import { stack } from "@/lib/stack/client";
-import { eventStakeChannelFid } from "@/lib/stack/events";
-import { NextRequest } from "next/server";
+import { CHANNELS } from '@/lib/consts';
+import getUser from '@/lib/neynar/getNeynarUser';
+import { stack } from '@/lib/stack/client';
+import { eventStakeChannelFid } from '@/lib/stack/events';
+import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest) {
   const fid = Number(req.nextUrl.searchParams.get('fid'));
@@ -12,22 +12,24 @@ export async function GET(req: NextRequest) {
     const user = await getUser(fid);
 
     const points = await Promise.all(
-      CHANNELS.map(channel => stack.pointsClient.getPoints({
-        addresses: user.verifications,
-        filter: { event: eventStakeChannelFid(channel.value, fid) }
-      }))
+      CHANNELS.map((channel) =>
+        stack.pointsClient.getPoints({
+          addresses: user.verifications,
+          filter: { event: eventStakeChannelFid(channel.value, fid) },
+        }),
+      ),
     );
 
     const channelPoints = CHANNELS.map((channel, i) => ({
       channelId: channel.value,
-      points: Math.abs(points[i]?.allocations?.reduce(
-        (total: any, curr: any) => total + curr?.points, 0
-      )),
+      points: Math.abs(
+        points[i]?.allocations?.reduce((total: any, curr: any) => total + curr?.points, 0),
+      ),
     }));
 
     return Response.json({
       message: 'success',
-      data: channelPoints.filter(({ points }) => points)
+      data: channelPoints.filter(({ points }) => points),
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Failed';

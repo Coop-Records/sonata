@@ -1,9 +1,9 @@
-import getUser from "@/lib/neynar/getNeynarUser";
-import { stack } from "@/lib/stack/client";
-import { eventStakeChannel, eventStakeChannelFid } from "@/lib/stack/events";
-import supabase from "@/lib/supabase/serverClient";
-import getPoints from "../getStackPoints";
-import getChannelTipInfo from "../tip/getChannelTipInfo";
+import getUser from '@/lib/neynar/getNeynarUser';
+import { stack } from '@/lib/stack/client';
+import { eventStakeChannel, eventStakeChannelFid } from '@/lib/stack/events';
+import supabase from '@/lib/supabase/serverClient';
+import getPoints from '../getStackPoints';
+import getChannelTipInfo from '../tip/getChannelTipInfo';
 
 async function executeChannelUnstake(channelId: string, amount: number, fid: number) {
   const event = eventStakeChannel(channelId);
@@ -26,7 +26,9 @@ async function executeChannelUnstake(channelId: string, amount: number, fid: num
     stack.track(event, { account: channelAddress, points: -amount }),
     stack.track(userEvent, { account: userAddress, points: amount }),
   ]);
-  results.forEach(res => { if (!res?.success) throw Error(res?.status) });
+  results.forEach((res) => {
+    if (!res?.success) throw Error(res?.status);
+  });
 
   const log = await supabase
     .from('stake_activity_log')

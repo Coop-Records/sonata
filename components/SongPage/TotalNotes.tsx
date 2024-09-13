@@ -7,10 +7,12 @@ export default function TotalNotes() {
   const { totalNotes } = useSongPageProvider();
   return (
     <>
-      {totalNotes == undefined ? <Skeleton className='h-10 w-20 rounded-full' /> : (
+      {totalNotes == undefined ? (
+        <Skeleton className="h-10 w-20 rounded-full" />
+      ) : (
         <div className="flex items-center gap-1 rounded-full bg-grey-light px-4 py-2 font-semibold">
           <span>{totalNotes ? formatBigInt(BigInt(totalNotes)) : '-'}</span>
-          <Image src='/images/notes.png' width={20} height={20} alt="notes" />
+          <Image src="/images/notes.png" width={20} height={20} alt="notes" />
         </div>
       )}
     </>

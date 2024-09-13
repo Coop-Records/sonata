@@ -14,9 +14,9 @@ async function filterZoraFeed(casts: Cast[]) {
     for (let i = 0; i < data.length; i += batchSize) {
       const batch = data.slice(i, i + batchSize);
 
-      castsMetadata.push(...await Promise.all(
-        batch.map(cast => fetch(getIpfsLink(cast.ipfs)))
-      ));
+      castsMetadata.push(
+        ...(await Promise.all(batch.map((cast) => fetch(getIpfsLink(cast.ipfs))))),
+      );
     }
 
     for (let i = 0; i < data.length; i++) {
@@ -25,8 +25,8 @@ async function filterZoraFeed(casts: Cast[]) {
       const metadata: {
         content?: {
           mime?: string;
-          uri?: string
-        }
+          uri?: string;
+        };
       } = await castsMetadata[i].json();
 
       if (

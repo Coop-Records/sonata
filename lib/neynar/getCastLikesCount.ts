@@ -1,4 +1,4 @@
-import { CastResponse } from "@/types/Cast";
+import { CastResponse } from '@/types/Cast';
 
 async function getCastLikesCount(hash: string) {
   const queryParams = new URLSearchParams({

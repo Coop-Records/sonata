@@ -1,13 +1,13 @@
 'use server';
 
-import { ReactionsResponse } from "@neynar/nodejs-sdk/build/neynar-api/v2";
+import { ReactionsResponse } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 
 async function hasUserLikedCast(hash: string, fid: number) {
   const options = {
     method: 'GET',
     headers: {
       accept: 'application/json',
-      api_key: process.env.NEYNAR_API_KEY!
+      api_key: process.env.NEYNAR_API_KEY!,
     },
   } as any;
 

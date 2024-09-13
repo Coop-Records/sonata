@@ -20,7 +20,8 @@ const PlayerButtons = ({ metadata }: PlayerButtonProps) => {
 
   useEffect(() => {
     if (player.position !== 0 && player.position >= player.duration) {
-      if (showActions) handleNext(); else handlePause();
+      if (showActions) handleNext();
+      else handlePause();
     }
   }, [player.position]);
 

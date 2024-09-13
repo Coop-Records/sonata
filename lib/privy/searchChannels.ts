@@ -1,11 +1,11 @@
-import { PrivyBatchUserResponse } from "@/types/Privy";
-import getPrivyIdentifier from "./getIdentifier";
-import privyClient from "./privyClient";
+import { PrivyBatchUserResponse } from '@/types/Privy';
+import getPrivyIdentifier from './getIdentifier';
+import privyClient from './privyClient';
 
 async function searchChannels(channelIds: string[]) {
   const PRIVY_LIMIT = 100;
   const channels = [];
-  const body: any = { emails: channelIds.map(id => getPrivyIdentifier(id)) };
+  const body: any = { emails: channelIds.map((id) => getPrivyIdentifier(id)) };
 
   do {
     const response = await privyClient('/users/search', { body });
@@ -22,6 +22,6 @@ async function searchChannels(channelIds: string[]) {
   } while (body?.cursor);
 
   return channels;
-};
+}
 
 export default searchChannels;

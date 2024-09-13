@@ -1,13 +1,11 @@
 import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { forEach } from 'lodash';
-import { createPublicClient, http } from "viem";
+import { createPublicClient, http } from 'viem';
 import * as chains from 'viem/chains';
 import { ZORA_TO_VIEM, ZoraChains } from '../consts';
-import getCastContractMapping from "./mapCastToContract";
+import getCastContractMapping from './mapCastToContract';
 
-async function getCastsMetadataLink(
-  input: ReturnType<typeof getCastContractMapping>
-) {
+async function getCastsMetadataLink(input: ReturnType<typeof getCastContractMapping>) {
   const data: (Cast & { ipfs: string })[] = [];
 
   for (const [key, { contracts, casts }] of Object.entries(input)) {
@@ -15,7 +13,7 @@ async function getCastsMetadataLink(
 
     const responses = await createPublicClient({
       chain: chains[chain],
-      transport: http()
+      transport: http(),
     }).multicall({ contracts });
 
     forEach(responses, ({ result, status }, index) => {

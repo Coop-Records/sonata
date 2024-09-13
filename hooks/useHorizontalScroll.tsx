@@ -5,7 +5,7 @@ const useHorizontalScroll = () => {
 
   useEffect(() => {
     const scroller = scrollerRef.current;
-    if(!scroller) return;
+    if (!scroller) return;
 
     let startOffset = 0;
 
@@ -23,10 +23,10 @@ const useHorizontalScroll = () => {
 
     let interval = setInterval(autoScroll, 16);
 
-    const playScroll = ()=> interval = setInterval(autoScroll, 16);
-    const pauseScroll = ()=> clearInterval(interval);
+    const playScroll = () => (interval = setInterval(autoScroll, 16));
+    const pauseScroll = () => clearInterval(interval);
 
-    scroller.addEventListener('mouseenter',pauseScroll);
+    scroller.addEventListener('mouseenter', pauseScroll);
     scroller.addEventListener('mouseleave', playScroll);
 
     return () => {

@@ -1,5 +1,5 @@
-import supabase from "@/lib/supabase/serverClient";
-import { NextRequest } from "next/server";
+import supabase from '@/lib/supabase/serverClient';
+import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest) {
   const channelId = req.nextUrl.searchParams.get('channelId');
@@ -16,20 +16,20 @@ export async function GET(req: NextRequest) {
         .limit(1)
         .single(),
       supabase.rpc('get_channel_tips_balance', {
-        p_channelId: channelId
+        p_channelId: channelId,
       }),
       supabase
         .from('channel_stake_stats')
         .select('stakers,staked')
         .eq('channelId', channelId)
-        .single()
+        .single(),
     ]);
 
     return Response.json({
       message: 'success',
       topSong: topSong.data,
       staking: stakeStats.data,
-      balance: balance.data ?? 0
+      balance: balance.data ?? 0,
     });
   } catch (error) {
     console.error(error);

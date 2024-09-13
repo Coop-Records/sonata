@@ -13,8 +13,7 @@ export default function ProfileHome() {
   const tab = useSearchParams().get('tab');
   const { loading, userStakes } = useUserStakes(tab, profile?.fid);
 
-  if (tab === 'stakes')
-    return loading ? <Loader /> : <UserStakes stakes={userStakes} />;
+  if (tab === 'stakes') return loading ? <Loader /> : <UserStakes stakes={userStakes} />;
 
   return <Feeds />;
 }

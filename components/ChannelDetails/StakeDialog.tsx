@@ -12,34 +12,50 @@ function StakeDialog({ balance = 0 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const onStart = () => { setIsOpen(false); setIsProcessing(true) };
+  const onStart = () => {
+    setIsOpen(false);
+    setIsProcessing(true);
+  };
   const onCompleted = () => setIsProcessing(false);
-  const openDialog = () => { if (checkLoggedIn()) setIsOpen(true) };
+  const openDialog = () => {
+    if (checkLoggedIn()) setIsOpen(true);
+  };
 
   return (
     <>
-      <div className='text-center'>
+      <div className="text-center">
         <Button
           disabled={isProcessing}
           onClick={openDialog}
-          className="h-auto min-w-48 rounded-full px-9 py-4 text-base font-normal">
-          {isProcessing ? <Loader2 className='animate-spin' /> : 'STAKE NOTES'}
+          className="h-auto min-w-48 rounded-full px-9 py-4 text-base font-normal"
+        >
+          {isProcessing ? <Loader2 className="animate-spin" /> : 'STAKE NOTES'}
         </Button>
-        <p className='mt-2 text-sm font-semibold'>
-          <span className='text-sm font-normal text-grey'>Staked: </span>
+        <p className="mt-2 text-sm font-semibold">
+          <span className="text-sm font-normal text-grey">Staked: </span>
           {formatNumber(balance)} NOTES
         </p>
       </div>
 
       <Dialog open={!isMobile && isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className='max-w-[709px] !rounded-3xl p-8'>
-          <Body stakedBalance={balance} onStart={onStart} onCompleted={onCompleted} className='gap-8' />
+        <DialogContent className="max-w-[709px] !rounded-3xl p-8">
+          <Body
+            stakedBalance={balance}
+            onStart={onStart}
+            onCompleted={onCompleted}
+            className="gap-8"
+          />
         </DialogContent>
       </Dialog>
 
       <Drawer open={isMobile && isOpen} onOpenChange={setIsOpen}>
         <DrawerContent>
-          <Body stakedBalance={balance} onStart={onStart} onCompleted={onCompleted} className='gap-6 p-6' />
+          <Body
+            stakedBalance={balance}
+            onStart={onStart}
+            onCompleted={onCompleted}
+            className="gap-6 p-6"
+          />
         </DrawerContent>
       </Drawer>
     </>

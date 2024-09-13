@@ -19,13 +19,14 @@ export default function CreatePost() {
   return (
     <div className="flex items-center gap-2">
       <PostInput
-        placeholder='What are you listening to?'
+        placeholder="What are you listening to?"
         value={dialog.embedUrl}
         onChange={(e) => dialog.setEmbedUrl(e.target.value)}
         action={
           <Button
             className="flex h-auto items-center gap-2 rounded-full bg-gray-500 px-4 py-2 text-white"
-            onClick={handleClick}>
+            onClick={handleClick}
+          >
             Cast
             <ChevronRight size={16} />
           </Button>

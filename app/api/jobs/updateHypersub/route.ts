@@ -1,7 +1,6 @@
 import processTipsBatch from '@/lib/hypersub/processTipsBatch';
 import forEachTableRowsBatch from '@/lib/supabase/forEachTableRowsBatch';
 
-
 export async function GET(): Promise<Response> {
   try {
     const res = await forEachTableRowsBatch('tips', 'fid, wallet_address', 3000, processTipsBatch);
