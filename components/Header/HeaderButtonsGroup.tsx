@@ -1,27 +1,21 @@
 import ClaimAirdropButton from '@/components/ClaimAirdropButton/ClaimAirdropButton';
 import SignInButton from '@/components/SignInButton';
-import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { useTipProvider } from '@/providers/TipProvider';
-import { useUi } from '@/providers/UiProvider';
-import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { useParams } from 'next/navigation';
 import HomeButton from './HomeButton';
 import UserMenu from './UserMenu';
+import Image from 'next/image';
 
 const HeaderButtonsGroup = ({ className = '' }) => {
   const { user, loading: userLoading } = useNeynarProvider();
-  const { menuOpen, setMenuOpen } = useUi();
   const { airdropBalance } = useTipProvider();
   const { username, channelId } = useParams();
 
   return (
-    <div className={cn('container flex items-center justify-between md:justify-end', className)}>
-      <Button variant="link" className={cn('p-0 text-5xl md:hidden', channelId && 'text-white')}>
-        <HamburgerMenuIcon onClick={() => setMenuOpen(!menuOpen)} className="size-6" />
-      </Button>
+    <div className={cn('px-4 pt-4 flex items-center justify-between', className)}>
       {(username || channelId) && (
         <HomeButton className={cn('mr-auto max-md:hidden', channelId && 'text-white')} />
       )}
@@ -34,6 +28,12 @@ const HeaderButtonsGroup = ({ className = '' }) => {
         </div>
       ) : (
         <SignInButton />
+      )}
+      <p className="font-clashdisplay_medium text-white">Sonata</p>
+      {user ? (
+        <Image src={'/images/logo.png'} width={36} height={36} alt="not found image" />
+      ) : (
+        <div />
       )}
     </div>
   );

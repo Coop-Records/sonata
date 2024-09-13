@@ -40,7 +40,7 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
 
   if (!metadata) return <></>;
   return (
-    <div className="w-full space-y-4 ">
+    <div className="w-full space-y-4 border rounded-xl p-3">
       <div className="flex gap-2">
         <UserDetails user={author} createdAt={cast.created_at} />
       </div>

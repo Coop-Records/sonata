@@ -11,7 +11,6 @@ import { useNeynarProvider } from '@/providers/NeynarProvider';
 import FeedProvider from '@/providers/FeedProvider';
 import ProfileProvider from '@/providers/ProfileProvider';
 import { useParams } from 'next/navigation';
-import TipsList from '@/components/TipsList';
 import StakeProvider from '@/providers/StakeProvider';
 import { cn } from '@/lib/utils';
 import ChannelHeader from '@/components/Header/ChannelHeader';
@@ -26,7 +25,6 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
     <ProfileProvider>
       <FeedProvider>
         <StakeProvider>
-          <TipsList />
           <div className="flex grow">
             <meta property="of:accepts:xmtp" content="2024-02-01" />
             <nav className="md:hidden">
@@ -46,7 +44,7 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
               <div className="h-0 grow">
                 <div id="feed-container" className="size-full">
                   {channelId && <ChannelHeader />}
-                  <div className={cn('mt-4 container space-y-6', { 'max-w-3xl': enableMaxWidth })}>
+                  <div className={cn('mt-4 px-4 space-y-6', { 'max-w-3xl': enableMaxWidth })}>
                     {user && !username && !channelId && <CreatePost />}
                     {children}
                   </div>

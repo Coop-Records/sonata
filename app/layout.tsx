@@ -40,7 +40,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
   const headerUrl = headersList.get('x-url') || '';
 
-  const backgroundColor = headerUrl?.includes('/api') ? 'bg-gray-100' : 'bg-white';
+  const backgroundColor = headerUrl?.includes('/api')
+    ? 'bg-gray-100'
+    : "bg-cover bg-[url('/images/mobile-bg.png')]";
 
   return (
     <html lang="en" className={sora.variable}>

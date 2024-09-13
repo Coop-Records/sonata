@@ -33,16 +33,13 @@ export default function Like({ cast }: { cast: SupabasePost }) {
   };
 
   return (
-    <Button
-      variant="ghost"
+    <button
+      type="button"
+      className="flex items-center gap-1 text-xs text-white"
       onClick={handleClick}
-      className={cn(
-        'h-auto rounded-full bg-muted px-4 py-1 font-semibold space-x-1 text-base',
-        liked && 'bg-red-50 text-red-600 hover:text-red-600 hover:bg-red-50',
-      )}
     >
       {liked ? <FaHeart /> : <FaRegHeart />}
       <span className="leading-none">{likes}</span>
-    </Button>
+    </button>
   );
 }

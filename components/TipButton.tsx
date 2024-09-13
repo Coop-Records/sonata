@@ -10,6 +10,7 @@ import { PopoverTrigger } from '@radix-ui/react-popover';
 import { useUi } from '@/providers/UiProvider';
 import { Badge } from './ui/badge';
 import { Input } from './ui/input';
+import Icon from './ui/icon';
 
 const defualtTips = {
   DEGEN: [10, 50, 100],
@@ -77,17 +78,14 @@ export default function TipButton({
   return (
     <Popover open={showDropdown} onOpenChange={setShowDropdown}>
       <PopoverTrigger asChild className={cn('rounded-full', className)}>
-        <Button
-          variant="ghost"
-          className={cn(
-            'rounded-full flex items-center flex-row gap-1 font-semibold px-4 bg-muted h-auto py-1',
-            currency === 'NOTES' && 'flex-row-reverse px-0 bg-transparent hover:bg-transparent',
-          )}
+        <button
+          type="button"
+          className="flex items-center gap-1 text-white text-xs"
           onClick={handleClick}
         >
+          <Icon name="degenchain" className="h-3 w-auto text-white" />
           <span>{total}</span>
-          <Image src={logos[currency]} width={iconSize} height={iconSize} alt="" />
-        </Button>
+        </button>
       </PopoverTrigger>
       <PopoverContent className="flex w-48 flex-col gap-2">
         <h3 className="mb-2 text-xs font-semibold">Tip</h3>

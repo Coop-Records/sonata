@@ -1,0 +1,8 @@
+@font-face {
+  font-family: 'ClashDisplay Medium';
+  src: url('/fonts/ClashDisplay-Medium.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'ClashDisplay Bold';
+  src: url('/fonts/ClashDisplay-Bold.ttf') format('truetype');
+}

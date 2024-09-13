@@ -11,7 +11,7 @@ export default function Tab({ tab, className = '', onClick }: Props) {
     <li className={className}>
       <Button
         variant="ghost"
-        className="p-0 text-sm font-bold hover:bg-transparent md:text-lg"
+        className="p-0 text-sm font-bold hover:bg-transparent md:text-lg !text-white"
         onClick={onClick}
       >
         {tab.label}

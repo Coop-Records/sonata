@@ -25,12 +25,12 @@ export default function Tabs({ tabs, className = '', onChange }: Props) {
   };
 
   return (
-    <ul className={cn('flex gap-4 md:gap-8', className)}>
+    <ul className={cn('flex gap-4 md:gap-8 w-full', className)}>
       {tabs.map((tab, index) => (
         <Tab
           tab={tab}
           key={index}
-          className={cn(activeTab === index && 'border-b-2 border-black')}
+          className={cn(activeTab === index && 'border-b-2 border-white')}
           onClick={() => onTabChange(tab.value, index)}
         />
       ))}

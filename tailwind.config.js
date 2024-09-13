@@ -21,7 +21,7 @@ module.exports = {
     extend: {
       colors: {
         farcaster: '#855DCD',
-        border: 'hsl(var(--border))',
+        border: '#1F1F1F',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
@@ -56,13 +56,20 @@ module.exports = {
           foreground: 'hsl(var(--card-foreground))',
         },
         grey: {
-          DEFAULT: '#949494',
+          DEFAULT: '#909090',
           light: '#f6f6f6',
         },
         purple: {
           DEFAULT: '#8B49F7',
           light: '#EEE4FE',
         },
+        blue: {
+          DEFAULT: 'rgba(49, 102, 218, 1)',
+        },
+      },
+      fontFamily: {
+        clashdisplay_medium: ['ClashDisplay Medium', 'sans-serif'],
+        clashdisplay_bold: ['ClashDisplay Bold', 'sans-serif'],
       },
       borderRadius: {
         lg: `var(--radius)`,

@@ -30,10 +30,13 @@ const Header = ({ className = '' }) => {
       <div className="mb-1 pt-2 md:pt-6">
         <HeaderButtonsGroup />
       </div>
-      <div className="container">
+      <div className="pl-4">
         {profile && <Profile />}
-        <Tabs tabs={filteredTabs} className={!username ? 'justify-center' : ''} />
-        <Separator className="-mt-px bg-grey-light" />
+        <p className="font-clashdisplay_bold text-[18px] text-white py-4 font-bold">
+          Music on Farcaster
+        </p>
+        <Tabs tabs={filteredTabs} className={!username ? 'justify-start' : ''} />
+        <Separator className="-mt-px bg-border" />
       </div>
     </header>
   );

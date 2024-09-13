@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
+import Icon from './ui/icon';
 
 type MediaPlayerProps = {
   metadata?: TrackMetadata;
@@ -35,10 +36,7 @@ export default function MediaPlayer({ metadata }: MediaPlayerProps) {
   return (
     <div
       data-type={metadata?.type}
-      className={cn(
-        'flex w-full gap-4 bg-white py-2',
-        currentTrack && player.loading && 'animate-pulse',
-      )}
+      className={cn('flex w-full gap-4 py-2', currentTrack && player.loading && 'animate-pulse')}
     >
       <div className="relative my-auto aspect-square w-12 shrink-0 overflow-hidden rounded-lg shadow-md">
         {metadata?.artworkUrl ? (
@@ -54,15 +52,15 @@ export default function MediaPlayer({ metadata }: MediaPlayerProps) {
         )}
       </div>
 
-      <div className="flex grow flex-col gap-1 text-left">
-        <div className="line-clamp-2 text-lg font-semibold leading-none">
+      <div className="flex grow flex-col gap-1 text-left justify-center">
+        <div className="line-clamp-2 text-sm font-semibold leading-none text-white">
           {metadata?.trackName ? (
             <>{metadata.trackName}</>
           ) : (
             <Skeleton className="h-2 w-32 rounded-sm" />
           )}
         </div>
-        <div className="line-clamp-2 text-sm font-extralight">
+        <div className="line-clamp-2 text-xs font-extralight text-white">
           {metadata?.artistName ? (
             <>{metadata.artistName}</>
           ) : (
@@ -79,7 +77,7 @@ export default function MediaPlayer({ metadata }: MediaPlayerProps) {
           {currentTrack && player.playing ? (
             <MdPauseCircle className="text-4xl" />
           ) : (
-            <MdPlayCircle className="text-4xl" />
+            <Icon name="play" />
           )}
         </Button>
       </div>
