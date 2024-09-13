@@ -70,14 +70,12 @@ module.exports = {
       fontFamily: {
         clashdisplay_medium: ['ClashDisplay Medium', 'sans-serif'],
         clashdisplay_bold: ['ClashDisplay Bold', 'sans-serif'],
+        sora: ['var(--font-sora)', 'sans-serif'],
       },
       borderRadius: {
         lg: `var(--radius)`,
         md: `calc(var(--radius) - 2px)`,
         sm: 'calc(var(--radius) - 4px)',
-      },
-      fontFamily: {
-        sora: ['var(--font-sora)', 'sans-serif'],
       },
       keyframes: {
         'accordion-down': {
