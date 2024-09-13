@@ -19,7 +19,7 @@ async function executeUserTip({
   if (amount <= 0) throw Error('Invalid amount');
 
   const post = await getCastByHash(postHash);
-  const recipientFid = post.authorFid;
+  const recipientFid = post.author.fid;
   if (tipperFid === recipientFid) throw Error('Can not tip yourself');
   const channelId = post.channelId;
 
