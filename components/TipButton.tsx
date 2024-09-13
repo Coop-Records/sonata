@@ -71,9 +71,6 @@ export default function TipButton({
     setShowDropdown(!showDropdown);
   };
 
-  let iconSize = 14;
-  if (currency === 'NOTES') iconSize = 24;
-
   if (!(verifications && verifications.length > 0)) return <></>;
   return (
     <Popover open={showDropdown} onOpenChange={setShowDropdown}>
