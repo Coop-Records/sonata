@@ -7,7 +7,7 @@ import { useTipProvider } from '@/providers/TipProvider';
 import { useParams } from 'next/navigation';
 import HomeButton from './HomeButton';
 import UserMenu from './UserMenu';
-import Image from 'next/image';
+import Balances from './Balances';
 
 const HeaderButtonsGroup = ({ className = '' }) => {
   const { user, loading: userLoading } = useNeynarProvider();
@@ -21,7 +21,7 @@ const HeaderButtonsGroup = ({ className = '' }) => {
       )}
       {userLoading ? (
         <Skeleton className="size-9 rounded-full" />
-      ) : user ? (
+      ) : !user ? (
         <div className="flex items-center gap-2">
           {airdropBalance > 0 && <ClaimAirdropButton />}
           <UserMenu />
@@ -30,11 +30,7 @@ const HeaderButtonsGroup = ({ className = '' }) => {
         <SignInButton />
       )}
       <p className="font-clashdisplay_medium text-white">Sonata</p>
-      {user ? (
-        <Image src={'/images/logo.png'} width={36} height={36} alt="not found image" />
-      ) : (
-        <div />
-      )}
+      {!user ? <Balances /> : <div />}
     </div>
   );
 };

@@ -13,7 +13,7 @@ import Link from 'next/link';
 export default function UserMenu() {
   const { user, signOut } = useNeynarProvider();
 
-  if (!user) return <></>;
+  // if (!user) return <></>;
 
   return (
     <DropdownMenu>
