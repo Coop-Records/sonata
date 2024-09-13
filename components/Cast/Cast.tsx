@@ -1,19 +1,19 @@
 'use client';
 import UserDetails from '@/components/UserDetails';
 import findValidEmbed from '@/lib/findValidEmbed';
-import TipButton from '@/components/TipButton';
 import { SupabasePost } from '@/types/SupabasePost';
 import fetchMetadata from '@/lib/fetchMetadata';
 import MediaPlayer from '../MediaPlayer';
 import { useEffect, useState } from 'react';
 import { TrackMetadata } from '@/types/Track';
-import Like from './Like';
 import Share from './Share';
 import { Separator } from '@/components/ui/separator';
 import UpvoteDownvote from '../UpvoteDownvote';
 import CollectButton from './CollectButton';
 import { EmbedUrl } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import findCollectibleUrl from '@/lib/findCollectibleUrlInCastEmbeds';
+import Image from 'next/image';
+import { PLATFORM_ICONS } from '@/lib/consts';
 
 const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
   const embed = findValidEmbed(cast);
@@ -28,7 +28,10 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
       if (url) {
         try {
           const metadata = await fetchMetadata(url, cast);
-          setMetadata(metadata);
+          setMetadata({
+            ...metadata,
+            channelId: cast.channelId,
+          });
         } catch (error) {
           console.error(error);
         }
@@ -39,6 +42,7 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
   }, [url]);
 
   if (!metadata) return <></>;
+
   return (
     <div className="w-full space-y-4 border rounded-xl p-3">
       <div className="flex gap-2">
@@ -49,11 +53,11 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
       <div className="flex gap-2">
         <UpvoteDownvote verifications={verifications} cast={cast} />
         {collectibleLink && <CollectButton collectUrl={collectibleLink} />}
-        <TipButton verifications={verifications} cast={cast} currency="DEGEN" className="ml-auto" />
-        <Like cast={cast} />
-        <Share cast={cast} />
+        <div className="flex flex-grow justify-end gap-4">
+          <Image src={PLATFORM_ICONS[metadata.type]} alt="" width={16} height={16} />
+          <Share cast={cast} />
+        </div>
       </div>
-      <Separator className="bg-muted" />
     </div>
   );
 };

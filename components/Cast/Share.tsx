@@ -13,8 +13,8 @@ export default function Share({ cast }: { cast: SupabasePost }) {
   };
 
   return (
-    <button type="button" onClick={handleClick} className="text-xs text-grey">
-      <FiShare />
+    <button type="button" onClick={handleClick} className="text-grey">
+      <FiShare className="text-md" />
     </button>
   );
 }

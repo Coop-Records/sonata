@@ -6,6 +6,7 @@ import { MdPauseCircle } from 'react-icons/md';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import Icon from './ui/icon';
+import { useUi } from '@/providers/UiProvider';
 
 type MediaPlayerProps = {
   metadata?: TrackMetadata;
@@ -13,6 +14,7 @@ type MediaPlayerProps = {
 
 export default function MediaPlayer({ metadata }: MediaPlayerProps) {
   const [player, dispatch] = usePlayer();
+  const { menuItems } = useUi();
   const currentTrack = player?.metadata?.feedId === metadata?.feedId;
 
   const handlePlay = () => {
@@ -33,20 +35,32 @@ export default function MediaPlayer({ metadata }: MediaPlayerProps) {
     dispatch({ type: 'PAUSE', payload: { id: metadata.id } });
   };
 
+  const channel = menuItems.filter((item) => item.value === metadata?.channelId);
+  const channelLogo = channel.length > 0 && channel[0].icon;
+
+  console.log('ZIAD', channelLogo);
+
   return (
     <div
       data-type={metadata?.type}
       className={cn('flex w-full gap-4 py-2', currentTrack && player.loading && 'animate-pulse')}
     >
-      <div className="relative my-auto aspect-square w-12 shrink-0 overflow-hidden rounded-lg shadow-md">
+      <div className="relative my-auto aspect-square w-12 shrink-0 rounded-lg shadow-md">
         {metadata?.artworkUrl ? (
-          <Image
-            src={metadata.artworkUrl}
-            alt=""
-            fill
-            style={{ objectFit: 'cover', objectPosition: 'center' }}
-            unoptimized
-          />
+          <>
+            <div className="relative size-full rounded-lg overflow-hidden">
+              <Image
+                src={metadata.artworkUrl}
+                alt=""
+                fill
+                style={{ objectFit: 'cover', objectPosition: 'center' }}
+                unoptimized
+              />
+            </div>
+            <div className="absolute right-[-4px] bottom-[-4px] rounded-full overflow-hidden">
+              <Image src={channelLogo || ''} width={16} height={16} unoptimized alt="" />
+            </div>
+          </>
         ) : (
           <Skeleton className="size-full" />
         )}

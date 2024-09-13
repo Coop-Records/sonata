@@ -15,7 +15,7 @@ const HeaderButtonsGroup = ({ className = '' }) => {
   const { username, channelId } = useParams();
 
   return (
-    <div className={cn('px-4 pt-4 flex items-center justify-between', className)}>
+    <div className={cn('relative px-6 pt-6 flex items-center justify-between', className)}>
       {(username || channelId) && (
         <HomeButton className={cn('mr-auto max-md:hidden', channelId && 'text-white')} />
       )}
@@ -29,7 +29,9 @@ const HeaderButtonsGroup = ({ className = '' }) => {
       ) : (
         <SignInButton />
       )}
-      <p className="font-clashdisplay_medium text-white">Sonata</p>
+      <div className="absolute left-0 top-0 flex justify-center items-center w-full h-full pointer-events-none">
+        <p className="font-clashdisplay_medium text-white pt-6">Sonata</p>
+      </div>
       {user ? (
         <Image src={'/images/logo.png'} width={36} height={36} alt="not found image" />
       ) : (
