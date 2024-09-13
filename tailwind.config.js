@@ -21,7 +21,10 @@ module.exports = {
     extend: {
       colors: {
         farcaster: '#855DCD',
-        border: '#1F1F1F',
+        border: {
+          DEFAULT: '#1F1F1F',
+          light: '#ffffff1a',
+        },
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
