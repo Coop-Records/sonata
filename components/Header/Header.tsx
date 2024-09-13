@@ -30,7 +30,7 @@ const Header = ({ className = '' }) => {
       <div className="mb-1 pt-2 md:pt-6">
         <HeaderButtonsGroup />
       </div>
-      <div className="pl-4">
+      <div className="pl-6">
         {profile && <Profile />}
         <p className="font-clashdisplay_bold text-[18px] text-white py-4 font-bold">
           Music on Farcaster
