@@ -7,7 +7,6 @@ import MediaPlayer from '../MediaPlayer';
 import { useEffect, useState } from 'react';
 import { TrackMetadata } from '@/types/Track';
 import Share from './Share';
-import { Separator } from '@/components/ui/separator';
 import UpvoteDownvote from '../UpvoteDownvote';
 import CollectButton from './CollectButton';
 import { EmbedUrl } from '@neynar/nodejs-sdk/build/neynar-api/v2';
