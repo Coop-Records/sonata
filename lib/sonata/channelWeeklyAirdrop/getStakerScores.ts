@@ -28,7 +28,7 @@ function getStakerScores(users: User[], channelId: string) {
       else prev.points -= event.points;
 
       return prev;
-    }, { date: '', points: 0, score: 0 });
+    }, { date: new Date(), points: 0, score: 0 });
 
     const days = dayjs(today).diff(multiplier.date, 'days', false);
 
