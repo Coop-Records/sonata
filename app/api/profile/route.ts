@@ -1,6 +1,6 @@
 import { EVENT_ZORA_PROFILE } from "@/lib/consts";
 import trackEndpoint from "@/lib/stack/trackEndpoint";
-import verfiySubscription from "@/lib/verfiySubscription";
+import verifySubscription from "@/lib/verifySubscription";
 import getZoraProfile from "@/lib/zora/getZoraProfile";
 import { NextRequest } from "next/server";
 import { Address, isAddress, zeroAddress } from "viem";
@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
     if (!address) throw Error("address is required")
 
     const zoraProfile = await getZoraProfile(address)
-    const isPro = await verfiySubscription(isAddress(address) ? address as Address : zeroAddress)
+    const isPro = await verifySubscription(isAddress(address) ? address as Address : zeroAddress)
 
     return Response.json({ message: 'success', zoraProfile, isPro });
   } catch (e) {
