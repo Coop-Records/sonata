@@ -1,6 +1,8 @@
 async function getZoraProfile(address: string) {
   if (!address) return;
-  const res = await fetch(`https://zora.co/api/profiles/${address}?expandedData=true`);
+  const fetchUrl = `https://zora.co/api/profiles/${address}?expandedData=true`
+  console.log(fetchUrl)
+  const res = await fetch(fetchUrl);
   if (!res.ok) throw Error(res.statusText);
   return await res.json();
 }
