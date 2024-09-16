@@ -30,7 +30,7 @@ const HeaderButtonsGroup = ({ className = '' }) => {
         <SignInButton />
       )}
       <div className="absolute left-0 top-0 flex justify-center items-center w-full h-full pointer-events-none">
-        <p className="font-clashdisplay_medium text-white pt-6">Sonata</p>
+        <p className="font-clashdisplay_semibold text-white pt-6 text-lg">Sonata</p>
       </div>
       {user ? (
         <Image src={'/images/logo.png'} width={36} height={36} alt="not found image" />
