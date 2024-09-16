@@ -6,8 +6,8 @@ import { usePrivy } from '@privy-io/react-auth';
 import ConnectButton from '../ConnectButton';
 import { Skeleton } from '../ui/skeleton';
 import Image from 'next/image';
-import Tooltip from '../ui/Tooltip';
 import { formatBigInt } from '@/lib/utils';
+import Tooltip from '../ui/tooltip';
 
 const SongMarketSection = () => {
   const { totalNotes, collection } = useSongPageProvider();
