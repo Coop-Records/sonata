@@ -8,18 +8,19 @@ const CollectButton = () => {
   const { collection } = useSongPageProvider();
 
   const { mint, loading: minting } = useMint(collection);
-  const { fee, loading: feeLoading } = useMintFee(collection);
+  const { loading: feeLoading } = useMintFee(collection);
 
   const isLoading = feeLoading || minting;
 
   return (
-    <Button onClick={mint} disabled={isLoading}>
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <div>BUY {fee && <span className="mx-2 font-bold">{fee} ETH</span>}</div>
-      )}
-    </Button>
+    <>
+      <Button onClick={mint} disabled={isLoading} className="bg-green !w-[186px] !rounded-full">
+        {isLoading ? <Loader /> : <div>Mint 111 ✧</div>}
+      </Button>
+      <p className="font-clashdisplay text-white">
+        <span className="font-clashdisplay_medium">500/1000</span> Collected
+      </p>
+    </>
   );
 };
 
