@@ -10,7 +10,3 @@
   font-family: 'ClashDisplay Bold';
   src: url('/ClashDisplay-Bold.ttf') format('truetype');
 }
-@font-face {
-  font-family: 'ClashDisplay';
-  src: url('/ClashDisplay-Regular.ttf') format('truetype');
-}

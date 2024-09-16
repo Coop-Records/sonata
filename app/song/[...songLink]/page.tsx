@@ -1,7 +1,6 @@
 'use client';
 
 import GlobalPlayer from '@/components/GlobalPlayer';
-import HeaderButtonsGroup from '@/components/Header/HeaderButtonsGroup';
 import Sidebar from '@/components/Sidebar';
 import SongPage from '@/components/SongPage';
 import { Separator } from '@/components/ui/separator';
@@ -31,13 +30,17 @@ export default function Page() {
         </nav>
 
         <main className="flex grow flex-col">
+          <Separator className="bg-muted" />
           <div className="relative grow">
             <div
               className="absolute left-0 top-0 size-full overflow-scroll pt-4"
               id="feed-container"
             >
-              <div className="mx-auto max-w-3xl space-y-6">
-                <HeaderButtonsGroup />
+              <div className="container mx-auto max-w-3xl space-y-6">
+                <Link href="/" className="flex flex-row items-center font-semibold">
+                  <CaretLeftIcon />
+                  <div className="">Home</div>
+                </Link>
                 <SongPageProvider>
                   <SongPage />
                 </SongPageProvider>

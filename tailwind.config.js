@@ -64,7 +64,6 @@ module.exports = {
         grey: {
           DEFAULT: '#909090',
           light: '#f6f6f6',
-          dark: '#1D1D1D',
         },
         purple: {
           DEFAULT: '#8B49F7',
@@ -73,15 +72,11 @@ module.exports = {
         blue: {
           DEFAULT: 'rgba(49, 102, 218, 1)',
         },
-        green: {
-          DEFAULT: '#3FB663',
-        },
       },
       fontFamily: {
         clashdisplay_medium: ['ClashDisplay Medium', 'sans-serif'],
         clashdisplay_bold: ['ClashDisplay Bold', 'sans-serif'],
         clashdisplay_semibold: ['ClashDisplay Semibold', 'sans-serif'],
-        clashdisplay: ['ClashDisplay Regular', 'sans-serif'],
         sora: ['var(--font-sora)', 'sans-serif'],
       },
       borderRadius: {
