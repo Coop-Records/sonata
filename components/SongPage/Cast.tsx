@@ -11,15 +11,19 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
     <div className="w-full justify-between flex">
       <div className="flex space-x-2 items-center">
         <Link href={`/${author.username}`}>
-          <Avatar className="size-4">
+          <Avatar className="size-6">
             <AvatarImage src={author.pfp_url} />
             <AvatarFallback>{author.display_name}</AvatarFallback>
           </Avatar>
         </Link>
         <div className="flex flex-col gap-1">
           <div className="flex flex-row items-center gap-1 text-grey text-[10px]">
-            <a href={`/${author.username}`} target="_blank" className="leading-none flex gap-1">
-              <p className="truncate max-w-[50px]">{author.display_name}</p> posted
+            <a
+              href={`/${author.username}`}
+              target="_blank"
+              className="leading-none flex gap-1 text-xs"
+            >
+              <p className="truncate max-w-[50px] text-white">{author.display_name}</p> posted
             </a>
             {author.power_badge && (
               <Image src="/images/hypersub.png" width={20} height={20} alt="" />
@@ -27,7 +31,9 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
           </div>
         </div>
       </div>
-      {cast.created_at && <span className="leading-none">{timeFromNow(cast.created_at)} ago</span>}
+      {cast.created_at && (
+        <span className="leading-none text-xs text-grey">{timeFromNow(cast.created_at)} ago</span>
+      )}
     </div>
   );
 };
