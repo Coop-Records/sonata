@@ -32,7 +32,7 @@ const Header = ({ className = '' }) => {
       </div>
       <div className="pl-6">
         {profile && <Profile />}
-        <p className="font-clashdisplay_bold text-2xl text-white py-4 font-bold">
+        <p className="font-clashdisplay_semibold text-2xl text-white py-5 font-bold">
           Music on Farcaster
         </p>
         <Tabs tabs={filteredTabs} className={!username ? 'justify-start' : ''} />
