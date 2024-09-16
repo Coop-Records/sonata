@@ -1,8 +1,12 @@
 @font-face {
   font-family: 'ClashDisplay Medium';
-  src: url('/fonts/ClashDisplay-Medium.ttf') format('truetype');
+  src: url('/ClashDisplay-Medium.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'ClashDisplay Semibold';
+  src: url('/ClashDisplay-Semibold.ttf') format('truetype');
 }
 @font-face {
   font-family: 'ClashDisplay Bold';
-  src: url('/fonts/ClashDisplay-Bold.ttf') format('truetype');
+  src: url('/ClashDisplay-Bold.ttf') format('truetype');
 }

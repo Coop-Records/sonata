@@ -73,6 +73,7 @@ module.exports = {
       fontFamily: {
         clashdisplay_medium: ['ClashDisplay Medium', 'sans-serif'],
         clashdisplay_bold: ['ClashDisplay Bold', 'sans-serif'],
+        clashdisplay_semibold: ['ClashDisplay Semibold', 'sans-serif'],
         sora: ['var(--font-sora)', 'sans-serif'],
       },
       borderRadius: {
