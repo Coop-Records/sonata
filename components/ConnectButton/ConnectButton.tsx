@@ -7,10 +7,18 @@ const ConnectButton = () => {
   if (!ready) return null;
 
   if (authenticated) {
-    return <Button disabled>Connected</Button>;
+    return (
+      <Button disabled className="bg-green !w-[186px] !rounded-full">
+        Connected
+      </Button>
+    );
   }
 
-  return <Button onClick={login}>Connect</Button>;
+  return (
+    <Button onClick={login} className="bg-green !w-[186px] !rounded-full">
+      Connect
+    </Button>
+  );
 };
 
 export default ConnectButton;
