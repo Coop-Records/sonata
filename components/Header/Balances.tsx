@@ -29,7 +29,21 @@ const Balances = () => {
           </span>
         </div>
         <div className="flex flex-wrap gap-[3px]">
-          <span>Total Balance:</span>
+          <span>Balance:</span>
+          <span className="flex whitespace-nowrap">
+            1M
+            <Image src="/images/notes.png" className="size-5" width={20} height={20} alt="" />
+          </span>
+        </div>
+        <div className="flex flex-wrap gap-[3px]">
+          <span>Staked:</span>
+          <span className="flex whitespace-nowrap">
+            5M
+            <Image src="/images/notes.png" className="size-5" width={20} height={20} alt="" />
+          </span>
+        </div>
+        <div className="flex flex-wrap gap-[3px]">
+          <span>Total:</span>
           <span className="flex whitespace-nowrap">
             {`${!isNil(balance) ? formatBigInt(BigInt(balance)) : '-'}`}
             <Image src="/images/notes.png" className="size-5" width={20} height={20} alt="" />

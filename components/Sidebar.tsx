@@ -1,11 +1,11 @@
 import SignInButton from './SignInButton';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
-import { Button } from './ui/button';
 import { Separator } from './ui/separator';
 import ChannelFilter from './Feed/ChannelFilter';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import Icon from './ui/icon';
 
 export default function MobileMenu({ isSingleCast = false }: { isSingleCast?: boolean }) {
   const { user, signOut } = useNeynarProvider();
@@ -16,24 +16,26 @@ export default function MobileMenu({ isSingleCast = false }: { isSingleCast?: bo
         <Image src="/images/notes.png" width={20} height={20} alt="" />
         <span className="font-semibold">Sonata</span>
       </Link>
-      <Avatar className="size-9 cursor-pointer">
-        <AvatarImage className="object-cover object-center" src={user?.pfp_url} />
-        <AvatarFallback>{user?.display_name?.[0]}</AvatarFallback>
-      </Avatar>
+      <div className="pt-4 pl-6">
+        <Avatar className="size-9 cursor-pointer">
+          <AvatarImage className="object-cover object-center" src={user?.pfp_url} />
+          <AvatarFallback>{user?.display_name?.[0]}</AvatarFallback>
+        </Avatar>
+      </div>
       <Separator className="!bg-border-light" />
       {!isSingleCast && <ChannelFilter />}
-      <a
-        href="https://warpcast.com/~/channel/sonata"
-        className="mt-auto flex items-center gap-2 self-start text-white"
-      >
-        <span>Follow Sonata</span>
-        <Image src="/images/warpcast.png" alt="warpcast" width={18} height={18} />
-      </a>
-      <div className="md:hidden">
+      <Separator className="!bg-border-light" />
+      <div className="md:hidden pl-4 pb-6">
         {user ? (
-          <Button onClick={signOut} variant="secondary" className="w-full">
-            Logout
-          </Button>
+          <>
+            <button
+              onClick={signOut}
+              type="button"
+              className="w-full text-white font-clashdisplay_medium flex items-center gap-1 mt-4 ml-2"
+            >
+              Logout <Icon name="exit" />
+            </button>
+          </>
         ) : (
           <SignInButton />
         )}

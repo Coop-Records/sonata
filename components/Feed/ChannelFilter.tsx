@@ -10,8 +10,8 @@ export default function ChannelFilter() {
   const { menuItems } = useUi();
 
   return (
-    <div className="flex grow flex-col">
-      <h2 className="mb-2 font-semibold text-white">Channels</h2>
+    <div className="flex grow flex-col pl-6">
+      <h2 className="mb-2 font-clashdisplay_semibold text-white text-2xl">Channels</h2>
       <div className="grow basis-0 overflow-y-auto scrollbar-thin md:-mr-16 md:pr-12">
         {menuItems.map((option) => {
           const active = channelId === option.value;

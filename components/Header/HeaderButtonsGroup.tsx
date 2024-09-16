@@ -32,11 +32,7 @@ const HeaderButtonsGroup = ({ className = '' }) => {
       <div className="absolute left-0 top-0 flex justify-center items-center w-full h-full pointer-events-none">
         <p className="font-clashdisplay_semibold text-white pt-6 text-lg">Sonata</p>
       </div>
-      {user ? (
-        <Balances />
-      ) : (
-        <div />
-      )}
+      {user ? <Balances /> : <div />}
     </div>
   );
 };
