@@ -17,6 +17,7 @@ const SongMarketSection = () => {
 
   return (
     <div className="flex flex-col gap-2 items-center w-full px-6">
+      <p className="py-2 font-clashdisplay_medium text-white text-sm">Markets Open at 1M NOTES</p>
       <div className="flex items-center justify-between w-full">
         {totalNotes == undefined ? (
           <Skeleton className="h-10 w-20 rounded-full" />
