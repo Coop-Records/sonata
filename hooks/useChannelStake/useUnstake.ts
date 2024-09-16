@@ -1,16 +1,17 @@
-import { useToast } from "@/components/ui/use-toast";
-import requestUnstake from "@/lib/sonata/staking/requestChannelUnstake";
-import { useNeynarProvider } from "@/providers/NeynarProvider";
-import { useStakeProvider } from "@/providers/StakeProvider";
-import { useTipProvider } from "@/providers/TipProvider";
-import { useParams } from "next/navigation";
+import { useToast } from '@/components/ui/use-toast';
+import requestUnstake from '@/lib/sonata/staking/requestChannelUnstake';
+import { useNeynarProvider } from '@/providers/NeynarProvider';
+import { useStakeProvider } from '@/providers/StakeProvider';
+import { useTipProvider } from '@/providers/TipProvider';
+import { useParams } from 'next/navigation';
 
 function useUnstake() {
   const { channelId } = useParams();
   const { toast } = useToast();
   const { signer } = useNeynarProvider();
   const { balance, setBalance } = useTipProvider();
-  const { setChannelDetails, channelDetails, setUserStakedAmount, userStakedAmount } = useStakeProvider();
+  const { setChannelDetails, channelDetails, setUserStakedAmount, userStakedAmount } =
+    useStakeProvider();
 
   const unstake = async (amount: number) => {
     if (!signer?.signer_uuid) {
@@ -38,6 +39,6 @@ function useUnstake() {
     toast({ description: res.message });
   };
   return { unstake };
-};
+}
 
 export default useUnstake;

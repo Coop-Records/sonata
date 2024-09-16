@@ -1,6 +1,6 @@
-import { ChannelAccumulator } from "@/types/ChannelStats";
-import { CHANNELS } from "../consts";
-import supbase from "./serverClient";
+import { ChannelAccumulator } from '@/types/ChannelStats';
+import { CHANNELS } from '../consts';
+import supbase from './serverClient';
 
 async function getChannelAuthorsAndPosts(filterChannels = false, fid?: string) {
   const limit = 1000;
@@ -16,7 +16,10 @@ async function getChannelAuthorsAndPosts(filterChannels = false, fid?: string) {
     if (fid) query.eq('author->fid', fid).neq('author', null);
 
     if (filterChannels) {
-      query.in('channelId', CHANNELS.map(channel => channel.value));
+      query.in(
+        'channelId',
+        CHANNELS.map((channel) => channel.value),
+      );
     } else {
       query.neq('channelId', null);
     }
@@ -26,10 +29,11 @@ async function getChannelAuthorsAndPosts(filterChannels = false, fid?: string) {
     if (error) throw error;
 
     posts.forEach(({ channelId, ...post }) => {
-      if (!entries[channelId]) entries[channelId] = {
-        uniquePosts: new Set,
-        uniqueAuthors: new Set,
-      };
+      if (!entries[channelId])
+        entries[channelId] = {
+          uniquePosts: new Set(),
+          uniqueAuthors: new Set(),
+        };
 
       entries[channelId].uniqueAuthors.add(post.authorFid);
       entries[channelId].uniquePosts.add(post.post_hash);
@@ -37,7 +41,6 @@ async function getChannelAuthorsAndPosts(filterChannels = false, fid?: string) {
 
     if (posts.length < limit) break;
     offset += limit;
-
   } while (offset);
 
   return entries;

@@ -1,16 +1,19 @@
-import useChannelStake from "@/hooks/useChannelStake";
-import { cn, formatBigInt } from "@/lib/utils";
-import { useTipProvider } from "@/providers/TipProvider";
-import Image from "next/image";
-import { useState } from "react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import StakeTabs from "./StakeTabs";
-import formatNumber from "@/lib/formatNumber";
+import useChannelStake from '@/hooks/useChannelStake';
+import { cn, formatBigInt } from '@/lib/utils';
+import { useTipProvider } from '@/providers/TipProvider';
+import Image from 'next/image';
+import { useState } from 'react';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import StakeTabs from './StakeTabs';
+import formatNumber from '@/lib/formatNumber';
 
-const tabs = [{ label: 'Stake', value: true }, { label: 'Unstake', value: false }];
+const tabs = [
+  { label: 'Stake', value: true },
+  { label: 'Unstake', value: false },
+];
 
-function Body({ className = '', stakedBalance = 0, onStart = () => { }, onCompleted = () => { } }) {
+function Body({ className = '', stakedBalance = 0, onStart = () => {}, onCompleted = () => {} }) {
   const [isStake, setIsStake] = useState(true);
   const [amount, setAmount] = useState<number>();
   const { stake, unstake } = useChannelStake();
@@ -22,12 +25,12 @@ function Body({ className = '', stakedBalance = 0, onStart = () => { }, onComple
     await (isStake ? stake(safeAmount) : unstake(safeAmount));
     onCompleted();
   };
-  const max = () => setAmount(isStake ? (balance ?? 0) : stakedBalance);
+  const max = () => setAmount(isStake ? balance ?? 0 : stakedBalance);
 
   return (
     <div className={cn('flex flex-col', className)}>
       <h2 className="text-center text-lg/5 font-semibold md:text-left">Stake NOTES</h2>
-      <StakeTabs tabs={tabs} onSelect={setIsStake} className='mx-auto w-fit' />
+      <StakeTabs tabs={tabs} onSelect={setIsStake} className="mx-auto w-fit" />
       <div>
         <label className="flex cursor-text items-center rounded-xl bg-grey-light px-8 py-5">
           <Input
@@ -38,14 +41,16 @@ function Body({ className = '', stakedBalance = 0, onStart = () => { }, onComple
             onChange={(e) => setAmount(Number(e.target.value))}
             className="h-auto grow border-none bg-transparent p-0 text-base/5 focus-visible:ring-0 focus-visible:ring-offset-0 [&::-webkit-inner-spin-button]:appearance-none"
           />
-          <div className='flex gap-1'>
-            <span className='text-base/5 font-semibold'>NOTES</span>
-            <Image src='/images/notes.png' width={16} height={16} className='size-4' alt="notes" />
+          <div className="flex gap-1">
+            <span className="text-base/5 font-semibold">NOTES</span>
+            <Image src="/images/notes.png" width={16} height={16} className="size-4" alt="notes" />
           </div>
         </label>
         <div className="mt-4 flex items-center justify-end gap-2">
-          <Button variant='outline' onClick={max} className="py-4">MAX</Button>
-          <h5 className='text-sm/4 font-semibold'>
+          <Button variant="outline" onClick={max} className="py-4">
+            MAX
+          </Button>
+          <h5 className="text-sm/4 font-semibold">
             Balance: {isStake ? formatBigInt(balance) : formatNumber(stakedBalance)} NOTES
           </h5>
         </div>
@@ -53,11 +58,12 @@ function Body({ className = '', stakedBalance = 0, onStart = () => { }, onComple
       <Button
         disabled={!amount}
         onClick={processStaking}
-        className="mx-auto h-auto w-[11.25rem] rounded-full p-4 text-base/5 font-normal">
+        className="mx-auto h-auto w-[11.25rem] rounded-full p-4 text-base/5 font-normal"
+      >
         {isStake ? 'Stake' : 'Unstake'}
       </Button>
     </div>
-  )
+  );
 }
 
 export default Body;

@@ -44,7 +44,7 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
             <main className="flex grow flex-col">
               {!channelId && <Header />}
               <div className="h-0 grow">
-                <div id="feed-container" className='size-full'>
+                <div id="feed-container" className="size-full">
                   {channelId && <ChannelHeader />}
                   <div className={cn('mt-4 container space-y-6', { 'max-w-3xl': enableMaxWidth })}>
                     {user && !username && !channelId && <CreatePost />}

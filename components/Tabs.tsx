@@ -12,7 +12,7 @@ interface Props {
   }[];
   className?: string;
   onChange?: (value: string) => void;
-};
+}
 
 export default function Tabs({ tabs, className = '', onChange }: Props) {
   const { setQueryParam } = useQueryParams();

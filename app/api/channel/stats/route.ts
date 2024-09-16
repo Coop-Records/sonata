@@ -1,7 +1,7 @@
-import sortChannels from "@/lib/sortChannels";
-import getChannelStats from "@/lib/supabase/getChannelStats";
-import getFidChannelStats from "@/lib/supabase/getFidChannelStats";
-import { NextRequest } from "next/server";
+import sortChannels from '@/lib/sortChannels';
+import getChannelStats from '@/lib/supabase/getChannelStats';
+import getFidChannelStats from '@/lib/supabase/getFidChannelStats';
+import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest) {
   const applyChannelFilter = req.nextUrl.searchParams.get('apply_channel_filter');
@@ -17,7 +17,9 @@ export async function GET(req: NextRequest) {
       console.log('channelStats count', channelStats.length);
 
       const allChannelStats = sortChannels(channelStats);
-      const channels = onlyChannelIds ? allChannelStats.map(channel => channel.channelId) : allChannelStats;
+      const channels = onlyChannelIds
+        ? allChannelStats.map((channel) => channel.channelId)
+        : allChannelStats;
 
       return Response.json({ message: 'success', channels });
     }

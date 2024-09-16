@@ -16,18 +16,18 @@ const Header = ({ className = '' }) => {
   const { profile } = useProfileProvider();
 
   const filteredTabs = useMemo(() => {
-    return tabs.filter(tab => {
+    return tabs.filter((tab) => {
       const userTabs = tab.value === FeedType.Posts || tab.value === 'stakes';
       if (username) return userTabs;
 
       const isDisabled = (tab.value === FeedType.Following && !user) || userTabs;
       return !isDisabled;
-    })
+    });
   }, [username, user]);
 
   return (
     <header className={className}>
-      <div className='mb-1 pt-2 md:pt-6'>
+      <div className="mb-1 pt-2 md:pt-6">
         <HeaderButtonsGroup />
       </div>
       <div className="container">

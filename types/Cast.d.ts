@@ -1,4 +1,7 @@
-import { Cast as CastType, CastWithInteractionsReactions } from '@neynar/nodejs-sdk/build/neynar-api/v2';
+import {
+  Cast as CastType,
+  CastWithInteractionsReactions,
+} from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { Address } from 'viem';
 
 export type Cast = CastType & {
@@ -18,4 +21,4 @@ export interface CastResponse {
       likes_count: number;
     } & CastWithInteractionsReactions;
   };
-};
+}

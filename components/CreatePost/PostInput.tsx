@@ -1,6 +1,6 @@
-import { ChangeEvent, ReactNode } from "react";
-import { Input } from "../ui/input";
-import { cn } from "@/lib/utils";
+import { ChangeEvent, ReactNode } from 'react';
+import { Input } from '../ui/input';
+import { cn } from '@/lib/utils';
 
 interface Props {
   action: ReactNode;
@@ -11,9 +11,13 @@ interface Props {
 }
 
 function PostInput({ action, onChange, value, placeholder, className }: Props) {
-
   return (
-    <div className={cn("flex grow items-center justify-between rounded-[100px] bg-grey-light p-3", className)}>
+    <div
+      className={cn(
+        'flex grow items-center justify-between rounded-[100px] bg-grey-light p-3',
+        className,
+      )}
+    >
       <Input
         value={value}
         className="border-none bg-transparent text-muted-foreground focus-visible:ring-0 focus-visible:ring-offset-0"
@@ -22,7 +26,7 @@ function PostInput({ action, onChange, value, placeholder, className }: Props) {
       />
       {action}
     </div>
-  )
+  );
 }
 
 export default PostInput;

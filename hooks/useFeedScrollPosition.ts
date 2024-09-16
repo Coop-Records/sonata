@@ -4,7 +4,8 @@ function useFeedScrollPosition() {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [scrollHeight, setScrollHeight] = useState(0);
 
-  const feedContainer = typeof window !== "undefined" ? document.getElementById('feed-container') : null;
+  const feedContainer =
+    typeof window !== 'undefined' ? document.getElementById('feed-container') : null;
 
   useEffect(() => {
     const feedContainer = document?.getElementById('feed-container');
@@ -14,7 +15,7 @@ function useFeedScrollPosition() {
     const handleScroll = () => {
       setScrollPosition(feedContainer.scrollTop);
       setScrollHeight(feedContainer.scrollHeight);
-    }
+    };
 
     feedContainer.addEventListener('scroll', handleScroll);
 
@@ -22,7 +23,6 @@ function useFeedScrollPosition() {
       feedContainer.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
 
   return { scrollPosition, scrollHeight, feedContainer };
 }

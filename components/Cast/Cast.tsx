@@ -11,7 +11,6 @@ import Like from './Like';
 import Share from './Share';
 import { Separator } from '@/components/ui/separator';
 import UpvoteDownvote from '../UpvoteDownvote';
-import { isNil } from 'lodash';
 import CollectButton from './CollectButton';
 import { EmbedUrl } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import findCollectibleUrl from '@/lib/findCollectibleUrlInCastEmbeds';
@@ -43,11 +42,7 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
   return (
     <div className="w-full space-y-4 ">
       <div className="flex gap-2">
-        <UserDetails
-          user={author}
-          hasHypersub={!isNil(cast.hypersub_subscribed_since)}
-          createdAt={cast.created_at}
-        />
+        <UserDetails user={author} createdAt={cast.created_at} />
       </div>
 
       <MediaPlayer metadata={metadata} />

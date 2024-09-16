@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useState } from "react";
-import useQueryParams from "./useQueryParams";
+import { useCallback, useEffect, useState } from 'react';
+import useQueryParams from './useQueryParams';
 
 export default function useTabs(tabs: { value: string }[]) {
   const { queryParams } = useQueryParams();
 
   const getTab = useCallback(() => {
     const tab = queryParams.get('tab');
-    const found = tabs.findIndex(t => t.value === tab);
+    const found = tabs.findIndex((t) => t.value === tab);
 
     if (found >= 0) return found;
     return 0;

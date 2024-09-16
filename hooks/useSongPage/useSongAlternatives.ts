@@ -1,5 +1,5 @@
-import isValidUrl from "@/lib/isValidUrl";
-import { useEffect, useState } from "react";
+import isValidUrl from '@/lib/isValidUrl';
+import { useEffect, useState } from 'react';
 
 export default function useSongAlternatives(songLink: string) {
   const [alternatives, setAlternative] = useState<{ [key: string]: string }>({});
@@ -8,7 +8,9 @@ export default function useSongAlternatives(songLink: string) {
     if (!isValidUrl(songLink)) return;
 
     (async () => {
-      const response = await fetch(`/api/songLink/fetchLink?trackUrl=${encodeURIComponent(songLink)}`);
+      const response = await fetch(
+        `/api/songLink/fetchLink?trackUrl=${encodeURIComponent(songLink)}`,
+      );
       if (!response.ok) return;
       const data = await response.json();
       if (!data) return;

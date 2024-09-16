@@ -28,17 +28,18 @@ export default function UiProvider({ children }: any) {
     return true;
   };
 
-  useEffect(() => { if (signer) setIsSignInDialogOpen(false) }, [signer]);
+  useEffect(() => {
+    if (signer) setIsSignInDialogOpen(false);
+  }, [signer]);
 
   useEffect(() => {
-    fetch(
-      '/api/channel/stats?apply_channel_filter=true&only_channel_ids=true',
-      { cache: 'force-cache' }
-    )
-      .then(res => res.json())
-      .then(data => {
+    fetch('/api/channel/stats?apply_channel_filter=true&only_channel_ids=true', {
+      cache: 'force-cache',
+    })
+      .then((res) => res.json())
+      .then((data) => {
         const items = data?.channels?.map(
-          (channelId: string) => CHANNELS.find(channel => channel.value == channelId)!
+          (channelId: string) => CHANNELS.find((channel) => channel.value == channelId)!,
         );
         if (items) setMenuItems(items);
       });

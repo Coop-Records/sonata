@@ -139,5 +139,6 @@ export const CHAIN = IS_TEST ? baseSepolia : base;
 export const SONG_MARKET_CONTRACT = '0xc05c4d631a8e0fdaa2d2cea1dba3727351eeb73e' as Address;
 export const MINIMUM_NOTES_FOR_SONG_MARKET = 1111;
 export const SONG_MARKET_POINT_SYSTEM_ID = 3285;
-export const MIN_MINTS_FOR_SONG_MARKET = 11111n;
+export const MARKET_COUNTDOWN = IS_TEST ? 1n : BigInt(24 * 60 * 60);
+export const MIN_MINTS_FOR_SONG_MARKET = IS_TEST ? 2n : 11111n;
 export const ZORA_MINT_FEE = 11100000000000n;

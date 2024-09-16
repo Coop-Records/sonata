@@ -11,7 +11,7 @@ function parseCollectionUrl(input: string) {
   return {
     chain: match[1] as ZoraChains,
     collectionAddress: match[2] as Address,
-    tokenId: match[3]
+    tokenId: match[3],
   };
 }
 

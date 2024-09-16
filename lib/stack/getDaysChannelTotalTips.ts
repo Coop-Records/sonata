@@ -1,5 +1,5 @@
-import { eventTipChannel } from "./events";
-import getDaysEvents from "./getDaysEvents";
+import { eventTipChannel } from './events';
+import getDaysEvents from './getDaysEvents';
 
 async function getDaysChannelTotalTips(channelId: string, daysAgo = 7) {
   const events = await getDaysEvents(eventTipChannel(channelId), daysAgo);

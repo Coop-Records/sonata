@@ -1,5 +1,5 @@
-import { PrivyBatchUserResponse } from "@/types/Privy";
-import privyClient from "./privyClient";
+import { PrivyBatchUserResponse } from '@/types/Privy';
+import privyClient from './privyClient';
 
 async function getAllChannels() {
   let cursor = null;
@@ -18,6 +18,6 @@ async function getAllChannels() {
   } while (cursor);
 
   return channels;
-};
+}
 
 export default getAllChannels;

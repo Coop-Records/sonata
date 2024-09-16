@@ -8,8 +8,8 @@ const StakeContext = createContext({
   loading: true,
   userStakedAmount: 0,
   channelDetails: DEFAULT_CHANNEL_DETAILS,
-  setChannelDetails: (() => { }) as Dispatch<SetStateAction<typeof DEFAULT_CHANNEL_DETAILS>>,
-  setUserStakedAmount: (() => { }) as Dispatch<SetStateAction<number>>
+  setChannelDetails: (() => {}) as Dispatch<SetStateAction<typeof DEFAULT_CHANNEL_DETAILS>>,
+  setUserStakedAmount: (() => {}) as Dispatch<SetStateAction<number>>,
 });
 
 const StakeProvider = ({ children }: any) => {
@@ -17,9 +17,7 @@ const StakeProvider = ({ children }: any) => {
   const channelDetails = useChannelDetails();
 
   return (
-    <StakeContext.Provider value={{ balance, ...channelDetails }}>
-      {children}
-    </StakeContext.Provider>
+    <StakeContext.Provider value={{ balance, ...channelDetails }}>{children}</StakeContext.Provider>
   );
 };
 

@@ -12,13 +12,13 @@ const BASEpublicServerClient = createPublicClient({
 
 const checkAddressBalances = async (verifications: Address[]) => {
   return BASEpublicServerClient.multicall({
-    contracts: verifications.map(address => ({
+    contracts: verifications.map((address) => ({
       address: hypersubContractAddress,
       abi: HyperSub as any,
       functionName: 'balanceOf',
       args: [address],
     })),
-    batchSize: 3000
+    batchSize: 3000,
   });
 };
 

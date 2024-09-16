@@ -18,11 +18,8 @@ const HeaderButtonsGroup = ({ className = '' }) => {
   const { username, channelId } = useParams();
 
   return (
-    <div className={cn("container flex items-center justify-between md:justify-end", className)}>
-      <Button
-        variant="link"
-        className={cn('p-0 text-5xl md:hidden', channelId && 'text-white')}
-      >
+    <div className={cn('container flex items-center justify-between md:justify-end', className)}>
+      <Button variant="link" className={cn('p-0 text-5xl md:hidden', channelId && 'text-white')}>
         <HamburgerMenuIcon onClick={() => setMenuOpen(!menuOpen)} className="size-6" />
       </Button>
       {(username || channelId) && (

@@ -90,7 +90,7 @@ module.exports = {
   },
   plugins: [
     require('tailwindcss-animate'),
-    function({ addUtilities }) {
+    function ({ addUtilities }) {
       const newUtilities = {
         '.scrollbar-thin': {
           '--scrollbar-width': '6px',
@@ -101,6 +101,6 @@ module.exports = {
         },
       };
       addUtilities(newUtilities);
-    }
+    },
   ],
 };

@@ -8,7 +8,7 @@ const getStackClient = (pointSystemId: number) => {
   });
 };
 
-export const stack = getStackClient(Number(process.env.STACK_SYSTEM_ID))
-export const songMarketStack = getStackClient(SONG_MARKET_POINT_SYSTEM_ID)
+export const stack = getStackClient(Number(process.env.STACK_SYSTEM_ID));
+export const songMarketStack = getStackClient(SONG_MARKET_POINT_SYSTEM_ID);
 
 export default getStackClient;

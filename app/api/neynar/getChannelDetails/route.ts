@@ -1,8 +1,8 @@
-import { NextRequest } from "next/server";
+import { NextRequest } from 'next/server';
 
 const options: any = {
   method: 'GET',
-  headers: { accept: 'application/json', api_key: process.env.NEYNAR_API_KEY }
+  headers: { accept: 'application/json', api_key: process.env.NEYNAR_API_KEY },
 };
 
 export async function GET(req: NextRequest) {
@@ -13,7 +13,10 @@ export async function GET(req: NextRequest) {
 
     const queryParams = new URLSearchParams({ id: channelId, type: 'id' });
 
-    const response = await fetch('https://api.neynar.com/v2/farcaster/channel?' + queryParams.toString(), options);
+    const response = await fetch(
+      'https://api.neynar.com/v2/farcaster/channel?' + queryParams.toString(),
+      options,
+    );
 
     if (!response.ok) throw Error(response.statusText);
 

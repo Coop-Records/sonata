@@ -20,7 +20,7 @@ async function executeUserTip({
   if (amount <= 0) throw Error('Invalid amount');
 
   const post = await getCastByHash(postHash);
-  const recipientFid = post?.authorFid || post?.author?.fid;
+  const recipientFid = post.author.fid;
   if (tipperFid === recipientFid) throw Error('Can not tip yourself');
   const channelId = post.channelId;
 
@@ -98,7 +98,7 @@ async function executeUserTip({
   updates.map(({ error }, id) => (error ? console.error({ error, id }) : undefined));
 
   await marketHook(post);
-  
+
   return {
     tipRemaining: remaining_tip_allocation,
     totalTipOnPost,

@@ -11,9 +11,13 @@ const HorizontalScroller = ({ items }: any) => {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={item.imgUrl} alt="" className="size-8 rounded-full" />
           <p className="font-sora text-base text-purple">
-            <Link className='hover:text-purple-800' href={'/' + item.sender}>@{item.sender}</Link>
+            <Link className="hover:text-purple-800" href={'/' + item.sender}>
+              @{item.sender}
+            </Link>
             {` tipped ${item.amount} NOTES to `}
-            <Link className='hover:text-purple-800' href={'/' + item.receiver}>@{item.receiver}</Link>
+            <Link className="hover:text-purple-800" href={'/' + item.receiver}>
+              @{item.receiver}
+            </Link>
           </p>
         </div>
       ))}

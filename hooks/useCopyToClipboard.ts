@@ -1,5 +1,5 @@
-import { useToast } from "@/components/ui/use-toast";
-import { useCallback } from "react";
+import { useToast } from '@/components/ui/use-toast';
+import { useCallback } from 'react';
 
 export default function useCopyToClipboard() {
   const { toast } = useToast();
@@ -11,7 +11,7 @@ export default function useCopyToClipboard() {
     } catch (error) {
       console.error('Failed to copy to clipboard:', error);
     }
-  }, [])
+  }, []);
 
   return { copy };
 }

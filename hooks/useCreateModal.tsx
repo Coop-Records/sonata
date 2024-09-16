@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useToast } from '@/components/ui/use-toast';
 import callPostApi from '@/lib/callPostApi';
 import isValidUrl from '@/lib/isValidUrl';
@@ -21,20 +21,19 @@ const useCreateDialog = () => {
     }
     if (!signer?.signer_uuid) return;
 
-    callPostApi(signer.signer_uuid, embedUrl, channelId).then(
-      async res => {
+    callPostApi(signer.signer_uuid, embedUrl, channelId)
+      .then(async (res) => {
         toast({ description: 'Posted!!!' });
         if (res.status == 307) {
           const data = await res.json();
           router.push(data.link);
         }
-      }
-    ).catch(
-      () => toast({ description: 'Failed' })
-    ).finally(() => {
-      setEmbedUrl('');
-      setIsPostDialogOpen(false);
-    });
+      })
+      .catch(() => toast({ description: 'Failed' }))
+      .finally(() => {
+        setEmbedUrl('');
+        setIsPostDialogOpen(false);
+      });
   };
 
   const handleClick = () => {
@@ -42,10 +41,14 @@ const useCreateDialog = () => {
   };
 
   return {
-    handleClick, handlePost,
-    isPostDialogOpen, setIsPostDialogOpen,
-    embedUrl, setEmbedUrl,
-    channelId, setChannelId
+    handleClick,
+    handlePost,
+    isPostDialogOpen,
+    setIsPostDialogOpen,
+    embedUrl,
+    setEmbedUrl,
+    channelId,
+    setChannelId,
   };
 };
 

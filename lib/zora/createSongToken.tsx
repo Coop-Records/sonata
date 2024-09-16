@@ -1,5 +1,6 @@
 import {
   CHAIN,
+  MARKET_COUNTDOWN,
   MIN_MINTS_FOR_SONG_MARKET,
   REFFERAL_ADDRESS,
   SONG_MARKET_CONTRACT,
@@ -20,7 +21,7 @@ const createSongToken = async (songLink: string) => {
         tokenMetadataURI,
         salesConfig: {
           type: 'timed',
-          marketCountdown: BigInt(24 * 60 * 60),
+          marketCountdown: MARKET_COUNTDOWN,
           erc20Name: 'sonata song market',
           erc20Symbol: 'SONG',
           minimumMarketEth: MIN_MINTS_FOR_SONG_MARKET * ZORA_MINT_FEE,

@@ -1,6 +1,6 @@
-import getAllPostsForSongLink from "@/lib/sonata/song/getAllPostsForSongLink";
-import { SupabasePost } from "@/types/SupabasePost";
-import { useEffect, useState } from "react";
+import getAllPostsForSongLink from '@/lib/sonata/song/getAllPostsForSongLink';
+import { SupabasePost } from '@/types/SupabasePost';
+import { useEffect, useState } from 'react';
 
 export default function useSongCasts(songLink: string) {
   const [posts, setPosts] = useState<SupabasePost[]>([]);
@@ -10,7 +10,7 @@ export default function useSongCasts(songLink: string) {
     getAllPostsForSongLink(songLink).then((response: any) => {
       if (Array.isArray(response.posts)) setPosts(response.posts);
       setLoading(false);
-    })
+    });
   }, [songLink]);
 
   return { posts, loading };

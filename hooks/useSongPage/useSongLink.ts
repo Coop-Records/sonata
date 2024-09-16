@@ -1,5 +1,5 @@
-import { useParams, useSearchParams } from "next/navigation";
-import { useMemo } from "react";
+import { useParams, useSearchParams } from 'next/navigation';
+import { useMemo } from 'react';
 
 export default function useSongLink() {
   const searchParams = useSearchParams();
@@ -11,8 +11,7 @@ export default function useSongLink() {
 
     if (songLinkParam.length == 1) link = songLinkParam[0];
     else {
-      link = songLinkParam[0].replaceAll('%3A', ':') +
-        '//' + songLinkParam.slice(1).join('/');
+      link = songLinkParam[0].replaceAll('%3A', ':') + '//' + songLinkParam.slice(1).join('/');
     }
 
     if (!query) return link;
