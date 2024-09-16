@@ -1,10 +1,8 @@
 import useWalletClient from '@/hooks/useWalletClient';
-import getPublicClient from '@/lib/viem/getPublicClient';
+import viemPublicClient from '@/lib/viem/viemPublicClient';
 import { CollectionObject } from '@/lib/sonata/song/createCollectionObject';
 import { useCallback, useEffect, useState } from 'react';
-import { CHAIN } from '@/lib/consts';
 import { zoraCreator1155ImplABI } from '@zoralabs/protocol-deployments';
-const client = getPublicClient(CHAIN);
 
 export default function useBalance(collection?: CollectionObject) {
   const { address, loading: walletClientLoading } = useWalletClient();
@@ -16,7 +14,7 @@ export default function useBalance(collection?: CollectionObject) {
     if (!collection || !address) return;
     setFetchingBalance(true);
     try {
-      const balance = await client.readContract({
+      const balance = await viemPublicClient.readContract({
         address: collection.address,
         abi: zoraCreator1155ImplABI,
         functionName: 'balanceOf',

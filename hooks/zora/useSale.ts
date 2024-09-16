@@ -2,12 +2,10 @@ import {
   zoraTimedSaleStrategyAddress,
   zoraTimedSaleStrategyABI,
 } from '@zoralabs/protocol-deployments';
-import getPublicClient from '@/lib/viem/getPublicClient';
+import viemPublicClient from '@/lib/viem/viemPublicClient';
 import { CollectionObject } from '@/lib/sonata/song/createCollectionObject';
 import { useEffect, useState } from 'react';
 import { CHAIN } from '@/lib/consts';
-
-const client = getPublicClient(CHAIN);
 
 export default function useSale(collection?: CollectionObject) {
   const [saleData, setSaleData] = useState<any>();
@@ -18,7 +16,7 @@ export default function useSale(collection?: CollectionObject) {
       if (!collection) return;
       setLoading(true);
       try {
-        const saleData = await client.readContract({
+        const saleData = await viemPublicClient.readContract({
           address: zoraTimedSaleStrategyAddress[CHAIN.id],
           abi: zoraTimedSaleStrategyABI,
           functionName: 'saleV2',
