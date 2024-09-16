@@ -6,8 +6,6 @@ import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { useUi } from '@/providers/UiProvider';
 import Header from '@/components/Header';
 import GlobalPlayer from '@/components/GlobalPlayer';
-import CreatePost from '@/components/CreatePost';
-import { useNeynarProvider } from '@/providers/NeynarProvider';
 import FeedProvider from '@/providers/FeedProvider';
 import ProfileProvider from '@/providers/ProfileProvider';
 import { useParams } from 'next/navigation';
@@ -18,8 +16,8 @@ import ChannelHeader from '@/components/Header/ChannelHeader';
 export default function FeedLayout({ children }: { children: ReactNode }) {
   const { menuOpen, setMenuOpen } = useUi();
   const { username, channelId } = useParams();
-  const { user } = useNeynarProvider();
   const enableMaxWidth = !channelId && !username;
+  const { setIsCastPostOpen } = useUi();
 
   return (
     <ProfileProvider>
@@ -45,13 +43,19 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
                 <div id="feed-container" className="size-full">
                   {channelId && <ChannelHeader />}
                   <div className={cn('mt-4 px-6 space-y-6', { 'max-w-3xl': enableMaxWidth })}>
-                    {user && !username && !channelId && <CreatePost />}
                     {children}
                   </div>
                 </div>
               </div>
             </main>
           </div>
+          <button
+            type="button"
+            className="bg-blue fixed z-40 bottom-4 right-4 text-white text-[32px] w-16 h-16 rounded-full"
+            onClick={() => setIsCastPostOpen(true)}
+          >
+            +
+          </button>
           <GlobalPlayer />
         </StakeProvider>
       </FeedProvider>

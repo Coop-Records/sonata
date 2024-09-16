@@ -20,8 +20,10 @@ export default function SignInDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Please sign in to continue</DialogTitle>
-          <DialogDescription>Connect with you farcaster account</DialogDescription>
+          <DialogTitle className="!text-white">Please sign in to continue</DialogTitle>
+          <DialogDescription className="!text-white">
+            Connect with you farcaster account
+          </DialogDescription>
         </DialogHeader>
         <DialogFooter className="w-full sm:justify-center">
           <SignInButton />
