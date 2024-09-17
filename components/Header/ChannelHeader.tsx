@@ -1,37 +1,13 @@
 'use client';
-import useFeedScrollPosition from '@/hooks/useFeedScrollPosition';
 import { useStakeProvider } from '@/providers/StakeProvider';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
-import { useSpring } from 'react-spring';
 import { Avatar } from '../ui/avatar';
 import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
-import DataPoints from '../ChannelDetails/DataPoints';
-import formatNumber from '@/lib/formatNumber';
-import StakeDialog from '../ChannelDetails/StakeDialog';
-import Skeleton from '../ChannelDetails/Skeleton';
 
 const ChannelHeader = () => {
+  const { channelImage } = useStakeProvider();
   const { channelId } = useParams();
-  const { scrollPosition } = useFeedScrollPosition();
-  const [showLess, setShowLess] = useState(false);
-  const headerRef = useRef<HTMLDivElement>(null);
-  const { loading, channelDetails: channel, userStakedAmount, channelImage } = useStakeProvider();
-
-  useEffect(() => {
-    const headerHeight = headerRef.current?.offsetHeight ?? 0;
-
-    if (!headerHeight) return;
-
-    if (scrollPosition > headerHeight + 10) setShowLess(true);
-    else setShowLess(false);
-  }, [scrollPosition, headerRef]);
-
-  const animation = useSpring({
-    transform: showLess ? 'translateY(0)' : 'translateY(-20px)',
-    config: { tension: 200, friction: 20, bounce: 0 },
-  });
 
   return (
     <main className="pr-6 mb-4">
@@ -61,12 +37,6 @@ const ChannelHeader = () => {
           </div>
         </div>
       </div>
-      {loading ? <Skeleton /> : <DataPoints channel={channel} />}
-      <StakeDialog balance={userStakedAmount} />
-      <p className="mt-2 text-sm font-clashdisplay_medium text-white text-center">
-        <span className="text-sm font-clashdisplay">Staked: </span>
-        {formatNumber(userStakedAmount)} NOTES
-      </p>
     </main>
   );
 };

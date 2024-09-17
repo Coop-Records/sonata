@@ -5,7 +5,7 @@ import Loader from '@/components/Loader';
 import { useFeedProvider } from '@/providers/FeedProvider';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-const Feeds = () => {
+const Feeds = ({ scrollTarget = 'feed-container' }: { scrollTarget?: any }) => {
   const { feed, fetchMore, hasMore } = useFeedProvider();
 
   return (
@@ -16,7 +16,7 @@ const Feeds = () => {
       loader={<Loader className="w-full" />}
       endMessage={<p className="py-4 text-center text-sm">{`That's All!`}</p>}
       className="!overflow-y-hidden"
-      scrollableTarget="feed-container"
+      scrollableTarget={scrollTarget}
     >
       <Feed feed={feed} />
     </InfiniteScroll>

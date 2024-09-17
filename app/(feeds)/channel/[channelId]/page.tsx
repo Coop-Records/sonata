@@ -1,4 +1,4 @@
-import Feeds from '@/app/(feeds)/feeds';
+import ChannelPage from '@/components/ChannelPage';
 import { CHANNELS } from '@/lib/consts';
 
 export async function generateStaticParams() {
@@ -8,5 +8,5 @@ export async function generateStaticParams() {
 }
 
 export default function Channel() {
-  return <Feeds />;
+  return <ChannelPage />;
 }

@@ -3,6 +3,7 @@ import useQueryParams from '@/hooks/useQueryParams';
 import useTabs from '@/hooks/useTabs';
 import { cn } from '@/lib/utils';
 import Tab from './Tab';
+import { useSpring, animated } from 'react-spring';
 
 interface Props {
   tabs: {
@@ -12,9 +13,10 @@ interface Props {
   }[];
   className?: string;
   onChange?: (value: string) => void;
+  isSticky?: boolean;
 }
 
-export default function Tabs({ tabs, className = '', onChange }: Props) {
+export default function Tabs({ tabs, className = '', onChange, isSticky = false }: Props) {
   const { setQueryParam } = useQueryParams();
   const { activeTab, setActiveTab } = useTabs(tabs);
 
@@ -24,8 +26,16 @@ export default function Tabs({ tabs, className = '', onChange }: Props) {
     setQueryParam('tab', value);
   };
 
+  const animation = useSpring({
+    transform: isSticky ? 'translateY(0)' : 'translateY(-20px)',
+    config: { tension: 200, friction: 20, bounce: 0 },
+  });
+
   return (
-    <ul className={cn('flex gap-4 md:gap-8 w-full', className)}>
+    <animated.ul
+      className={`flex gap-4 md:gap-8 w-full ${className} ${isSticky ? 'sticky top-0 z-10 backdrop-blur-[2px] bg-[#0000000D]' : ''}`}
+      style={isSticky ? animation : {}}
+    >
       {tabs.map((tab, index) => (
         <Tab
           tab={tab}
@@ -34,6 +44,6 @@ export default function Tabs({ tabs, className = '', onChange }: Props) {
           onClick={() => onTabChange(tab.value, index)}
         />
       ))}
-    </ul>
+    </animated.ul>
   );
 }

@@ -1,7 +1,5 @@
-import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Drawer, DrawerContent } from '@/components/ui/drawer';
-import formatNumber from '@/lib/formatNumber';
 import { useUi } from '@/providers/UiProvider';
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';

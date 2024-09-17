@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 
-function useFeedScrollPosition() {
+function useFeedScrollPosition(feedContainerName: string = 'feed-container') {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [scrollHeight, setScrollHeight] = useState(0);
 
   const feedContainer =
-    typeof window !== 'undefined' ? document.getElementById('feed-container') : null;
+    typeof window !== 'undefined' ? document.getElementById(feedContainerName) : null;
 
   useEffect(() => {
-    const feedContainer = document?.getElementById('feed-container');
+    const feedContainer = document?.getElementById(feedContainerName);
 
     if (!feedContainer) return;
 
@@ -22,7 +22,7 @@ function useFeedScrollPosition() {
     return () => {
       feedContainer.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [feedContainerName]);
 
   return { scrollPosition, scrollHeight, feedContainer };
 }

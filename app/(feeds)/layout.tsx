@@ -8,14 +8,10 @@ import Header from '@/components/Header';
 import GlobalPlayer from '@/components/GlobalPlayer';
 import FeedProvider from '@/providers/FeedProvider';
 import ProfileProvider from '@/providers/ProfileProvider';
-import { useParams } from 'next/navigation';
 import StakeProvider from '@/providers/StakeProvider';
-import { cn } from '@/lib/utils';
 
 export default function FeedLayout({ children }: { children: ReactNode }) {
   const { menuOpen, setMenuOpen } = useUi();
-  const { username, channelId } = useParams();
-  const enableMaxWidth = !channelId && !username;
   const { setIsCastPostOpen } = useUi();
 
   return (
@@ -38,11 +34,9 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
 
             <main className="flex grow flex-col">
               <Header />
-              <div className="h-0 grow">
-                <div id="feed-container" className="size-full">
-                  <div className={cn('mt-4 px-6 space-y-6', { 'max-w-3xl': enableMaxWidth })}>
-                    {children}
-                  </div>
+              <div className="h-0 grow overflow-y-hidden">
+                <div id="feed-container" className="size-full px-6 mt-4 space-y-6">
+                  {children}
                 </div>
               </div>
             </main>
