@@ -26,7 +26,7 @@ export default function MobileMenu({ isSingleCast = false }: { isSingleCast?: bo
       {!isSingleCast && <ChannelFilter />}
       <Separator className="!bg-border-light" />
       <div className="md:hidden pl-10 pb-10">
-        {!user ? (
+        {user ? (
           <>
             <button
               onClick={signOut}
