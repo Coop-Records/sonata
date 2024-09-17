@@ -11,7 +11,6 @@ import ProfileProvider from '@/providers/ProfileProvider';
 import { useParams } from 'next/navigation';
 import StakeProvider from '@/providers/StakeProvider';
 import { cn } from '@/lib/utils';
-import ChannelHeader from '@/components/Header/ChannelHeader';
 
 export default function FeedLayout({ children }: { children: ReactNode }) {
   const { menuOpen, setMenuOpen } = useUi();
@@ -38,10 +37,9 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
             </nav>
 
             <main className="flex grow flex-col">
-              {!channelId && <Header />}
+              <Header />
               <div className="h-0 grow">
                 <div id="feed-container" className="size-full">
-                  {channelId && <ChannelHeader />}
                   <div className={cn('mt-4 px-6 space-y-6', { 'max-w-3xl': enableMaxWidth })}>
                     {children}
                   </div>

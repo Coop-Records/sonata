@@ -1,27 +1,23 @@
 'use client';
-import Tabs from '@/components/Tabs';
 import useFeedScrollPosition from '@/hooks/useFeedScrollPosition';
-import { tabs } from '@/lib/consts';
-import { cn } from '@/lib/utils';
 import { useStakeProvider } from '@/providers/StakeProvider';
-import { FeedType } from '@/types/Feed';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
-import ChannelDetails from '../ChannelDetails';
-import { Separator } from '../ui/separator';
-import HeaderButtonsGroup from './HeaderButtonsGroup';
 import { useEffect, useRef, useState } from 'react';
-import { useSpring, animated } from 'react-spring';
+import { useSpring } from 'react-spring';
+import { Avatar } from '../ui/avatar';
+import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
+import DataPoints from '../ChannelDetails/DataPoints';
+import formatNumber from '@/lib/formatNumber';
+import StakeDialog from '../ChannelDetails/StakeDialog';
+import Skeleton from '../ChannelDetails/Skeleton';
 
-const ChannelHeader = ({ className = '' }) => {
+const ChannelHeader = () => {
   const { channelId } = useParams();
-  const { channelImage } = useStakeProvider();
   const { scrollPosition } = useFeedScrollPosition();
   const [showLess, setShowLess] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
-  const filteredTabs = tabs.filter(
-    ({ value }) => value == FeedType.Recent || value == FeedType.Trending,
-  );
+  const { loading, channelDetails: channel, userStakedAmount, channelImage } = useStakeProvider();
 
   useEffect(() => {
     const headerHeight = headerRef.current?.offsetHeight ?? 0;
@@ -38,52 +34,40 @@ const ChannelHeader = ({ className = '' }) => {
   });
 
   return (
-    <>
-      <header className={cn('z-10', className)} ref={headerRef}>
-        <div className="grid grid-rows-[172px_60px] max-md:grid-rows-[172px] [&>*]:col-span-full">
-          <div
-            style={{
-              backgroundImage: `url("${channelImage}")`,
-              boxShadow: 'inset 0 0 0 1000px #141a1eb2',
-            }}
-            className="row-[1/2] bg-cover bg-center bg-no-repeat pt-12"
-          >
-            <HeaderButtonsGroup />
-          </div>
-
-          <div className="container row-span-full self-end">
-            <Image
-              src={channelImage ?? ''}
-              height={120}
-              width={120}
-              className="size-[120px] rounded-full border-[5px] border-white object-cover max-md:hidden"
-              alt={channelId as string}
-            />
+    <main className="pr-6 mb-4">
+      <div className="flex gap-2 my-4 items-center">
+        <Image
+          src={channelImage ?? ''}
+          height={72}
+          width={72}
+          className="size-[72px] rounded-full object-cover"
+          alt={channelId as string}
+        />
+        <div>
+          <p className="text-white font-clashdisplay_medium text-md">{channelId as string}</p>
+          <div className="text-grey text-sm font-clashdisplay flex flex-wrap items-center">
+            Discussions about all types of music
+            <div className="flex items-center">
+              Moderated by&nbsp;
+              <Avatar className="size-4 cursor-pointer">
+                <AvatarImage
+                  className="object-cover object-center"
+                  src={'https://i.imgur.com/Hf9CCmq.jpg'}
+                />
+                <AvatarFallback>akhil_bvs</AvatarFallback>
+              </Avatar>
+              &nbsp;<span className="text-white">@akhil_bvs</span>
+            </div>
           </div>
         </div>
-
-        <div className="container pt-4">
-          <ChannelDetails channelId={channelId as string} />
-          <Tabs tabs={filteredTabs} />
-          <Separator className="-mt-px bg-grey-light" />
-        </div>
-      </header>
-
-      {showLess && (
-        <animated.div className={cn('sticky top-0 z-10 bg-white', className)} style={animation}>
-          <div className="container flex items-center gap-3 py-2 shadow-sm">
-            <Image
-              src={channelImage}
-              height={40}
-              width={40}
-              className="size-10 rounded-full object-cover"
-              alt={channelId as string}
-            />
-            <h1 className="text-xl font-semibold">/{channelId}</h1>
-          </div>
-        </animated.div>
-      )}
-    </>
+      </div>
+      {loading ? <Skeleton /> : <DataPoints channel={channel} />}
+      <StakeDialog balance={userStakedAmount} />
+      <p className="mt-2 text-sm font-clashdisplay_medium text-white text-center">
+        <span className="text-sm font-clashdisplay">Staked: </span>
+        {formatNumber(userStakedAmount)} NOTES
+      </p>
+    </main>
   );
 };
 
