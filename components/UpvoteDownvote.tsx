@@ -10,8 +10,8 @@ import { PopoverTrigger } from '@radix-ui/react-popover';
 import { useUi } from '@/providers/UiProvider';
 import { Badge } from './ui/badge';
 import { Input } from './ui/input';
-import { ArrowBigUp } from 'lucide-react';
 import { useStakeProvider } from '@/providers/StakeProvider';
+import Icon from './ui/icon';
 
 const defaultTips = {
   DEGEN: [10, 50, 100],
@@ -71,21 +71,18 @@ export default function UpvoteDownvote({
 
   if (!(verifications && verifications.length > 0)) return <></>;
   return (
-    <div className="flex flex-row rounded-full bg-muted px-1">
+    <div className="flex flex-row rounded-full px-1">
       <Popover open={showUpvoteDropdown} onOpenChange={setShowUpvoteDropdown}>
-        <PopoverTrigger asChild className={cn('rounded-full !bg-grey-light', className)}>
-          <Button
-            variant="ghost"
-            className={cn(
-              'rounded-full flex items-center flex-row gap-1 font-semibold py-2 px-4 bg-muted h-auto',
-              'flex-row-reverse bg-transparent hover:bg-transparent',
-            )}
+        <PopoverTrigger asChild className={cn('rounded-full !bg-none', className)}>
+          <button
+            type="button"
             onClick={handleUpvoteClick}
+            className="flex items-center gap-1 !bg-none text-xs text-white font-clashdisplay_medium"
           >
+            <Icon name="arrowBigUp" className="text-white" />
             <span>{formatBigInt(BigInt(total))}</span>
             <Image src={logos.NOTES} width={16} height={16} alt="" />
-            <ArrowBigUp className="hover:fill-black" />
-          </Button>
+          </button>
         </PopoverTrigger>
         <PopoverContent className="flex w-48 flex-col gap-2">
           <h3 className="mb-2 text-xs font-semibold">Upvote</h3>

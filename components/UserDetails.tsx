@@ -15,37 +15,26 @@ export default function UserDetails({
   createdAt?: SupabasePost['created_at'];
 }) {
   return (
-    <div className={cn('flex space-x-3', className)}>
+    <div className={cn('flex space-x-2 items-center', className)}>
       <Link href={`/${user.username}`}>
-        <Avatar className="size-8">
+        <Avatar className="size-4">
           <AvatarImage src={user.pfp_url} />
           <AvatarFallback>{user.display_name}</AvatarFallback>
         </Avatar>
       </Link>
       <div className="flex flex-col gap-1">
-        <div className="flex flex-row items-center gap-1 align-middle">
-          <a
-            href={`/${user.username}`}
-            target="_blank"
-            className="text-sm font-semibold leading-none"
-          >
-            {user.display_name}
+        <div className="flex flex-row items-center gap-1 text-grey text-[10px]">
+          <a href={`/${user.username}`} target="_blank" className="leading-none flex gap-1">
+            <p className="truncate max-w-[50px]">{user.display_name}</p> posted
           </a>
           {user.power_badge && <Image src="/images/hypersub.png" width={20} height={20} alt="" />}
           {createdAt && (
-            <span className="text-sm leading-none text-muted-foreground">
+            <span className="leading-none">
               {'• '}
-              {timeFromNow(createdAt)}
+              {timeFromNow(createdAt)} ago
             </span>
           )}
         </div>
-        <a
-          href={`/${user.username}`}
-          target="_blank"
-          className="text-xs leading-none text-muted-foreground hover:underline"
-        >
-          @{user.username}
-        </a>
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ export type TrackMetadata = {
   artworkUrl: string;
   url: string;
   feedId: number;
+  channelId?: string;
 };
 
 export type TrackControls = {

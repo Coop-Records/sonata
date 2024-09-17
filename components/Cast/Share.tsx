@@ -1,8 +1,7 @@
 import findValidEmbed from '@/lib/findValidEmbed';
 import { SupabasePost } from '@/types/SupabasePost';
-import { ShareIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import useCopyToClipboard from '@/hooks/useCopyToClipboard';
+import { FiShare } from 'react-icons/fi';
 
 export default function Share({ cast }: { cast: SupabasePost }) {
   const { copy } = useCopyToClipboard();
@@ -14,12 +13,8 @@ export default function Share({ cast }: { cast: SupabasePost }) {
   };
 
   return (
-    <Button
-      variant="ghost"
-      className="h-auto p-0 text-muted-foreground outline-none hover:bg-transparent"
-      onClick={handleClick}
-    >
-      <ShareIcon />
-    </Button>
+    <button type="button" onClick={handleClick} className="text-grey">
+      <FiShare className="text-md" />
+    </button>
   );
 }

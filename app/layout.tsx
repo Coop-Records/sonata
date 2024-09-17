@@ -40,7 +40,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
   const headerUrl = headersList.get('x-url') || '';
 
-  const backgroundColor = headerUrl?.includes('/api') ? 'bg-gray-100' : 'bg-white';
+  const backgroundColor = headerUrl?.includes('/api')
+    ? 'bg-gray-100'
+    : "bg-cover bg-[url('/images/mobile-bg.png')]";
 
   return (
     <html lang="en" className={sora.variable}>
@@ -49,6 +51,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       >
         <Providers>
           <div id="player-portal" className="pointer-events-none fixed left-0 top-0 opacity-0" />
+          <button
+            type="button"
+            className="bg-blue fixed z-[10000] bottom-4 right-4 text-white text-[32px] w-16 h-16 rounded-full"
+          >
+            +
+          </button>
           {children}
           <Toaster />
         </Providers>
