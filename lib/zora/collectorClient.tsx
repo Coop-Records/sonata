@@ -1,10 +1,10 @@
 import { createCollectorClient } from '@zoralabs/protocol-sdk';
-import getPublicClient from '../viem/getPublicClient';
-import { CHAIN } from '../consts';
+import viemPublicClient from '@/lib/viem/viemPublicClient';
+import { CHAIN } from '@/lib/consts';
 
 const collectorClient = createCollectorClient({
   chainId: CHAIN.id,
-  publicClient: getPublicClient(CHAIN),
+  publicClient: viemPublicClient,
 });
 
 export default collectorClient;

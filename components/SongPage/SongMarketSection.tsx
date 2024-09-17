@@ -1,19 +1,26 @@
 import { Progress } from '../ui/progress';
-import CollectButton from './CollectButton';
 import { MINIMUM_NOTES_FOR_SONG_MARKET } from '@/lib/consts';
 import { useSongPageProvider } from '@/providers/SongPageProvider';
-import { usePrivy } from '@privy-io/react-auth';
-import ConnectButton from '../ConnectButton';
 import { Skeleton } from '../ui/skeleton';
 import Image from 'next/image';
 import { formatBigInt } from '@/lib/utils';
 import Tooltip from '../ui/tooltip';
+import ConnectButton from '@/components/ConnectButton';
+import SellButton from '@/components/SellButton';
+import CollectButton from '@/components/CollectButton';
+import useSale from '@/hooks/zora/useSale';
+import useBalance from '@/hooks/zora/useBalance';
+import useWalletClient from '@/hooks/useWalletClient';
 
 const SongMarketSection = () => {
   const { totalNotes, collection } = useSongPageProvider();
-  const { authenticated } = usePrivy();
+  const { address } = useWalletClient();
   const progressPercentage = totalNotes ? (totalNotes / MINIMUM_NOTES_FOR_SONG_MARKET) * 100 : 0;
   const tokenCreated = Boolean(collection && collection.zora);
+
+  const { saleData } = useSale(collection);
+  const { balance } = useBalance(collection);
+  const saleEnabled = saleData?.secondaryActivated && balance;
 
   return (
     <div className="flex flex-col gap-2 items-center w-full px-6">
@@ -48,10 +55,13 @@ const SongMarketSection = () => {
       </div>
       {!tokenCreated ? (
         <Progress value={progressPercentage > 100 ? 100 : progressPercentage} className="w-full" />
-      ) : !authenticated ? (
+      ) : !address ? (
         <ConnectButton />
       ) : (
-        <CollectButton />
+        <div className="flex flex-col gap-2">
+          <CollectButton collection={collection} />
+          {saleEnabled && <SellButton collection={collection} />}
+        </div>
       )}
     </div>
   );
