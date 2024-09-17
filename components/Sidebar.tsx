@@ -26,12 +26,12 @@ export default function MobileMenu({ isSingleCast = false }: { isSingleCast?: bo
       {!isSingleCast && <ChannelFilter />}
       <Separator className="!bg-border-light" />
       <div className="md:hidden pl-10 pb-10">
-        {user ? (
+        {!user ? (
           <>
             <button
               onClick={signOut}
               type="button"
-              className="w-full text-white font-clashdisplay_medium flex items-center gap-1 mt-4 ml-2"
+              className="w-full text-white font-clashdisplay_medium flex items-center gap-1 ml-2"
             >
               Logout <Icon name="exit" />
             </button>
