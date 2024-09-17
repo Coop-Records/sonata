@@ -16,7 +16,7 @@ export default function MobileMenu({ isSingleCast = false }: { isSingleCast?: bo
         <Image src="/images/notes.png" width={20} height={20} alt="" />
         <span className="font-clashdisplay_medium">Sonata</span>
       </Link>
-      <div className="pt-4 pl-6">
+      <div className="pt-8 pl-6">
         <Avatar className="size-9 cursor-pointer">
           <AvatarImage className="object-cover object-center" src={user?.pfp_url} />
           <AvatarFallback>{user?.display_name?.[0]}</AvatarFallback>
@@ -25,7 +25,7 @@ export default function MobileMenu({ isSingleCast = false }: { isSingleCast?: bo
       <Separator className="!bg-border-light" />
       {!isSingleCast && <ChannelFilter />}
       <Separator className="!bg-border-light" />
-      <div className="md:hidden pl-4 pb-6">
+      <div className="md:hidden pl-10 pb-10">
         {user ? (
           <>
             <button

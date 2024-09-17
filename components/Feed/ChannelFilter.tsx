@@ -11,7 +11,7 @@ export default function ChannelFilter() {
 
   return (
     <div className="flex grow flex-col pl-6">
-      <h2 className="mb-2 font-clashdisplay_semibold text-white text-2xl">Channels</h2>
+      <h2 className="mb-2 font-clashdisplay_medium text-white text-2xl">Channels</h2>
       <div className="grow basis-0 overflow-y-auto scrollbar-thin md:-mr-16 md:pr-12">
         {menuItems.map((option) => {
           const active = channelId === option.value;
@@ -33,7 +33,7 @@ export default function ChannelFilter() {
                 />
               </div>
 
-              <span>{option.label}</span>
+              <span>{option.value}</span>
             </Link>
           );
         })}
