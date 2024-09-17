@@ -8,10 +8,18 @@ const ConnectButton = () => {
   if (!ready) return null;
 
   if (address) {
-    return <Button disabled className="bg-green !w-[186px] !rounded-full">Connected</Button>;
+    return (
+      <Button disabled className="bg-green !w-[186px] !rounded-full">
+        Connected
+      </Button>
+    );
   }
 
-  return <Button onClick={connectWallet} className="bg-green !w-[186px] !rounded-full">Connect</Button>;
+  return (
+    <Button onClick={connectWallet} className="bg-green !w-[186px] !rounded-full">
+      Connect
+    </Button>
+  );
 };
 
 export default ConnectButton;

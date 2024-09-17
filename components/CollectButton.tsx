@@ -15,7 +15,7 @@ const CollectButton = ({ collection }: { collection?: CollectionObject }) => {
       <Button onClick={mint} disabled={isLoading} className="bg-green !w-[186px] !rounded-full">
         {isLoading ? <Loader /> : <div>Mint 111 ✧</div>}
       </Button>
-      <p className="font-clashdisplay text-white">
+      <p className="font-clashdisplay text-white text-center">
         <span className="font-clashdisplay_medium">500/1000</span> Collected
       </p>
     </>
