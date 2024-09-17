@@ -8,7 +8,7 @@ const SignInButton = () => {
   return (
     <Button
       onClick={signIn}
-      className="h-auto rounded-full bg-blue px-4 py-2 font-light text-white"
+      className="h-auto rounded-full bg-blue px-6 py-3 font-medium text-white font-sora"
     >
       Sign-In
     </Button>

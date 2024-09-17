@@ -1,12 +1,10 @@
-import { useSongPageProvider } from '@/providers/SongPageProvider';
 import { Button } from '@/components/ui/button';
 import Loader from '@/components/Loader';
 import useMint from '@/hooks/zora/useMint';
 import useMintFee from '@/hooks/zora/useMintFee';
+import { CollectionObject } from '@/lib/sonata/song/createCollectionObject';
 
-const CollectButton = () => {
-  const { collection } = useSongPageProvider();
-
+const CollectButton = ({ collection }: { collection?: CollectionObject }) => {
   const { mint, loading: minting } = useMint(collection);
   const { fee, loading: feeLoading } = useMintFee(collection);
 

@@ -13,6 +13,8 @@ import { EmbedUrl } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import findCollectibleUrl from '@/lib/findCollectibleUrlInCastEmbeds';
 import Image from 'next/image';
 import { PLATFORM_ICONS } from '@/lib/consts';
+import Icon from '../ui/icon';
+import { Progress } from '../ui/progress';
 
 const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
   const embed = findValidEmbed(cast);
@@ -51,6 +53,11 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
       <MediaPlayer metadata={metadata} />
       <div className="flex gap-2">
         <UpvoteDownvote verifications={verifications} cast={cast} />
+        <div className="flex gap-1 items-center">
+          <Icon name="lock" className="text-grey size-4" />
+          <p className="text-xs text-grey">20%</p>
+          <Progress value={20} className="w-20 h-2" />
+        </div>
         {collectibleLink && <CollectButton collectUrl={collectibleLink} />}
         <div className="flex flex-grow justify-end gap-4">
           <Image src={PLATFORM_ICONS[metadata.type]} alt="" width={16} height={16} />
