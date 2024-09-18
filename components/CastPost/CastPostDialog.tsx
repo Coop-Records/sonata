@@ -64,14 +64,6 @@ export default function CastPostDialog({
           />
           {isChannelListOpen && (
             <section className="flex gap-2 overflow-x-scroll px-2 text-grey">
-              <button
-                type="button"
-                className="flex cursor-pointer select-none items-center gap-2 px-4 py-2 text-sm/4 font-semibold outline-none"
-                onClick={() => onSelect(undefined)}
-              >
-                <Globe size={24} />
-                /none
-              </button>
               {menuItems.map((item, i) => (
                 <button
                   className="flex cursor-pointer items-center gap-2 px-4 py-2 text-sm/4 font-semibold outline-none"
@@ -93,18 +85,20 @@ export default function CastPostDialog({
           )}
           <section className="self-end">
             <Button
-              className="text-grey hover:bg-transparent"
+              className={`text-grey hover:bg-transparent ${selected ? '' : 'mr-8'}`}
               variant="ghost"
               onClick={() => setOpen(false)}
             >
               Cancel
             </Button>
-            <Button
-              className="h-auto rounded-[6.25rem] px-6 py-2 !bg-white !text-background"
-              onClick={handleClick}
-            >
-              Cast
-            </Button>
+            {typeof selected == 'number' && selected > 0 && (
+              <Button
+                className="h-auto rounded-[6.25rem] px-6 py-2 !bg-white !text-background"
+                onClick={handleClick}
+              >
+                Cast
+              </Button>
+            )}
           </section>
         </div>
       </DrawerContent>
