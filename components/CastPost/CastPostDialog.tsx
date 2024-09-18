@@ -22,6 +22,7 @@ export default function CastPostDialog({
     selected,
     isChannelListOpen,
     setIsChannelListOpen,
+    embedUrl,
   } = useCreateDialog();
 
   const handleClick = () => {
@@ -52,6 +53,7 @@ export default function CastPostDialog({
             className="w-full px-4 py-[2px]"
             selected={selected}
             onClick={() => setIsChannelListOpen(true)}
+            value={embedUrl}
           />
           {isChannelListOpen && <ChannelList onSelect={onSelect} />}
           <section className="flex gap-3 self-end">
