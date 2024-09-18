@@ -23,7 +23,7 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
     <ProfileProvider>
       <FeedProvider>
         <StakeProvider>
-          <div className="flex grow">
+          <div className="flex h-screen">
             <meta property="of:accepts:xmtp" content="2024-02-01" />
             <nav className="md:hidden">
               <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
@@ -37,7 +37,7 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
               <Sidebar />
             </nav>
 
-            <main className="flex grow flex-col">
+            <main className="flex h-full flex-col overflow-hidden">
               {!channelId && <Header />}
               <div className="h-0 grow">
                 <div id="feed-container" className="size-full">
