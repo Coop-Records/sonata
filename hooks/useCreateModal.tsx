@@ -13,12 +13,12 @@ const useCreateDialog = () => {
   const [channelId, setChannelId] = useState<string>();
   const [selected, setSelected] = useState<number>();
   const [isChannelListOpen, setIsChannelListOpen] = useState(false);
-  const { menuItems } = useUi();
+  const { menuItems, setIsCastPostOpen } = useUi();
   const { toast } = useToast();
   const router = useRouter();
   const canCast = (typeof selected == 'number' && selected >= 0) || embedUrl;
 
-  const handlePost = (callback: () => void = () => {}) => {
+  const handlePost = () => {
     if (!isValidUrl(embedUrl)) {
       toast({ description: `Sound / Soundcloud / Spotify / Youtube only` });
       return;
@@ -29,7 +29,7 @@ const useCreateDialog = () => {
       .then(async (res) => {
         toast({ description: 'Posted!!!' });
         if (res.status == 307) {
-          callback();
+          setIsCastPostOpen(false);
           const data = await res.json();
           router.push(data.link);
         }
