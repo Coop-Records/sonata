@@ -5,7 +5,6 @@ import useCreateDialog from '@/hooks/useCreateModal';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '../ui/drawer';
 import PostInput from './PostInput';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
 
 export default function CastPostDialog({
   open,
@@ -15,28 +14,16 @@ export default function CastPostDialog({
   setOpen: (open: boolean) => void;
 }) {
   const { checkLoggedIn } = useUi();
-  const { channelId, setChannelId, handlePost, setEmbedUrl, embedUrl } = useCreateDialog();
+  const {
+    handlePost,
+    setEmbedUrl,
+    embedUrl,
+    onSelect,
+    selected,
+    isChannelListOpen,
+    setIsChannelListOpen,
+  } = useCreateDialog();
   const { menuItems } = useUi();
-
-  const [selected, setSelected] = useState<number>();
-  const [isChannelListOpen, setIsChannelListOpen] = useState(false);
-
-  useEffect(() => {
-    if (channelId == undefined && selected !== undefined) {
-      setSelected(undefined);
-      return;
-    }
-
-    const menuItem = menuItems.findIndex((item) => item.value == channelId);
-    if (menuItem >= 0) setSelected(menuItem);
-  }, [channelId]);
-
-  const onSelect = (index: number | undefined) => {
-    setSelected(index);
-    const channelId = typeof index == 'number' ? menuItems[index].value : undefined;
-    setChannelId(channelId);
-    setIsChannelListOpen(false);
-  };
 
   const handleClick = () => {
     if (!checkLoggedIn()) return;
