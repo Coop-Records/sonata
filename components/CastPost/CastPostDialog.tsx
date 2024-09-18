@@ -27,7 +27,7 @@ export default function CastPostDialog({
   const handleClick = () => {
     if (!checkLoggedIn()) return;
 
-    handlePost();
+    handlePost(() => setOpen(false));
   };
   const handleCancel = () => {
     if (isChannelListOpen) {

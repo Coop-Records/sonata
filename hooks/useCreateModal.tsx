@@ -11,7 +11,6 @@ const useCreateDialog = () => {
   const { signer } = useNeynarProvider();
   const [embedUrl, setEmbedUrl] = useState<string>('');
   const [channelId, setChannelId] = useState<string>();
-  const [isPostDialogOpen, setIsPostDialogOpen] = useState<boolean>(false);
   const [selected, setSelected] = useState<number>();
   const [isChannelListOpen, setIsChannelListOpen] = useState(false);
   const { menuItems } = useUi();
@@ -19,7 +18,7 @@ const useCreateDialog = () => {
   const router = useRouter();
   const canCast = (typeof selected == 'number' && selected >= 0) || embedUrl;
 
-  const handlePost = () => {
+  const handlePost = (callback: () => void = () => {}) => {
     if (!isValidUrl(embedUrl)) {
       toast({ description: `Sound / Soundcloud / Spotify / Youtube only` });
       return;
@@ -30,6 +29,7 @@ const useCreateDialog = () => {
       .then(async (res) => {
         toast({ description: 'Posted!!!' });
         if (res.status == 307) {
+          callback();
           const data = await res.json();
           router.push(data.link);
         }
@@ -37,12 +37,7 @@ const useCreateDialog = () => {
       .catch(() => toast({ description: 'Failed' }))
       .finally(() => {
         setEmbedUrl('');
-        setIsPostDialogOpen(false);
       });
-  };
-
-  const handleClick = () => {
-    setIsPostDialogOpen(true);
   };
 
   useEffect(() => {
@@ -63,10 +58,7 @@ const useCreateDialog = () => {
   };
 
   return {
-    handleClick,
     handlePost,
-    isPostDialogOpen,
-    setIsPostDialogOpen,
     embedUrl,
     setEmbedUrl,
     channelId,
