@@ -142,3 +142,110 @@ export const SONG_MARKET_POINT_SYSTEM_ID = 3285;
 export const MARKET_COUNTDOWN = IS_TEST ? 1n : BigInt(24 * 60 * 60);
 export const MIN_MINTS_FOR_SONG_MARKET = IS_TEST ? 2n : 11111n;
 export const ZORA_MINT_FEE = 11100000000000n;
+
+export const FEEDS_MOCK = [
+  {
+    id: 1210529,
+    post_hash: '0x0a5c26f50e719fb76402523c4d6ae0637a5b72b5',
+    points: 1500,
+    version: 1,
+    created_at: '2024-09-17T15:28:04.817+00:00',
+    degen: 10,
+    likes: 6,
+    author: {
+      fid: 210648,
+      object: 'user',
+      pfp_url: 'https://i.imgur.com/KX2nQMz.png',
+      profile: {
+        bio: {
+          text: 'the dev for onchain music',
+        },
+      },
+      username: 'sweetman.eth',
+      power_badge: true,
+      display_name: 'sweetman',
+      active_status: 'inactive',
+      verifications: [
+        '0xcfbf34d385ea2d5eb947063b67ea226dcda3dc38',
+        '0x0b04b2abe7844895cf79bee2734932ff18ee28e8',
+        '0xb5acded340d66678f01097818940a0f028dafb8d',
+      ],
+      follower_count: 1229,
+      custody_address: '0xc0839ddde7ad70bc49fd20fc5800c0fb1b2c4d9c',
+      following_count: 130,
+      verified_addresses: {
+        eth_addresses: [
+          '0xcfbf34d385ea2d5eb947063b67ea226dcda3dc38',
+          '0x0b04b2abe7844895cf79bee2734932ff18ee28e8',
+          '0xb5acded340d66678f01097818940a0f028dafb8d',
+        ],
+        sol_addresses: [],
+      },
+    },
+    embeds: ['{"url":"https://open.spotify.com/track/7Kmfjms3yyhg2y56mN7EfZ?si=fd0eeaec65484be1"}'],
+    channelId: 'music',
+    alternativeEmbeds: [
+      'https://music.amazon.com/albums/B07SCP7X9B?trackAsin=B07SBMRXRM',
+      'https://amazon.com/dp/B07SBMRXRM',
+      'https://audiomack.com/song/hector-lavoe/el-dia-de-mi-suerte',
+      'https://play.anghami.com/song/1161305773?refer=linktree',
+      'https://www.boomplay.com/songs/5860108',
+      'https://www.deezer.com/track/1182194142',
+      'https://geo.music.apple.com/us/album/_/1464270824?i=1464272393&mt=1&app=music&ls=1&at=1000lHKX&ct=api_http&itscg=30200&itsct=odsl_m',
+      'https://geo.music.apple.com/us/album/_/1464270824?i=1464272393&mt=1&app=itunes&ls=1&at=1000lHKX&ct=api_http&itscg=30200&itsct=odsl_m',
+      'https://play.napster.com/track/tra.790205620',
+      'https://www.pandora.com/TR:5812210',
+      'https://soundcloud.com/willie-colon-official/el-dia-de-mi-suerte',
+      'https://listen.tidal.com/track/110215451',
+      'https://music.yandex.ru/track/1181034',
+      'https://www.youtube.com/watch?v=mXZRB_al3fs',
+      'https://music.youtube.com/watch?v=mXZRB_al3fs',
+      'https://open.spotify.com/track/7Kmfjms3yyhg2y56mN7EfZ',
+    ],
+    authorFid: 210648,
+  },
+  {
+    id: 57655,
+    post_hash: '0xd0f35f47bd4ac30165ac8959aeadec23a6851805',
+    points: 0,
+    version: 1,
+    created_at: '2024-09-18T15:28:04.817+00:00',
+    degen: 0,
+    likes: 0,
+    author: {
+      fid: 210648,
+      object: 'user',
+      pfp_url: 'https://i.imgur.com/KX2nQMz.png',
+      profile: {
+        bio: {
+          text: '✧the dev for onchain music\n✧✧✧✧✧✧✧',
+          mentioned_profiles: [],
+        },
+      },
+      username: 'sweetman.eth',
+      power_badge: true,
+      display_name: 'sweetman',
+      active_status: 'inactive',
+      verifications: [
+        '0xcfbf34d385ea2d5eb947063b67ea226dcda3dc38',
+        '0x0b04b2abe7844895cf79bee2734932ff18ee28e8',
+        '0xb5acded340d66678f01097818940a0f028dafb8d',
+      ],
+      follower_count: 1986,
+      custody_address: '0xc0839ddde7ad70bc49fd20fc5800c0fb1b2c4d9c',
+      following_count: 163,
+      verified_addresses: {
+        eth_addresses: [
+          '0xcfbf34d385ea2d5eb947063b67ea226dcda3dc38',
+          '0x0b04b2abe7844895cf79bee2734932ff18ee28e8',
+          '0xb5acded340d66678f01097818940a0f028dafb8d',
+        ],
+        sol_addresses: [],
+      },
+    },
+    embeds: ['{"url":"https://open.spotify.com/track/7Kmfjms3yyhg2y56mN7EfZ"}'],
+    channelId: null,
+    alternativeEmbeds: null,
+    authorFid: 210648,
+  },
+];

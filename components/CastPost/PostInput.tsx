@@ -26,7 +26,7 @@ function PostInput({ onClick, onChange, value, selected, placeholder, className 
     >
       <Input
         value={value}
-        className="border-none bg-transparent text-grey focus-visible:ring-0 focus-visible:ring-offset-0"
+        className="border-none bg-transparent text-white focus-visible:ring-0 focus-visible:ring-offset-0"
         placeholder={placeholder}
         onChange={onChange}
       />

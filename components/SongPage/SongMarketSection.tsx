@@ -1,21 +1,15 @@
-import { Progress } from '../ui/progress';
-import { MINIMUM_NOTES_FOR_SONG_MARKET } from '@/lib/consts';
 import { useSongPageProvider } from '@/providers/SongPageProvider';
-import { Skeleton } from '../ui/skeleton';
-import Image from 'next/image';
-import { formatBigInt } from '@/lib/utils';
-import Tooltip from '../ui/tooltip';
 import ConnectButton from '@/components/ConnectButton';
 import SellButton from '@/components/SellButton';
 import CollectButton from '@/components/CollectButton';
 import useSale from '@/hooks/zora/useSale';
 import useBalance from '@/hooks/zora/useBalance';
 import useWalletClient from '@/hooks/useWalletClient';
+import TipSong from './TipSong';
 
 const SongMarketSection = () => {
-  const { totalNotes, collection } = useSongPageProvider();
+  const { collection } = useSongPageProvider();
   const { address } = useWalletClient();
-  const progressPercentage = totalNotes ? (totalNotes / MINIMUM_NOTES_FOR_SONG_MARKET) * 100 : 0;
   const tokenCreated = Boolean(collection && collection.zora);
 
   const { saleData } = useSale(collection);
@@ -24,45 +18,16 @@ const SongMarketSection = () => {
 
   return (
     <div className="flex flex-col gap-2 items-center w-full px-6">
-      <p className="py-2 font-clashdisplay_medium text-white text-sm">Markets Open at 1M NOTES</p>
-      <div className="flex items-center justify-between w-full">
-        {totalNotes == undefined ? (
-          <Skeleton className="h-10 w-20 rounded-full" />
+      <div className="flex items-center justify-between w-full">{!tokenCreated && <TipSong />}</div>
+      {tokenCreated &&
+        (!address ? (
+          <ConnectButton />
         ) : (
-          <div className="w-full">
-            <section className="w-full relative">
-              <div className="flex justify-between pt-2 text-grey font-clashdisplay_medium text-sm">
-                <p>0</p>
-                <p>1M</p>
-              </div>
-              <Tooltip
-                id="percentage"
-                content={() => (
-                  <div className="flex items-center gap-1 rounded-full bg-blue px-3 py-1">
-                    <span className="text-xs">
-                      {totalNotes ? formatBigInt(BigInt(totalNotes)) : '-'}
-                    </span>
-                    <Image src="/images/notes.png" width={10} height={10} alt="notes" />
-                  </div>
-                )}
-                tipClasses="!bg-blue !rounded-full !p-0"
-              >
-                <Progress value={totalNotes / 10000} className="w-full" />
-              </Tooltip>
-            </section>
+          <div className="flex flex-col gap-2">
+            <CollectButton collection={collection} />
+            {saleEnabled && <SellButton collection={collection} />}
           </div>
-        )}
-      </div>
-      {!tokenCreated ? (
-        <Progress value={progressPercentage > 100 ? 100 : progressPercentage} className="w-full" />
-      ) : !address ? (
-        <ConnectButton />
-      ) : (
-        <div className="flex flex-col gap-2">
-          <CollectButton collection={collection} />
-          {saleEnabled && <SellButton collection={collection} />}
-        </div>
-      )}
+        ))}
     </div>
   );
 };

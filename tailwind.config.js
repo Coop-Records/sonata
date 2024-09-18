@@ -83,6 +83,8 @@ module.exports = {
         clashdisplay_semibold: ['ClashDisplay Semibold', 'sans-serif'],
         clashdisplay: ['ClashDisplay Regular', 'sans-serif'],
         sora: ['var(--font-sora)', 'sans-serif'],
+        inter: ['Inter Regular', 'sans-serif'],
+        inter_thin: ['Inter Thin', 'sans-serif'],
       },
       borderRadius: {
         lg: `var(--radius)`,
