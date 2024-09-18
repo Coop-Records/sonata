@@ -25,6 +25,8 @@ export default function CastPostDialog({
   } = useCreateDialog();
   const { menuItems } = useUi();
 
+  const canCast = (typeof selected == 'number' && selected >= 0) || embedUrl;
+
   const handleClick = () => {
     if (!checkLoggedIn()) return;
 
@@ -78,13 +80,13 @@ export default function CastPostDialog({
           )}
           <section className="flex gap-3 self-end">
             <button
-              className={`py-2 text-grey hover:bg-transparent ${typeof selected == 'number' && selected >= 0 ? '' : 'mr-[96px]'}`}
+              className={`py-2 text-grey hover:bg-transparent ${canCast ? '' : 'mr-[97.5px]'}`}
               type="button"
               onClick={handleCancel}
             >
               Cancel
             </button>
-            {((typeof selected == 'number' && selected >= 0) || embedUrl) && (
+            {canCast && (
               <button
                 className="rounded-[6.25rem] px-6 py-2 !bg-white !text-background"
                 onClick={handleClick}
