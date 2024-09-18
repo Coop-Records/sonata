@@ -9,6 +9,7 @@ import { DEFAULT_FRAME, DESCRIPTION, TITLE, VERCEL_URL } from '@/lib/consts';
 import { getFrameMetadata } from '@coinbase/onchainkit';
 import { Metadata } from 'next';
 import { cn } from '@/lib/utils';
+
 const frameMetadata = { ...getFrameMetadata(DEFAULT_FRAME), 'of:accepts:xmtp': '2024-02-01' };
 
 export const metadata: Metadata = {
@@ -37,9 +38,7 @@ const sora = Sora({
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   const headersList = headers();
-
   const headerUrl = headersList.get('x-url') || '';
-
   const backgroundColor = headerUrl?.includes('/api')
     ? 'bg-gray-100'
     : "bg-cover bg-[url('/images/mobile-bg.png')]";
@@ -47,16 +46,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={sora.variable}>
       <body
-        className={cn('flex min-h-screen flex-col overflow-x-hidden font-sora', backgroundColor)}
+        className={cn('flex h-screen w-screen flex-col overflow-hidden font-sora', backgroundColor)}
       >
         <Providers>
           <div id="player-portal" className="pointer-events-none fixed left-0 top-0 opacity-0" />
-          <button
-            type="button"
-            className="bg-blue fixed z-[49] bottom-4 right-4 text-white text-[32px] w-16 h-16 rounded-full"
-          >
-            +
-          </button>
           {children}
           <Toaster />
         </Providers>

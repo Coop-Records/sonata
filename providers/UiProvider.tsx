@@ -3,10 +3,12 @@ import { CHANNELS } from '@/lib/consts';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
 import { useNeynarProvider } from './NeynarProvider';
+import CastPostDialog from '@/components/CastPost/CastPostDialog';
 
 type UiContextType = {
   menuOpen: boolean;
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsCastPostOpen: React.Dispatch<React.SetStateAction<boolean>>;
   checkLoggedIn: () => boolean;
   isMobile: boolean;
   menuItems: typeof CHANNELS;
@@ -16,6 +18,7 @@ const UiContext = createContext<UiContextType>({} as any);
 export default function UiProvider({ children }: any) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isSignInDialogOpen, setIsSignInDialogOpen] = useState(false);
+  const [isCastPostOpen, setIsCastPostOpen] = useState(false);
   const [menuItems, setMenuItems] = useState(CHANNELS);
   const { signer } = useNeynarProvider();
   const isMobile = useMediaQuery('(max-width: 768px)');
@@ -46,9 +49,12 @@ export default function UiProvider({ children }: any) {
   }, []);
 
   return (
-    <UiContext.Provider value={{ menuOpen, setMenuOpen, checkLoggedIn, isMobile, menuItems }}>
+    <UiContext.Provider
+      value={{ menuOpen, setMenuOpen, setIsCastPostOpen, checkLoggedIn, isMobile, menuItems }}
+    >
       {children}
       <SignInDialog open={isSignInDialogOpen} setOpen={setIsSignInDialogOpen} />
+      <CastPostDialog open={isCastPostOpen} setOpen={setIsCastPostOpen} />
     </UiContext.Provider>
   );
 }
