@@ -17,6 +17,7 @@ const useCreateDialog = () => {
   const { menuItems } = useUi();
   const { toast } = useToast();
   const router = useRouter();
+  const canCast = (typeof selected == 'number' && selected >= 0) || embedUrl;
 
   const handlePost = () => {
     if (!isValidUrl(embedUrl)) {
@@ -74,6 +75,7 @@ const useCreateDialog = () => {
     isChannelListOpen,
     selected,
     setIsChannelListOpen,
+    canCast,
   };
 };
 

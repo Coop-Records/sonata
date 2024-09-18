@@ -4,7 +4,7 @@ import { useUi } from '@/providers/UiProvider';
 import useCreateDialog from '@/hooks/useCreateModal';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '../ui/drawer';
 import PostInput from './PostInput';
-import Image from 'next/image';
+import ChannelList from './ChannelList';
 
 export default function CastPostDialog({
   open,
@@ -17,22 +17,18 @@ export default function CastPostDialog({
   const {
     handlePost,
     setEmbedUrl,
-    embedUrl,
+    canCast,
     onSelect,
     selected,
     isChannelListOpen,
     setIsChannelListOpen,
   } = useCreateDialog();
-  const { menuItems } = useUi();
-
-  const canCast = (typeof selected == 'number' && selected >= 0) || embedUrl;
 
   const handleClick = () => {
     if (!checkLoggedIn()) return;
 
     handlePost();
   };
-
   const handleCancel = () => {
     if (isChannelListOpen) {
       setIsChannelListOpen(false);
@@ -57,27 +53,7 @@ export default function CastPostDialog({
             selected={selected}
             onClick={() => setIsChannelListOpen(true)}
           />
-          {isChannelListOpen && (
-            <section className="flex gap-16 overflow-x-scroll px-2 text-grey">
-              {menuItems.map((item, i) => (
-                <button
-                  className="flex cursor-pointer items-center gap-2 py-2 text-sm/4 font-semibold outline-none"
-                  onClick={() => onSelect(i)}
-                  key={item.value}
-                  type="button"
-                >
-                  <Image
-                    alt={item.label}
-                    src={item.icon}
-                    width={24}
-                    height={24}
-                    className="size-6 rounded-full"
-                  />
-                  {item.label}
-                </button>
-              ))}
-            </section>
-          )}
+          {isChannelListOpen && <ChannelList onSelect={onSelect} />}
           <section className="flex gap-3 self-end">
             <button
               className={`py-2 text-grey hover:bg-transparent ${canCast ? '' : 'mr-[97.5px]'}`}
