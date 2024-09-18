@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { useTipProvider } from '@/providers/TipProvider';
 import { SupabasePost } from '@/types/SupabasePost';
-import { useNeynarProvider } from '@/providers/NeynarProvider';
+import { useUserProvider } from '@/providers/UserProvider';
 import { Popover, PopoverContent } from '@/components/ui/popover';
 import { cn, formatBigInt, isValidNumber } from '@/lib/utils';
 import { PopoverTrigger } from '@radix-ui/react-popover';
@@ -32,7 +32,7 @@ export default function UpvoteDownvote({
   cast: SupabasePost;
   className?: string;
 }) {
-  const { user } = useNeynarProvider();
+  const { user } = useUserProvider();
   const { setChannelDetails } = useStakeProvider();
   const userFid = user?.fid;
   const castAuthorFid = cast.author?.fid;

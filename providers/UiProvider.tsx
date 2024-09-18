@@ -2,7 +2,7 @@ import SignInDialog from '@/components/SignInDialog';
 import { CHANNELS } from '@/lib/consts';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
-import { useNeynarProvider } from './NeynarProvider';
+import { useUserProvider } from './UserProvider';
 import CastPostDialog from '@/components/CastPost/CastPostDialog';
 
 type UiContextType = {
@@ -20,7 +20,7 @@ export default function UiProvider({ children }: any) {
   const [isSignInDialogOpen, setIsSignInDialogOpen] = useState(false);
   const [isCastPostOpen, setIsCastPostOpen] = useState(false);
   const [menuItems, setMenuItems] = useState(CHANNELS);
-  const { signer } = useNeynarProvider();
+  const { signer } = useUserProvider();
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   const checkLoggedIn = () => {

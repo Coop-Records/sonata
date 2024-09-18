@@ -1,6 +1,6 @@
 'use client';
 
-import NeynarProvider from '@/providers/NeynarProvider';
+import UserProvider from '@/providers/UserProvider';
 import AudioProvider from './audio';
 import TipProvider from './TipProvider';
 import UiProvider from './UiProvider';
@@ -8,13 +8,13 @@ import PrivyProvider from './PrivyProvider';
 
 const Providers = ({ children }: { children: React.ReactNode }) => (
   <PrivyProvider>
-    <NeynarProvider>
+    <UserProvider>
       <TipProvider>
         <UiProvider>
           <AudioProvider>{children}</AudioProvider>
         </UiProvider>
       </TipProvider>
-    </NeynarProvider>
+    </UserProvider>
   </PrivyProvider>
 );
 

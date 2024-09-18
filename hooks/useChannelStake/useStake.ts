@@ -1,6 +1,6 @@
 import { useToast } from '@/components/ui/use-toast';
 import requestStake from '@/lib/sonata/staking/requestChannelStake';
-import { useNeynarProvider } from '@/providers/NeynarProvider';
+import { useUserProvider } from '@/providers/UserProvider';
 import { useStakeProvider } from '@/providers/StakeProvider';
 import { useTipProvider } from '@/providers/TipProvider';
 import { useParams } from 'next/navigation';
@@ -8,7 +8,7 @@ import { useParams } from 'next/navigation';
 function useStake() {
   const { channelId } = useParams();
   const { toast } = useToast();
-  const { signer } = useNeynarProvider();
+  const { signer } = useUserProvider();
   const { balance, setBalance } = useTipProvider();
   const { setChannelDetails, channelDetails, setUserStakedAmount, userStakedAmount } =
     useStakeProvider();

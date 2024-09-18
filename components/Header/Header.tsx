@@ -1,6 +1,6 @@
 'use client';
 import Tabs from '@/components/Tabs';
-import { useNeynarProvider } from '@/providers/NeynarProvider';
+import { useUserProvider } from '@/providers/UserProvider';
 import { useProfileProvider } from '@/providers/ProfileProvider';
 import { FeedType } from '@/types/Feed';
 import { useParams, usePathname } from 'next/navigation';
@@ -11,7 +11,7 @@ import HeaderButtonsGroup from './HeaderButtonsGroup';
 import { tabs } from '@/lib/consts';
 
 const Header = ({ className = '' }) => {
-  const { user } = useNeynarProvider();
+  const { user } = useUserProvider();
   const { username, channelId } = useParams();
   const { profile } = useProfileProvider();
   const pathname = usePathname();

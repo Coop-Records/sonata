@@ -8,9 +8,23 @@ export default function useWalletClient() {
   const wallet = wallets[0];
   const [walletClient, setWalletClient] = useState<WalletClient>();
   const [address, setAddress] = useState<Address>();
+
+  const disconnect = async () => {
+    wallet?.disconnect();
+    setAddress(undefined);
+  };
+
   useEffect(() => {
     const createWallet = async () => {
-      if (!ready || !wallet) return;
+      if (!ready || !wallet) {
+        setAddress(undefined);
+        return;
+      }
+      const isConnected = await wallet.isConnected();
+      if (!isConnected) {
+        setAddress(undefined);
+        return;
+      }
       await wallet.switchChain(CHAIN.id);
       const provider = await wallet.getEthereumProvider();
       const walletClient = createWalletClient({
@@ -26,5 +40,5 @@ export default function useWalletClient() {
     createWallet();
   }, [wallet, ready]);
 
-  return { address, walletClient, loading: !ready };
+  return { address, walletClient, loading: !ready, disconnect };
 }

@@ -1,13 +1,13 @@
 'use client';
-import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { Button } from '@/components/ui/button';
+import { usePrivy } from '@privy-io/react-auth';
 
 const SignInButton = () => {
-  const { signIn } = useNeynarProvider();
+  const { connectWallet } = usePrivy();
 
   return (
     <Button
-      onClick={signIn}
+      onClick={connectWallet}
       className="h-auto rounded-full bg-blue px-6 py-3 font-medium text-white font-sora"
     >
       Sign-In
