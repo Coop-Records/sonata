@@ -1,5 +1,4 @@
 import { FeedType } from '@/types/Feed';
-import { SupabasePost } from '@/types/SupabasePost';
 import { FrameMetadataType } from '@coinbase/onchainkit';
 import { Address, zeroAddress } from 'viem';
 import { base, baseSepolia } from 'viem/chains';
