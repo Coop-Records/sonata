@@ -35,11 +35,6 @@ const Header = ({ className = '' }) => {
         {!channelId && profile && <Profile />}
         {!channelId && (
           <>
-            {pathname === '/' && (
-              <p className="font-clashdisplay_semibold text-2xl text-white py-5 font-bold">
-                Music on Farcaster
-              </p>
-            )}
             <Tabs tabs={filteredTabs} className={!username ? 'justify-start' : ''} />
             <Separator className="-mt-px bg-border" />
           </>
