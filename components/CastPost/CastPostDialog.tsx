@@ -31,6 +31,14 @@ export default function CastPostDialog({
     handlePost();
   };
 
+  const handleCancel = () => {
+    if (isChannelListOpen) {
+      setIsChannelListOpen(false);
+      return;
+    }
+    setOpen(false);
+  };
+
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerContent>
@@ -72,7 +80,7 @@ export default function CastPostDialog({
             <button
               className={`py-2 text-grey hover:bg-transparent ${typeof selected == 'number' && selected >= 0 ? '' : 'mr-[96px]'}`}
               type="button"
-              onClick={() => setIsChannelListOpen(false)}
+              onClick={handleCancel}
             >
               Cancel
             </button>
