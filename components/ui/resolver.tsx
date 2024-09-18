@@ -1,8 +1,12 @@
 import { PiArrowFatUpBold } from 'react-icons/pi';
+import { RxExit } from 'react-icons/rx';
 import { FiLock } from 'react-icons/fi';
+import { IoClose } from 'react-icons/io5';
 
 export const Icons = {
   arrowBigUp: PiArrowFatUpBold,
+  close: IoClose,
+  exit: RxExit,
   lock: FiLock,
   play: () => (
     <svg width="28" height="29" viewBox="0 0 28 29" fill="none" xmlns="http://www.w3.org/2000/svg">

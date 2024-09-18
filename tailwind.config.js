@@ -21,7 +21,10 @@ module.exports = {
     extend: {
       colors: {
         farcaster: '#855DCD',
-        border: '#1F1F1F',
+        border: {
+          DEFAULT: '#1F1F1F',
+          light: '#ffffff1a',
+        },
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
@@ -73,6 +76,8 @@ module.exports = {
         clashdisplay_bold: ['ClashDisplay Bold', 'sans-serif'],
         clashdisplay_semibold: ['ClashDisplay Semibold', 'sans-serif'],
         sora: ['var(--font-sora)', 'sans-serif'],
+        inter: ['Inter Regular', 'sans-serif'],
+        inter_thin: ['Inter Thin', 'sans-serif'],
       },
       borderRadius: {
         lg: `var(--radius)`,

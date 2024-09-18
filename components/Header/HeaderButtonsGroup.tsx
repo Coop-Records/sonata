@@ -7,7 +7,7 @@ import { useTipProvider } from '@/providers/TipProvider';
 import { useParams } from 'next/navigation';
 import HomeButton from './HomeButton';
 import UserMenu from './UserMenu';
-import Image from 'next/image';
+import Balances from './Balances';
 
 const HeaderButtonsGroup = ({ className = '' }) => {
   const { user, loading: userLoading } = useNeynarProvider();
@@ -32,11 +32,7 @@ const HeaderButtonsGroup = ({ className = '' }) => {
       <div className="absolute left-0 top-0 flex justify-center items-center w-full h-full pointer-events-none">
         <p className="font-clashdisplay_semibold text-white pt-6 text-lg">Sonata</p>
       </div>
-      {user ? (
-        <Image src={'/images/logo.png'} width={36} height={36} alt="not found image" />
-      ) : (
-        <div />
-      )}
+      {user ? <Balances /> : <div />}
     </div>
   );
 };
