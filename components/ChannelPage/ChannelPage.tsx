@@ -41,7 +41,7 @@ const ChannelPage = () => {
         <div ref={stickyRef}>
           {loading ? <Skeleton /> : <DataPoints channel={channel} />}
           <StakeDialog balance={userStakedAmount} />
-          <p className="mt-2 text-sm font-clashdisplay_medium text-white text-center">
+          <p className="mt-2 text-sm font-clashdisplay_medium text-white text-center mb-6">
             <span className="text-sm font-clashdisplay">Staked: </span>
             {formatNumber(userStakedAmount)} NOTES
           </p>
