@@ -149,6 +149,7 @@ export const FEEDS_MOCK = [
     post_hash: '0x0a5c26f50e719fb76402523c4d6ae0637a5b72b5',
     points: 1500,
     version: 1,
+    created_at: '2024-09-17T15:28:04.817+00:00',
     degen: 10,
     likes: 6,
     author: {
