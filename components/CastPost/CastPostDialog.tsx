@@ -4,7 +4,6 @@ import { useUi } from '@/providers/UiProvider';
 import useCreateDialog from '@/hooks/useCreateModal';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '../ui/drawer';
 import PostInput from './PostInput';
-import { Button } from '../ui/button';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
