@@ -83,20 +83,21 @@ export default function CastPostDialog({
             </section>
           )}
           <section className="self-end">
-            <Button
-              className={`text-grey hover:bg-transparent ${selected ? '' : 'mr-8'}`}
-              variant="ghost"
+            <button
+              className={`py-2 text-grey hover:bg-transparent ${selected ? '' : 'mr-8'}`}
+              type="button"
               onClick={() => setIsChannelListOpen(false)}
             >
               Cancel
-            </Button>
+            </button>
             {((typeof selected == 'number' && selected >= 0) || embedUrl) && (
-              <Button
-                className="h-auto rounded-[6.25rem] px-6 py-2 !bg-white !text-background"
+              <button
+                className="rounded-[6.25rem] px-6 py-2 !bg-white !text-background"
                 onClick={handleClick}
+                type="button"
               >
                 Cast
-              </Button>
+              </button>
             )}
           </section>
         </div>
