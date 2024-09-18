@@ -44,10 +44,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     : "bg-cover bg-[url('/images/mobile-bg.png')]";
 
   return (
-    <html lang="en" className={sora.variable}>
-      <body
-        className={cn('flex min-h-screen flex-col overflow-x-hidden font-sora', backgroundColor)}
-      >
+    <html lang="en" className={`${sora.variable} !bg-[#02030c]`}>
+      <body className={cn('flex min-h-screen flex-col overflow-hidden font-sora', backgroundColor)}>
         <Providers>
           <div id="player-portal" className="pointer-events-none fixed left-0 top-0 opacity-0" />
           {children}
