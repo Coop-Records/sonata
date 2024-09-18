@@ -16,7 +16,7 @@ export default function CastPostDialog({
   setOpen: (open: boolean) => void;
 }) {
   const { checkLoggedIn } = useUi();
-  const { channelId, setChannelId, handlePost, setEmbedUrl } = useCreateDialog();
+  const { channelId, setChannelId, handlePost, setEmbedUrl, embedUrl } = useCreateDialog();
   const { menuItems } = useUi();
 
   const [selected, setSelected] = useState<number>();
@@ -62,10 +62,10 @@ export default function CastPostDialog({
             onClick={() => setIsChannelListOpen(true)}
           />
           {isChannelListOpen && (
-            <section className="flex gap-2 overflow-x-scroll px-2 text-grey">
+            <section className="flex gap-16 overflow-x-scroll px-2 text-grey">
               {menuItems.map((item, i) => (
                 <button
-                  className="flex cursor-pointer items-center gap-2 px-4 py-2 text-sm/4 font-semibold outline-none"
+                  className="flex cursor-pointer items-center gap-2 py-2 text-sm/4 font-semibold outline-none"
                   onClick={() => onSelect(i)}
                   key={item.value}
                   type="button"
@@ -86,11 +86,11 @@ export default function CastPostDialog({
             <Button
               className={`text-grey hover:bg-transparent ${selected ? '' : 'mr-8'}`}
               variant="ghost"
-              onClick={() => setOpen(false)}
+              onClick={() => setIsChannelListOpen(false)}
             >
               Cancel
             </Button>
-            {typeof selected == 'number' && selected > 0 && (
+            {((typeof selected == 'number' && selected >= 0) || embedUrl) && (
               <Button
                 className="h-auto rounded-[6.25rem] px-6 py-2 !bg-white !text-background"
                 onClick={handleClick}
