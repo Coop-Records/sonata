@@ -68,9 +68,9 @@ export default function CastPostDialog({
               ))}
             </section>
           )}
-          <section className="self-end">
+          <section className="flex gap-3 self-end">
             <button
-              className={`py-2 text-grey hover:bg-transparent ${selected ? '' : 'mr-8'}`}
+              className={`py-2 text-grey hover:bg-transparent ${typeof selected == 'number' && selected >= 0 ? '' : 'mr-[96px]'}`}
               type="button"
               onClick={() => setIsChannelListOpen(false)}
             >
