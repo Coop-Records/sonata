@@ -34,8 +34,17 @@ async function getChannelWeeklyAirdropData() {
     [] as Promise<{ channelId: string; weeklyDrops: any }>[],
   );
 
-  const results = await Promise.all(channels);
-  const data = results.filter((result) => !!result.weeklyDrops?.length);
+  const chunkSize = 99;
+  const data = [];
+  for (let i = 0; i < channels.length; i += chunkSize) {
+    const chunk = channels.slice(i, i + chunkSize);
+    const items = await Promise.all(chunk);
+
+    for (const item of items) {
+      if (item.weeklyDrops?.length) data.push(item);
+    }
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
 
   return data;
 }
