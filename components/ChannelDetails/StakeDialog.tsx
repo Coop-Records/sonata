@@ -1,7 +1,5 @@
-import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Drawer, DrawerContent } from '@/components/ui/drawer';
-import formatNumber from '@/lib/formatNumber';
 import { useUi } from '@/providers/UiProvider';
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
@@ -23,18 +21,14 @@ function StakeDialog({ balance = 0 }) {
 
   return (
     <>
-      <div className="text-center">
-        <Button
+      <div className="my-4">
+        <button
           disabled={isProcessing}
           onClick={openDialog}
-          className="h-auto min-w-48 rounded-full px-9 py-4 text-base font-normal"
+          className="px-6 py-3 rounded-full w-full bg-blue text-md font-sora text-white"
         >
-          {isProcessing ? <Loader2 className="animate-spin" /> : 'STAKE NOTES'}
-        </Button>
-        <p className="mt-2 text-sm font-semibold">
-          <span className="text-sm font-normal text-grey">Staked: </span>
-          {formatNumber(balance)} NOTES
-        </p>
+          {isProcessing ? <Loader2 className="animate-spin" /> : 'Stake NOTES'}
+        </button>
       </div>
 
       <Dialog open={!isMobile && isOpen} onOpenChange={setIsOpen}>

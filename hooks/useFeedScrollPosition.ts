@@ -5,10 +5,10 @@ function useFeedScrollPosition() {
   const [scrollHeight, setScrollHeight] = useState(0);
 
   const feedContainer =
-    typeof window !== 'undefined' ? document.getElementById('feed-container') : null;
+    typeof window !== 'undefined' ? document.getElementById('channel-sticky') : null;
 
   useEffect(() => {
-    const feedContainer = document?.getElementById('feed-container');
+    const feedContainer = document?.getElementById('channel-sticky');
 
     if (!feedContainer) return;
 

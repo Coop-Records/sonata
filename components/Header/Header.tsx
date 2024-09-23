@@ -1,6 +1,5 @@
 'use client';
 import Tabs from '@/components/Tabs';
-import { tabs } from '@/lib/consts';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { useProfileProvider } from '@/providers/ProfileProvider';
 import { FeedType } from '@/types/Feed';
@@ -9,10 +8,11 @@ import { useMemo } from 'react';
 import Profile from '../Profile';
 import { Separator } from '../ui/separator';
 import HeaderButtonsGroup from './HeaderButtonsGroup';
+import { tabs } from '@/lib/consts';
 
 const Header = ({ className = '' }) => {
   const { user } = useNeynarProvider();
-  const { username } = useParams();
+  const { username, channelId } = useParams();
   const { profile } = useProfileProvider();
 
   const filteredTabs = useMemo(() => {
@@ -31,12 +31,16 @@ const Header = ({ className = '' }) => {
         <HeaderButtonsGroup />
       </div>
       <div className="pl-6">
-        {profile && <Profile />}
-        <p className="font-clashdisplay_semibold text-2xl text-white py-5 font-bold">
-          Music on Farcaster
-        </p>
-        <Tabs tabs={filteredTabs} className={!username ? 'justify-start' : ''} />
-        <Separator className="-mt-px bg-border" />
+        {!channelId && profile && <Profile />}
+        {!channelId && (
+          <>
+            <p className="font-clashdisplay_semibold text-2xl text-white py-5 font-bold">
+              Music on Farcaster
+            </p>
+            <Tabs tabs={filteredTabs} className={!username ? 'justify-start' : ''} />
+            <Separator className="-mt-px bg-border" />
+          </>
+        )}
       </div>
     </header>
   );
