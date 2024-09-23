@@ -2,13 +2,13 @@
 import { useToast } from '@/components/ui/use-toast';
 import callPostApi from '@/lib/callPostApi';
 import isValidUrl from '@/lib/isValidUrl';
-import { useNeynarProvider } from '@/providers/NeynarProvider';
+import { useUserProvider } from '@/providers/UserProvider';
 import { useUi } from '@/providers/UiProvider';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const useCreateDialog = () => {
-  const { signer } = useNeynarProvider();
+  const { signer } = useUserProvider();
   const [embedUrl, setEmbedUrl] = useState<string>('');
   const [channelId, setChannelId] = useState<string>();
   const [selected, setSelected] = useState<number>();

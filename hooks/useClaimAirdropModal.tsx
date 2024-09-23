@@ -1,10 +1,10 @@
 import { useToast } from '@/components/ui/use-toast';
 import claimAirdrop from '@/lib/sonata/claimAirdrop';
-import { useNeynarProvider } from '@/providers/NeynarProvider';
+import { useUserProvider } from '@/providers/UserProvider';
 import { useState } from 'react';
 
 const useClaimAirdropModal = () => {
-  const { signer, user } = useNeynarProvider();
+  const { signer, user } = useUserProvider();
   const [isPostDialogOpen, setIsPostDialogOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();

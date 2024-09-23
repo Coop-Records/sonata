@@ -1,6 +1,6 @@
 import { CHANNELS } from '@/lib/consts';
 import getChannelDetails from '@/lib/sonata/getChannelDetails';
-import { useNeynarProvider } from '@/providers/NeynarProvider';
+import { useUserProvider } from '@/providers/UserProvider';
 import { TrackMetadata } from '@/types/Track';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -18,7 +18,7 @@ const DEFAULT_CHANNEL_DETAILS = {
 
 function useChannelDetails() {
   const { channelId } = useParams();
-  const { signer } = useNeynarProvider();
+  const { signer } = useUserProvider();
   const [userStakedAmount, setUserStakedAmount] = useState(0);
   const [channelImage, setChannelImage] = useState('');
   const [channelDetails, setChannelDetails] = useState(DEFAULT_CHANNEL_DETAILS);

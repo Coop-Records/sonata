@@ -1,11 +1,11 @@
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useNeynarProvider } from '@/providers/NeynarProvider';
+import { useUserProvider } from '@/providers/UserProvider';
 import { useUi } from '@/providers/UiProvider';
 
 export default function UserMenu() {
-  const { user } = useNeynarProvider();
+  const { user } = useUserProvider();
 
   const { setMenuOpen } = useUi();
   if (!user) return <></>;

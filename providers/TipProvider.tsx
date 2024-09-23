@@ -4,7 +4,7 @@ import getCurrentNotes from '@/lib/sonata/getCurrentNotes';
 import { isEmpty, isNil } from 'lodash';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Address } from 'viem';
-import { useNeynarProvider } from './NeynarProvider';
+import { useUserProvider } from './UserProvider';
 import { useToast } from '@/components/ui/use-toast';
 import claimAirdrop from '@/lib/sonata/claimAirdrop';
 import { supabaseClient } from '@/lib/supabase/client';
@@ -16,7 +16,7 @@ const TipProvider = ({ children }: any) => {
   const [airdropBalance, setAirdropBalance] = useState<bigint | undefined>(undefined);
   const [balance, setBalance] = useState<bigint | undefined>(undefined);
   const [dailyTipAllowance, setDailyTipAllowance] = useState<bigint | undefined>(undefined);
-  const { user, signer } = useNeynarProvider();
+  const { user, signer } = useUserProvider();
 
   const [remainingTipAllocation, setRemainingTipAllocation] = useState<bigint | undefined>(
     undefined,

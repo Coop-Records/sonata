@@ -4,7 +4,7 @@ import { ReactNode, createContext, useCallback, useContext, useEffect, useState 
 import { SupabasePost } from '@/types/SupabasePost';
 import findValidEmbed from '@/lib/findValidEmbed';
 import mergeArraysUniqueByPostHash from '@/lib/mergeArraysUniqueByPostHash';
-import { useNeynarProvider } from './NeynarProvider';
+import { useUserProvider } from './UserProvider';
 import { fetchPostsLimit } from '@/lib/consts';
 import fetchMetadata from '@/lib/fetchMetadata';
 import { usePlayer } from '@/providers/audio/PlayerProvider';
@@ -30,7 +30,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const [feed, setFeed] = useState<SupabasePost[]>([]);
   const [feedType, setFeedType] = useState<FeedType>();
   const [hasMore, setHasMore] = useState(true);
-  const { user, loading: userLoading } = useNeynarProvider();
+  const { user, loading: userLoading } = useUserProvider();
   const [player, dispatch] = usePlayer();
   const { profile, loading: profileLoading, error: profileError } = useProfileProvider();
 

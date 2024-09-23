@@ -1,15 +1,21 @@
 import SignInButton from './SignInButton';
-import { useNeynarProvider } from '@/providers/NeynarProvider';
+import { useUserProvider } from '@/providers/UserProvider';
 import { Separator } from './ui/separator';
 import ChannelFilter from './Feed/ChannelFilter';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Icon from './ui/icon';
+import { useUi } from '@/providers/UiProvider';
 
 export default function MobileMenu({ isSingleCast = false }: { isSingleCast?: boolean }) {
-  const { user, signOut } = useNeynarProvider();
+  const { setMenuOpen } = useUi();
+  const { user, signOut } = useUserProvider();
 
+  const handleLogout = async () => {
+    await signOut();
+    setMenuOpen(false);
+  };
   return (
     <div className="flex h-full flex-col gap-4 md:px-16 md:py-6">
       <Link href="/" className="mb-8 flex items-center gap-2 max-md:hidden">
@@ -29,7 +35,7 @@ export default function MobileMenu({ isSingleCast = false }: { isSingleCast?: bo
         {user ? (
           <>
             <button
-              onClick={signOut}
+              onClick={handleLogout}
               type="button"
               className="w-full text-white font-clashdisplay_medium flex items-center gap-1 ml-2"
             >

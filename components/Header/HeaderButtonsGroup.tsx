@@ -2,7 +2,7 @@ import ClaimAirdropButton from '@/components/ClaimAirdropButton/ClaimAirdropButt
 import SignInButton from '@/components/SignInButton';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
-import { useNeynarProvider } from '@/providers/NeynarProvider';
+import { useUserProvider } from '@/providers/UserProvider';
 import { useTipProvider } from '@/providers/TipProvider';
 import { usePathname } from 'next/navigation';
 import HomeButton from './HomeButton';
@@ -10,7 +10,7 @@ import UserMenu from './UserMenu';
 import Balances from './Balances';
 
 const HeaderButtonsGroup = ({ className = '' }) => {
-  const { user, loading: userLoading } = useNeynarProvider();
+  const { user, loading: userLoading } = useUserProvider();
   const { airdropBalance } = useTipProvider();
   const pathname = usePathname();
   return (

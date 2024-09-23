@@ -1,6 +1,7 @@
 import { SupabaseUser } from '@/types/SupabaseUser';
+import { Address } from 'viem';
 
-export default async function getUser(fid: number) {
+export default async function getUser(address: Address) {
   const options = {
     method: 'GET',
     headers: { accept: 'application/json' },
@@ -8,7 +9,7 @@ export default async function getUser(fid: number) {
 
   try {
     const queryParams = new URLSearchParams({
-      fids: String(fid),
+      address,
     });
 
     const response = await fetch(`/api/neynar/getUser?${queryParams}`, options);
