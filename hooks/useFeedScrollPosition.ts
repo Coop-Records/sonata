@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 
-function useFeedScrollPosition(feedContainerName: string = 'feed-container') {
+function useFeedScrollPosition() {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [scrollHeight, setScrollHeight] = useState(0);
 
   const feedContainer =
-    typeof window !== 'undefined' ? document.getElementById(feedContainerName) : null;
+    typeof window !== 'undefined' ? document.getElementById('channel-sticky') : null;
 
   useEffect(() => {
-    const feedContainer = document?.getElementById(feedContainerName);
+    const feedContainer = document?.getElementById('channel-sticky');
 
     if (!feedContainer) return;
 
@@ -22,7 +22,7 @@ function useFeedScrollPosition(feedContainerName: string = 'feed-container') {
     return () => {
       feedContainer.removeEventListener('scroll', handleScroll);
     };
-  }, [feedContainerName]);
+  }, []);
 
   return { scrollPosition, scrollHeight, feedContainer };
 }

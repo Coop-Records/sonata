@@ -16,7 +16,7 @@ import Tabs from '../Tabs';
 import { Separator } from '../ui/separator';
 
 const ChannelPage = () => {
-  const { scrollPosition } = useFeedScrollPosition('channel-sticky');
+  const { scrollPosition } = useFeedScrollPosition();
   const [showLess, setShowLess] = useState(false);
   const stickyRef = useRef<HTMLDivElement>(null);
   const { username } = useParams();
