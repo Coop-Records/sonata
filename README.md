@@ -46,7 +46,7 @@ myco API is a powerful tool designed to help developers and creators leverage th
 
 ## How myco API Helps Developers 👨‍💻
 
-1. **Simplified Zora Integration**: Access Zora blockchain data through easy-to-use REST API endpoints. 🔗
+1. **Simplified Zora Integration**: Access Zora protocol data through easy-to-use REST API endpoints. 🔗
 2. **Profile Information**: Retrieve comprehensive Zora profile data for any address. 👤
 3. **Token and Collection Data**: Easily fetch information about Zora tokens and collections. 🖼️
 4. **Rewards System**: Access and track Zora rewards for different activities. 🏆
