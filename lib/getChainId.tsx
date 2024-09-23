@@ -1,11 +1,16 @@
-import { base, baseSepolia } from 'viem/chains';
+import { base, baseSepolia, zora, zoraSepolia } from 'viem/chains';
 
 const getChainId = (chain: string) => {
+  console.log('chain', chain);
   switch (chain) {
-    case 'mainnet':
+    case 'base':
       return base.id;
-    case 'sepolia':
+    case 'baseSepolia':
       return baseSepolia.id;
+    case 'zora':
+      return zora.id;
+    case 'zoraSepolia':
+      return zoraSepolia.id;
     default:
       return base.id;
   }
