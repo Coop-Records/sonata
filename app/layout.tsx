@@ -44,7 +44,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     : "bg-cover bg-[url('/images/mobile-bg.png')]";
 
   return (
-    <html lang="en" className={sora.variable}>
+    <html lang="en" className={`${sora.variable} !bg-blue-dark`}>
       <body
         className={cn('flex h-screen w-screen flex-col overflow-hidden font-sora', backgroundColor)}
       >
