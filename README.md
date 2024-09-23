@@ -67,7 +67,7 @@ For a complete list of available API endpoints and their usage, please refer to 
 
 ## Contributing 🤝
 
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for more details.
+We welcome contributions! Please open a pull request to contribute.
 
 ## License 📄
 
