@@ -3,7 +3,7 @@ import Tabs from '@/components/Tabs';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { useProfileProvider } from '@/providers/ProfileProvider';
 import { FeedType } from '@/types/Feed';
-import { useParams, usePathname } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useMemo } from 'react';
 import Profile from '../Profile';
 import { Separator } from '../ui/separator';
@@ -14,7 +14,6 @@ const Header = ({ className = '' }) => {
   const { user } = useNeynarProvider();
   const { username, channelId } = useParams();
   const { profile } = useProfileProvider();
-  const pathname = usePathname();
 
   const filteredTabs = useMemo(() => {
     return tabs.filter((tab) => {
