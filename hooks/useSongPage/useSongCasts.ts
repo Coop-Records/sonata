@@ -7,10 +7,14 @@ export default function useSongCasts(songLink: string) {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    getAllPostsForSongLink(songLink).then((response: any) => {
-      if (Array.isArray(response.posts)) setPosts(response.posts);
-      setLoading(false);
-    });
+    getAllPostsForSongLink(songLink)
+      .then((response: any) => {
+        if (Array.isArray(response.posts)) setPosts(response.posts);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   }, [songLink]);
 
   return { posts, loading };

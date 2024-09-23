@@ -27,11 +27,11 @@ const Header = ({ className = '' }) => {
   }, [username, user]);
 
   return (
-    <header className={className}>
+    <header className={`w-full ${className}`}>
       <div className="mb-1 pt-2 md:pt-6">
         <HeaderButtonsGroup />
       </div>
-      <div className="pl-6">
+      <div className="pl-6 w-full">
         {!channelId && profile && <Profile />}
         {!channelId && (
           <>
