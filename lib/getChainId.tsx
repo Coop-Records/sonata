@@ -1,7 +1,6 @@
 import { base, baseSepolia, zora, zoraSepolia } from 'viem/chains';
 
 const getChainId = (chain: string) => {
-  console.log('chain', chain);
   switch (chain) {
     case 'base':
       return base.id;
