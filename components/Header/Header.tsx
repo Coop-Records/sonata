@@ -3,7 +3,7 @@ import Tabs from '@/components/Tabs';
 import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { useProfileProvider } from '@/providers/ProfileProvider';
 import { FeedType } from '@/types/Feed';
-import { useParams, usePathname } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useMemo } from 'react';
 import Profile from '../Profile';
 import { Separator } from '../ui/separator';
@@ -14,7 +14,6 @@ const Header = ({ className = '' }) => {
   const { user } = useNeynarProvider();
   const { username, channelId } = useParams();
   const { profile } = useProfileProvider();
-  const pathname = usePathname();
 
   const filteredTabs = useMemo(() => {
     return tabs.filter((tab) => {
@@ -31,15 +30,10 @@ const Header = ({ className = '' }) => {
       <div className="mb-1 pt-2 md:pt-6">
         <HeaderButtonsGroup />
       </div>
-      <div className="pl-6 w-full">
+      <div className="pl-6 w-full mt-4">
         {!channelId && profile && <Profile />}
         {!channelId && (
           <>
-            {pathname === '/' && (
-              <p className="font-clashdisplay_semibold text-2xl text-white py-5 font-bold">
-                Music on Farcaster
-              </p>
-            )}
             <Tabs tabs={filteredTabs} className={!username ? 'justify-start' : ''} />
             <Separator className="-mt-px bg-border" />
           </>
