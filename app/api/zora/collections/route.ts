@@ -1,7 +1,6 @@
 import { NextRequest } from 'next/server';
 import trackEndpoint from '@/lib/stack/trackEndpoint';
 import {
-  EVENT_UPDATED_PERMISSIONS,
   EVENT_ZORA_COLLECTIONS,
   TOKEN_INDEXER_POINT_ID,
 } from '@/lib/consts';
