@@ -10,21 +10,15 @@ export default function UserStakes({ stakes }: { stakes: UserStake[] }) {
           key={'stake_' + stake.channelId}
           className="flex w-full flex-wrap items-center gap-2 p-1"
         >
-          <Image
-            src={stake.icon}
-            alt="music-channel"
-            height={48}
-            width={48}
-            className="size-12 rounded-full ring-1 ring-slate-300"
-          />
+          <Image src={stake.icon} alt="" height={32} width={32} className="size-8 rounded-full" />
           <div className="space-y-1">
-            <h3 className="text-base/5 font-semibold">/{stake.channelId}</h3>
-            <p className="max-w-[350px] truncate text-sm/4 text-gray-500">{stake.description}</p>
+            <h3 className="text-base/5 text-white font-clashdisplay_semibold">
+              /{stake.channelId}
+            </h3>
           </div>
 
-          <h5 className="ml-auto w-[10.32rem] text-sm/4 font-semibold">
-            <span className="font-normal text-grey">Staked : </span> {formatNumber(stake.points)}{' '}
-            NOTES
+          <h5 className="ml-auto w-[10.32rem] text-sm font-[600] text-white">
+            <span className="font-[400]">Staked : </span> {formatNumber(stake.points)} NOTES
           </h5>
         </div>
       ))}
