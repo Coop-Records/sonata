@@ -50,3 +50,7 @@ export async function GET(request: NextRequest) {
     return Response.json({ message: 'failed' }, { status: 400 });
   }
 }
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const fetchCache = 'force-no-store';
