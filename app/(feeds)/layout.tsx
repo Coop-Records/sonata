@@ -32,7 +32,7 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
               <Sidebar />
             </nav>
 
-            <main className="flex flex-col h-full flex-col overflow-hidden">
+            <main className="flex flex-col h-full flex-col overflow-hidden w-full">
               <Header />
               <div className="h-0 grow overflow-y-hidden">
                 <div id="feed-container" className="size-full px-6 mt-4 space-y-6">
