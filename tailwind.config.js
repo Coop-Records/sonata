@@ -72,6 +72,7 @@ module.exports = {
         },
         blue: {
           DEFAULT: 'rgba(49, 102, 218, 1)',
+          dar: '#02030c',
         },
         green: {
           DEFAULT: '#3FB663',
@@ -83,6 +84,8 @@ module.exports = {
         clashdisplay_semibold: ['ClashDisplay Semibold', 'sans-serif'],
         clashdisplay: ['ClashDisplay Regular', 'sans-serif'],
         sora: ['var(--font-sora)', 'sans-serif'],
+        inter: ['Inter Regular', 'sans-serif'],
+        inter_thin: ['Inter Thin', 'sans-serif'],
       },
       borderRadius: {
         lg: `var(--radius)`,

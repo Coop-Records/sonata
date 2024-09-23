@@ -3,16 +3,20 @@ import { useToast } from '@/components/ui/use-toast';
 import callPostApi from '@/lib/callPostApi';
 import isValidUrl from '@/lib/isValidUrl';
 import { useUserProvider } from '@/providers/UserProvider';
+import { useUi } from '@/providers/UiProvider';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const useCreateDialog = () => {
   const { signer } = useUserProvider();
   const [embedUrl, setEmbedUrl] = useState<string>('');
   const [channelId, setChannelId] = useState<string>();
-  const [isPostDialogOpen, setIsPostDialogOpen] = useState<boolean>(false);
+  const [selected, setSelected] = useState<number>();
+  const [isChannelListOpen, setIsChannelListOpen] = useState(false);
+  const { menuItems, setIsCastPostOpen } = useUi();
   const { toast } = useToast();
   const router = useRouter();
+  const canCast = (typeof selected == 'number' && selected >= 0) || embedUrl;
 
   const handlePost = () => {
     if (!isValidUrl(embedUrl)) {
@@ -25,6 +29,7 @@ const useCreateDialog = () => {
       .then(async (res) => {
         toast({ description: 'Posted!!!' });
         if (res.status == 307) {
+          setIsCastPostOpen(false);
           const data = await res.json();
           router.push(data.link);
         }
@@ -32,23 +37,37 @@ const useCreateDialog = () => {
       .catch(() => toast({ description: 'Failed' }))
       .finally(() => {
         setEmbedUrl('');
-        setIsPostDialogOpen(false);
       });
   };
 
-  const handleClick = () => {
-    setIsPostDialogOpen(true);
+  useEffect(() => {
+    if (channelId == undefined && selected !== undefined) {
+      setSelected(undefined);
+      return;
+    }
+
+    const menuItem = menuItems.findIndex((item) => item.value == channelId);
+    if (menuItem >= 0) setSelected(menuItem);
+  }, [channelId]);
+
+  const onSelect = (index: number | undefined) => {
+    setSelected(index);
+    const channelId = typeof index == 'number' ? menuItems[index].value : undefined;
+    setChannelId(channelId);
+    setIsChannelListOpen(false);
   };
 
   return {
-    handleClick,
     handlePost,
-    isPostDialogOpen,
-    setIsPostDialogOpen,
     embedUrl,
     setEmbedUrl,
     channelId,
     setChannelId,
+    onSelect,
+    isChannelListOpen,
+    selected,
+    setIsChannelListOpen,
+    canCast,
   };
 };
 

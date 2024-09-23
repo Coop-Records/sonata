@@ -11,13 +11,16 @@ const BaseInfo = () => {
       <Avatar className="size-[72px]">
         <AvatarImage className="object-cover" src={profile?.pfp.url} />
       </Avatar>
-      <div className="space-y-1">
-        <p className="font-clashdisplay_medium text-white text-md">{profile?.displayName}</p>
-        <div className="flex gap-2">
-          <Link href={warpcastProfileURL} target="_blank" className="text-grey font-sora text-sm">
-            <p>@{profile?.username}</p>
-          </Link>
+      <div className="flex flex-col justify-between h-[72px]">
+        <div>
+          <p className="font-clashdisplay_medium text-white text-md">{profile?.displayName}</p>
+          <div className="flex gap-2">
+            <Link href={warpcastProfileURL} target="_blank" className="text-grey font-sora text-sm">
+              <p>@{profile?.username}</p>
+            </Link>
+          </div>
         </div>
+        <p className="text-sm font-inter text-grey">Pick my bio from farcaster.</p>
       </div>
     </div>
   );
