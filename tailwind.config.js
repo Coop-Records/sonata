@@ -72,6 +72,7 @@ module.exports = {
         },
         blue: {
           DEFAULT: 'rgba(49, 102, 218, 1)',
+          dar: '#02030c',
         },
         green: {
           DEFAULT: '#3FB663',

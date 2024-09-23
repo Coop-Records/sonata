@@ -43,7 +43,7 @@ async function getChannelWeeklyAirdropData() {
     for (const item of items) {
       if (item.weeklyDrops?.length) data.push(item);
     }
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
   }
 
   return data;
