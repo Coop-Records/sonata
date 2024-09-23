@@ -37,5 +37,5 @@ export const EVENT_ZORA_PROFILE = 'zora+profile';
 export const FOLLOWERS_PERFECT = 55555;
 
 // stack point systems
-export const TOKEN_INDEXER_POINT_ID = 3372;
+export const TOKEN_INDEXER_POINT_ID = 3500;
 export const REWARDS_DEPOSIT_POINT_SYSTEM_ID = 3078;
