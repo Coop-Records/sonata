@@ -1,7 +1,6 @@
 import { NextRequest } from 'next/server';
 import trackEndpoint from '@/lib/stack/trackEndpoint';
 import {
-  EVENT_UPDATED_PERMISSIONS,
   EVENT_ZORA_COLLECTIONS,
   TOKEN_INDEXER_POINT_ID,
 } from '@/lib/consts';
@@ -14,7 +13,7 @@ const stack = createStackClient(TOKEN_INDEXER_POINT_ID);
 export async function GET(request: NextRequest) {
   try {
     await trackEndpoint(EVENT_ZORA_COLLECTIONS);
-    const query: Record<string, any> = { limit: 100, event: EVENT_UPDATED_PERMISSIONS };
+    const query: Record<string, any> = { limit: 100 };
     const creatorAddress = request.nextUrl.searchParams.get('creator');
     if (creatorAddress) query.address = creatorAddress;
 
