@@ -63,7 +63,7 @@ myco API is a powerful tool designed to help developers and creators leverage th
 
 ## API Endpoints 🔌
 
-For a complete list of available API endpoints and their usage, please refer to our [API documentation](https://docs.myco-api.com).
+For a complete list of available API endpoints and their usage, please refer to our [API documentation](https://api.myco.wtf).
 
 ## Contributing 🤝
 
