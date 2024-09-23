@@ -52,7 +52,7 @@ const ChannelPage = () => {
           isSticky={showLess}
         />
         <Separator className="-mt-px bg-border mb-4" />
-        <Feeds scrollTarget="channel-sticky" />
+        <Feeds />
       </div>
     </div>
   );
