@@ -20,8 +20,8 @@ const Notes = () => {
 
   return (
     <div className="flex w-fit flex-col justify-center">
-      <p className="font-sora text-[16px] font-semibold">{formatBigInt(BigInt(notes))}</p>
-      <p className="text-[14px] text-grey">Notes</p>
+      <p className="font-clashdisplay_medium text-white text-lg">{formatBigInt(BigInt(notes))}</p>
+      <p className="text-sm text-grey">Notes</p>
     </div>
   );
 };

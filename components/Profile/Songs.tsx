@@ -6,8 +6,10 @@ const Songs = () => {
 
   return (
     <div className="flex w-fit flex-col justify-center">
-      <p className="font-sora text-[16px] font-semibold">{formatBigInt(BigInt(songs.length))}</p>
-      <p className="text-[14px] text-grey">Songs</p>
+      <p className="text-lg font-clashdisplay_medium text-white">
+        {formatBigInt(BigInt(songs.length))}
+      </p>
+      <p className="text-sm text-grey">Songs</p>
     </div>
   );
 };

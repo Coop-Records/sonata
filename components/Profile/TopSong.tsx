@@ -21,15 +21,15 @@ const TopSong = () => {
             <Skeleton className="size-full" />
           )}
         </div>
-        <div className="line-clamp-2 text-[14px] font-semibold leading-none">
+        <div className="line-clamp-2 text-sm font-clashdisplay leading-none text-white">
           {topSongMetadata?.trackName ? (
-            <>{topSongMetadata.trackName}</>
+            <p className="truncate max-w-16">{topSongMetadata.trackName}</p>
           ) : (
-            <Skeleton className="h-2 w-32 rounded-sm" />
+            <Skeleton className="h-2 w-16 rounded-sm" />
           )}
         </div>
       </div>
-      <p className="text-[14px] text-grey">Top Song</p>
+      <p className="text-sm text-grey font-sora">Top Song</p>
     </div>
   );
 };

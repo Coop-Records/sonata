@@ -2,17 +2,15 @@ import BaseInfo from './BaseInfo';
 import Notes from './Notes';
 import Songs from './Songs';
 import TopSong from './TopSong';
-import Followers from './Followers';
 
 const Profile = () => (
-  <section className="mx-auto mb-4 mt-8 space-y-4">
+  <section className="w-full mb-4 mt-8 space-y-4 pr-6">
     <BaseInfo />
-    <div className="flex gap-4">
+    <div className="flex w-full justify-between">
       <Songs />
       <Notes />
       <TopSong />
     </div>
-    <Followers />
   </section>
 );
 
