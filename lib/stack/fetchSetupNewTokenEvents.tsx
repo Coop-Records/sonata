@@ -4,7 +4,7 @@ async function fetchSetupNewTokenEvents() {
   const query = songMarketStack
     .eventsQuery()
     .where({ eventType: 'SetupNewToken' })
-    .limit(20)
+    .limit(200)
     .build();
 
   return songMarketStack.getEvents({ query });

@@ -5,17 +5,20 @@ import AudioProvider from './audio';
 import TipProvider from './TipProvider';
 import UiProvider from './UiProvider';
 import PrivyProvider from './PrivyProvider';
+import QueryProvider from './QueryProvider';
 
 const Providers = ({ children }: { children: React.ReactNode }) => (
-  <PrivyProvider>
-    <NeynarProvider>
-      <TipProvider>
-        <UiProvider>
-          <AudioProvider>{children}</AudioProvider>
-        </UiProvider>
-      </TipProvider>
-    </NeynarProvider>
-  </PrivyProvider>
+  <QueryProvider>
+    <PrivyProvider>
+      <NeynarProvider>
+        <TipProvider>
+          <UiProvider>
+            <AudioProvider>{children}</AudioProvider>
+          </UiProvider>
+        </TipProvider>
+      </NeynarProvider>
+    </PrivyProvider>
+  </QueryProvider>
 );
 
 export default Providers;
