@@ -7,20 +7,11 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
   if (!trackUrl) return NextResponse.json({ errors: 'Missing trackUrl' }, { status: 422 });
 
   try {
-    const { response, data } = (await getSongLinks(trackUrl)) as any;
-    if (response.ok) {
-      if (data.errors) {
-        console.error('SongLink Errors:', data.errors);
-        return NextResponse.json(data, { status: 400 });
-      }
-      return NextResponse.json(data, { status: 200 });
-    } else {
-      console.error(response.status, response.statusText);
-      return NextResponse.json(data, { status: 400 });
-    }
+    const data = await getSongLinks(trackUrl);
+    return NextResponse.json(data, { status: 200 });
   } catch (error: any) {
     console.error(error?.message);
-    return NextResponse.json({ errors: 'Something went wrong' }, { status: 400 });
+    return NextResponse.json({ error: 'Something went wrong' }, { status: 400 });
   }
 };
 
