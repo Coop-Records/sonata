@@ -1,5 +1,5 @@
 import { StackClient } from '@stackso/js-core';
-import { REWARDS_DEPOSIT_POINT_SYSTEM_ID } from '../consts';
+import { REWARDS_DEPOSIT_POINT_SYSTEM_ID, SETTINGS_STACK_ID } from '../consts';
 
 export const createStackClient = (pointSystemId: number) =>
   new StackClient({
@@ -9,3 +9,4 @@ export const createStackClient = (pointSystemId: number) =>
 
 export const stack = createStackClient(parseInt(process.env.STACK_POINT_SYSTEM_ID as string, 10));
 export const rewardStack = createStackClient(REWARDS_DEPOSIT_POINT_SYSTEM_ID);
+export const settingsStack = createStackClient(SETTINGS_STACK_ID);
