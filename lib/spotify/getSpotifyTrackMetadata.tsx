@@ -7,11 +7,6 @@ const getSpotifyTrackMetadata = async (url: string, cast: SupabasePost): Promise
   const spotifyKey = songLinkData.linksByPlatform.spotify.entityUniqueId;
   const spotifyData = songLinkData.entitiesByUniqueId[spotifyKey];
 
-  console.log({
-    id: spotifyData.id,
-    artistName: spotifyData.artistName,
-    trackName: spotifyData.title,
-  });
   return {
     type: 'spotify',
     id: spotifyData.id,
