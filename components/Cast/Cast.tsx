@@ -12,7 +12,7 @@ import CollectButton from './CollectButton';
 import { EmbedUrl } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import findCollectibleUrl from '@/lib/findCollectibleUrlInCastEmbeds';
 import Image from 'next/image';
-import { PLATFORM_ICONS } from '@/lib/consts';
+import { MINIMUM_NOTES_FOR_SONG_MARKET, PLATFORM_ICONS } from '@/lib/consts';
 import Icon from '../ui/icon';
 import { Progress } from '../ui/progress';
 
@@ -44,8 +44,10 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
 
   if (!metadata) return <></>;
 
+  const progress = Math.round(Math.min(100, cast.points / MINIMUM_NOTES_FOR_SONG_MARKET));
+
   return (
-    <div className="w-full space-y-4 border rounded-xl p-3">
+    <div className="w-full space-y-4 rounded-xl border p-3">
       <div className="flex gap-2">
         <UserDetails user={author} createdAt={cast.created_at} />
       </div>
@@ -53,13 +55,13 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
       <MediaPlayer metadata={metadata} />
       <div className="flex gap-2">
         <UpvoteDownvote verifications={verifications} cast={cast} />
-        <div className="flex gap-1 items-center">
-          <Icon name="lock" className="text-grey size-4" />
-          <p className="text-xs text-grey">20%</p>
-          <Progress value={20} className="w-20 h-2" />
+        <div className="flex items-center gap-1">
+          <Icon name="lock" className="size-4 text-grey" />
+          <p className="text-xs text-grey">{progress}%</p>
+          <Progress value={progress} className="h-2 w-20" />
         </div>
         {collectibleLink && <CollectButton collectUrl={collectibleLink} />}
-        <div className="flex flex-grow justify-end gap-4">
+        <div className="flex grow justify-end gap-4">
           <Image src={PLATFORM_ICONS[metadata.type]} alt="" width={16} height={16} />
           <Share cast={cast} />
         </div>

@@ -9,7 +9,7 @@ export type SupabasePost = {
   created_at: Date;
   embeds: string[];
   alternativeEmbeds: string[];
-  points?: number;
+  points: number;
   degen?: number;
   parent_url?: string;
   channelId?: string;
