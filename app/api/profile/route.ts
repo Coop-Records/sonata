@@ -16,9 +16,13 @@ export async function GET(req: NextRequest) {
     const zoraProfile = await getZoraProfile(address);
     const isPro = await verifySubscription(isAddress(address) ? (address as Address) : zeroAddress);
     const identify = await getIdentify(zoraProfile?.address);
-    const connectedZoraProfile = Boolean(identify?.tagData?.identity);
 
-    return Response.json({ message: 'success', zoraProfile, isPro, connectedZoraProfile });
+    return Response.json({
+      message: 'success',
+      zoraProfile,
+      isPro,
+      connectedZoraProfile: identify?.tagData?.identity || null,
+    });
   } catch (e) {
     const message = (e as { message?: string })?.message ?? 'failed';
     return Response.json({ message }, { status: 400 });
