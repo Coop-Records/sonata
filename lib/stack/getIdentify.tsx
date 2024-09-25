@@ -1,8 +1,8 @@
 import { Address } from 'viem';
-import { stack } from './client';
+import { settingsStack } from './client';
 
 const getIdentify = async (address: Address) => {
-  const identify = await stack.getTags(address, 'custom identity');
+  const identify = await settingsStack.getTags(address, 'custom identity');
   return identify;
 };
 
