@@ -1,7 +1,7 @@
 import { useSongPageProvider } from '@/providers/SongPageProvider';
 import { Separator } from '@radix-ui/react-separator';
 import SongPostsFeed from './SongPostsFeed';
-import SongMarketSection from './SongMarketSection';
+import SongMarketSection from './SongMarketSection/SongMarketSection';
 import MediaSection from './MediaSection';
 
 const SongPage = () => {

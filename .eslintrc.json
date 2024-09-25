@@ -19,7 +19,8 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:import/recommended",
-    "prettier"
+    "prettier",
+    "plugin:@tanstack/eslint-plugin-query/recommended"
   ],
   "rules": {
     "no-prototype-builtins": "off",
