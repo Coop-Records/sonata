@@ -3,10 +3,15 @@ import { SupabasePost } from '@/types/SupabasePost';
 import getSongLinks from '@/lib/songLink/getSongLinks';
 
 const getSpotifyTrackMetadata = async (url: string, cast: SupabasePost): Promise<TrackMetadata> => {
-  const { data: songLinkData } = await getSongLinks(url);
+  const songLinkData = await getSongLinks(url);
   const spotifyKey = songLinkData.linksByPlatform.spotify.entityUniqueId;
   const spotifyData = songLinkData.entitiesByUniqueId[spotifyKey];
 
+  console.log({
+    id: spotifyData.id,
+    artistName: spotifyData.artistName,
+    trackName: spotifyData.title,
+  });
   return {
     type: 'spotify',
     id: spotifyData.id,
