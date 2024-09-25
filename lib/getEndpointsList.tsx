@@ -1,4 +1,10 @@
-import { DEMO_ADDRESS, EVENT_ZORA_PROFILE, EVENT_ZORA_REWARDS, EVENT_ZORA_SCORE, EVENT_ZORA_TOKENS } from './consts';
+import {
+  DEMO_ADDRESS,
+  EVENT_ZORA_PROFILE,
+  EVENT_ZORA_REWARDS,
+  EVENT_ZORA_SCORE,
+  EVENT_ZORA_TOKENS,
+} from './consts';
 
 export const endpoints = [
   {
