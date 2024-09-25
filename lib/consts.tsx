@@ -13,7 +13,7 @@ export const ZORA_FEE_RECIPIENTS = [
 export const DEMO_ADDRESS = '0x33912a0d6bEFf5Fb8e5B70688CE858D5e7E8104E' as Address;
 
 // hypersub
-export const HYPERSUB_SUBSCRIPTION_ADDRESS = "0xb5a4ca234730dfb411ec16513ed2cff9b16a85d9"
+export const HYPERSUB_SUBSCRIPTION_ADDRESS = '0xb5a4ca234730dfb411ec16513ed2cff9b16a85d9';
 
 // viem
 export const INITIAL_BLOCK_RANGE = 1_000_000n;
