@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
     const isPro = await verifySubscription(isAddress(address) ? (address as Address) : zeroAddress);
     const identify = await getIdentify(zoraProfile?.address);
     let connectedZoraProfile = null;
-    if (identify?.tagData) await getZoraProfile(identify?.tagData?.identify);
+    if (identify?.tagData) connectedZoraProfile = await getZoraProfile(identify?.tagData?.identify);
 
     return Response.json({
       message: 'success',
