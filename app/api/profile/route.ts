@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
       message: 'success',
       zoraProfile,
       isPro,
-      connectedZoraProfile: identify?.tagData?.identity || null,
+      connectedZoraProfile: identify?.tagData || null,
     });
   } catch (e) {
     const message = (e as { message?: string })?.message ?? 'failed';
