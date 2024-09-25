@@ -6,9 +6,8 @@ import { useSongPageProvider } from '@/providers/SongPageProvider';
 const CollectButton = () => {
   const { collection } = useSongPageProvider();
 
-  const { mint, loading, fee } = useMint(collection);
+  const { mint, loading } = useMint(collection);
 
-  console.log(fee);
   return (
     <>
       <Button
