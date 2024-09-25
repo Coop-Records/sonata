@@ -3,7 +3,7 @@ import { HYPERSUB_SUBSCRIPTION_ADDRESS } from './consts';
 import { getPublicClient } from './viem';
 import { base } from 'viem/chains';
 
-async function verfiySubscription(address: Address) {
+async function verifySubscription(address: Address) {
   const client = getPublicClient(base.id);
 
   const result = await client.readContract({
@@ -36,4 +36,4 @@ async function verfiySubscription(address: Address) {
   return result > 0;
 }
 
-export default verfiySubscription;
+export default verifySubscription;

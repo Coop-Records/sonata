@@ -1,5 +1,5 @@
 import { EVENT_ZORA_PROFILE } from '@/lib/consts';
-import getIdentity from '@/lib/stack/getIdentity';
+import getConnectedZoraProfile from '@/lib/getConnectedZoraProfile';
 import trackEndpoint from '@/lib/stack/trackEndpoint';
 import verifySubscription from '@/lib/verifySubscription';
 import getZoraProfile from '@/lib/zora/getZoraProfile';
@@ -15,14 +15,7 @@ export async function GET(req: NextRequest) {
 
     const zoraProfile = await getZoraProfile(address);
     const isPro = await verifySubscription(isAddress(address) ? (address as Address) : zeroAddress);
-    const identity = await getIdentity(zoraProfile.address);
-
-    let connectedZoraProfile = null;
-    if (identity?.tagData) {
-      const connectedAddress = new URL(identity?.tagData?.externalUrl).pathname.split('@')[1];
-      connectedZoraProfile = await getZoraProfile(connectedAddress);
-    }
-
+    const connectedZoraProfile = await getConnectedZoraProfile(zoraProfile.address);
     return Response.json({
       message: 'success',
       zoraProfile,
