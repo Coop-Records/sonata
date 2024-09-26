@@ -428,6 +428,11 @@
   resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.4.0.tgz#45814aa329f30e4fe0ba49426f49dfccdd066426"
   integrity sha512-V1JJ1WTRUqHHrOSh597hURcMqVKVGL/ea3kv0gSnEdsEZ0/+VyPghM1lMNGc00z7CIQorSvbKpuJkxvuHbvdbg==
 
+"@noble/hashes@~1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.5.0.tgz#abadc5ca20332db2b1b2aa3e496e9af1213570b0"
+  integrity sha512-1j6kQFb7QRru7eKN3ZDvRcP13rugwdxZqCjbiAVZfIJwgj2A65UmT4TgARXGlXgnRkORLTDTrO19ZErt7+QXgA==
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz"
@@ -1116,6 +1121,11 @@
   resolved "https://registry.yarnpkg.com/@scure/base/-/base-1.1.7.tgz#fe973311a5c6267846aa131bc72e96c5d40d2b30"
   integrity sha512-PPNYBslrLNNUQ/Yad37MHYsNQtK67EhWb6WtSvNLLPo7SdVZgkUjD6Dg+5On7zNwmskf8OX7I7Nx5oN+MIWE0g==
 
+"@scure/base@~1.1.8":
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/@scure/base/-/base-1.1.9.tgz#e5e142fbbfe251091f9c5f1dd4c834ac04c3dbd1"
+  integrity sha512-8YKhl8GHiNI/pU2VMaofa2Tor7PJRAjwQLBBuilkJ9L5+13yVbC7JO/wS7piioAvPSwR3JKM1IJ/u4xQzbcXKg==
+
 "@scure/bip32@1.3.2":
   version "1.3.2"
   resolved "https://registry.npmjs.org/@scure/bip32/-/bip32-1.3.2.tgz"
@@ -1150,6 +1160,14 @@
     "@noble/hashes" "~1.4.0"
     "@scure/base" "~1.1.6"
 
+"@scure/bip39@1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@scure/bip39/-/bip39-1.4.0.tgz#664d4f851564e2e1d4bffa0339f9546ea55960a6"
+  integrity sha512-BEEm6p8IueV/ZTfQLp/0vhw4NPnT9oWf5+28nvmeUICjP99f4vr2d+qc7AVGDDtwRep6ifR43Yed9ERVmiITzw==
+  dependencies:
+    "@noble/hashes" "~1.5.0"
+    "@scure/base" "~1.1.8"
+
 "@shuding/opentype.js@1.4.0-beta.0":
   version "1.4.0-beta.0"
   resolved "https://registry.npmjs.org/@shuding/opentype.js/-/opentype.js-1.4.0-beta.0.tgz"
@@ -1158,10 +1176,10 @@
     fflate "^0.7.3"
     string.prototype.codepointat "^0.2.1"
 
-"@stackso/js-core@^0.2.30":
-  version "0.2.30"
-  resolved "https://registry.npmjs.org/@stackso/js-core/-/js-core-0.2.30.tgz"
-  integrity sha512-T8va1lge2VStgoPHE2T2mO6iTjp7Y/BHfE7kCj9BmMEfpwy0G7pJlTFgniuyVlB5XSgMi+3tPcZsMvz2Ss1ZfQ==
+"@stackso/js-core@^0.4.16":
+  version "0.4.16"
+  resolved "https://registry.yarnpkg.com/@stackso/js-core/-/js-core-0.4.16.tgz#99ff7b40b1b1b822e25a670ffabe0f6cd6150a3f"
+  integrity sha512-gx5kqUUx3OpM3+wPWOM9zr9906HFpdZf0CfIxj684D5uwbrV75GVbm/rZI89wzF/c7x2jj0Lv5TK4sHAMJeNww==
   dependencies:
     axios "^1.6.2"
     viem "^2.7.12"
@@ -5009,7 +5027,22 @@ viem@^2.7.10:
     webauthn-p256 "0.0.5"
     ws "8.17.1"
 
-viem@^2.7.12, viem@^2.7.14, viem@^2.9.17:
+viem@^2.7.12:
+  version "2.21.15"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.21.15.tgz#068c010946151e7f256bb7da601ab9b8287c583b"
+  integrity sha512-Ae05NQzMsqPWRwuAHf1OfmL0SjI+1GBgiFB0JA9BAbK/61nJXsTPsQxfV5CbLe4c3ct8IEZTX89rdeW4dqf97g==
+  dependencies:
+    "@adraffy/ens-normalize" "1.10.0"
+    "@noble/curves" "1.4.0"
+    "@noble/hashes" "1.4.0"
+    "@scure/bip32" "1.4.0"
+    "@scure/bip39" "1.4.0"
+    abitype "1.0.5"
+    isows "1.0.4"
+    webauthn-p256 "0.0.5"
+    ws "8.17.1"
+
+viem@^2.7.14, viem@^2.9.17:
   version "2.9.17"
   resolved "https://registry.npmjs.org/viem/-/viem-2.9.17.tgz"
   integrity sha512-xMQ4JhgR1fPXQYagEeSsq9lmKXXooHP2gcnowb0eJRq3NTheyzpVBtMuH8DZnnWT4aeFepZktqSXlFul+Ou5Xg==
