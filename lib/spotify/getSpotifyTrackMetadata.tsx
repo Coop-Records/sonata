@@ -1,25 +1,19 @@
 import { TrackMetadata } from '@/types/Track';
-import getSpotifyTrackId from './getSpotifyTrackId';
 import { SupabasePost } from '@/types/SupabasePost';
-import getSoundcloudTrackMetadata from '../soundcloud/getSoundcloudTrackMetadata';
+import getSongLinkData from '@/lib/songLink/getSongLinkData';
 
 const getSpotifyTrackMetadata = async (url: string, cast: SupabasePost): Promise<TrackMetadata> => {
-  const soundcloudLink = cast.alternativeEmbeds?.find((link) => link.includes('soundcloud.com'));
-
-  if (soundcloudLink) return await getSoundcloudTrackMetadata(soundcloudLink, cast);
-
-  const oEmbedUrl = `https://open.spotify.com/oembed?url=${encodeURIComponent(url)}`;
-  const response = await fetch(oEmbedUrl);
-  const embedData = await response.json();
-  const trackId = getSpotifyTrackId(embedData.iframe_url);
+  const songLinkData = await getSongLinkData(url);
+  const spotifyKey = songLinkData.linksByPlatform.spotify.entityUniqueId;
+  const spotifyData = songLinkData.entitiesByUniqueId[spotifyKey];
 
   return {
     type: 'spotify',
-    id: trackId,
-    artistName: '',
-    trackName: embedData.title,
-    artworkUrl: embedData.thumbnail_url,
-    url: `spotify:track:${trackId}`,
+    id: spotifyData.id,
+    artistName: spotifyData.artistName,
+    trackName: spotifyData.title,
+    artworkUrl: spotifyData.thumbnailUrl,
+    url: `spotify:track:${spotifyData.id}`,
     feedId: cast.id,
   } as TrackMetadata;
 };
