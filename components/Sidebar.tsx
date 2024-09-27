@@ -1,16 +1,15 @@
 import BalanceInfo from '@/components/BalanceInfo';
 import SignInButton from './SignInButton';
-import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { Button } from './ui/button';
 import { Separator } from './ui/separator';
 import ChannelFilter from './Feed/ChannelFilter';
 import Image from 'next/image';
-import UserDetails from './UserDetails';
 import Link from 'next/link';
 import HomeButton from './Header/HomeButton';
+import { usePrivy } from '@privy-io/react-auth';
 
 export default function MobileMenu({ isSingleCast = false }: { isSingleCast?: boolean }) {
-  const { user, signOut } = useNeynarProvider();
+  const { authenticated, logout } = usePrivy();
 
   return (
     <div className="flex h-full flex-col gap-4 md:px-16 md:py-6">
@@ -18,8 +17,7 @@ export default function MobileMenu({ isSingleCast = false }: { isSingleCast?: bo
         <Image src="/images/notes.png" width={20} height={20} alt="" />
         <span className="font-semibold">Sonata</span>
       </Link>
-      <HomeButton className='mb-2 md:hidden' />
-      {user && <UserDetails className="mb-8 md:hidden" user={user} />}
+      <HomeButton className="mb-2 md:hidden" />
       <BalanceInfo />
       <a
         className="flex items-center gap-2"
@@ -40,8 +38,8 @@ export default function MobileMenu({ isSingleCast = false }: { isSingleCast?: bo
         <Image src="/images/warpcast.png" alt="warpcast" width={18} height={18} />
       </a>
       <div className="md:hidden">
-        {user ? (
-          <Button onClick={signOut} variant="secondary" className="w-full">
+        {authenticated ? (
+          <Button onClick={logout} variant="secondary" className="w-full">
             Logout
           </Button>
         ) : (
