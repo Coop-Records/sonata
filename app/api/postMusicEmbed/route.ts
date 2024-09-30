@@ -7,8 +7,8 @@ const getResponse = async (req: NextRequest) => {
   const body = await req.json();
   const { signer_uuid, url, channel_id } = body;
 
-  if (!(signer_uuid && url)) return Response
-    .json({ message: 'signer_uuid & url required' }, { status: 400 });
+  if (!(signer_uuid && url))
+    return Response.json({ message: 'signer_uuid & url required' }, { status: 400 });
 
   const data = await postMusicEmbed(signer_uuid, url, channel_id);
 
@@ -30,16 +30,16 @@ const getResponse = async (req: NextRequest) => {
   };
   const { success } = await upsertCast(cast);
 
-  if (!success) return Response.json(
-    { message: 'successfuly casted', data },
-    { status: 200 }
-  );
+  if (!success) return Response.json({ message: 'successfuly casted', data }, { status: 201 });
   sendBotCast(cast);
 
-  return Response.json({
-    message: 'successfuly casted and indexed',
-    link: `/cast/${cast.author.username}/${cast.hash.substring(0, 8)}`
-  }, { status: 307 });
+  return Response.json(
+    {
+      message: 'successfuly casted and indexed',
+      link: `/cast/${cast.author.username}/${cast.hash.substring(0, 8)}`,
+    },
+    { status: 201 },
+  );
 };
 
 export async function POST(req: NextRequest) {
