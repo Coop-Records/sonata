@@ -13,10 +13,6 @@
       "schedule": "0 7 * * *"
     },
     {
-      "path": "/api/jobs/getMissingCasts",
-      "schedule": "0 */3 * * *"
-    },
-    {
       "path": "/api/jobs/channels",
       "schedule": "0 12 * * 5"
     }
