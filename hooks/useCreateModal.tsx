@@ -1,40 +1,42 @@
-'use client'
+'use client';
 import { useToast } from '@/components/ui/use-toast';
-import callPostApi from '@/lib/callPostApi';
 import isValidUrl from '@/lib/isValidUrl';
-import { useNeynarProvider } from '@/providers/NeynarProvider';
-import { useRouter } from 'next/navigation';
+import { usePrivy } from '@privy-io/react-auth';
 import { useState } from 'react';
+import useSigner from './farcaster/useSigner';
+import farcasterClient from '@/lib/farcaster/client';
 
 const useCreateDialog = () => {
-  const { signer } = useNeynarProvider();
+  const { getSigner } = useSigner();
+  const { user } = usePrivy();
   const [embedUrl, setEmbedUrl] = useState<string>('');
   const [channelId, setChannelId] = useState<string>();
   const [isPostDialogOpen, setIsPostDialogOpen] = useState<boolean>(false);
   const { toast } = useToast();
-  const router = useRouter();
 
-  const handlePost = () => {
+  const handlePost = async () => {
     if (!isValidUrl(embedUrl)) {
       toast({ description: `Sound / Soundcloud / Spotify / Youtube only` });
       return;
     }
-    if (!signer?.signer_uuid) return;
+    const signer = await getSigner();
+    if (!(signer && user?.farcaster?.fid)) return;
 
-    callPostApi(signer.signer_uuid, embedUrl, channelId).then(
-      async res => {
-        toast({ description: 'Posted!!!' });
-        if (res.status == 307) {
-          const data = await res.json();
-          router.push(data.link);
-        }
-      }
-    ).catch(
-      () => toast({ description: 'Failed' })
-    ).finally(() => {
+    try {
+      const parentUrl = channelId ? `https://warpcast.com/~/channel/${channelId}` : undefined;
+      await farcasterClient.submitCast(
+        { text: '', embeds: [{ url: embedUrl }], parentUrl },
+        user.farcaster.fid,
+        signer,
+      );
+      toast({ description: 'Posted!!!' });
+    } catch (error) {
+      // console.error(error);
+      toast({ description: 'Failed' });
+    } finally {
       setEmbedUrl('');
       setIsPostDialogOpen(false);
-    });
+    }
   };
 
   const handleClick = () => {
@@ -42,10 +44,14 @@ const useCreateDialog = () => {
   };
 
   return {
-    handleClick, handlePost,
-    isPostDialogOpen, setIsPostDialogOpen,
-    embedUrl, setEmbedUrl,
-    channelId, setChannelId
+    handleClick,
+    handlePost,
+    isPostDialogOpen,
+    setIsPostDialogOpen,
+    embedUrl,
+    setEmbedUrl,
+    channelId,
+    setChannelId,
   };
 };
 
