@@ -60,7 +60,7 @@ const getResponse = async (): Promise<NextResponse> => {
     return channelId && CHANNELS.find((channel) => channel.value === channelId);
   });
 
-  console.log('jobs::getNewCasts', 'ytEntries', youtubeFiltered);
+  console.log('jobs::getMissingCasts', 'ytEntries', youtubeFiltered);
   allEntries.push(...youtubeFiltered);
 
   console.log('jobs::getMissingCasts', `${allEntries.length} new entries`);
