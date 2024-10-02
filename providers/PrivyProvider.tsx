@@ -15,6 +15,9 @@ const PrivyProvider = ({ children }: PrivyProviderProps) => (
         accentColor: '#676FFF',
         logo: '/images/logo2.png',
       },
+      embeddedWallets: {
+        createOnLogin: 'all-users',
+      },
     }}
   >
     {children}
