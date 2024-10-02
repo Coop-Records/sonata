@@ -5,6 +5,7 @@ import { usePrivy } from '@privy-io/react-auth';
 import { useState } from 'react';
 import useSigner from './farcaster/useSigner';
 import farcasterClient from '@/lib/farcaster/client';
+import getParentUrlFromChannelId from '@/lib/getParentUrlFormChannelId';
 
 const useCreateDialog = () => {
   const { getSigner } = useSigner();
@@ -23,15 +24,15 @@ const useCreateDialog = () => {
     if (!(signer && user?.farcaster?.fid)) return;
 
     try {
-      const parentUrl = channelId ? `https://warpcast.com/~/channel/${channelId}` : undefined;
+      const parentUrl = getParentUrlFromChannelId(channelId);
       await farcasterClient.submitCast(
-        { text: '', embeds: [{ url: embedUrl }], parentUrl },
+        { text: embedUrl, embeds: [{ url: embedUrl }], parentUrl },
         user.farcaster.fid,
         signer,
       );
       toast({ description: 'Posted!!!' });
     } catch (error) {
-      // console.error(error);
+      console.error(error);
       toast({ description: 'Failed' });
     } finally {
       setEmbedUrl('');
