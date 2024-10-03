@@ -1,13 +1,13 @@
 import { Button } from '@/components/ui/button';
-import useCreateDialog from '@/hooks/useCreateModal';
+import useCreateModal from '@/hooks/useCreateModal';
 import { useUi } from '@/providers/UiProvider';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Loader2 } from 'lucide-react';
 import PostDialog from './PostDialog';
 import PostInput from './PostInput';
 
 export default function CreatePost() {
   const { checkLoggedIn } = useUi();
-  const dialog = useCreateDialog();
+  const dialog = useCreateModal();
 
   const handleClick = () => {
     if (!checkLoggedIn()) return;
@@ -19,15 +19,24 @@ export default function CreatePost() {
   return (
     <div className="flex items-center gap-2">
       <PostInput
-        placeholder='What are you listening to?'
+        placeholder="What are you listening to?"
         value={dialog.embedUrl}
         onChange={(e) => dialog.setEmbedUrl(e.target.value)}
         action={
           <Button
+            disabled={dialog.posting}
             className="flex h-auto items-center gap-2 rounded-full bg-gray-500 px-4 py-2 text-white"
-            onClick={handleClick}>
-            Cast
-            <ChevronRight size={16} />
+            onClick={handleClick}
+          >
+            {dialog.posting ? (
+              <>
+                Casting <Loader2 className="animate-spin" size={16} />
+              </>
+            ) : (
+              <>
+                Cast <ChevronRight size={16} />
+              </>
+            )}
           </Button>
         }
       />
@@ -39,6 +48,7 @@ export default function CreatePost() {
         setIsOpen={dialog.setIsPostDialogOpen}
         channelId={dialog.channelId}
         setChannelId={dialog.setChannelId}
+        loading={dialog.posting}
       />
     </div>
   );

@@ -6,14 +6,18 @@ import { useState } from 'react';
 import useSigner from './farcaster/useSigner';
 import farcasterClient from '@/lib/farcaster/client';
 import getParentUrlFromChannelId from '@/lib/getParentUrlFormChannelId';
+import upsertCast from '@/lib/supabase/upsertCast';
+import { useRouter } from 'next/navigation';
 
-const useCreateDialog = () => {
+const useCreateModal = () => {
   const { getSigner } = useSigner();
   const { user } = usePrivy();
   const [embedUrl, setEmbedUrl] = useState<string>('');
   const [channelId, setChannelId] = useState<string>();
   const [isPostDialogOpen, setIsPostDialogOpen] = useState<boolean>(false);
+  const [posting, setPosting] = useState<boolean>(false);
   const { toast } = useToast();
+  const { push } = useRouter();
 
   const handlePost = async () => {
     if (!isValidUrl(embedUrl)) {
@@ -23,17 +27,23 @@ const useCreateDialog = () => {
     const signer = await getSigner();
     if (!(signer && user?.farcaster?.fid)) return;
 
+    setPosting(true);
     try {
       const parentUrl = getParentUrlFromChannelId(channelId);
-      await farcasterClient.submitCast(
+      const castAdd = await farcasterClient.submitCast(
         { text: embedUrl, embeds: [{ url: embedUrl }], parentUrl },
         user.farcaster.fid,
         signer,
       );
+
+      const { link } = await upsertCast(castAdd);
+      push(link!);
+
       toast({ description: 'Posted!!!' });
     } catch (error) {
       console.error(error);
       toast({ description: 'Failed' });
+      setPosting(false);
     } finally {
       setEmbedUrl('');
       setIsPostDialogOpen(false);
@@ -53,7 +63,8 @@ const useCreateDialog = () => {
     setEmbedUrl,
     channelId,
     setChannelId,
+    posting,
   };
 };
 
-export default useCreateDialog;
+export default useCreateModal;
