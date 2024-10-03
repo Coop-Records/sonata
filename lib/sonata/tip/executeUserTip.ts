@@ -1,10 +1,12 @@
+'use server';
 import { stack } from '@/lib/stack/client';
 import { eventTipCashback, eventTipChannel, eventTipRecipient } from '@/lib/stack/events';
 import supabase from '@/lib/supabase/serverClient';
 import getCastByHash from '@/lib/supabase/getPostByHash';
-import getChannelTipInfo from './getChannelTipInfo';
-import getBulkUsersByFid from '@/lib/neynar/getBulkUsersByFid';
 import getAllowance from '@/lib/supabase/getAllowance';
+import getChannelTipInfo from '@/lib/sonata/tip/getChannelTipInfo';
+import getUserFromFid from '@/lib/farcaster/getUserFromFid';
+import { isNil } from 'lodash';
 
 async function executeUserTip({
   postHash,
@@ -17,6 +19,8 @@ async function executeUserTip({
 }) {
   if (isNaN(amount)) throw Error('Amount must be a number');
   if (amount <= 0) throw Error('Invalid amount');
+
+  if (!tipperFid) throw Error('Invalid user');
 
   const post = await getCastByHash(postHash);
   const recipientFid = post.author.fid;
@@ -57,7 +61,11 @@ async function executeUserTip({
     );
   }
 
-  const [sender, receiver] = await getBulkUsersByFid([tipperFid, recipientFid]);
+  const sender = await getUserFromFid(tipperFid);
+  const receiver = await getUserFromFid(recipientFid);
+
+  if (isNil(receiver)) throw Error('Invalid recipient');
+  if (isNil(sender)) throw Error('Invalid sender');
   const recipientWalletAddress = receiver?.verifications?.find(Boolean);
   if (!recipientWalletAddress) throw Error('Invalid recipient');
   const tipperWalletAddress = sender?.verifications?.find(Boolean);
