@@ -6,8 +6,8 @@ async function getChannelWeeklyAirdropData() {
   const wallets = await getAllChannels();
 
   const channels = wallets.reduce((prev, curr) => {
-    const email = curr.linked_accounts.find(account => account.type == 'email');
-    const wallet = curr.linked_accounts.find(account => account.type === 'wallet');
+    const email = curr.linkedAccounts.find(account => account.type == 'email');
+    const wallet = curr.linkedAccounts.find(account => account.type === 'wallet');
 
     if (email && wallet) {
       const channelId = email.address.split('@')[0];

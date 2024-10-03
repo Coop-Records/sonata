@@ -2,6 +2,7 @@
 import { UserDataType } from '@standard-crypto/farcaster-js-hub-rest';
 import farcasterClient from './client';
 import { SupabaseUser } from '@/types/SupabaseUser';
+import getVerifications from './getVerifications';
 
 const getUserFromFid = async (fid?: number) => {
   if (!fid) return null;
@@ -20,6 +21,10 @@ const getUserFromFid = async (fid?: number) => {
       user.profile = { bio: { text: data.value, mentioned_profiles: [] } };
     }
   }
+
+  const verifications = await getVerifications(fid);
+  user.verifications = verifications;
+
   return user;
 };
 
