@@ -1,4 +1,3 @@
-'use client';
 import { HubRestAPIClient } from '@standard-crypto/farcaster-js-hub-rest';
 import axios from 'axios';
 
