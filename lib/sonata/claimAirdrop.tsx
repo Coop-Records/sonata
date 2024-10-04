@@ -1,29 +1,36 @@
+'use server';
 import { isNil } from 'lodash';
+import supabase from '@/lib/supabase/serverClient';
+import getFidFromToken from '@/lib/privy/getFidFromToken';
+import getVerifications from '@/lib/farcaster/getVerifications';
+import { stack } from '@/lib/stack/client';
+import { eventAirdrop } from '@/lib/stack/events';
 
-const claimAirdrop = async (
-  signer_uuid: string | undefined,
-  wallet_address: string,
-): Promise<any> => {
-  try {
-    if (isNil(signer_uuid)) throw Error('Invalid Signer');
-    const body = {
-      signer_uuid,
-      wallet_address,
-    };
-    const stringifiedBody = JSON.stringify(body);
-    const res = await fetch('/api/claimAirdrop', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: stringifiedBody,
-    });
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.error(error);
-    return { message: 'Airdrop Failed' };
+const claimAirdrop = async (accessToken: string | null) => {
+  if (isNil(accessToken)) {
+    throw new Error('Invalid Access Token');
   }
+
+  const fid = await getFidFromToken(accessToken);
+  const verifications = await getVerifications(fid);
+  const walletAddress = verifications[0];
+
+  if (isNil(walletAddress)) {
+    throw new Error('Please verify an address on warpcast and try again');
+  }
+
+  const { data: airdropAmount, error } = await supabase.rpc('redeem_airdrop', {
+    wallet_address_input: walletAddress,
+  });
+  if (error) {
+    console.error('Error calling function:', error);
+    throw new Error('Error redeeming airdrop');
+  }
+
+  if (airdropAmount > 0) {
+    await stack.track(eventAirdrop(), { account: walletAddress, points: airdropAmount });
+  }
+  return { airdropAmount };
 };
 
 export default claimAirdrop;
