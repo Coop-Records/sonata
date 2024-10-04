@@ -29,10 +29,6 @@ const getFeed = async (
 
     if (!query) return [];
 
-    if (![FeedType.Following, FeedType.Posts].includes(feedType)) {
-      query.filter('author', 'cs', '{"power_badge": true}');
-    }
-
     if (channelId) query.eq('channelId', channelId);
     if (authorFid) query.eq('authorFid', authorFid);
     if (limit) query.range(start, start + fetchPostsLimit - 1);
