@@ -1,11 +1,11 @@
 'use server';
 import { UserDataType } from '@standard-crypto/farcaster-js-hub-rest';
 import farcasterClient from './client';
-import { SupabaseUser } from '@/types/SupabaseUser';
+import { User } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 
 const getUserFromFid = async (fid?: number) => {
   if (!fid) return null;
-  const user: Partial<SupabaseUser> = {};
+  const user: Partial<User> = {};
 
   const userDataList = farcasterClient.listAllUserDataByFid(fid);
   for await (const userAdd of userDataList) {

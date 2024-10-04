@@ -1,16 +1,15 @@
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { cn, timeFromNow } from '@/lib/utils';
-import Image from 'next/image';
 import Link from 'next/link';
 import { SupabasePost } from '@/types/SupabasePost';
-import { SupabaseUser } from '@/types/SupabaseUser';
+import { User } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 
 export default function UserDetails({
   user,
   className,
   createdAt,
 }: {
-  user: SupabaseUser;
+  user: User;
   className?: string;
   createdAt?: SupabasePost['created_at'];
 }) {
@@ -31,7 +30,6 @@ export default function UserDetails({
           >
             {user.display_name}
           </a>
-          {user.power_badge && <Image src="/images/hypersub.png" width={20} height={20} alt="" />}
           {createdAt && (
             <span className="text-sm leading-none text-muted-foreground">
               {'• '}
