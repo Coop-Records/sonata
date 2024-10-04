@@ -1,7 +1,7 @@
 import { CHANNELS } from '@/lib/consts';
 import getChannelDetails from '@/lib/sonata/getChannelDetails';
-import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { TrackMetadata } from '@/types/Track';
+import { usePrivy } from '@privy-io/react-auth';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -18,18 +18,19 @@ const DEFAULT_CHANNEL_DETAILS = {
 
 function useChannelDetails() {
   const { channelId } = useParams();
-  const { signer } = useNeynarProvider();
+  const { user } = usePrivy();
   const [userStakedAmount, setUserStakedAmount] = useState(0);
   const [channelImage, setChannelImage] = useState('');
   const [channelDetails, setChannelDetails] = useState(DEFAULT_CHANNEL_DETAILS);
   const [loading, setLoading] = useState(true);
 
+  const fid = user?.farcaster?.fid;
   useEffect(() => {
     if (channelId) {
       const image = CHANNELS.find(({ value }) => value === channelId)?.icon;
       setChannelImage(image ?? '/images/placeholder.png');
 
-      getChannelDetails(channelId as string, signer?.fid)
+      getChannelDetails(channelId as string, fid)
         .then((data) => {
           const mods = [];
           const info = data.info;
@@ -54,7 +55,7 @@ function useChannelDetails() {
     return () => {
       setLoading(true);
     };
-  }, [signer, channelId]);
+  }, [fid, channelId]);
 
   return {
     channelImage,

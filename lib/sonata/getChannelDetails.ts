@@ -1,18 +1,17 @@
-import fetchMetadata from "../fetchMetadata";
-import findValidEmbed from "../findValidEmbed";
+import fetchMetadata from '../fetchMetadata';
+import findValidEmbed from '../findValidEmbed';
 
-async function getChannelDetails(id: string, fid: number | undefined) {
+async function getChannelDetails(id: string, fid?: number | null) {
   if (!id) throw Error('channel id required');
 
-  const processSuccess = (res: Response) => res.ok ? res.json() : null;
+  const processSuccess = (res: Response) => (res.ok ? res.json() : null);
 
   const promises = [
     fetch(`/api/neynar/getChannelDetails?channelId=${id}`).then(processSuccess),
-    fetch(`/api/channel/details?channelId=${id}`).then(processSuccess)
+    fetch(`/api/channel/details?channelId=${id}`).then(processSuccess),
   ];
-  if (fid) promises.push(
-    fetch(`/api/channel/stake?channelId=${id}&fid=${fid}`).then(processSuccess)
-  );
+  if (fid)
+    promises.push(fetch(`/api/channel/stake?channelId=${id}&fid=${fid}`).then(processSuccess));
   const [info, stats, user] = await Promise.all(promises);
 
   const embed = stats?.topSong ? findValidEmbed(stats.topSong) : null;
@@ -23,8 +22,8 @@ async function getChannelDetails(id: string, fid: number | undefined) {
     topSong: metadata,
     staking: stats?.staking,
     balance: stats?.balance,
-    user
-  }
+    user,
+  };
 }
 
 export default getChannelDetails;
