@@ -1,11 +1,19 @@
-import getUser from "@/lib/neynar/getNeynarUser";
-import { stack } from "@/lib/stack/client";
-import { eventStakeChannel, eventStakeChannelFid } from "@/lib/stack/events";
-import supabase from "@/lib/supabase/serverClient";
-import getPoints from "../getStackPoints";
-import getChannelTipInfo from "../tip/getChannelTipInfo";
+'use server';
+import getUser from '@/lib/neynar/getNeynarUser';
+import { stack } from '@/lib/stack/client';
+import { eventStakeChannel, eventStakeChannelFid } from '@/lib/stack/events';
+import supabase from '@/lib/supabase/serverClient';
+import getPoints from '../getStackPoints';
+import getChannelTipInfo from '../tip/getChannelTipInfo';
+import { ChannelStakeParams } from '@/types/ChannelStakeParams';
+import getFidFromToken from '@/lib/privy/getFidFromToken';
 
-async function executeChannelUnstake(channelId: string, amount: number, fid: number) {
+async function executeChannelUnstake({ channelId, amount, accessToken }: ChannelStakeParams) {
+  if (!channelId) throw Error('Channel Id required');
+  if (!isFinite(amount)) throw Error('Amount required');
+  if (!accessToken) throw Error('Access token required');
+
+  const fid = await getFidFromToken(accessToken);
   const event = eventStakeChannel(channelId);
   const userEvent = eventStakeChannelFid(channelId, fid);
 
@@ -26,7 +34,9 @@ async function executeChannelUnstake(channelId: string, amount: number, fid: num
     stack.track(event, { account: channelAddress, points: -amount }),
     stack.track(userEvent, { account: userAddress, points: amount }),
   ]);
-  results.forEach(res => { if (!res?.success) throw Error(res?.status) });
+  results.forEach((res) => {
+    if (!res?.success) throw Error(res?.status);
+  });
 
   const log = await supabase
     .from('stake_activity_log')

@@ -1,43 +1,45 @@
-import { useToast } from "@/components/ui/use-toast";
-import requestUnstake from "@/lib/sonata/staking/requestChannelUnstake";
-import { useNeynarProvider } from "@/providers/NeynarProvider";
-import { useStakeProvider } from "@/providers/StakeProvider";
-import { useTipProvider } from "@/providers/TipProvider";
-import { useParams } from "next/navigation";
+import { useToast } from '@/components/ui/use-toast';
+import executeChannelUnstake from '@/lib/sonata/staking/executeChannelUnstake';
+import { useStakeProvider } from '@/providers/StakeProvider';
+import { useTipProvider } from '@/providers/TipProvider';
+import { usePrivy } from '@privy-io/react-auth';
+import { useParams } from 'next/navigation';
 
 function useUnstake() {
-  const { channelId } = useParams();
+  const { channelId }: { channelId: string } = useParams();
   const { toast } = useToast();
-  const { signer } = useNeynarProvider();
+  const { getAccessToken } = usePrivy();
   const { balance, setBalance } = useTipProvider();
-  const { setChannelDetails, channelDetails, setUserStakedAmount, userStakedAmount } = useStakeProvider();
+  const { setChannelDetails, channelDetails, setUserStakedAmount, userStakedAmount } =
+    useStakeProvider();
 
   const unstake = async (amount: number) => {
-    if (!signer?.signer_uuid) {
-      toast({ description: 'Invalid signer', variant: 'destructive' });
-      return;
-    }
-    if (amount > userStakedAmount) {
-      toast({ description: 'Invalid entry', variant: 'destructive' });
-      return;
-    }
-    const res = await requestUnstake(amount, signer.signer_uuid, channelId);
+    try {
+      const accessToken = await getAccessToken();
+      if (!accessToken) {
+        throw Error('Invalid signer');
+      }
 
-    if (!res) {
-      toast({ description: 'Could not unstake', variant: 'destructive' });
-      return;
+      if (amount > userStakedAmount) {
+        throw Error('Invalid entry');
+      }
+      const res = await executeChannelUnstake({ channelId, amount, accessToken });
+
+      const staking = channelDetails.staking;
+      staking.staked -= amount;
+      if (res.remainingStake == 0) --staking.stakers;
+
+      setChannelDetails({ ...channelDetails, staking });
+      setBalance(balance + BigInt(amount));
+      setUserStakedAmount(res.remainingStake);
+
+      toast({ description: `Unstaked ${res?.unstakedAmount} NOTES` });
+    } catch (error: any) {
+      console.error(error);
+      toast({ description: error.message ?? 'Could not unstake', variant: 'destructive' });
     }
-    const staking = channelDetails.staking;
-    staking.staked -= amount;
-    if (res.remainingStake == 0) --staking.stakers;
-
-    setChannelDetails({ ...channelDetails, staking });
-    setBalance(balance + BigInt(amount));
-    setUserStakedAmount(res.remainingStake);
-
-    toast({ description: res.message });
   };
   return { unstake };
-};
+}
 
 export default useUnstake;

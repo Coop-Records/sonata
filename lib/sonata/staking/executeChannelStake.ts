@@ -6,12 +6,7 @@ import getPoints from '../getStackPoints';
 import getChannelTipInfo from '../tip/getChannelTipInfo';
 import getFidFromToken from '@/lib/privy/getFidFromToken';
 import getUserFromFid from '@/lib/farcaster/getUserFromFid';
-
-interface ChannelStakeParams {
-  channelId: string;
-  amount: number;
-  accessToken: string;
-}
+import { ChannelStakeParams } from '@/types/ChannelStakeParams';
 
 async function executeChannelStake({ channelId, amount, accessToken }: ChannelStakeParams) {
   if (!channelId) throw Error('Channel Id required');
