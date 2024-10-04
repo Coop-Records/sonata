@@ -1,3 +1,4 @@
+'use server';
 import { VerifiedSigner } from '@/types/VerifiedSigner';
 
 export default async function verifySignerUUID(signer_uuid: string): Promise<VerifiedSigner> {

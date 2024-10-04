@@ -4,6 +4,7 @@ import createPostReply from '@/lib/neynar/createPostReply';
 const BOT_SIGNER_UUID = process.env.BOT_SIGNER_UUID!;
 
 async function sendBotCast(cast: Cast) {
+  return;
   await createPostReply(
     BOT_SIGNER_UUID,
     cast.hash,
