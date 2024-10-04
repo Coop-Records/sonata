@@ -1,6 +1,6 @@
 'use server';
-import privyClient from '@/lib/privy/privyClient';
 import executeUserTip from './tip/executeUserTip';
+import getFidFromToken from '../privy/getFidFromToken';
 
 async function executeTip({
   accessToken,
@@ -11,11 +11,7 @@ async function executeTip({
   postHash: string;
   amount: number;
 }) {
-  const verifiedClaims = await privyClient.verifyAuthToken(accessToken);
-  const user = await privyClient.getUserById(verifiedClaims.userId);
-  const tipperFid = user.farcaster?.fid;
-  if (!tipperFid) throw Error('Invalid user');
-
+  const tipperFid = await getFidFromToken(accessToken);
   return executeUserTip({ tipperFid, postHash, amount });
 }
 
