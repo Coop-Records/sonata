@@ -1,24 +1,7 @@
-import { PrivyClientOptions } from "@/types/Privy";
+import { PrivyClient } from '@privy-io/server-auth';
 
-const APP_ID = process.env.PRIVY_APP_ID!;
+const APP_ID = process.env.NEXT_PUBLIC_PRIVY_APP_ID!;
 const APP_SECRET = process.env.PRIVY_APP_SECRET!;
-
-const headers = {
-  'Content-Type': 'application/json',
-  'Authorization': `Basic ${btoa(APP_ID + ':' + APP_SECRET)}`,
-  'privy-app-id': APP_ID,
-};
-
-const privyClient = (
-  endpoint: string,
-  options: PrivyClientOptions = {}
-) => fetch(
-  'https://auth.privy.io/api/v1' + endpoint,
-  {
-    method: options.method ?? 'POST',
-    headers,
-    body: options.body ? JSON.stringify(options.body) : undefined,
-  }
-);
+const privyClient = new PrivyClient(APP_ID, APP_SECRET);
 
 export default privyClient;

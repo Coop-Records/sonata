@@ -1,32 +1,26 @@
-import { TipResponse } from '@/types/TipResponse';
-import { isNil } from 'lodash';
+'use server';
+import supabase from '@/lib/supabase/serverClient';
+import privyClient from '@/lib/privy/privyClient';
 
-const executeDegenTip = async (
-  walletAddress: string,
-  signer_uuid: string | undefined,
-  amount: bigint,
-  postHash: string,
-) => {
-  try {
-    if (isNil(signer_uuid)) throw Error('Invalid Signer');
-    const res = await fetch('/api/degenTip', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        signer_uuid,
-        tipAmount: amount,
-        postHash,
-        walletAddress,
-      }),
-    });
-    const data = (await res.json()) as TipResponse;
-    return data;
-  } catch (error) {
-    console.error(error);
-    return { error: 'Unable to tip' };
+const executeDegenTip = async (accessToken: string, amount: bigint, postHash: string) => {
+  const verifiedClaims = await privyClient.verifyAuthToken(accessToken);
+  const user = await privyClient.getUserById(verifiedClaims.userId);
+  const tipperFid = user.farcaster?.fid;
+  if (!tipperFid) throw Error('Invalid user');
+
+  const { data: totalDegenOnPost, error } = await supabase.rpc('degen_tip_post', {
+    tip_amount: amount,
+    post_hash_input: postHash,
+  });
+
+  if (error) {
+    console.error('Error calling function:', error);
+    throw error;
   }
+  return {
+    usedTip: amount,
+    totalTipOnPost: totalDegenOnPost,
+  };
 };
 
 export default executeDegenTip;
