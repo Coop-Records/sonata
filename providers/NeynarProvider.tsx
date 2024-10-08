@@ -2,6 +2,7 @@ import { createContext, useContext, useCallback, useState, useEffect } from 'rea
 import { Signer } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import getUser from '@/lib/sonata/getUser';
 import { SupabaseUser } from '@/types/SupabaseUser';
+import verifySignerUUID from '@/lib/neynar/verifySigner';
 
 const clientId = process.env.NEXT_PUBLIC_NEYNAR_CLIENT_ID;
 const loginUrl = 'https://app.neynar.com/login';
@@ -68,19 +69,24 @@ const NeynarProvider = ({ children }: any) => {
   useEffect(() => {
     const updateUser = async () => {
       setLoading(true);
-      if (!signer?.fid) {
+      if (!signer?.signer_uuid) {
         setUser(undefined);
       } else {
-        const user = await getUser(signer.fid);
-        if ('error' in user) {
-          throw new Error('Error fetching user');
+        const { fid, status } = await verifySignerUUID(signer.signer_uuid);
+        if (!status) {
+          localStorage.removeItem('signer');
+        } else {
+          const user = await getUser(fid);
+          if ('error' in user) {
+            throw new Error('Error fetching user');
+          }
+          setUser(user);
         }
-        setUser(user);
       }
       setLoading(false);
     };
     updateUser();
-  }, [signer?.fid]);
+  }, [signer?.signer_uuid]);
 
   return (
     <NeynarContext.Provider value={{ signer, signIn, signOut, user, loading }}>
