@@ -27,7 +27,6 @@ const useCreateModal = () => {
     const signer = await getSigner();
     if (!(signer && user?.farcaster?.fid)) return;
 
-<<<<<<< HEAD
     setPosting(true);
     try {
       const parentUrl = getParentUrlFromChannelId(channelId);
@@ -45,18 +44,6 @@ const useCreateModal = () => {
       console.error(error);
       toast({ description: 'Failed' });
       setPosting(false);
-=======
-    try {
-      const res = await callPostApi(signer.signer_uuid, embedUrl, channelId);
-      if (!res.ok) throw new Error('Failed');
-      toast({ description: 'Posted!!!' });
-      const data = await res.json();
-      if (data?.link) {
-        push(data.link);
-      }
-    } catch (e) {
-      toast({ description: 'Failed' });
->>>>>>> eab9712b686607c332090dd543433407acd98d02
     } finally {
       setEmbedUrl('');
       setIsPostDialogOpen(false);
