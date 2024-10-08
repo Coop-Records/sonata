@@ -63,10 +63,7 @@ const useCreateModal = () => {
     setEmbedUrl,
     channelId,
     setChannelId,
-<<<<<<< HEAD
     posting,
-=======
->>>>>>> eab9712b686607c332090dd543433407acd98d02
   };
 };
 
