@@ -4,13 +4,13 @@ import { ReactNode, createContext, useCallback, useContext, useEffect, useState 
 import { SupabasePost } from '@/types/SupabasePost';
 import findValidEmbed from '@/lib/findValidEmbed';
 import mergeArraysUniqueByPostHash from '@/lib/mergeArraysUniqueByPostHash';
-import { useNeynarProvider } from './NeynarProvider';
 import { fetchPostsLimit } from '@/lib/consts';
 import fetchMetadata from '@/lib/fetchMetadata';
 import { usePlayer } from '@/providers/audio/PlayerProvider';
 import { useProfileProvider } from './ProfileProvider';
 import { useParams, useSearchParams } from 'next/navigation';
 import qs from 'qs';
+import { usePrivy } from '@privy-io/react-auth';
 
 type FeedProviderType = {
   feed: SupabasePost[];
@@ -30,22 +30,22 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const [feed, setFeed] = useState<SupabasePost[]>([]);
   const [feedType, setFeedType] = useState<FeedType>();
   const [hasMore, setHasMore] = useState(true);
-  const { user, loading: userLoading } = useNeynarProvider();
+  const { user, ready: privyReady } = usePrivy();
   const [player, dispatch] = usePlayer();
   const { profile, loading: profileLoading, error: profileError } = useProfileProvider();
 
-  const fid = user?.fid;
+  const fid = user?.farcaster?.fid;
   const profileFid = profile?.fid;
 
   useEffect(() => {
-    if (userLoading || profileLoading || profileError) return;
+    if (!privyReady || profileLoading || profileError) return;
     if (tab && Object.values(FeedType).includes(tab as FeedType)) {
       setFeedType(tab as FeedType);
     } else if (channelId) setFeedType(FeedType.Trending);
     else if (profileFid) setFeedType(FeedType.Posts);
     else if (user) setFeedType(FeedType.Following);
     else setFeedType(FeedType.Trending);
-  }, [userLoading, profileLoading, profileError, user, profileFid, channelId, tab]);
+  }, [privyReady, profileLoading, profileError, user, profileFid, channelId, tab]);
 
   const fetchMore = useCallback(
     async (start: number) => {

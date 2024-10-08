@@ -1,16 +1,21 @@
 'use client';
 import { useToast } from '@/components/ui/use-toast';
-import callPostApi from '@/lib/callPostApi';
 import isValidUrl from '@/lib/isValidUrl';
-import { useNeynarProvider } from '@/providers/NeynarProvider';
-import { useRouter } from 'next/navigation';
+import { usePrivy } from '@privy-io/react-auth';
 import { useState } from 'react';
+import useSigner from './farcaster/useSigner';
+import farcasterClient from '@/lib/farcaster/client';
+import getParentUrlFromChannelId from '@/lib/getParentUrlFormChannelId';
+import upsertCast from '@/lib/supabase/upsertCast';
+import { useRouter } from 'next/navigation';
 
-const useCreateDialog = () => {
-  const { signer } = useNeynarProvider();
+const useCreateModal = () => {
+  const { getSigner } = useSigner();
+  const { user } = usePrivy();
   const [embedUrl, setEmbedUrl] = useState<string>('');
   const [channelId, setChannelId] = useState<string>();
   const [isPostDialogOpen, setIsPostDialogOpen] = useState<boolean>(false);
+  const [posting, setPosting] = useState<boolean>(false);
   const { toast } = useToast();
   const { push } = useRouter();
 
@@ -19,18 +24,26 @@ const useCreateDialog = () => {
       toast({ description: `Sound / Soundcloud / Spotify / Youtube only` });
       return;
     }
-    if (!signer?.signer_uuid) return;
+    const signer = await getSigner();
+    if (!(signer && user?.farcaster?.fid)) return;
 
+    setPosting(true);
     try {
-      const res = await callPostApi(signer.signer_uuid, embedUrl, channelId);
-      if (!res.ok) throw new Error('Failed');
+      const parentUrl = getParentUrlFromChannelId(channelId);
+      const castAdd = await farcasterClient.submitCast(
+        { text: embedUrl, embeds: [{ url: embedUrl }], parentUrl },
+        user.farcaster.fid,
+        signer,
+      );
+
+      const { link } = await upsertCast(castAdd);
+      push(link!);
+
       toast({ description: 'Posted!!!' });
-      const data = await res.json();
-      if (data?.link) {
-        push(data.link);
-      }
-    } catch (e) {
+    } catch (error) {
+      console.error(error);
       toast({ description: 'Failed' });
+      setPosting(false);
     } finally {
       setEmbedUrl('');
       setIsPostDialogOpen(false);
@@ -50,7 +63,8 @@ const useCreateDialog = () => {
     setEmbedUrl,
     channelId,
     setChannelId,
+    posting,
   };
 };
 
-export default useCreateDialog;
+export default useCreateModal;

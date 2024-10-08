@@ -3,13 +3,13 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { useTipProvider } from '@/providers/TipProvider';
 import { SupabasePost } from '@/types/SupabasePost';
-import { useNeynarProvider } from '@/providers/NeynarProvider';
 import { Popover, PopoverContent } from '@/components/ui/popover';
 import { cn, isValidNumber } from '@/lib/utils';
 import { PopoverTrigger } from '@radix-ui/react-popover';
 import { useUi } from '@/providers/UiProvider';
 import { Badge } from './ui/badge';
 import { Input } from './ui/input';
+import { usePrivy } from '@privy-io/react-auth';
 
 const defualtTips = {
   DEGEN: [10, 50, 100],
@@ -32,8 +32,8 @@ export default function TipButton({
   currency: 'DEGEN' | 'NOTES';
   className?: string;
 }) {
-  const { user } = useNeynarProvider();
-  const userFid = user?.fid;
+  const { user } = usePrivy();
+  const userFid = user?.farcaster?.fid;
   const castAuthorFid = cast.author?.fid;
   const isSelfPost = userFid === castAuthorFid;
   const { tip, tipDegen } = useTipProvider();

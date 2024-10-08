@@ -1,40 +1,35 @@
-import 'server-only';
+'use server';
+import getChannelIdFromParentUrl from '@/lib/neynar/getChannelIdFromParentUrl';
+import { type CastAdd } from '@standard-crypto/farcaster-js-hub-rest';
+import { supabaseClient } from './client';
+import getDate from '@/lib/farcaster/getDate';
+import getUserFromFid from '../farcaster/getUserFromFid';
 
-import { Cast } from '@neynar/nodejs-sdk/build/neynar-api/v2';
-import getChannelIdFromCast from '../neynar/getChannelIdFromCast';
-import { createClient } from '@supabase/supabase-js';
+async function upsertCast(cast: CastAdd) {
+  const channelId = getChannelIdFromParentUrl(cast.data.castAddBody.parentUrl);
 
-const SUPABASE_URL = process.env.SUPABASE_URL!;
-const SUPABASE_KEY = process.env.SUPABASE_KEY!;
-
-export const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-async function upsertCast(cast: Cast) {
-  const likes = (cast as any).reactions.likes_count;
-  const alternativeEmbeds = (cast as any).alternativeEmbeds;
-  const channelId = getChannelIdFromCast(cast);
+  const authorFid = cast.data.fid;
+  const author = await getUserFromFid(authorFid);
 
   const { error, statusText } = await supabaseClient.from('posts').upsert(
     {
       post_hash: cast.hash,
-      likes,
-      created_at: new Date(cast.timestamp),
-      embeds: cast.embeds,
-      author: cast.author,
+      created_at: getDate(cast.data.timestamp),
+      embeds: cast.data.castAddBody.embeds,
+      author,
       channelId,
-      alternativeEmbeds,
-      authorFid: cast.author.fid,
+      authorFid,
     },
     {
       onConflict: 'post_hash',
     },
   );
   if (error) {
-    console.error('Error upserting cast:', error);
-    return { success: false, statusText };
+    throw new Error(error.message);
   }
+  const link = `/cast/${author?.username}/${cast.hash.substring(0, 8)}`;
   console.log(statusText, 'cast(hash):', cast.hash);
-  return { success: true, statusText };
+  return { statusText, link };
 }
 
 export default upsertCast;

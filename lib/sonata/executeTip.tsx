@@ -1,24 +1,18 @@
-import { TipResponse } from '@/types/TipResponse';
+'use server';
+import executeUserTip from './tip/executeUserTip';
+import getFidFromToken from '../privy/getFidFromToken';
 
-const executeTip = async (signer_uuid: string | undefined, amount: bigint, postHash: string) => {
-  try {
-    const res = await fetch('/api/tip', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        signer_uuid,
-        tipAmount: amount,
-        postHash,
-      }),
-    });
-    const data = (await res.json()) as TipResponse;
-    return data;
-  } catch (error) {
-    console.error(error);
-    return { error: 'Unable to tip' };
-  }
-};
+async function executeTip({
+  accessToken,
+  postHash,
+  amount,
+}: {
+  accessToken: string;
+  postHash: string;
+  amount: number;
+}) {
+  const tipperFid = await getFidFromToken(accessToken);
+  return executeUserTip({ tipperFid, postHash, amount });
+}
 
 export default executeTip;
