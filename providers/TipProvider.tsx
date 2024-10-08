@@ -141,8 +141,8 @@ const TipProvider = ({ children }: any) => {
       setBalance((balance ?? BigInt(0)) + BigInt(data.tipperAmount));
       toast({ description: `Tipped ${amount} NOTES` });
       return data;
-    } catch (error: any) {
-      toast({ description: error.message ?? 'Unable to Tip!', variant: 'destructive' });
+    } catch (error) {
+      toast({ description: 'Unable to Tip!', variant: 'destructive' });
       return;
     }
   };
