@@ -7,7 +7,6 @@ import fetchMetadata from '@/lib/fetchMetadata';
 import MediaPlayer from '../MediaPlayer';
 import { useEffect, useState } from 'react';
 import { TrackMetadata } from '@/types/Track';
-import Like from './Like';
 import Share from './Share';
 import { Separator } from '@/components/ui/separator';
 import UpvoteDownvote from '../UpvoteDownvote';
@@ -50,7 +49,6 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
         <UpvoteDownvote verifications={verifications} cast={cast} />
         {collectibleLink && <CollectButton collectUrl={collectibleLink} />}
         <TipButton verifications={verifications} cast={cast} currency="DEGEN" className="ml-auto" />
-        <Like cast={cast} />
         <Share cast={cast} />
       </div>
       <Separator className="bg-muted" />
