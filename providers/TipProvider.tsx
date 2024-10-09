@@ -2,10 +2,9 @@ import executeDegenTip from '@/lib/degen/executeDegenTip';
 import executeTip from '@/lib/sonata/executeTip';
 import getCurrentNotes from '@/lib/sonata/getCurrentNotes';
 import { isEmpty, isNil } from 'lodash';
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { Address } from 'viem';
 import { useToast } from '@/components/ui/use-toast';
-import claimAirdrop from '@/lib/sonata/claimAirdrop';
 import { supabaseClient } from '@/lib/supabase/client';
 import { usePrivy } from '@privy-io/react-auth';
 import getVerifications from '@/lib/farcaster/getVerifications';
@@ -16,7 +15,6 @@ const TipContext = createContext<any>(null);
 
 const TipProvider = ({ children }: any) => {
   const { toast } = useToast();
-  const [airdropBalance, setAirdropBalance] = useState<bigint | undefined>(undefined);
   const [balance, setBalance] = useState<bigint | undefined>(undefined);
   const [dailyTipAllowance, setDailyTipAllowance] = useState<bigint | undefined>(undefined);
   const [accessToken, setAccessToken] = useState<string>();
@@ -75,37 +73,22 @@ const TipProvider = ({ children }: any) => {
     fetchVerifications();
   }, [userFid]);
 
-  const syncPoints = useCallback(async () => {
-    if (isNil(userFid) || verifications.length === 0) return;
-
-    let totalBalance = BigInt(0);
-
-    for (const verification of verifications) {
-      const currentBalance = await getCurrentNotes(verification as Address);
-      totalBalance += BigInt(currentBalance);
-    }
-
-    setBalance(totalBalance);
-  }, [userFid, verifications]);
-
-  const getAirdropBalance = useCallback(async () => {
-    if (isNil(user) || verifications.length === 0) return;
-
-    const { data } = await supabaseClient
-      .from('airdrop')
-      .select('notes')
-      .ilike('wallet_address', verifications[0])
-      .single();
-
-    const currentBalance = data?.notes;
-    setAirdropBalance(currentBalance);
-  }, [user, verifications]);
-
   useEffect(() => {
-    if (isNil(userFid)) return;
+    const syncPoints = async () => {
+      if (isNil(userFid) || verifications.length === 0) return;
+
+      let totalBalance = BigInt(0);
+
+      for (const verification of verifications) {
+        const currentBalance = await getCurrentNotes(verification as Address);
+        totalBalance += BigInt(currentBalance);
+      }
+
+      setBalance(totalBalance);
+    };
+
     syncPoints();
-    getAirdropBalance();
-  }, [userFid, syncPoints, getAirdropBalance]);
+  }, [userFid, verifications]);
 
   const tipDegen = async (amount: bigint, postHash: string) => {
     try {
@@ -147,21 +130,6 @@ const TipProvider = ({ children }: any) => {
     }
   };
 
-  const refreshBalances = async () => {
-    getAirdropBalance();
-    syncPoints();
-  };
-
-  const handlePost = async () => {
-    if (verifications.length === 0) {
-      toast({ description: 'Please verify an address on warpcast and try again' });
-    } else if (verifications) {
-      const response = await claimAirdrop(accessToken, verifications[0]);
-      toast({ description: `${response.message}` });
-      await refreshBalances();
-    }
-  };
-
   return (
     <TipContext.Provider
       value={{
@@ -171,8 +139,6 @@ const TipProvider = ({ children }: any) => {
         tipDegen,
         remainingTipAllocation,
         dailyTipAllowance,
-        airdropBalance,
-        handlePost,
       }}
     >
       {children}
