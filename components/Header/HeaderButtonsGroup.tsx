@@ -1,9 +1,7 @@
-import ClaimAirdropButton from '@/components/ClaimAirdropButton/ClaimAirdropButton';
 import SignInButton from '@/components/SignInButton';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
-import { useTipProvider } from '@/providers/TipProvider';
 import { useUi } from '@/providers/UiProvider';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { useParams } from 'next/navigation';
@@ -14,7 +12,6 @@ import { usePrivy } from '@privy-io/react-auth';
 const HeaderButtonsGroup = ({ className = '' }) => {
   const { ready, authenticated } = usePrivy();
   const { menuOpen, setMenuOpen } = useUi();
-  const { airdropBalance } = useTipProvider();
   const { username, channelId } = useParams();
 
   return (
@@ -29,7 +26,6 @@ const HeaderButtonsGroup = ({ className = '' }) => {
         <Skeleton className="size-9 rounded-full" />
       ) : authenticated ? (
         <div className="flex items-center gap-2">
-          {airdropBalance > 0 && <ClaimAirdropButton />}
           <UserMenu />
         </div>
       ) : (
