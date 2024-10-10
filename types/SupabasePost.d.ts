@@ -10,7 +10,6 @@ export type SupabasePost = {
   embeds: string[];
   alternativeEmbeds: string[];
   points?: number;
-  degen?: number;
   parent_url?: string;
   channelId?: string;
   hypersub_subscribed_since?: Date;

@@ -1,4 +1,3 @@
-import executeDegenTip from '@/lib/degen/executeDegenTip';
 import executeTip from '@/lib/sonata/executeTip';
 import getCurrentNotes from '@/lib/sonata/getCurrentNotes';
 import { isEmpty, isNil } from 'lodash';
@@ -8,8 +7,6 @@ import { useToast } from '@/components/ui/use-toast';
 import { supabaseClient } from '@/lib/supabase/client';
 import { usePrivy } from '@privy-io/react-auth';
 import getVerifications from '@/lib/farcaster/getVerifications';
-import useSigner from '@/hooks/farcaster/useSigner';
-import farcasterClient from '@/lib/farcaster/client';
 
 const TipContext = createContext<any>(null);
 
@@ -19,7 +16,6 @@ const TipProvider = ({ children }: any) => {
   const [dailyTipAllowance, setDailyTipAllowance] = useState<bigint | undefined>(undefined);
   const [accessToken, setAccessToken] = useState<string>();
   const [verifications, setVerifications] = useState<string[]>([]);
-  const { getSigner } = useSigner();
   const { user, getAccessToken } = usePrivy();
 
   const userFid = user?.farcaster?.fid;
@@ -90,25 +86,6 @@ const TipProvider = ({ children }: any) => {
     syncPoints();
   }, [userFid, verifications]);
 
-  const tipDegen = async (amount: bigint, postHash: string) => {
-    try {
-      const signer = await getSigner();
-
-      if (isNil(userFid) || isEmpty(verifications) || isNil(accessToken) || isNil(signer)) {
-        throw new Error();
-      }
-
-      const data = await executeDegenTip(accessToken, amount, postHash);
-      farcasterClient.submitCast({ text: `${data.usedTip} $DEGEN` }, userFid, signer);
-      toast({ description: `Tipped ${data.usedTip} DEGEN` });
-
-      return data;
-    } catch (error) {
-      toast({ description: 'Unable to Tip!', variant: 'destructive' });
-      return;
-    }
-  };
-
   const tip = async (amount: number, postHash: string) => {
     try {
       if (
@@ -136,7 +113,6 @@ const TipProvider = ({ children }: any) => {
         balance,
         setBalance,
         tip,
-        tipDegen,
         remainingTipAllocation,
         dailyTipAllowance,
       }}

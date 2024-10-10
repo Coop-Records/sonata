@@ -13,15 +13,8 @@ import { ArrowBigUp } from 'lucide-react';
 import { useStakeProvider } from '@/providers/StakeProvider';
 import { usePrivy } from '@privy-io/react-auth';
 
-const defaultTips = {
-  DEGEN: [10, 50, 100],
-  NOTES: [100, 1000, 10000],
-};
-
-const logos = {
-  DEGEN: '/images/degenchain.png',
-  NOTES: '/images/notes.png',
-};
+const defaultTips = [100, 1000, 10000];
+const logo = '/images/notes.png';
 
 export default function UpvoteDownvote({
   verifications,
@@ -83,7 +76,7 @@ export default function UpvoteDownvote({
             onClick={handleUpvoteClick}
           >
             <span>{formatBigInt(BigInt(total))}</span>
-            <Image src={logos.NOTES} width={16} height={16} alt="" />
+            <Image src={logo} width={16} height={16} alt="" />
             <ArrowBigUp className="hover:fill-black" />
           </Button>
         </PopoverTrigger>
@@ -91,7 +84,7 @@ export default function UpvoteDownvote({
           <h3 className="mb-2 text-xs font-semibold">Upvote</h3>
 
           <ul className="flex flex-wrap gap-2">
-            {defaultTips.NOTES.map((amount) => (
+            {defaultTips.map((amount) => (
               <li key={amount}>
                 <Badge
                   variant="secondary"
@@ -99,7 +92,7 @@ export default function UpvoteDownvote({
                   onClick={() => handleUpvoteTip(amount)}
                 >
                   {amount}
-                  <Image src={logos.NOTES} width={14} height={14} alt="" />
+                  <Image src={logo} width={14} height={14} alt="" />
                 </Badge>
               </li>
             ))}
@@ -115,7 +108,7 @@ export default function UpvoteDownvote({
               className="h-auto grow border-none bg-transparent px-0 py-3.5 text-xs outline-none [appearance:textfield] focus-visible:ring-0 focus-visible:ring-offset-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             />
             <Button variant="ghost" onClick={handleCustomUpvoteTip} className="size-4 p-0">
-              <Image src={logos.NOTES} width={16} height={16} alt="" />
+              <Image src={logo} width={16} height={16} alt="" />
             </Button>
           </div>
         </PopoverContent>
