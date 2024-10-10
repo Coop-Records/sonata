@@ -1,7 +1,6 @@
 'use client';
 import UserDetails from '@/components/UserDetails';
 import findValidEmbed from '@/lib/findValidEmbed';
-import TipButton from '@/components/TipButton';
 import { SupabasePost } from '@/types/SupabasePost';
 import fetchMetadata from '@/lib/fetchMetadata';
 import MediaPlayer from '../MediaPlayer';
@@ -48,8 +47,7 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
       <div className="flex gap-2">
         <UpvoteDownvote verifications={verifications} cast={cast} />
         {collectibleLink && <CollectButton collectUrl={collectibleLink} />}
-        <TipButton verifications={verifications} cast={cast} currency="DEGEN" className="ml-auto" />
-        <Share cast={cast} />
+        <Share cast={cast} className="ml-auto" />
       </div>
       <Separator className="bg-muted" />
     </div>
