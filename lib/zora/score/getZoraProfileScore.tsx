@@ -6,6 +6,15 @@ import getFollowingScore from './getFollowingScore';
 
 async function getZoraProfileScore(address: Address) {
   const profile = await getZoraProfile(address);
+  if (!profile) {
+    return {
+      username: '',
+      completeness: 0,
+      followers: 0,
+      following: 0,
+    };
+  }
+
   const completenessScore = getCompletenessScore(profile);
   const followersScore = getFollowersScore(profile.totalFollowers);
   const followingScore = getFollowingScore(profile.totalFollowing);

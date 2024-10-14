@@ -35,6 +35,7 @@ export const EVENT_ZORA_PROFILE = 'zora+profile';
 
 // zora score
 export const FOLLOWERS_PERFECT = 55555;
+export const MAX_CREATE_SCORE = 333;
 
 // stack point systems
 export const TOKEN_INDEXER_POINT_ID = 3500;
