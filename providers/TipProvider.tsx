@@ -31,7 +31,7 @@ const TipProvider = ({ children }: any) => {
         .select('remaining_tip_allocation,daily_tip_allocation')
         .eq('fid', userFid)
         .single();
-
+      console.log({ tipData: data });
       if (error) {
         console.error('Error fetching data:', error);
         return;
@@ -94,7 +94,8 @@ const TipProvider = ({ children }: any) => {
         isEmpty(verifications) ||
         isNil(accessToken)
       ) {
-        throw new Error();
+        console.error({ user, remainingTipAllocation, verifications, accessToken });
+        throw new Error('Missing required data');
       }
       const data = await executeTip({ accessToken, amount, postHash });
       setRemainingTipAllocation(BigInt(data.tipRemaining));
@@ -102,6 +103,7 @@ const TipProvider = ({ children }: any) => {
       toast({ description: `Tipped ${amount} NOTES` });
       return data;
     } catch (error) {
+      console.error(error);
       toast({ description: 'Unable to Tip!', variant: 'destructive' });
       return;
     }
