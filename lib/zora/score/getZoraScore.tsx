@@ -1,10 +1,12 @@
-function getZoraScore(profile: {
-  completeness: number;
-  followers: number;
-  following: number;
-}): number {
-  const { completeness, followers, following } = profile;
-  return (completeness + followers + following) / 3;
+import { SCORE_FACTOR } from '@/lib/consts';
+
+interface getZoraScoreProps {
+  profileScore: number;
+  createScore: number;
+}
+
+function getZoraScore({ profileScore, createScore }: getZoraScoreProps): number {
+  return SCORE_FACTOR * (profileScore + createScore);
 }
 
 export default getZoraScore;

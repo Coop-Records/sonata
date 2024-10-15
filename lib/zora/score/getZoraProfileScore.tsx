@@ -18,11 +18,13 @@ async function getZoraProfileScore(address: Address) {
   const completenessScore = getCompletenessScore(profile);
   const followersScore = getFollowersScore(profile.totalFollowers);
   const followingScore = getFollowingScore(profile.totalFollowing);
+  const profileComponentScore = (completenessScore + followersScore + followingScore) / 3;
   return {
     username: profile.username || profile.handle || profile.ensName || address,
     completeness: completenessScore,
     followers: followersScore,
     following: followingScore,
+    score: profileComponentScore,
   };
 }
 
