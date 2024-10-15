@@ -1,43 +1,43 @@
-import { eventStakeChannelFid } from "@/lib/stack/events";
-import getDaysEvents from "@/lib/stack/getDaysEvents";
-import { User } from "@neynar/nodejs-sdk/build/neynar-api/v2";
-import dayjs from "dayjs";
-import getStackPoints from "../getStackPoints";
+import dayjs from 'dayjs';
+import serverClient from '@/lib/supabase/serverClient';
 
-function getStakerScores(users: User[], channelId: string) {
-  const DAILY_APR = .05 / 365;
+async function getStakerScores(channelId: string) {
+  const DAILY_APR = 0.05 / 365;
   const today = new Date();
 
-  return Promise.all(users.map(async user => {
-    const event = eventStakeChannelFid(channelId, user.fid);
+  const { data: recentStakes, error: recentStakesError } = await serverClient
+    .from('stake_activity_log')
+    .select('*')
+    .eq('channelId', channelId)
+    .gt('created_at', dayjs().subtract(7, 'day').toISOString())
+    .order('created_at', { ascending: true });
 
-    const points = await getStackPoints(user.verifications, event);
-    if (points >= 0) return null;
-    const events = await getDaysEvents(event);
+  if (recentStakesError) throw recentStakesError;
 
-    const multiplier = events.reduceRight((prev, event, index) => {
-      if (index === 0) prev.date = events[0].timestamp;
-      const days = dayjs(event.timestamp).diff(prev.date, 'days', false);
+  const stakesByUser: { [key: string]: { totalStaked: number; stakes: typeof recentStakes } } = {};
+  recentStakes.forEach((stake) => {
+    if (!stakesByUser[stake.fid]) {
+      stakesByUser[stake.fid] = { totalStaked: 0, stakes: [] };
+    }
+    stakesByUser[stake.fid].totalStaked += stake.amount;
+    stakesByUser[stake.fid].stakes.push(stake);
+  });
 
-      if (days > 0) {
-        prev.date = event.timestamp;
-        prev.score += prev.points * ((1 + DAILY_APR) ** days);
-      }
+  const stakerScores = Object.entries(stakesByUser).map(([fid, { stakes, totalStaked }]) => {
+    if (totalStaked <= 0) return;
 
-      if (event.points < 0) prev.points += Math.abs(event.points);
-      else if (event.points >= prev.points) prev.points = 0;
-      else prev.points -= event.points;
+    let score = stakes.reduce((score, event) => {
+      const days = dayjs(today).diff(event.created_at, 'days');
+      score += event.amount * (1 + DAILY_APR) ** days;
+      return score;
+    }, 0);
 
-      return prev;
-    }, { date: new Date(), points: 0, score: 0 });
+    score = Math.round(Math.max(score, 0));
+    return { fid: Number(fid), score };
+  });
 
-    const days = dayjs(today).diff(multiplier.date, 'days', false);
-
-    if (days > 0)
-      multiplier.score += multiplier.points * ((1 + DAILY_APR) ** days);
-
-    return { fid: user.fid, score: Math.abs(points) + multiplier.score };
-  }));
+  const filteredStakerScores = stakerScores.filter((score) => score !== undefined);
+  return filteredStakerScores;
 }
 
 export default getStakerScores;

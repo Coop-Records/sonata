@@ -11,10 +11,10 @@ const BaseInfo = () => {
   return (
     <div className="flex items-center gap-2">
       <Avatar className="size-[60px]">
-        <AvatarImage className="object-cover" src={profile?.pfp.url} />
+        <AvatarImage className="object-cover" src={profile?.pfp_url} />
       </Avatar>
       <div className="space-y-1">
-        <p className="font-sora text-[21px] font-semibold">{profile?.displayName}</p>
+        <p className="font-sora text-[21px] font-semibold">{profile?.display_name}</p>
         <div className="flex gap-2">
           <Rank />
           <Link
