@@ -1,19 +1,13 @@
-import { User } from "@neynar/nodejs-sdk/build/neynar-api/v2";
-import getStakerScores from "./getStakerScores";
+import getStakerScores from './getStakerScores';
 
-export default async function calculateStakersReward(
-  users: User[],
-  channelId: string,
-  totalAmount: number
-) {
-  const results = await getStakerScores(users, channelId);
+export default async function calculateStakersReward(channelId: string, totalAmount: number) {
+  const results = await getStakerScores(channelId);
 
-  const userScores = results.filter(user => user !== null) as { fid: number; score: number }[];
-  const totalScore = userScores.reduce((sum, user) => sum + user.score, 0);
+  const totalScore = results.reduce((sum, user) => sum + user.score, 0);
 
-  const rewards = userScores.map(user => {
-    const reward = (user.score / totalScore) * totalAmount;
-    return { fid: user.fid, reward: Math.ceil(reward) };
+  const rewards = results.map((user) => {
+    const amount = Math.ceil((user.score / totalScore) * totalAmount);
+    return { fid: user.fid, amount };
   });
 
   return rewards;
