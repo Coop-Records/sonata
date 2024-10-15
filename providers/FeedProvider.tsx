@@ -55,7 +55,6 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
       const { posts }: { posts: SupabasePost[] } = await fetch(
         `/api/feed?${qs.stringify(query)}`,
       ).then((res) => res.json());
-      
 
       if (!(posts && posts.length === fetchPostsLimit)) {
         setHasMore(false);
