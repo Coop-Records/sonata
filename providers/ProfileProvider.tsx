@@ -42,10 +42,9 @@ const ProfileProvider = ({ children }: { children: ReactNode }) => {
         setSongs([]);
         setTopSongMetadata(null);
 
-        if (!username) throw new Error('username not found');
+        if (!username) return;
         const fid = await getFidByName(username);
         if (!fid) throw new Error('user not found');
-        console.log('getting user');
         const user = await getUserFromFid(fid);
         if (!user) throw new Error('user not found');
         setProfile(user);
