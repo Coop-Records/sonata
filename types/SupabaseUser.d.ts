@@ -1,3 +1,12 @@
-import { User } from '@neynar/nodejs-sdk/build/neynar-api/v2';
+import { Address } from 'viem';
 
-export type SupabaseUser = User & { power_badge: boolean };
+export type SupabaseUser = {
+  fid: number;
+  username: string;
+  pfp_url: string;
+  display_name: string;
+  profile: { bio: { text: string } };
+  verifications: Address[];
+  follower_count: number;
+  power_badge: boolean;
+};

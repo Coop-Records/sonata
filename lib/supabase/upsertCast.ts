@@ -1,7 +1,7 @@
 'use server';
 import getChannelIdFromParentUrl from '@/lib/neynar/getChannelIdFromParentUrl';
 import { type CastAdd } from '@standard-crypto/farcaster-js-hub-rest';
-import { supabaseClient } from './client';
+import serverClient from './serverClient';
 import getDate from '@/lib/farcaster/getDate';
 import getUserFromFid from '../farcaster/getUserFromFid';
 
@@ -11,7 +11,7 @@ async function upsertCast(cast: CastAdd) {
   const authorFid = cast.data.fid;
   const author = await getUserFromFid(authorFid);
 
-  const { error, statusText } = await supabaseClient.from('posts').upsert(
+  const { error, statusText } = await serverClient.from('posts').upsert(
     {
       post_hash: cast.hash,
       created_at: getDate(cast.data.timestamp),

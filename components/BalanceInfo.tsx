@@ -3,10 +3,9 @@ import Image from 'next/image';
 import { formatBigInt } from '@/lib/utils';
 import { isNil } from 'lodash';
 import { useTipProvider } from '@/providers/TipProvider';
-import ClaimAirdropButton from '@/components/ClaimAirdropButton/ClaimAirdropButton';
 
 export default function BalanceInfo() {
-  const { balance, remainingTipAllocation, dailyTipAllowance, airdropBalance } = useTipProvider();
+  const { balance, remainingTipAllocation, dailyTipAllowance } = useTipProvider();
 
   return (
     <div className="flex flex-col gap-3 sm:gap-4">
@@ -26,18 +25,6 @@ export default function BalanceInfo() {
           <Image src="/images/notes.png" className='size-5' width={20} height={20} alt="" />
         </span>
       </div>
-      {airdropBalance > 0 ? (
-        <div className="flex flex-wrap gap-[3px]">
-          <span>Airdrop:</span>
-          <span className='flex whitespace-nowrap'>
-            {`${!isNil(airdropBalance) ? formatBigInt(BigInt(airdropBalance)) : '-'}`}
-            <Image src="/images/notes.png" className='size-5' width={20} height={20} alt="" />
-          </span>
-        </div>
-      ) : (
-        <></>
-      )}
-      {airdropBalance > 0 ? <ClaimAirdropButton /> : <></>}
     </div>
   );
 }

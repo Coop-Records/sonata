@@ -1,4 +1,4 @@
-const getUserSongs = async (profileFid: string) => {
+const getUserSongs = async (profileFid: number) => {
   const options = {
     method: 'GET',
     headers: { accept: 'application/json' },
@@ -6,7 +6,7 @@ const getUserSongs = async (profileFid: string) => {
 
   try {
     const queryParams = new URLSearchParams({
-      profile_fid: profileFid,
+      profile_fid: String(profileFid),
     });
 
     const response = await fetch(`/api/user/getSongs?${queryParams}`, options);
