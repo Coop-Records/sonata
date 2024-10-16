@@ -12,9 +12,10 @@ export async function GET(req: NextRequest) {
 
     const verifications = await getVerifications(fid);
 
-    const stakedAmount = Math.abs(
-      await getStackPoints(verifications, eventStakeChannelFid(channelId, fid)),
-    );
+    const stakedAmount = -(await getStackPoints(
+      verifications,
+      eventStakeChannelFid(channelId, fid),
+    ));
 
     return Response.json({ message: 'success', stakedAmount });
   } catch (error) {
