@@ -1,5 +1,4 @@
 'use server';
-import getUser from '@/lib/neynar/getNeynarUser';
 import { stack } from '@/lib/stack/client';
 import { eventStakeChannel, eventStakeChannelFid } from '@/lib/stack/events';
 import supabase from '@/lib/supabase/serverClient';
@@ -7,6 +6,7 @@ import getPoints from '../getStackPoints';
 import getChannelTipInfo from '../tip/getChannelTipInfo';
 import { ChannelStakeParams } from '@/types/ChannelStakeParams';
 import getFidFromToken from '@/lib/privy/getFidFromToken';
+import getVerifications from '@/lib/farcaster/getVerifications';
 
 async function executeChannelUnstake({ channelId, amount, accessToken }: ChannelStakeParams) {
   if (!channelId) throw Error('Channel Id required');
@@ -14,11 +14,11 @@ async function executeChannelUnstake({ channelId, amount, accessToken }: Channel
   if (!accessToken) throw Error('Access token required');
 
   const fid = await getFidFromToken(accessToken);
+  const verifications = await getVerifications(fid);
   const event = eventStakeChannel(channelId);
   const userEvent = eventStakeChannelFid(channelId, fid);
 
-  const user = await getUser(fid);
-  const userAddress: string = user?.verifications?.[0];
+  const userAddress = verifications[0];
   if (!userAddress) throw Error('No user address found');
 
   const info = await getChannelTipInfo(channelId, 0);
@@ -26,7 +26,7 @@ async function executeChannelUnstake({ channelId, amount, accessToken }: Channel
 
   const { channelAddress } = info;
 
-  const userStakeAmount = Math.abs(await getPoints(user.verifications, userEvent));
+  const userStakeAmount = Math.abs(await getPoints(verifications, userEvent));
 
   if (amount > userStakeAmount) throw Error('Invalid amount');
 
