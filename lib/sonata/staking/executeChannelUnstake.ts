@@ -17,7 +17,7 @@ async function executeChannelUnstake({ channelId, amount, accessToken }: Channel
   const fid = await getFidFromToken(accessToken);
   const verifications = await getVerifications(fid);
   const event = eventStakeChannel(channelId);
-  const userEvent = eventStakeChannelFid(channelId, fid);
+  const userStakeEvent = eventStakeChannelFid(channelId, fid);
 
   const userAddress = verifications[0];
   if (!userAddress) throw Error('No user address found');
@@ -27,13 +27,13 @@ async function executeChannelUnstake({ channelId, amount, accessToken }: Channel
 
   const { channelAddress } = info;
 
-  const userStakeAmount = -(await getPoints(verifications, userEvent));
+  const userStakeAmount = -(await getPoints(verifications, userStakeEvent));
 
   if (amount > userStakeAmount) throw Error('Invalid amount');
 
   const result = await stack.trackMany([
     { event, payload: { account: channelAddress, points: -amount } },
-    { event: userEvent, payload: { account: userAddress, points: amount } },
+    { event: userStakeEvent, payload: { account: userAddress, points: amount } },
   ]);
   if (!result?.success) throw Error(result?.status);
 
