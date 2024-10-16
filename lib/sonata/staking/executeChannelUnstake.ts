@@ -1,5 +1,4 @@
 'use server';
-import getUser from '@/lib/neynar/getNeynarUser';
 import { stack } from '@/lib/stack/client';
 import { eventStakeChannel, eventStakeChannelFid } from '@/lib/stack/events';
 import supabase from '@/lib/supabase/serverClient';
@@ -7,18 +6,20 @@ import getPoints from '../getStackPoints';
 import getChannelTipInfo from '../tip/getChannelTipInfo';
 import { ChannelStakeParams } from '@/types/ChannelStakeParams';
 import getFidFromToken from '@/lib/privy/getFidFromToken';
+import getVerifications from '@/lib/farcaster/getVerifications';
 
 async function executeChannelUnstake({ channelId, amount, accessToken }: ChannelStakeParams) {
   if (!channelId) throw Error('Channel Id required');
   if (!isFinite(amount)) throw Error('Amount required');
   if (!accessToken) throw Error('Access token required');
+  if (amount < 0) throw Error('Invalid amount');
 
   const fid = await getFidFromToken(accessToken);
+  const verifications = await getVerifications(fid);
   const event = eventStakeChannel(channelId);
-  const userEvent = eventStakeChannelFid(channelId, fid);
+  const userStakeEvent = eventStakeChannelFid(channelId, fid);
 
-  const user = await getUser(fid);
-  const userAddress: string = user?.verifications?.[0];
+  const userAddress = verifications[0];
   if (!userAddress) throw Error('No user address found');
 
   const info = await getChannelTipInfo(channelId, 0);
@@ -26,17 +27,15 @@ async function executeChannelUnstake({ channelId, amount, accessToken }: Channel
 
   const { channelAddress } = info;
 
-  const userStakeAmount = Math.abs(await getPoints(user.verifications, userEvent));
+  const userStakeAmount = -(await getPoints(verifications, userStakeEvent));
 
   if (amount > userStakeAmount) throw Error('Invalid amount');
 
-  const results = await Promise.all([
-    stack.track(event, { account: channelAddress, points: -amount }),
-    stack.track(userEvent, { account: userAddress, points: amount }),
+  const result = await stack.trackMany([
+    { event, payload: { account: channelAddress, points: -amount } },
+    { event: userStakeEvent, payload: { account: userAddress, points: amount } },
   ]);
-  results.forEach((res) => {
-    if (!res?.success) throw Error(res?.status);
-  });
+  if (!result?.success) throw Error(result?.status);
 
   const log = await supabase
     .from('stake_activity_log')

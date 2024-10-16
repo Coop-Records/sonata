@@ -1,20 +1,20 @@
-import getUser from '@/lib/neynar/getNeynarUser';
+import getVerifications from '@/lib/farcaster/getVerifications';
 import getStackPoints from '@/lib/sonata/getStackPoints';
 import { eventStakeChannelFid } from '@/lib/stack/events';
 import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest) {
   const channelId = req.nextUrl.searchParams.get('channelId');
-  const fid = req.nextUrl.searchParams.get('fid');
+  const fid = Number(req.nextUrl.searchParams.get('fid'));
 
   try {
-    if (!channelId || !fid) throw Error('channelId and fid required');
+    if (!channelId || isNaN(fid)) throw Error('channelId and fid required');
 
-    const user = await getUser(Number(fid));
+    const verifications = await getVerifications(fid);
 
-    const stakedAmount = Math.abs(await getStackPoints(
-      user.verifications,
-      eventStakeChannelFid(channelId, user.fid)
+    const stakedAmount = -(await getStackPoints(
+      verifications,
+      eventStakeChannelFid(channelId, fid),
     ));
 
     return Response.json({ message: 'success', stakedAmount });

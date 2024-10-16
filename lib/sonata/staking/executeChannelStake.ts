@@ -12,7 +12,7 @@ async function executeChannelStake({ channelId, amount, accessToken }: ChannelSt
   if (!channelId) throw Error('Channel Id required');
   if (!isFinite(amount)) throw Error('Stake amount required');
   if (!accessToken) throw Error('Access token required');
-
+  if (amount < 0) throw Error('Invalid amount');
   const fid = await getFidFromToken(accessToken);
 
   const event = eventStakeChannel(channelId);
@@ -30,13 +30,11 @@ async function executeChannelStake({ channelId, amount, accessToken }: ChannelSt
   if (!info) throw Error('could not find channel');
   const { channelAddress } = info;
 
-  const results = await Promise.all([
-    stack.track(event, { account: channelAddress, points: amount }),
-    stack.track(userEvent, { account: userAddress, points: -amount }),
+  const result = await stack.trackMany([
+    { event, payload: { account: channelAddress, points: amount } },
+    { event: userEvent, payload: { account: userAddress, points: -amount } },
   ]);
-  results.forEach((res) => {
-    if (!res?.success) throw Error(res?.status);
-  });
+  if (!result.success) throw Error(result.status);
 
   const { error } = await supabase
     .from('stake_activity_log')
