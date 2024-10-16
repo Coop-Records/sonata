@@ -12,6 +12,7 @@ async function executeChannelUnstake({ channelId, amount, accessToken }: Channel
   if (!channelId) throw Error('Channel Id required');
   if (!isFinite(amount)) throw Error('Amount required');
   if (!accessToken) throw Error('Access token required');
+  if (amount < 0) throw Error('Invalid amount');
 
   const fid = await getFidFromToken(accessToken);
   const verifications = await getVerifications(fid);
@@ -26,17 +27,15 @@ async function executeChannelUnstake({ channelId, amount, accessToken }: Channel
 
   const { channelAddress } = info;
 
-  const userStakeAmount = Math.abs(await getPoints(verifications, userEvent));
+  const userStakeAmount = -(await getPoints(verifications, userEvent));
 
   if (amount > userStakeAmount) throw Error('Invalid amount');
 
-  const results = await Promise.all([
-    stack.track(event, { account: channelAddress, points: -amount }),
-    stack.track(userEvent, { account: userAddress, points: amount }),
+  const result = await stack.trackMany([
+    { event, payload: { account: channelAddress, points: -amount } },
+    { event: userEvent, payload: { account: userAddress, points: amount } },
   ]);
-  results.forEach((res) => {
-    if (!res?.success) throw Error(res?.status);
-  });
+  if (!result?.success) throw Error(result?.status);
 
   const log = await supabase
     .from('stake_activity_log')
