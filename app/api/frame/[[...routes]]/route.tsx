@@ -89,7 +89,7 @@ app.frame('/', async (c) => {
     const castUrl = `${BASE_URL}/cast/${username}/${postHash}`;
 
     return c.res({
-      image: `${BASE_URL}/images/og.webp`,
+      image: `${BASE_URL}/api/frame/img?post_hash=${postHash}`,
       browserLocation: castUrl,
       action: `${BASE_URL}/api/frame/tip`,
       intents: [
