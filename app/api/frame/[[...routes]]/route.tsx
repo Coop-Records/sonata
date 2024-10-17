@@ -288,7 +288,7 @@ app.frame('/execute-tip', async (c) => {
     const castUrl = `${BASE_URL}/cast/${username}/${postHash}`;
 
     return c.res({
-      image: `${BASE_URL}/api/frame/execute-tip-img?amount=${amount}&receiverUsername=${receiver.username}&dailyAllowance=${dailyAllowance}&tipRemaining=${tipRemaining}`,
+      image: `${BASE_URL}/api/frame/execute-tip-img?amount=${amount}&receiverUsername=${receiver.username}&dailyAllowance=${dailyAllowance}&tipRemaining=${tipRemaining}&receiverPfpUrl=${receiver.pfp_url}`,
       action: `${BASE_URL}/api/frame/tip?post_hash=${postHash}`,
       intents: [<Button>Tip Again</Button>, <Button.Link href={castUrl}>Listen</Button.Link>],
     });
@@ -305,6 +305,12 @@ app.image('/execute-tip-img', async (c) => {
   const receiverUsername = searchParams.get('receiverUsername');
   const dailyAllowance = searchParams.get('dailyAllowance');
   const tipRemaining = searchParams.get('tipRemaining');
+  const receiverPfpUrl = searchParams.get('receiverPfpUrl');
+
+  if (!receiverPfpUrl) throw Error('Receiver pfp url needed');
+  if (!receiverUsername) throw Error('Receiver username needed');
+  if (!dailyAllowance) throw Error('Daily allowance needed');
+  if (!tipRemaining) throw Error('Tip remaining needed');
 
   return c.res({
     image: (
@@ -313,7 +319,7 @@ app.image('/execute-tip-img', async (c) => {
           You have tipped {amount} NOTES to
         </span>
         <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <img src={receiver.pfp_url} width={16} height={16} style={{ borderRadius: '50%' }} />
+          <img src={receiverPfpUrl} width={16} height={16} style={{ borderRadius: '50%' }} />
           <span style={{ fontSize: '14px' }}>{receiverUsername}</span>
         </div>
         <div style={{ marginTop: '32px', display: 'flex', gap: '70px' }}>
