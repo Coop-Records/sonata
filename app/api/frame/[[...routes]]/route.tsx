@@ -106,10 +106,8 @@ app.frame('/', async (c) => {
 app.image('/img', async (c) => {
   const { searchParams } = new URL(c.req.url);
   const postHash = searchParams.get('post_hash');
-  console.log('postHash /img', postHash);
 
   const { cast, metadata, channelIcon, channelLabel, points } = await getDataForCastOg(postHash);
-  console.log({ cast, metadata });
   return c.res({
     image: (
       <FrameContainer>
