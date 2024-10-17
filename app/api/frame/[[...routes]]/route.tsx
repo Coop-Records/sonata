@@ -83,66 +83,13 @@ app.frame('/', async (c) => {
 
   try {
     if (!postHash) throw Error('Post hash needed');
-    const { cast, metadata, channelIcon, channelLabel, points } = await getDataForCastOg(postHash);
+    const { cast } = await getDataForCastOg(postHash);
 
     const username = cast.author.username;
     const castUrl = `${BASE_URL}/cast/${username}/${postHash}`;
 
     return c.res({
-      image: (
-        <FrameContainer>
-          <div style={{ display: 'flex', gap: '16px', maxWidth: '90%', overflow: 'hidden' }}>
-            <img
-              src={metadata.artworkUrl}
-              width={164}
-              height={164}
-              style={{ borderRadius: '12px' }}
-            />
-            <div
-              style={{
-                flexShrink: 1,
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
-              <span
-                style={{
-                  fontSize: '20px',
-                  fontWeight: '600',
-                  width: '100%',
-                }}
-              >
-                {metadata.trackName}
-              </span>
-              {metadata.artistName && (
-                <span style={{ marginTop: '4px', color: 'rgba(255, 255, 255, 0.6)' }}>
-                  {metadata.artistName}
-                </span>
-              )}
-              <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <img src={channelIcon} width={16} height={16} style={{ borderRadius: '100%' }} />
-                <span style={{ fontSize: '12px' }}>{channelLabel}</span>
-              </div>
-              <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <span style={{ fontSize: '12px', fontWeight: '600' }}>{points}</span>
-                <img src={LOGO_URL} width={16} height={16} />
-              </div>
-              <span
-                style={{ marginTop: '8px', fontSize: '10px', color: 'rgba(255, 255, 255, 0.6)' }}
-              >
-                NOTES Collected
-              </span>
-            </div>
-          </div>
-          <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <span style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '10px' }}>
-              Posted on Sonata by
-            </span>
-            <img src={cast.author.pfp_url} width={16} height={16} style={{ borderRadius: '50%' }} />
-            <span style={{ fontSize: '12px' }}>{cast.author.username}</span>
-          </div>
-        </FrameContainer>
-      ),
+      image: `${BASE_URL}/api/frame/img?post_hash=${postHash}`,
       browserLocation: castUrl,
       action: `${BASE_URL}/api/frame/tip`,
       intents: [
@@ -154,6 +101,70 @@ app.frame('/', async (c) => {
     console.error(error);
     return c.res({ image: `${BASE_URL}/images/og.webp`, browserLocation: BASE_URL });
   }
+});
+
+app.image('/img', async (c) => {
+  const { searchParams } = new URL(c.req.url);
+  const postHash = searchParams.get('post_hash');
+
+  const { cast, metadata, channelIcon, channelLabel, points } = await getDataForCastOg(postHash);
+  return c.res({
+    image: (
+      <FrameContainer>
+        <div style={{ display: 'flex', gap: '16px', maxWidth: '90%', overflow: 'hidden' }}>
+          <img
+            src={metadata.artworkUrl}
+            width={164}
+            height={164}
+            style={{ borderRadius: '12px' }}
+          />
+          <div
+            style={{
+              flexShrink: 1,
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <span
+              style={{
+                fontSize: '20px',
+                fontWeight: '600',
+                width: '100%',
+              }}
+            >
+              {metadata.trackName}
+            </span>
+            {metadata.artistName && (
+              <span style={{ marginTop: '4px', color: 'rgba(255, 255, 255, 0.6)' }}>
+                {metadata.artistName}
+              </span>
+            )}
+            <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <img src={channelIcon} width={16} height={16} style={{ borderRadius: '100%' }} />
+              <span style={{ fontSize: '12px' }}>{channelLabel}</span>
+            </div>
+            <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ fontSize: '12px', fontWeight: '600' }}>{points}</span>
+              <img src={LOGO_URL} width={16} height={16} />
+            </div>
+            <span style={{ marginTop: '8px', fontSize: '10px', color: 'rgba(255, 255, 255, 0.6)' }}>
+              NOTES Collected
+            </span>
+          </div>
+        </div>
+        <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <span style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '10px' }}>
+            Posted on Sonata by
+          </span>
+          <img src={cast.author.pfp_url} width={16} height={16} style={{ borderRadius: '50%' }} />
+          <span style={{ fontSize: '12px' }}>{cast.author.username}</span>
+        </div>
+      </FrameContainer>
+    ),
+    headers: {
+      'Cache-Control': 'max-age=0',
+    },
+  });
 });
 
 app.frame('/tip', async (c) => {
