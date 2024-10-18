@@ -1,14 +1,12 @@
 'use server';
 import { SupabasePost } from '@/types/SupabasePost';
-import { SupabaseClient } from '@supabase/supabase-js';
 import { fetchPostsLimit } from '@/lib/consts';
 import { FeedType } from '@/types/Feed';
 import getBaseQuery from './getBaseQuery';
 import findValidEmbed from '@/lib/findValidEmbed';
-import getFollowing from '@/lib/neynar/getFollowing';
+import getFollowing from '@/lib/farcaster/getFollowing';
 
 const getFeed = async (
-  supabaseClient: SupabaseClient,
   feedType: FeedType,
   start: number,
   channelId: string,
@@ -17,15 +15,13 @@ const getFeed = async (
   limit: boolean = true,
 ): Promise<SupabasePost[]> => {
   try {
-    const followingFids = [];
+    let followingFids: number[] = [];
     if (feedType === FeedType.Following) {
       if (!viewerFid) throw new Error('Invalid viewerFid');
-
-      const following = await getFollowing(viewerFid);
-      followingFids.push(...following.map((user) => user.fid), viewerFid);
+      followingFids = await getFollowing(viewerFid);
     }
 
-    const query = getBaseQuery(supabaseClient, feedType, followingFids);
+    const query = getBaseQuery(feedType, followingFids);
 
     if (!query) return [];
 
