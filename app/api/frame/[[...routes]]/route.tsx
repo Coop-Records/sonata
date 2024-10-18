@@ -6,11 +6,8 @@ import { getDataForCastOg } from '@/lib/getDataForCastOg';
 import executeUserTip from '@/lib/sonata/tip/executeUserTip';
 import getAllowance from '@/lib/supabase/getAllowance';
 import { Button, Frog, TextInput } from 'frog';
-import { neynar as neynarHub } from 'frog/hubs';
 import { handle } from 'frog/next';
 import { ReactNode } from 'react';
-
-const NEYNAR_KEY = process.env.NEYNAR_API_KEY ?? 'NEYNAR_FROG_FM';
 
 function FrameContainer({ children }: { children: ReactNode }) {
   return (
@@ -52,7 +49,7 @@ function FrameContainer({ children }: { children: ReactNode }) {
 const app = new Frog({
   basePath: '/api/frame',
   title: 'Sonata Tip or Listen',
-  hub: neynarHub({ apiKey: NEYNAR_KEY }),
+  hub: { apiUrl: 'https://hub.pinata.cloud' },
   verify: true,
   unstable_metaTags: [
     { property: 'of:version', content: 'vNext' },
