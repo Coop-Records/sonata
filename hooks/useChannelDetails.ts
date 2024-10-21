@@ -28,7 +28,7 @@ function useChannelDetails() {
 
   useEffect(() => {
     const fetchChannelDetails = async () => {
-      if (!(channelId && fid)) {
+      if (!channelId) {
         return;
       }
       setLoading(true);

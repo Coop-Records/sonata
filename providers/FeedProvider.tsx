@@ -9,8 +9,8 @@ import fetchMetadata from '@/lib/fetchMetadata';
 import { usePlayer } from '@/providers/audio/PlayerProvider';
 import { useProfileProvider } from './ProfileProvider';
 import { useParams, useSearchParams } from 'next/navigation';
-import qs from 'qs';
 import { usePrivy } from '@privy-io/react-auth';
+import getFeed from '@/lib/feed/getFeed';
 
 type FeedProviderType = {
   feed: SupabasePost[];
@@ -25,7 +25,7 @@ type FeedProviderType = {
 const FeedContext = createContext<FeedProviderType>({} as any);
 
 const FeedProvider = ({ children }: { children: ReactNode }) => {
-  const { channelId } = useParams();
+  const { channelId }: { channelId: string } = useParams();
   const tab = useSearchParams().get('tab');
   const [feed, setFeed] = useState<SupabasePost[]>([]);
   const [feedType, setFeedType] = useState<FeedType>();
@@ -43,18 +43,15 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
       setFeedType(tab as FeedType);
     } else if (channelId) setFeedType(FeedType.Trending);
     else if (profileFid) setFeedType(FeedType.Posts);
-    else if (user) setFeedType(FeedType.Following);
+    else if (fid) setFeedType(FeedType.Following);
     else setFeedType(FeedType.Trending);
-  }, [privyReady, profileLoading, profileError, user, profileFid, channelId, tab]);
+  }, [privyReady, profileLoading, profileError, profileFid, channelId, tab, fid]);
 
   const fetchMore = useCallback(
     async (start: number) => {
-      if (!feedType) return;
+      if (!feedType || !fid) return;
       setHasMore(true);
-      const query = { feedType, start, channelId, viewerFid: fid, authorFid: profileFid };
-      const { posts }: { posts: SupabasePost[] } = await fetch(
-        `/api/feed?${qs.stringify(query)}`,
-      ).then((res) => res.json());
+      const posts = await getFeed(feedType, start, channelId, fid, profileFid);
 
       if (!(posts && posts.length === fetchPostsLimit)) {
         setHasMore(false);
