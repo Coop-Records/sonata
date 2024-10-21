@@ -49,7 +49,7 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
 
   const fetchMore = useCallback(
     async (start: number) => {
-      if (!feedType || !fid) return;
+      if (!feedType) return;
       setHasMore(true);
       const posts = await getFeed(feedType, start, channelId, fid, profileFid);
 
