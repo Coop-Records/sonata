@@ -14,7 +14,6 @@ export async function GET(req: NextRequest) {
   const channelId = params.get('channelId');
   const viewerFid = parseInt(params.get('viewerFid') || '', 10) || undefined;
   const authorFid = parseInt(params.get('authorFid') || '', 10) || undefined;
-  const limit = Boolean(params.get('limit'));
 
   try {
     let followingFids: number[] = [];
@@ -29,7 +28,7 @@ export async function GET(req: NextRequest) {
 
     if (channelId) query.eq('channelId', channelId);
     if (authorFid) query.eq('authorFid', authorFid);
-    if (limit) query.range(start, start + fetchPostsLimit - 1);
+    query.range(start, start + fetchPostsLimit - 1);
 
     let { data: posts } = await query.returns<SupabasePost[]>();
     if (!posts) posts = [];
