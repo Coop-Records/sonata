@@ -10,8 +10,8 @@ const getFeed = async (
   feedType: FeedType,
   start: number,
   channelId: string,
-  viewerFid?: number,
-  authorFid?: number,
+  viewerFid?: number | null,
+  authorFid?: number | null,
   limit: boolean = true,
 ): Promise<SupabasePost[]> => {
   try {
