@@ -10,7 +10,7 @@ import { usePlayer } from '@/providers/audio/PlayerProvider';
 import { useProfileProvider } from './ProfileProvider';
 import { useParams, useSearchParams } from 'next/navigation';
 import { usePrivy } from '@privy-io/react-auth';
-import getFeed from '@/lib/feed/getFeed';
+import qs from 'qs';
 
 type FeedProviderType = {
   feed: SupabasePost[];
@@ -51,8 +51,14 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
     async (start: number) => {
       if (!feedType) return;
       setHasMore(true);
-      const posts = await getFeed(feedType, start, channelId, fid, profileFid);
-
+      const queryString = qs.stringify({
+        feedType,
+        start,
+        channelId,
+        viewerFid: fid,
+        authorFid: profileFid,
+      });
+      const posts = await fetch(`/api/feed?${queryString}`).then((res) => res.json());
       if (!(posts && posts.length === fetchPostsLimit)) {
         setHasMore(false);
       }
