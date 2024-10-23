@@ -30,7 +30,7 @@ export default function Tabs({ tabs, className = '', onChange }: Props) {
         <Tab
           tab={tab}
           key={index}
-          className={cn(activeTab === index && 'border-b-2 border-black')}
+          className={cn(activeTab === index && 'border-b-2 border-white')}
           onClick={() => onTabChange(tab.value, index)}
         />
       ))}
