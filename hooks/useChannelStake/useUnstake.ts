@@ -1,7 +1,7 @@
 import { useToast } from '@/components/ui/use-toast';
-import executeChannelUnstake from '@/lib/sonata/staking/executeChannelUnstake';
 import { useStakeProvider } from '@/providers/StakeProvider';
 import { useTipProvider } from '@/providers/TipProvider';
+import { ChannelUnstakeResponse } from '@/types/Stake';
 import { usePrivy } from '@privy-io/react-auth';
 import { useParams } from 'next/navigation';
 
@@ -23,17 +23,24 @@ function useUnstake() {
       if (amount > userStakedAmount) {
         throw Error('Invalid entry');
       }
-      const res = await executeChannelUnstake({ channelId, amount, accessToken });
+      const res = await fetch('/api/channel/unstake', {
+        body: JSON.stringify({ channelId, amount, accessToken }),
+        method: 'POST',
+      });
+      const stakeData: ChannelUnstakeResponse = await res.json();
+      if ('error' in stakeData) throw Error(stakeData.error);
+
+      const { unstakedAmount, remainingStake } = stakeData;
 
       const staking = channelDetails.staking;
       staking.staked -= amount;
-      if (res.remainingStake == 0) --staking.stakers;
+      if (remainingStake == 0) --staking.stakers;
 
       setChannelDetails({ ...channelDetails, staking });
       setBalance(balance + BigInt(amount));
-      setUserStakedAmount(res.remainingStake);
+      setUserStakedAmount(remainingStake);
 
-      toast({ description: `Unstaked ${res?.unstakedAmount} NOTES` });
+      toast({ description: `Unstaked ${unstakedAmount} NOTES` });
     } catch (error: any) {
       console.error(error);
       toast({ description: error.message ?? 'Could not unstake', variant: 'destructive' });
