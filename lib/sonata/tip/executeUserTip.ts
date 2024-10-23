@@ -5,8 +5,9 @@ import supabase from '@/lib/supabase/serverClient';
 import getCastByHash from '@/lib/supabase/getPostByHash';
 import getAllowance from '@/lib/supabase/getAllowance';
 import getChannelTipInfo from '@/lib/sonata/tip/getChannelTipInfo';
-import getUserFromFid from '@/lib/farcaster/getUserFromFid';
 import { isNil } from 'lodash';
+import { EventPayloadWithEvent } from '@stackso/js-core';
+import getVerifications from '@/lib/farcaster/getVerifications';
 
 async function executeUserTip({
   postHash,
@@ -22,12 +23,11 @@ async function executeUserTip({
 
   if (!tipperFid) throw Error('Invalid user');
 
-  const post = await getCastByHash(postHash);
+  const [post, balanceData] = await Promise.all([getCastByHash(postHash), getAllowance(tipperFid)]);
+
   const recipientFid = post.author.fid;
   if (tipperFid === recipientFid) throw Error('Can not tip yourself');
   const channelId = post.channelId;
-
-  const balanceData = await getAllowance(tipperFid);
 
   const allowedTip = Math.min(
     balanceData.remaining_tip_allocation,
@@ -39,16 +39,17 @@ async function executeUserTip({
   let receiverAmount = amount,
     tipperAmount = 0,
     channelAmount = 0;
-  const stacks = [];
+  const stackEvents: EventPayloadWithEvent[] = [];
   const allUpdates = [];
 
   const channelTip = await getChannelTipInfo(channelId, amount);
   if (channelTip) {
     const { channelAddress, channelId } = channelTip;
     receiverAmount -= channelAmount = channelTip.channelAmount;
-    stacks.push(
-      stack.track(eventTipChannel(channelId), { account: channelAddress, points: channelAmount }),
-    );
+    stackEvents.push({
+      event: eventTipChannel(channelId),
+      payload: { account: channelAddress, points: channelAmount },
+    });
 
     allUpdates.push(
       supabase.from('channel_tips_activity_log').insert({
@@ -60,33 +61,30 @@ async function executeUserTip({
       }),
     );
   }
+  const [senderVerifications, receiverVerifications] = await Promise.all([
+    getVerifications(tipperFid),
+    getVerifications(recipientFid),
+  ]);
 
-  const sender = await getUserFromFid(tipperFid);
-  const receiver = await getUserFromFid(recipientFid);
-
-  if (isNil(receiver)) throw Error('Invalid recipient');
-  if (isNil(sender)) throw Error('Invalid sender');
-  const recipientWalletAddress = receiver?.verifications?.find(Boolean);
+  if (isNil(receiverVerifications)) throw Error('Invalid recipient');
+  if (isNil(senderVerifications)) throw Error('Invalid sender');
+  const recipientWalletAddress = receiverVerifications[0];
   if (!recipientWalletAddress) throw Error('Invalid recipient');
-  const tipperWalletAddress = sender?.verifications?.find(Boolean);
+  const tipperWalletAddress = senderVerifications[0];
   if (tipperWalletAddress) {
     receiverAmount -= tipperAmount = Math.floor(Number(amount) * 0.1);
-    stacks.push(
-      stack.track(eventTipCashback(tipperFid), {
-        account: tipperWalletAddress,
-        points: tipperAmount,
-      }),
-    );
+    stackEvents.push({
+      event: eventTipCashback(tipperFid),
+      payload: { account: tipperWalletAddress, points: tipperAmount },
+    });
   }
 
-  stacks.unshift(
-    stack.track(eventTipRecipient(recipientFid), {
-      account: recipientWalletAddress,
-      points: receiverAmount,
-    }),
-  );
+  stackEvents.push({
+    event: eventTipRecipient(recipientFid),
+    payload: { account: recipientWalletAddress, points: receiverAmount },
+  });
 
-  const [result] = await Promise.all(stacks);
+  const result = await stack.trackMany(stackEvents);
   if (!result?.success) throw Error('Could not stack');
 
   const remaining_tip_allocation = balanceData.remaining_tip_allocation - amount;
@@ -112,8 +110,6 @@ async function executeUserTip({
     tipperAmount,
     channelAmount,
     post,
-    sender,
-    receiver,
     dailyAllowance: balanceData.daily_tip_allocation,
   };
 }
