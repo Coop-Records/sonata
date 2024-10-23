@@ -9,6 +9,7 @@ import { DEFAULT_FRAME, DESCRIPTION, TITLE, VERCEL_URL } from '@/lib/consts';
 import { getFrameMetadata } from '@coinbase/onchainkit';
 import { Metadata } from 'next';
 import { cn } from '@/lib/utils';
+import localFont from 'next/font/local';
 const frameMetadata = { ...getFrameMetadata(DEFAULT_FRAME), 'of:accepts:xmtp': '2024-02-01' };
 
 export const metadata: Metadata = {
@@ -35,15 +36,44 @@ const sora = Sora({
   variable: '--font-sora',
 });
 
+const clashDisplay = localFont({
+  src: [
+    {
+      path: './fonts/ClashDisplay-Regular.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: './fonts/ClashDisplay-Medium.ttf',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: './fonts/ClashDisplay-Semibold.ttf',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: './fonts/ClashDisplay-Bold.ttf',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
+  display: 'swap',
+  variable: '--font-clash-display',
+});
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   const headersList = headers();
 
   const headerUrl = headersList.get('x-url') || '';
 
-  const backgroundColor = headerUrl?.includes('/api') ? 'bg-gray-100' : 'bg-white';
+  const backgroundColor = headerUrl?.includes('/api')
+    ? 'bg-gray-100'
+    : "bg-cover bg-[url('/images/mobile-bg.png')]";
 
   return (
-    <html lang="en" className={sora.variable}>
+    <html lang="en" className={cn(sora.variable, clashDisplay.variable)}>
       <body
         className={cn('flex min-h-screen flex-col overflow-x-hidden font-sora', backgroundColor)}
       >

@@ -15,7 +15,7 @@ export default function MobileMenu({ isSingleCast = false }: { isSingleCast?: bo
     <div className="flex h-full flex-col gap-4 md:px-16 md:py-6">
       <Link href="/" className="mb-8 flex items-center gap-2 max-md:hidden">
         <Image src="/images/notes.png" width={20} height={20} alt="" />
-        <span className="font-semibold">Sonata</span>
+        <span className="font-clashDisplay font-semibold">Sonata</span>
       </Link>
       <HomeButton className="mb-2 md:hidden" />
       <BalanceInfo />
