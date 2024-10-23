@@ -3,6 +3,7 @@
 
 import { LOGO_URL } from '@/lib/consts';
 import { getDataForCastOg } from '@/lib/getDataForCastOg';
+import getBulkUsersByFid from '@/lib/neynar/getBulkUsersByFid';
 import executeUserTip from '@/lib/sonata/tip/executeUserTip';
 import getAllowance from '@/lib/supabase/getAllowance';
 import { Button, Frog, TextInput } from 'frog';
@@ -278,7 +279,8 @@ app.frame('/execute-tip', async (c) => {
 
     const amount = Number(c?.frameData?.inputText);
 
-    const { post, receiver, tipRemaining, dailyAllowance } = await executeUserTip({
+    const [receiver] = await getBulkUsersByFid([tipperFid]);
+    const { post, tipRemaining, dailyAllowance } = await executeUserTip({
       postHash,
       tipperFid,
       amount,

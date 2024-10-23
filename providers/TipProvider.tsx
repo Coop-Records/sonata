@@ -1,4 +1,3 @@
-import executeTip from '@/lib/sonata/executeTip';
 import getCurrentNotes from '@/lib/sonata/getCurrentNotes';
 import { isEmpty, isNil } from 'lodash';
 import { createContext, useContext, useEffect, useState } from 'react';
@@ -7,6 +6,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { supabaseClient } from '@/lib/supabase/client';
 import { usePrivy } from '@privy-io/react-auth';
 import getVerifications from '@/lib/farcaster/getVerifications';
+import { TipResponse } from '@/types/TipResponse';
 
 const TipContext = createContext<any>(null);
 
@@ -96,7 +96,14 @@ const TipProvider = ({ children }: any) => {
       ) {
         throw new Error();
       }
-      const data = await executeTip({ accessToken, amount, postHash });
+      const tipResponse = await fetch('/api/tip', {
+        body: JSON.stringify({ accessToken, amount, postHash }),
+        method: 'POST',
+      });
+      const data: TipResponse = await tipResponse.json();
+      if ('error' in data) {
+        throw new Error(data.error);
+      }
       setRemainingTipAllocation(BigInt(data.tipRemaining));
       setBalance((balance ?? BigInt(0)) + BigInt(data.tipperAmount));
       toast({ description: `Tipped ${amount} NOTES` });
