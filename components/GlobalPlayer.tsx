@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Scrubber from '@/components/Scrubber';
 import PlayerButtons from './PlayerButtons';
 import { useUi } from '@/providers/UiProvider';
+import { cn } from '@/lib/utils';
 
 export default function GlobalPlayer() {
   const { isMobile } = useUi();
@@ -15,7 +16,7 @@ export default function GlobalPlayer() {
   return (
     <div
       data-type={metadata.type}
-      className="sticky bottom-0 left-0 mt-auto w-screen space-y-6 overflow-hidden bg-white py-3 shadow-2xl shadow-black"
+      className="sticky bottom-0 left-0 mt-auto w-screen space-y-6 overflow-hidden bg-background py-3 shadow-2xl shadow-black"
     >
       <div className="container relative flex items-center gap-3">
         <div className="relative my-auto size-16 overflow-hidden rounded-lg shadow-md">
@@ -28,21 +29,26 @@ export default function GlobalPlayer() {
           />
         </div>
 
-        <div className=" max-w-[33%] space-y-0.5 self-center">
-          <div className="line-clamp-2 text-sm font-bold">{metadata.trackName}</div>
-          <div className="line-clamp-2 text-xs font-extralight text-muted-foreground">
-            {metadata.artistName}
+        <div className={cn(isMobile ? 'grow space-y-2' : 'space-y-0.5 max-w-[33%]')}>
+          <div className={cn('text-sm', isMobile ? 'line-clamp-1' : 'line-clamp-2')}>
+            {metadata.trackName}
           </div>
+
+          {isMobile ? (
+            <Scrubber className="w-full" />
+          ) : (
+            <div className="line-clamp-2 text-xs font-extralight text-secondary-foreground">
+              {metadata.artistName}
+            </div>
+          )}
         </div>
-        <div className="absolute left-1/4 w-full">
-          <div className="ml-6 flex max-w-2xl grow flex-col items-center gap-1">
+        <div className={cn(!isMobile && 'grow')}>
+          <div className="ml-6 flex max-w-2xl grow flex-col items-center gap-1 md:gap-3">
             {metadata && <PlayerButtons metadata={metadata} />}
             {!isMobile && <Scrubber className="w-full" />}
           </div>
         </div>
       </div>
-
-      {isMobile && <Scrubber className="container" />}
     </div>
   );
 }
