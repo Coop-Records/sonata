@@ -1,6 +1,6 @@
 import { CHANNELS } from '@/lib/consts';
 import getVerifications from '@/lib/farcaster/getVerifications';
-import { stack } from '@/lib/stack/client';
+import getStackPoints from '@/lib/sonata/getStackPoints';
 import { eventStakeChannelFid } from '@/lib/stack/events';
 import { NextRequest } from 'next/server';
 
@@ -10,18 +10,14 @@ export async function GET(req: NextRequest) {
 
   try {
     const verifications = await getVerifications(fid);
-    console.log(verifications);
     const points = await Promise.all(
       CHANNELS.map((channel) =>
-        stack.getPoints(verifications, {
-          event: eventStakeChannelFid(channel.value, fid),
-        }),
+        getStackPoints(verifications, eventStakeChannelFid(channel.value, fid)),
       ),
     );
 
     const channelPoints = CHANNELS.map((channel, i) => {
       let totalPointsForChanel;
-      console.log(points[i]);
       if (Array.isArray(points[i])) {
         totalPointsForChanel = Math.abs(
           points[i]?.reduce((total: any, curr: any) => total + curr?.amount, 0),

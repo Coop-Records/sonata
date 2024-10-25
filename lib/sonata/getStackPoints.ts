@@ -1,8 +1,7 @@
-import { stack } from "../stack/client";
+import { stack } from '@/lib/stack/client';
 
 async function getStackPoints(addresses: string[] | string, event?: string) {
-  const balances: { amount: number; address: string }[] | number | null =
-    await stack.getPoints(addresses, event ? { event } : undefined);
+  const balances = await stack.getPoints(addresses, event ? { event } : undefined);
 
   if (!balances) return 0;
   if (typeof balances === 'number') return balances;
