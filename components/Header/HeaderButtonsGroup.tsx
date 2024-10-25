@@ -34,7 +34,7 @@ const HeaderButtonsGroup = ({ className = '' }) => {
       <div className="pointer-events-none font-clashDisplay text-lg font-semibold text-white">
         Sonata
       </div>
-      <BalanceMenu />
+      {authenticated && <BalanceMenu />}
     </div>
   );
 };
