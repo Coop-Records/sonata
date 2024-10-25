@@ -1,38 +1,46 @@
 import SignInButton from '@/components/SignInButton';
-import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { useUi } from '@/providers/UiProvider';
-import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { useParams } from 'next/navigation';
 import HomeButton from './HomeButton';
 import UserMenu from './UserMenu';
 import { usePrivy } from '@privy-io/react-auth';
+import UserAvatar from '@/components/UserAvatar';
+import Image from 'next/image';
 
 const HeaderButtonsGroup = ({ className = '' }) => {
   const { ready, authenticated } = usePrivy();
   const { menuOpen, setMenuOpen } = useUi();
   const { username, channelId } = useParams();
 
+  const { isMobile } = useUi();
+
   return (
-    <div className={cn('container flex items-center relative', className)}>
-      <Button variant="link" className={cn('p-0 text-5xl md:hidden', channelId && 'text-white')}>
-        <HamburgerMenuIcon onClick={() => setMenuOpen(!menuOpen)} className="size-6" />
-      </Button>
+    <div className={cn('container flex items-center justify-between', className)}>
       {username || channelId ? (
         <HomeButton className={cn('max-md:hidden', channelId && 'text-white')} />
       ) : !ready ? (
         <Skeleton className="size-9 rounded-full" />
       ) : authenticated ? (
-        <div className="flex items-center gap-2">
+        isMobile ? (
+          <UserAvatar onClick={() => setMenuOpen(!menuOpen)} />
+        ) : (
           <UserMenu />
-        </div>
+        )
       ) : (
         <SignInButton />
       )}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center font-clashDisplay text-lg font-semibold text-white">
+      <div className="pointer-events-none font-clashDisplay text-lg font-semibold text-white">
         Sonata
       </div>
+      <Image
+        src="/images/notes.jpg"
+        alt="Sonata Logo"
+        width={36}
+        height={36}
+        className="rounded-full md:opacity-0"
+      />
     </div>
   );
 };

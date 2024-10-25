@@ -3,7 +3,7 @@ import Tabs from '@/components/Tabs';
 import { tabs } from '@/lib/consts';
 import { useProfileProvider } from '@/providers/ProfileProvider';
 import { FeedType } from '@/types/Feed';
-import { useParams } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import { useMemo } from 'react';
 import Profile from '../Profile';
 import { Separator } from '../ui/separator';
@@ -15,6 +15,7 @@ const Header = ({ className = '' }) => {
   const { authenticated } = usePrivy();
   const { username } = useParams();
   const { profile } = useProfileProvider();
+  const pathname = usePathname();
 
   const filteredTabs = useMemo(() => {
     return tabs.filter((tab) => {
@@ -29,7 +30,11 @@ const Header = ({ className = '' }) => {
   return (
     <header className={cn('mt-6 md:mt-12', className)}>
       <HeaderButtonsGroup />
+
       <div className="container">
+        {pathname === '/' && (
+          <div className="mb-4 mt-8 font-clashDisplay text-2xl font-medium">Music on Farcaster</div>
+        )}
         {profile && <Profile />}
         <Tabs tabs={filteredTabs} className={cn('mt-4', !username && 'justify-start')} />
         <Separator className="-mt-px bg-border" />
