@@ -7,7 +7,7 @@ import HomeButton from './HomeButton';
 import UserMenu from './UserMenu';
 import { usePrivy } from '@privy-io/react-auth';
 import UserAvatar from '@/components/UserAvatar';
-import Image from 'next/image';
+import BalanceMenu from '@/components/Balance/BalanceMenu';
 
 const HeaderButtonsGroup = ({ className = '' }) => {
   const { ready, authenticated } = usePrivy();
@@ -34,13 +34,7 @@ const HeaderButtonsGroup = ({ className = '' }) => {
       <div className="pointer-events-none font-clashDisplay text-lg font-semibold text-white">
         Sonata
       </div>
-      <Image
-        src="/images/notes.jpg"
-        alt="Sonata Logo"
-        width={36}
-        height={36}
-        className="rounded-full md:opacity-0"
-      />
+      <BalanceMenu />
     </div>
   );
 };
