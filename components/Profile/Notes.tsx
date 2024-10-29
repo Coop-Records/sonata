@@ -1,4 +1,4 @@
-import getProfileNotes from '@/lib/sonata/getProfileNotes';
+import getCurrentNotes from '@/lib/sonata/getCurrentNotes';
 import { formatBigInt } from '@/lib/utils';
 import { useProfileProvider } from '@/providers/ProfileProvider';
 import { useEffect, useState } from 'react';
@@ -10,7 +10,7 @@ const Notes = () => {
   useEffect(() => {
     const init = async () => {
       if (!profile?.verifications) return;
-      const cnt = await getProfileNotes(profile?.verifications);
+      const cnt = await getCurrentNotes(profile.fid);
       setNotes(cnt);
     };
     if (!profile) return;
