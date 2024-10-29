@@ -1,7 +1,6 @@
 import getCurrentNotes from '@/lib/sonata/getCurrentNotes';
 import { isEmpty, isNil } from 'lodash';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { Address } from 'viem';
 import { useToast } from '@/components/ui/use-toast';
 import { supabaseClient } from '@/lib/supabase/client';
 import { usePrivy } from '@privy-io/react-auth';
@@ -73,14 +72,8 @@ const TipProvider = ({ children }: any) => {
     const syncPoints = async () => {
       if (isNil(userFid) || verifications.length === 0) return;
 
-      let totalBalance = BigInt(0);
-
-      for (const verification of verifications) {
-        const currentBalance = await getCurrentNotes(verification as Address);
-        totalBalance += BigInt(currentBalance);
-      }
-
-      setBalance(totalBalance);
+      const currentBalance = await getCurrentNotes(userFid);
+      setBalance(BigInt(currentBalance));
     };
 
     syncPoints();
