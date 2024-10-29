@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Slider } from '@/components/ui/slider';
 import { usePlayer } from '@/providers/audio/PlayerProvider';
-import { cn, formatDuration } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 
 export default function Scrubber({ className }: { className?: string }) {
   const [player, dispatch] = usePlayer();
@@ -42,8 +42,7 @@ export default function Scrubber({ className }: { className?: string }) {
     <div
       className={cn('flex items-center gap-2 text-xs font-light text-muted-foreground', className)}
     >
-      <span className="w-10">{formatDuration(displayPosition)}</span>
-      <div className="relative flex h-3 grow items-center">
+      <div className="relative flex h-2 grow items-center">
         <div
           className="absolute left-0 top-0 flex size-full items-end gap-[3px]"
           ref={visualisationContainer}
@@ -53,7 +52,7 @@ export default function Scrubber({ className }: { className?: string }) {
               key={`bar-${idx}`}
               className={cn(
                 'rounded-full w-[3px]',
-                idx <= currentBarIdx ? 'bg-black' : 'bg-gray-200',
+                idx <= currentBarIdx ? 'bg-foreground' : 'bg-secondary',
               )}
               style={{ height: `${h * 100}%` }}
             />
@@ -81,8 +80,6 @@ export default function Scrubber({ className }: { className?: string }) {
           className="z-10 cursor-pointer opacity-0"
         />
       </div>
-
-      <span className="w-10 text-right">{formatDuration(player.duration)}</span>
     </div>
   );
 }

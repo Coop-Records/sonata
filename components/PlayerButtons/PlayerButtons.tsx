@@ -2,10 +2,9 @@ import { Button } from '@/components/ui/button';
 import { usePlayer } from '@/providers/audio/PlayerProvider';
 import { useFeedProvider } from '@/providers/FeedProvider';
 import { TrackMetadata } from '@/types/Track';
-import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useEffect } from 'react';
-import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';
+import { RiPauseFill, RiPlayFill, RiSkipForwardFill, RiSkipBackFill } from 'react-icons/ri';
 
 type PlayerButtonProps = {
   metadata?: TrackMetadata;
@@ -20,7 +19,8 @@ const PlayerButtons = ({ metadata }: PlayerButtonProps) => {
 
   useEffect(() => {
     if (player.position !== 0 && player.position >= player.duration) {
-      if (showActions) handleNext(); else handlePause();
+      if (showActions) handleNext();
+      else handlePause();
     }
   }, [player.position]);
 
@@ -28,27 +28,23 @@ const PlayerButtons = ({ metadata }: PlayerButtonProps) => {
   const handlePause = () => id && dispatch({ type: 'PAUSE', payload: { id } });
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center gap-2 md:gap-4">
       {showActions && (
-        <Button onClick={handlePrev} className="bg-white">
-          <Image src="/images/skip-back.png" width={22} height={22} alt="" />
-        </Button>
+        <RiSkipBackFill onClick={handlePrev} className="cursor-pointer text-lg md:text-2xl" />
       )}
       <Button
         onClick={player.playing ? handlePause : handlePlay}
-        variant="ghost"
-        className="rounded-full p-0"
+        variant="secondary"
+        className="aspect-square h-auto rounded-full p-2 md:p-3"
       >
         {player.playing ? (
-          <MdPauseCircle className="text-4xl" />
+          <RiPauseFill className="text-lg md:text-2xl" />
         ) : (
-          <MdPlayCircle className="text-4xl" />
+          <RiPlayFill className="text-lg md:text-2xl" />
         )}
       </Button>
       {showActions && (
-        <Button onClick={handleNext} className="bg-white">
-          <Image src="/images/skip-forward.png" width={22} height={22} alt="" />
-        </Button>
+        <RiSkipForwardFill onClick={handleNext} className="cursor-pointer text-lg md:text-2xl" />
       )}
     </div>
   );
