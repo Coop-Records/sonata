@@ -10,7 +10,6 @@ import CreatePost from '@/components/CreatePost';
 import FeedProvider from '@/providers/FeedProvider';
 import ProfileProvider from '@/providers/ProfileProvider';
 import { useParams } from 'next/navigation';
-import TipsList from '@/components/TipsList';
 import StakeProvider from '@/providers/StakeProvider';
 import { cn } from '@/lib/utils';
 import ChannelHeader from '@/components/Header/ChannelHeader';
@@ -26,7 +25,6 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
     <ProfileProvider>
       <FeedProvider>
         <StakeProvider>
-          <TipsList />
           <div className="flex grow">
             <meta property="of:accepts:xmtp" content="2024-02-01" />
             <nav className="md:hidden">
