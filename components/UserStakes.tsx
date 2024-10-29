@@ -14,13 +14,13 @@ export default function UserStakes({ fid }: { fid?: number }) {
           key={'stake_' + stake.channelId}
           className="flex w-full flex-wrap items-center gap-2 p-1"
         >
-          <div className="relative size-12 overflow-hidden rounded-full ring-1 ring-slate-300">
+          <div className="relative size-8 overflow-hidden rounded-full ring-1 ring-slate-300">
             <Image src={stake.icon} alt="music-channel" className="object-cover" fill />
           </div>
 
           <h3 className="font-clashDisplay text-base/5 font-medium">/{stake.channelId}</h3>
 
-          <h5 className="ml-auto w-[10.32rem] text-sm/4 font-semibold">
+          <h5 className="ml-auto text-sm/4 font-semibold">
             <span className="font-normal text-grey">Staked : </span> {formatNumber(stake.points)}{' '}
             NOTES
           </h5>
