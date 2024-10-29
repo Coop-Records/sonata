@@ -63,6 +63,10 @@ module.exports = {
           DEFAULT: '#8B49F7',
           light: '#EEE4FE',
         },
+        blue: {
+          DEFAULT: 'rgba(49, 102, 218, 1)',
+          dar: '#02030c',
+        },
       },
       borderRadius: {
         lg: `var(--radius)`,
@@ -71,6 +75,7 @@ module.exports = {
       },
       fontFamily: {
         sora: ['var(--font-sora)', 'sans-serif'],
+        clashDisplay: ['var(--font-clash-display)', 'sans-serif'],
       },
       keyframes: {
         'accordion-down': {
@@ -90,7 +95,7 @@ module.exports = {
   },
   plugins: [
     require('tailwindcss-animate'),
-    function({ addUtilities }) {
+    function ({ addUtilities }) {
       const newUtilities = {
         '.scrollbar-thin': {
           '--scrollbar-width': '6px',
@@ -101,6 +106,6 @@ module.exports = {
         },
       };
       addUtilities(newUtilities);
-    }
+    },
   ],
 };

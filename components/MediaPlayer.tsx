@@ -35,10 +35,7 @@ export default function MediaPlayer({ metadata }: MediaPlayerProps) {
   return (
     <div
       data-type={metadata?.type}
-      className={cn(
-        'flex w-full gap-4 bg-white py-2',
-        currentTrack && player.loading && 'animate-pulse',
-      )}
+      className={cn('flex w-full gap-4 py-2', currentTrack && player.loading && 'animate-pulse')}
     >
       <div className="relative my-auto aspect-square w-12 shrink-0 overflow-hidden rounded-lg shadow-md">
         {metadata?.artworkUrl ? (

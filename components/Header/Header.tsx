@@ -9,6 +9,7 @@ import Profile from '../Profile';
 import { Separator } from '../ui/separator';
 import HeaderButtonsGroup from './HeaderButtonsGroup';
 import { usePrivy } from '@privy-io/react-auth';
+import { cn } from '@/lib/utils';
 
 const Header = ({ className = '' }) => {
   const { authenticated } = usePrivy();
@@ -26,13 +27,11 @@ const Header = ({ className = '' }) => {
   }, [username, authenticated]);
 
   return (
-    <header className={className}>
-      <div className="mb-1 pt-2 md:pt-6">
-        <HeaderButtonsGroup />
-      </div>
+    <header className={cn('mt-6 md:mt-12', className)}>
+      <HeaderButtonsGroup />
       <div className="container">
         {profile && <Profile />}
-        <Tabs tabs={filteredTabs} className={!username ? 'justify-center' : ''} />
+        <Tabs tabs={filteredTabs} className={cn('mt-4', !username && 'justify-start')} />
         <Separator className="-mt-px bg-grey-light" />
       </div>
     </header>
