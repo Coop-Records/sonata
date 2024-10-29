@@ -18,8 +18,8 @@ export default function GlobalPlayer() {
       data-type={metadata.type}
       className="sticky bottom-0 left-0 mt-auto w-screen space-y-6 overflow-hidden bg-background py-3 shadow-2xl shadow-black"
     >
-      <div className="container relative flex items-center gap-3">
-        <div className="relative my-auto size-16 overflow-hidden rounded-lg shadow-md">
+      <div className="container relative flex items-center gap-2">
+        <div className="relative my-auto size-8 overflow-hidden rounded-lg shadow-md">
           <Image
             src={metadata.artworkUrl}
             alt=""
@@ -30,7 +30,7 @@ export default function GlobalPlayer() {
         </div>
 
         <div className={cn(isMobile ? 'grow space-y-2' : 'space-y-0.5 max-w-[33%]')}>
-          <div className={cn('text-sm', isMobile ? 'line-clamp-1' : 'line-clamp-2')}>
+          <div className={cn('text-sm leading-none', isMobile ? 'line-clamp-1' : 'line-clamp-2')}>
             {metadata.trackName}
           </div>
 
