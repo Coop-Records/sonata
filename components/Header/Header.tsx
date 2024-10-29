@@ -32,7 +32,7 @@ const Header = ({ className = '' }) => {
       <div className="container">
         {profile && <Profile />}
         <Tabs tabs={filteredTabs} className={cn('mt-4', !username && 'justify-start')} />
-        <Separator className="-mt-px bg-grey-light" />
+        <Separator className="-mt-px bg-border" />
       </div>
     </header>
   );

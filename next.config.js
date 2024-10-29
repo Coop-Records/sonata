@@ -33,6 +33,9 @@ const nextConfig = {
       {
         hostname: 'static.highongrowth.xyz',
       },
+      {
+        hostname: 'warpcast.com',
+      },
     ],
   },
 };

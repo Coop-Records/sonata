@@ -3,7 +3,6 @@ import { UserDataType } from '@standard-crypto/farcaster-js-hub-rest';
 import farcasterClient from './client';
 import { SupabaseUser } from '@/types/SupabaseUser';
 import getVerifications from './getVerifications';
-import getFollowerCount from './getFollowerCount';
 
 const getUserFromFid = async (fid?: number) => {
   if (!fid) return null;
@@ -34,9 +33,6 @@ const getUserFromFid = async (fid?: number) => {
 
   const verifications = await getVerifications(fid);
   user.verifications = verifications;
-
-  const followerCount = await getFollowerCount(fid);
-  user.follower_count = followerCount;
 
   return user;
 };
