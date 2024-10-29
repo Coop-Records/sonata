@@ -11,15 +11,14 @@ import Image from 'next/image';
 
 const HeaderButtonsGroup = ({ className = '' }) => {
   const { ready, authenticated } = usePrivy();
-  const { menuOpen, setMenuOpen } = useUi();
   const { username, channelId } = useParams();
 
-  const { isMobile } = useUi();
+  const { isMobile, setMenuOpen, menuOpen } = useUi();
 
   return (
-    <div className={cn('container flex items-center justify-between', className)}>
+    <div className={cn('container flex items-center relative', className)}>
       {username || channelId ? (
-        <HomeButton className={cn('max-md:hidden', channelId && 'text-white')} />
+        <HomeButton />
       ) : !ready ? (
         <Skeleton className="size-9 rounded-full" />
       ) : authenticated ? (

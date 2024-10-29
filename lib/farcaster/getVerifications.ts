@@ -1,5 +1,5 @@
 'use server';
-import { Address } from 'viem';
+import { Address, getAddress } from 'viem';
 import farcasterClient from './client';
 
 const getVerifications = async (fid?: number) => {
@@ -9,7 +9,8 @@ const getVerifications = async (fid?: number) => {
   const verificationsDataList = farcasterClient.listVerificationsByFid(fid);
   for await (const verification of verificationsDataList) {
     const data = verification.data.verificationAddEthAddressBody;
-    verifications.push(data.address as Address);
+    const address = getAddress(data.address);
+    verifications.push(address);
   }
 
   return verifications;

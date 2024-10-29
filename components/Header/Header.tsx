@@ -30,7 +30,6 @@ const Header = ({ className = '' }) => {
   return (
     <header className={cn('mt-6 md:mt-12', className)}>
       <HeaderButtonsGroup />
-
       <div className="container">
         {pathname === '/' && (
           <div className="mb-4 mt-8 font-clashDisplay text-2xl font-medium">Music on Farcaster</div>
