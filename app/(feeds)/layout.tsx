@@ -6,7 +6,7 @@ import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { useUi } from '@/providers/UiProvider';
 import Header from '@/components/Header';
 import GlobalPlayer from '@/components/GlobalPlayer';
-import CreatePost from '@/components/CreatePost';
+import CreatePostButton from '@/components/CreatePostButton';
 import FeedProvider from '@/providers/FeedProvider';
 import ProfileProvider from '@/providers/ProfileProvider';
 import { useParams } from 'next/navigation';
@@ -45,7 +45,7 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
                 <div id="feed-container" className="size-full">
                   {channelId && <ChannelHeader />}
                   <div className={cn('mt-4 container space-y-6', { 'max-w-3xl': enableMaxWidth })}>
-                    {user?.farcaster && !username && !channelId && <CreatePost />}
+                    {user?.farcaster && !username && !channelId && <CreatePostButton />}
                     {children}
                   </div>
                 </div>
