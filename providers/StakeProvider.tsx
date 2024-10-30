@@ -24,18 +24,19 @@ const StakeProvider = ({ children }: any) => {
 
   const fid = user?.farcaster?.fid;
   const [stakes, setStakes] = useState<UserStake[]>([]);
+  const [stakedAmount, setStakedAmount] = useState(0);
 
   useEffect(() => {
     if (!fid) return;
     const fetchUserStakes = async () => {
       const stakes = await getAllUserStakes(fid);
-      console.log(stakes);
+      const stakedAmount = stakes.reduce((acc, stake) => acc + stake.points, 0);
+
       setStakes(stakes);
+      setStakedAmount(stakedAmount);
     };
     fetchUserStakes();
   }, [fid]);
-
-  const stakedAmount = stakes.reduce((acc, stake) => acc + stake.points, 0);
 
   return (
     <StakeContext.Provider value={{ balance, stakes, stakedAmount, ...channelDetails }}>
