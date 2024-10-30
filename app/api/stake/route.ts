@@ -17,17 +17,17 @@ export async function GET(req: NextRequest) {
     );
 
     const channelPoints = CHANNELS.map((channel, i) => {
-      let totalPointsForChanel;
+      let totalPointsForChannel;
       if (Array.isArray(points[i])) {
-        totalPointsForChanel = Math.abs(
+        totalPointsForChannel = Math.abs(
           points[i]?.reduce((total: any, curr: any) => total + curr?.amount, 0),
         );
       } else {
-        totalPointsForChanel = Math.abs(points[i]);
+        totalPointsForChannel = Math.abs(points[i]);
       }
       return {
         channelId: channel.value,
-        points: totalPointsForChanel,
+        points: totalPointsForChannel,
       };
     });
 

@@ -1,9 +1,9 @@
 import useChannelDetails, { DEFAULT_CHANNEL_DETAILS } from '@/hooks/useChannelDetails';
-import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
+import { createContext, Dispatch, SetStateAction, useContext } from 'react';
 import { useTipProvider } from './TipProvider';
 import { UserStake } from '@/types/Stake';
-import getAllUserStakes from '@/lib/sonata/staking/getAllUserStakes';
 import { usePrivy } from '@privy-io/react-auth';
+import useUserStakes from '@/hooks/useUserStakes';
 
 const StakeContext = createContext({
   channelImage: '',
@@ -23,20 +23,7 @@ const StakeProvider = ({ children }: any) => {
   const channelDetails = useChannelDetails();
 
   const fid = user?.farcaster?.fid;
-  const [stakes, setStakes] = useState<UserStake[]>([]);
-  const [stakedAmount, setStakedAmount] = useState(0);
-
-  useEffect(() => {
-    if (!fid) return;
-    const fetchUserStakes = async () => {
-      const stakes = await getAllUserStakes(fid);
-      const stakedAmount = stakes.reduce((acc, stake) => acc + stake.points, 0);
-
-      setStakes(stakes);
-      setStakedAmount(stakedAmount);
-    };
-    fetchUserStakes();
-  }, [fid]);
+  const { stakes, stakedAmount } = useUserStakes(fid);
 
   return (
     <StakeContext.Provider value={{ balance, stakes, stakedAmount, ...channelDetails }}>
