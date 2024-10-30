@@ -1,41 +1,64 @@
-import SignInButton from './SignInButton';
-import { Button } from './ui/button';
-import { Separator } from './ui/separator';
-import ChannelFilter from './Feed/ChannelFilter';
+import SignInButton from '@/components/SignInButton';
+import { Separator } from '@/components/ui/separator';
+import ChannelFilter from '@/components/Feed/ChannelFilter';
 import Image from 'next/image';
 import Link from 'next/link';
-import HomeButton from './Header/HomeButton';
 import { usePrivy } from '@privy-io/react-auth';
+import UserAvatar from '@/components/UserAvatar';
+import { useUi } from '@/providers/UiProvider';
+import { ExitIcon } from '@radix-ui/react-icons';
+import { X } from 'lucide-react';
+import { Sheet, SheetContent } from '@/components/ui/sheet';
 
-export default function MobileMenu({ isSingleCast = false }: { isSingleCast?: boolean }) {
-  const { authenticated, logout } = usePrivy();
+export default function Sidebar({ isSingleCast = false }: { isSingleCast?: boolean }) {
+  const { isMobile, menuOpen, setMenuOpen } = useUi();
+  return isMobile ? (
+    <nav>
+      <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
+        <SheetContent side="left">
+          <SidebarContent isSingleCast={isSingleCast} />
+        </SheetContent>
+      </Sheet>
+    </nav>
+  ) : (
+    <nav className="shadow-xl max-md:hidden">
+      <SidebarContent />
+    </nav>
+  );
+}
+
+const SidebarContent = ({ isSingleCast = false }: { isSingleCast?: boolean }) => {
+  const { isMobile, setMenuOpen } = useUi();
 
   return (
-    <div className="flex h-full flex-col gap-4 md:px-16 md:py-6">
-      <Link href="/" className="mb-8 flex items-center gap-2 max-md:hidden">
-        <Image src="/images/notes.png" width={20} height={20} alt="" />
-        <span className="font-clashDisplay font-semibold">Sonata</span>
-      </Link>
-      <HomeButton className="mb-2 md:hidden" />
+    <div className="flex h-full flex-col gap-6 md:px-16 md:py-6">
+      {isMobile ? (
+        <div className="flex items-center justify-between">
+          <UserAvatar className="size-9" />
+          <X className="size-6 cursor-pointer" onClick={() => setMenuOpen(false)} />
+        </div>
+      ) : (
+        <Link href="/" className="mb-8 flex items-center gap-2">
+          <Image src="/images/notes.png" width={20} height={20} alt="" />
+          <span className="font-clashDisplay font-semibold">Sonata</span>
+        </Link>
+      )}
       <Separator />
 
       {!isSingleCast && <ChannelFilter />}
-      <a
-        href="https://warpcast.com/~/channel/sonata"
-        className="mt-auto flex items-center gap-2 self-start"
-      >
-        <span>Follow Sonata</span>
-        <Image src="/images/warpcast.png" alt="warpcast" width={18} height={18} />
-      </a>
-      <div className="md:hidden">
-        {authenticated ? (
-          <Button onClick={logout} variant="secondary" className="w-full">
-            Logout
-          </Button>
-        ) : (
-          <SignInButton />
-        )}
-      </div>
+      {isMobile && <AuthButton />}
     </div>
   );
-}
+};
+
+const AuthButton = () => {
+  const { authenticated, logout } = usePrivy();
+  return authenticated ? (
+    <button onClick={logout} className="flex items-center gap-2">
+      <span className="font-clashDisplay font-semibold">Logout</span>
+      <ExitIcon className="size-4" />
+    </button>
+  ) : (
+    <SignInButton />
+  );
+};
