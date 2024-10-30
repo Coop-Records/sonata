@@ -1,6 +1,9 @@
 import useChannelDetails, { DEFAULT_CHANNEL_DETAILS } from '@/hooks/useChannelDetails';
 import { createContext, Dispatch, SetStateAction, useContext } from 'react';
 import { useTipProvider } from './TipProvider';
+import { UserStake } from '@/types/Stake';
+import { usePrivy } from '@privy-io/react-auth';
+import useUserStakes from '@/hooks/useUserStakes';
 
 const StakeContext = createContext({
   channelImage: '',
@@ -8,16 +11,22 @@ const StakeContext = createContext({
   loading: true,
   userStakedAmount: 0,
   channelDetails: DEFAULT_CHANNEL_DETAILS,
-  setChannelDetails: (() => { }) as Dispatch<SetStateAction<typeof DEFAULT_CHANNEL_DETAILS>>,
-  setUserStakedAmount: (() => { }) as Dispatch<SetStateAction<number>>
+  setChannelDetails: (() => {}) as Dispatch<SetStateAction<typeof DEFAULT_CHANNEL_DETAILS>>,
+  setUserStakedAmount: (() => {}) as Dispatch<SetStateAction<number>>,
+  stakes: [] as UserStake[],
+  stakedAmount: 0,
 });
 
 const StakeProvider = ({ children }: any) => {
+  const { user } = usePrivy();
   const { balance } = useTipProvider();
   const channelDetails = useChannelDetails();
 
+  const fid = user?.farcaster?.fid;
+  const { stakes, stakedAmount } = useUserStakes(fid);
+
   return (
-    <StakeContext.Provider value={{ balance, ...channelDetails }}>
+    <StakeContext.Provider value={{ balance, stakes, stakedAmount, ...channelDetails }}>
       {children}
     </StakeContext.Provider>
   );

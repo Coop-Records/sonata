@@ -3,13 +3,13 @@ import formatNumber from '@/lib/formatNumber';
 import Image from 'next/image';
 import Loader from '@/components/Loader';
 
-export default function UserStakes({ fid }: { fid?: number }) {
-  const { loading, userStakes } = useUserStakes(fid);
+export default function UserStakes({ fid }: { fid?: number | null }) {
+  const { loading, stakes } = useUserStakes(fid);
 
   if (loading) return <Loader />;
   return (
     <div className="max-w-full grow space-y-6">
-      {userStakes.map((stake) => (
+      {stakes.map((stake) => (
         <div
           key={'stake_' + stake.channelId}
           className="flex w-full flex-wrap items-center gap-2 p-1"

@@ -1,6 +1,6 @@
 import { CHANNELS } from '@/lib/consts';
 import getVerifications from '@/lib/farcaster/getVerifications';
-import { stack } from '@/lib/stack/client';
+import getStackPoints from '@/lib/sonata/getStackPoints';
 import { eventStakeChannelFid } from '@/lib/stack/events';
 import { NextRequest } from 'next/server';
 
@@ -10,24 +10,30 @@ export async function GET(req: NextRequest) {
 
   try {
     const verifications = await getVerifications(fid);
-
     const points = await Promise.all(
-      CHANNELS.map(channel => stack.pointsClient.getPoints({
-          addresses: verifications,
-          filter: { event: eventStakeChannelFid(channel.value, fid) }
-        }))
+      CHANNELS.map((channel) =>
+        getStackPoints(verifications, eventStakeChannelFid(channel.value, fid)),
+      ),
     );
 
-    const channelPoints = CHANNELS.map((channel, i) => ({
-      channelId: channel.value,
-      points: Math.abs(points[i]?.allocations?.reduce(
-        (total: any, curr: any) => total + curr?.points, 0
-      )),
-    }));
+    const channelPoints = CHANNELS.map((channel, i) => {
+      let totalPointsForChannel;
+      if (Array.isArray(points[i])) {
+        totalPointsForChannel = Math.abs(
+          points[i]?.reduce((total: any, curr: any) => total + curr?.amount, 0),
+        );
+      } else {
+        totalPointsForChannel = Math.abs(points[i]);
+      }
+      return {
+        channelId: channel.value,
+        points: totalPointsForChannel,
+      };
+    });
 
     return Response.json({
       message: 'success',
-      data: channelPoints.filter(({ points }) => points)
+      data: channelPoints.filter(({ points }) => points),
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Failed';
