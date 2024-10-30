@@ -16,7 +16,7 @@ const HeaderButtonsGroup = ({ className = '' }) => {
   const { isMobile, setMenuOpen, menuOpen } = useUi();
 
   return (
-    <div className={cn('container flex items-center relative', className)}>
+    <div className={cn('container flex items-center relative justify-between', className)}>
       {username || channelId ? (
         <HomeButton />
       ) : !ready ? (
@@ -38,7 +38,7 @@ const HeaderButtonsGroup = ({ className = '' }) => {
         alt="Sonata Logo"
         width={36}
         height={36}
-        className="rounded-full md:opacity-0"
+        className={cn('rounded-full', !authenticated && 'opacity-0 pointer-events-none')}
       />
     </div>
   );
