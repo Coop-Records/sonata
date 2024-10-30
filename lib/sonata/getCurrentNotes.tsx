@@ -1,14 +1,14 @@
-import { Address } from 'viem';
+import qs from 'qs';
 
-const getCurrentNotes = async (wallet_address: Address) => {
+const getCurrentNotes = async (fid: number) => {
   const options = {
     method: 'GET',
     headers: { accept: 'application/json' },
   } as any;
 
   try {
-    const queryParams = new URLSearchParams({
-      wallet_address,
+    const queryParams = qs.stringify({
+      fid,
     });
 
     const response = await fetch(`/api/getPoints?${queryParams}`, options);

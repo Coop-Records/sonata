@@ -1,11 +1,12 @@
 import { stack } from '@/lib/stack/client';
+import getVerifications from '@/lib/farcaster/getVerifications';
 import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest): Promise<Response> {
-  // Retrieve the wallet_address from the query parameters
-  const wallet_address = req.nextUrl.searchParams.get('wallet_address');
+  // Retrieve the fid from the query parameters
+  const fid = req.nextUrl.searchParams.get('fid');
 
-  if (!wallet_address) {
+  if (!fid) {
     return new Response(JSON.stringify({ error: 'wallet_address is required' }), {
       status: 400,
       headers: {
@@ -13,9 +14,15 @@ export async function GET(req: NextRequest): Promise<Response> {
       },
     });
   }
-  const currentBalance = await stack.getPoints(wallet_address);
+  const verifications = await getVerifications(Number(fid));
+  const points = await stack.getPoints(verifications);
 
-  return new Response(JSON.stringify({ notes: currentBalance }), {
+  let notes = 0;
+  if (Array.isArray(points)) {
+    notes = points.reduce((acc, curr) => acc + curr.amount, 0);
+  }
+
+  return new Response(JSON.stringify({ notes }), {
     status: 200,
     headers: {
       'Content-Type': 'application/json',

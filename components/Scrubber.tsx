@@ -42,7 +42,7 @@ export default function Scrubber({ className }: { className?: string }) {
     <div
       className={cn('flex items-center gap-2 text-xs font-light text-muted-foreground', className)}
     >
-      <div className="relative flex h-3 grow items-center">
+      <div className="relative flex h-2 grow items-center">
         <div
           className="absolute left-0 top-0 flex size-full items-end gap-[3px]"
           ref={visualisationContainer}

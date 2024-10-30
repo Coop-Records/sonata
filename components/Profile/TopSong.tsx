@@ -21,7 +21,7 @@ const TopSong = () => {
             <Skeleton className="size-full" />
           )}
         </div>
-        <div className="line-clamp-2 text-[14px] font-semibold leading-none">
+        <div className="max-w-16 truncate font-clashDisplay text-sm font-semibold leading-none">
           {topSongMetadata?.trackName ? (
             <>{topSongMetadata.trackName}</>
           ) : (

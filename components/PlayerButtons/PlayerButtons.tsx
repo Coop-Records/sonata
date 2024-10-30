@@ -30,7 +30,7 @@ const PlayerButtons = ({ metadata }: PlayerButtonProps) => {
   return (
     <div className="flex items-center gap-2 md:gap-4">
       {showActions && (
-        <RiSkipBackFill onClick={handlePrev} className="cursor-pointer text-xl md:text-3xl" />
+        <RiSkipBackFill onClick={handlePrev} className="cursor-pointer text-lg md:text-2xl" />
       )}
       <Button
         onClick={player.playing ? handlePause : handlePlay}
@@ -38,13 +38,13 @@ const PlayerButtons = ({ metadata }: PlayerButtonProps) => {
         className="aspect-square h-auto rounded-full p-2 md:p-3"
       >
         {player.playing ? (
-          <RiPauseFill className="m-2 text-xl md:text-3xl" />
+          <RiPauseFill className="text-lg md:text-2xl" />
         ) : (
-          <RiPlayFill className="text-xl md:text-3xl" />
+          <RiPlayFill className="text-lg md:text-2xl" />
         )}
       </Button>
       {showActions && (
-        <RiSkipForwardFill onClick={handleNext} className="cursor-pointer text-xl md:text-3xl" />
+        <RiSkipForwardFill onClick={handleNext} className="cursor-pointer text-lg md:text-2xl" />
       )}
     </div>
   );

@@ -19,7 +19,7 @@ export default function CreatePost() {
       <Button
         variant="secondary"
         disabled={dialog.posting}
-        className="fixed bottom-16 right-6 size-16 rounded-full bg-blue text-3xl text-foreground hover:bg-blue"
+        className="fixed bottom-16 right-6 size-16 rounded-full bg-blue text-3xl font-extralight text-foreground hover:bg-blue"
         onClick={handleClick}
       >
         {dialog.posting ? <Loader /> : '+'}
