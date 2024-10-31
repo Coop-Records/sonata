@@ -1,3 +1,4 @@
+'use client';
 import SignInButton from '@/components/SignInButton';
 import { Separator } from '@/components/ui/separator';
 import ChannelFilter from '@/components/Feed/ChannelFilter';
@@ -10,10 +11,16 @@ import { ExitIcon } from '@radix-ui/react-icons';
 import { X } from 'lucide-react';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 
-export default function Sidebar({ isSingleCast = false }: { isSingleCast?: boolean }) {
+export default function Sidebar({
+  isSingleCast = false,
+  className,
+}: {
+  isSingleCast?: boolean;
+  className?: string;
+}) {
   const { isMobile, menuOpen, setMenuOpen } = useUi();
   return isMobile ? (
-    <nav>
+    <nav className={className}>
       <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
         <SheetContent side="left">
           <SidebarContent isSingleCast={isSingleCast} />
@@ -21,7 +28,7 @@ export default function Sidebar({ isSingleCast = false }: { isSingleCast?: boole
       </Sheet>
     </nav>
   ) : (
-    <nav className="shadow-xl max-md:hidden">
+    <nav className={className}>
       <SidebarContent />
     </nav>
   );
