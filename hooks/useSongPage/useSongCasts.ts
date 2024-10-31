@@ -1,7 +1,7 @@
-import { supabaseClient } from "@/lib/supabase/client";
-import { SupabasePost } from "@/types/SupabasePost";
-import { isEmpty } from "lodash";
-import { useEffect, useState } from "react";
+import { supabaseClient } from '@/lib/supabase/client';
+import { SupabasePost } from '@/types/SupabasePost';
+import { isEmpty } from 'lodash';
+import { useEffect, useState } from 'react';
 
 export default function useSongCasts(songLink: string, alternatives: Record<string, string>) {
   const [posts, setPosts] = useState<SupabasePost[]>([]);
