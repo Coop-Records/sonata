@@ -43,7 +43,7 @@ function StakeDialog({ balance = 0 }) {
             stakedBalance={balance}
             onStart={onStart}
             onCompleted={onCompleted}
-            className="gap-8"
+            className="gap-6"
           />
         </DialogContent>
       </Dialog>
