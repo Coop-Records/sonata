@@ -10,21 +10,19 @@ const SongContext = createContext<{
   songLink: string;
   posts: SupabasePost[];
   postsLoading: boolean;
+  firstPost?: SupabasePost;
 }>({
   alternatives: {},
   songLink: '',
-  posts:[],
-  postsLoading: true
+  posts: [],
+  postsLoading: true,
+  firstPost: undefined,
 });
 
 const SongPageProvider = ({ children }: any) => {
   const data = useSongPage();
 
-  return (
-    <SongContext.Provider value={data}>
-      {children}
-    </SongContext.Provider>
-  );
+  return <SongContext.Provider value={data}>{children}</SongContext.Provider>;
 };
 
 export const useSongPageProvider = () => {
