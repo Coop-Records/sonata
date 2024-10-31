@@ -23,18 +23,22 @@ export default function PostDialog({
       <Dialog open={!isMobile && isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="flex flex-col items-center gap-8 ">
           <DialogHeader className="self-start">
-            <DialogTitle>Cast Song</DialogTitle>
+            <DialogTitle className="font-clashDisplay text-base font-thin">Cast Song</DialogTitle>
           </DialogHeader>
 
           <PostInput
-            placeholder="Paste Song URL"
+            placeholder="What are you listening to?"
             onChange={handleTextChange}
             className="w-full px-4 py-[2px]"
             action={<Dropdown handleSelect={setChannelId} value={channelId} className="z-50" />}
           />
 
           <div className="self-end">
-            <Button className="text-grey hover:bg-transparent" variant="ghost" onClick={close}>
+            <Button
+              className="font-thin text-muted-foreground hover:bg-transparent"
+              variant="ghost"
+              onClick={close}
+            >
               Cancel
             </Button>
             <Button

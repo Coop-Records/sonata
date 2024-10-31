@@ -2,9 +2,8 @@ import { cn } from '@/lib/utils';
 import { usePlayer } from '@/providers/audio/PlayerProvider';
 import { TrackMetadata } from '@/types/Track';
 import Image from 'next/image';
-import { MdPauseCircle, MdPlayCircle } from 'react-icons/md';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Button } from '@/components/ui/button';
+import { FaPause, FaPlay } from 'react-icons/fa';
 
 type MediaPlayerProps = {
   metadata?: TrackMetadata;
@@ -35,9 +34,12 @@ export default function MediaPlayer({ metadata }: MediaPlayerProps) {
   return (
     <div
       data-type={metadata?.type}
-      className={cn('flex w-full gap-4 py-2', currentTrack && player.loading && 'animate-pulse')}
+      className={cn(
+        'flex w-full gap-4 py-2 items-center',
+        currentTrack && player.loading && 'animate-pulse',
+      )}
     >
-      <div className="relative my-auto aspect-square w-12 shrink-0 overflow-hidden rounded-lg shadow-md">
+      <div className="relative my-auto aspect-square w-14 shrink-0 overflow-hidden rounded-lg shadow-md">
         {metadata?.artworkUrl ? (
           <Image
             src={metadata.artworkUrl}
@@ -59,7 +61,7 @@ export default function MediaPlayer({ metadata }: MediaPlayerProps) {
             <Skeleton className="h-2 w-32 rounded-sm" />
           )}
         </div>
-        <div className="line-clamp-2 text-sm font-extralight">
+        <div className="line-clamp-2 text-sm font-extralight text-muted-foreground">
           {metadata?.artistName ? (
             <>{metadata.artistName}</>
           ) : (
@@ -68,17 +70,17 @@ export default function MediaPlayer({ metadata }: MediaPlayerProps) {
         </div>
       </div>
       <div className="my-auto">
-        <Button
+        <button
+          className="rounded-full bg-secondary p-2"
           onClick={currentTrack && player.playing ? handlePause : handlePlay}
-          variant="ghost"
-          className="rounded-full p-0"
+          title={player.playing ? 'Pause' : 'Play'}
         >
           {currentTrack && player.playing ? (
-            <MdPauseCircle className="text-4xl" />
+            <FaPause className="size-3" />
           ) : (
-            <MdPlayCircle className="text-4xl" />
+            <FaPlay className="size-3" />
           )}
-        </Button>
+        </button>
       </div>
     </div>
   );
