@@ -7,7 +7,7 @@ export async function getDataForCastOg(hash: any) {
 
   const channelData = getChannelData(cast.channelId);
 
-  const channelLabel = channelData?.label || '/sonata';
+  const channelLabel = `/${channelData?.value}` || '/sonata';
   const channelIcon = channelData?.icon || 'https://i.imgur.com/Xa4LjYA.jpeg';
 
   const points = formatPoints(cast.points);

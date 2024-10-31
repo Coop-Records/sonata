@@ -2,8 +2,6 @@
 
 import { ReactNode } from 'react';
 import Sidebar from '@/components/Sidebar';
-import { Sheet, SheetContent } from '@/components/ui/sheet';
-import { useUi } from '@/providers/UiProvider';
 import Header from '@/components/Header';
 import GlobalPlayer from '@/components/GlobalPlayer';
 import CreatePostButton from '@/components/CreatePostButton';
@@ -16,7 +14,6 @@ import ChannelHeader from '@/components/Header/ChannelHeader';
 import { usePrivy } from '@privy-io/react-auth';
 
 export default function FeedLayout({ children }: { children: ReactNode }) {
-  const { menuOpen, setMenuOpen } = useUi();
   const { username, channelId } = useParams();
   const { user } = usePrivy();
   const enableMaxWidth = !channelId && !username;
@@ -27,17 +24,7 @@ export default function FeedLayout({ children }: { children: ReactNode }) {
         <StakeProvider>
           <div className="flex grow">
             <meta property="of:accepts:xmtp" content="2024-02-01" />
-            <nav className="md:hidden">
-              <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
-                <SheetContent side="left">
-                  <Sidebar />
-                </SheetContent>
-              </Sheet>
-            </nav>
-
-            <nav className="shadow-xl max-md:hidden">
-              <Sidebar />
-            </nav>
+            <Sidebar />
 
             <main className="flex grow flex-col">
               {!channelId && <Header />}

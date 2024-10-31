@@ -66,8 +66,8 @@ const Dropdown = ({ handleSelect, className, value }: Props) => {
               className="flex cursor-pointer select-none items-center gap-2 px-4 py-2 text-sm/4 font-semibold outline-none hover:bg-grey-light"
               onSelect={() => onSelect(i)}
               key={item.value}>
-              <Image alt={item.label} src={item.icon} width={24} height={24} className='size-6 rounded-full' />
-              {item.label}
+              <Image alt={item.value} src={item.icon} width={24} height={24} className='size-6 rounded-full' />
+              {item.value}
             </DropdownMenu.Item>
           ))}
         </DropdownMenu.Content>
