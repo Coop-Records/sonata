@@ -80,8 +80,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" className={cn(sora.variable, clashDisplay.variable, 'dark')}>
       <body
         className={cn(
-          'h-screen overflow-hidden font-sora',
-          'grid grid-cols-[auto_1fr] grid-rows-[auto_1fr]',
+          'h-screen overflow-hidden font-sora relative',
+          'grid grid-cols-[auto_1fr] grid-rows-[auto_1fr_auto]',
           backgroundColor,
         )}
       >
@@ -91,8 +91,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <Sidebar className="row-span-2" />
           <Header />
           <main className="container size-full overflow-hidden">{children}</main>
+          <GlobalPlayer className="col-span-2" />
           <Toaster />
-          <GlobalPlayer />
         </Providers>
         <Analytics />
       </body>
