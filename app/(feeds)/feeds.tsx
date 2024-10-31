@@ -11,9 +11,10 @@ const Feeds = () => {
   return (
     <div id="feed-container">
       <InfiniteScroll
-        hasMore={hasMore}
         next={() => fetchMore(feed.length)}
+        hasMore={hasMore}
         loader={<Loader className="w-full py-2" />}
+        endMessage={<p className="py-4 text-center text-sm">{`That's All!`}</p>}
       >
         <Feed feed={feed} />
       </InfiniteScroll>

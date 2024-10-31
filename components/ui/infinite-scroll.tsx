@@ -7,9 +7,16 @@ interface InfiniteScrollProps {
   next: () => unknown;
   children?: React.ReactNode;
   loader?: React.ReactNode;
+  endMessage?: React.ReactNode;
 }
 
-export default function InfiniteScroll({ hasMore, next, children, loader }: InfiniteScrollProps) {
+export default function InfiniteScroll({
+  hasMore,
+  next,
+  children,
+  loader,
+  endMessage,
+}: InfiniteScrollProps) {
   const [isLoadingMore, setIsLoadingMore] = React.useState(false);
   const { ref, isIntersecting } = useIntersectionObserver({
     threshold: 0.8,
@@ -31,7 +38,7 @@ export default function InfiniteScroll({ hasMore, next, children, loader }: Infi
   return (
     <>
       {children}
-      {isLoadingMore ? loader : <div className="h-10" ref={ref} />}
+      {isLoadingMore ? loader : !hasMore ? endMessage : <div className="h-10" ref={ref} />}
     </>
   );
 }
