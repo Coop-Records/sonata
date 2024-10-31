@@ -1,6 +1,7 @@
 import formatNumber from '@/lib/formatNumber';
 import NotesIcon from '@/components/NotesIcon';
 import { Skeleton } from '@/components/ui/skeleton';
+import { isNull } from 'lodash';
 
 function DataPoints({ channel }: { channel: any }) {
   const stats = [
@@ -14,7 +15,7 @@ function DataPoints({ channel }: { channel: any }) {
         <div key={stat.label} className="space-y-1">
           <div className="flex items-center gap-1">
             <p className="font-clashDisplay font-semibold leading-none">
-              {stat?.value ? formatNumber(stat.value) : <Skeleton className="h-4 w-12" />}
+              {!isNull(stat?.value) ? formatNumber(stat.value) : <Skeleton className="h-4 w-12" />}
             </p>
             {stat?.notes && <NotesIcon size={16} />}
           </div>
