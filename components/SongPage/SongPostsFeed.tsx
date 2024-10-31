@@ -7,8 +7,6 @@ import { Avatar, AvatarImage } from '../ui/avatar';
 export default function SongPostsFeed() {
   const { posts, postsLoading } = useSongPageProvider();
 
-  console.log({ posts, postsLoading });
-
   return postsLoading ? (
     <Loader />
   ) : (

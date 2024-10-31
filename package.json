@@ -3,7 +3,7 @@
   "version": "0.9.4",
   "scripts": {
     "build": "rm -rf .next && next build",
-    "dev": "NODE_OPTIONS='--max-old-space-size=8192' next dev",
+    "dev": "next dev",
     "lint": "next lint --dir . --fix",
     "format": "prettier --log-level warn --write .",
     "start": "next start",
