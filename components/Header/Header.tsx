@@ -1,38 +1,40 @@
 'use client';
-import Tabs from '@/components/Tabs';
-import { tabs } from '@/lib/consts';
-import { useProfileProvider } from '@/providers/ProfileProvider';
-import { FeedType } from '@/types/Feed';
-import { useParams } from 'next/navigation';
-import { useMemo } from 'react';
-import Profile from '../Profile';
-import { Separator } from '../ui/separator';
-import HeaderButtonsGroup from './HeaderButtonsGroup';
-import { usePrivy } from '@privy-io/react-auth';
+import SignInButton from '@/components/SignInButton';
+import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
+import { useUi } from '@/providers/UiProvider';
+import { usePathname } from 'next/navigation';
+import HomeButton from './HomeButton';
+import UserMenu from './UserMenu';
+import { usePrivy } from '@privy-io/react-auth';
+import UserAvatar from '@/components/UserAvatar';
+import BalanceMenu from '@/components/Balance/BalanceMenu';
 
 const Header = ({ className = '' }) => {
-  const { authenticated } = usePrivy();
-  const { username } = useParams();
-  const { profile } = useProfileProvider();
+  const { ready, authenticated } = usePrivy();
+  const pathname = usePathname();
 
-  const filteredTabs = useMemo(() => {
-    return tabs.filter((tab) => {
-      const userTabs = tab.value === FeedType.Posts || tab.value === 'stakes';
-      if (username) return userTabs;
-
-      const isDisabled = (tab.value === FeedType.Following && !authenticated) || userTabs;
-      return !isDisabled;
-    });
-  }, [username, authenticated]);
-
+  const { isMobile, setMenuOpen, menuOpen } = useUi();
   return (
-    <header className={cn('mt-6 md:mt-12', className)}>
-      <HeaderButtonsGroup />
-      <div className="container">
-        {profile && <Profile />}
-        <Tabs tabs={filteredTabs} className={cn('mt-4', !username && 'justify-start')} />
-        <Separator className="-mt-px bg-border" />
+    <header className={cn('pb-4 pt-6 md:pt-12', className)}>
+      <div className={cn('container flex items-center relative justify-between', className)}>
+        {pathname !== '/' ? (
+          <HomeButton />
+        ) : !ready ? (
+          <Skeleton className="size-9 rounded-full" />
+        ) : authenticated ? (
+          isMobile ? (
+            <UserAvatar onClick={() => setMenuOpen(!menuOpen)} />
+          ) : (
+            <UserMenu />
+          )
+        ) : (
+          <SignInButton />
+        )}
+        <div className="pointer-events-none font-clashDisplay text-lg font-semibold text-white">
+          Sonata
+        </div>
+        {authenticated ? <BalanceMenu /> : <span />}
       </div>
     </header>
   );

@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react';
 const DEFAULT_CHANNEL_DETAILS = {
   info: undefined as any,
   balance: 0,
-  moderators: [] as any[],
   topSong: undefined as TrackMetadata | undefined,
   staking: {
     stakers: 0,
@@ -36,16 +35,12 @@ function useChannelDetails() {
         const image = CHANNELS.find(({ value }) => value === channelId)?.icon;
         setChannelImage(image ?? '/images/placeholder.png');
         const data = await getChannelDetails(channelId as string, fid);
-        const mods = [];
         const info = data.info;
-        !!info?.hosts?.[0] && mods.push(info.hosts[0]);
-        !!info?.moderator && mods.push(info.moderator);
 
         setChannelDetails({
           info,
           balance: data.balance ?? 0,
           topSong: data.topSong,
-          moderators: mods,
           staking: {
             staked: data.staking?.staked ?? 0,
             stakers: data.staking?.stakers ?? 0,

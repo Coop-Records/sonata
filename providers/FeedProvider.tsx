@@ -33,7 +33,6 @@ const FeedProvider = ({ children }: { children: ReactNode }) => {
   const { user, ready: privyReady } = usePrivy();
   const [player, dispatch] = usePlayer();
   const { profile, loading: profileLoading, error: profileError } = useProfileProvider();
-
   const fid = user?.farcaster?.fid;
   const profileFid = profile?.fid;
 

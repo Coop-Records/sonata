@@ -1,6 +1,6 @@
 import Providers from '@/providers';
 import { Sora } from 'next/font/google';
-import '../styles/globals.css';
+import '@/styles/globals.css';
 import { Analytics } from '@vercel/analytics/react';
 import { ReactNode } from 'react';
 import { Toaster } from '@/components/ui/toaster';
@@ -10,6 +10,10 @@ import { getFrameMetadata } from '@coinbase/onchainkit';
 import { Metadata } from 'next';
 import { cn } from '@/lib/utils';
 import localFont from 'next/font/local';
+import Sidebar from '@/components/Sidebar';
+import Header from '@/components/Header';
+import GlobalPlayer from '@/components/GlobalPlayer';
+
 const frameMetadata = { ...getFrameMetadata(DEFAULT_FRAME), 'of:accepts:xmtp': '2024-02-01' };
 
 export const metadata: Metadata = {
@@ -75,12 +79,20 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={cn(sora.variable, clashDisplay.variable, 'dark')}>
       <body
-        className={cn('flex min-h-screen flex-col overflow-x-hidden font-sora', backgroundColor)}
+        className={cn(
+          'h-screen overflow-hidden font-sora',
+          'grid grid-cols-[auto_1fr] grid-rows-[auto_1fr]',
+          backgroundColor,
+        )}
       >
         <Providers>
           <div id="player-portal" className="pointer-events-none fixed left-0 top-0 opacity-0" />
-          {children}
+
+          <Sidebar className="row-span-2" />
+          <Header />
+          <main className="container size-full overflow-hidden">{children}</main>
           <Toaster />
+          <GlobalPlayer />
         </Providers>
         <Analytics />
       </body>
