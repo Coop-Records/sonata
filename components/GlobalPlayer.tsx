@@ -6,7 +6,7 @@ import PlayerButtons from './PlayerButtons';
 import { useUi } from '@/providers/UiProvider';
 import { cn } from '@/lib/utils';
 
-export default function GlobalPlayer() {
+export default function GlobalPlayer({ className }: { className?: string }) {
   const { isMobile } = useUi();
   const [player] = usePlayer();
   const { metadata } = player;
@@ -16,7 +16,10 @@ export default function GlobalPlayer() {
   return (
     <div
       data-type={metadata.type}
-      className="sticky bottom-0 left-0 mt-auto w-screen space-y-6 overflow-hidden bg-background py-3 shadow-2xl shadow-black"
+      className={cn(
+        'sticky bottom-0 left-0 mt-auto w-screen space-y-6 overflow-hidden bg-background py-3 shadow-2xl shadow-black',
+        className,
+      )}
     >
       <div className="container relative flex items-center gap-2">
         <div className="relative my-auto size-8 overflow-hidden rounded-lg shadow-md">

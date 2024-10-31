@@ -1,85 +1,28 @@
 import formatNumber from '@/lib/formatNumber';
-import { cn } from '@/lib/utils';
-import { TrackMetadata } from '@/types/Track';
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import fetchMetadata from '@/lib/fetchMetadata';
-import findValidEmbed from '@/lib/findValidEmbed';
+import NotesIcon from '@/components/NotesIcon';
+import { Skeleton } from '@/components/ui/skeleton';
+import { isNull } from 'lodash';
 
 function DataPoints({ channel }: { channel: any }) {
-  const [topSongMetadata, setTopSongMetadata] = useState<TrackMetadata>();
-
-  useEffect(() => {
-    const fetchTopSongMetadata = async () => {
-      const topSong = channel.topSong;
-      if (topSong) {
-        const embed = findValidEmbed(topSong);
-        const metadata = embed ? await fetchMetadata(embed.url, topSong) : undefined;
-        setTopSongMetadata(metadata);
-      }
-    };
-
-    fetchTopSongMetadata();
-  }, [channel.topSong]);
-
+  const stats = [
+    { label: 'Balance', value: channel?.balance, notes: true },
+    { label: 'Staked', value: channel?.staking?.staked, notes: true },
+    { label: 'Stakers', value: channel?.staking?.stakers },
+  ];
   return (
-    <div className="mt-4 flex flex-wrap items-end gap-x-6 gap-y-3">
-      <div className="grid grid-cols-[auto_1fr] gap-x-1">
-        <span className="font-sora text-base/[17px] font-semibold">
-          {formatNumber(channel.balance)}
-        </span>
-        <Image src="/images/notes.png" width={16} height={16} alt="notes" />
-        <span className="col-span-full text-sm text-grey">Balance</span>
-      </div>
-
-      <div className="grid grid-cols-[auto_1fr] gap-x-1">
-        <span className="font-sora text-base/[17px] font-semibold">
-          {formatNumber(channel.staking.staked)}
-        </span>
-        <Image src="/images/notes.png" width={16} height={16} alt="notes" />
-        <span className="col-span-full text-sm text-grey">Staked</span>
-      </div>
-
-      <div>
-        <p className="font-sora text-base/[17px] font-semibold">
-          {formatNumber(channel.staking.stakers)}
-        </p>
-        <p className="col-span-full text-sm text-grey">Stakers</p>
-      </div>
-
-      {topSongMetadata && (
-        <div className="grid grid-cols-[auto_1fr] items-center gap-x-1">
-          <Image
-            className="size-6 rounded-md object-cover"
-            src={topSongMetadata?.artworkUrl ?? ''}
-            width={24}
-            height={24}
-            alt="song"
-          />
-          <span className="max-w-20 truncate font-sora text-base/[17px] font-semibold">
-            {topSongMetadata?.trackName ?? '-'}
-          </span>
-          <span className="col-span-full text-sm text-grey">Top Song</span>
-        </div>
-      )}
-
-      {channel.moderators.length > 0 && (
-        <div>
-          <div className="flex">
-            {channel.moderators.map((moderator: any, i: number) => (
-              <Image
-                key={moderator.fid}
-                src={moderator.pfp_url}
-                width={24}
-                height={24}
-                alt={moderator.display_name}
-                className={cn('size-6 rounded-3xl', { 'translate-x-[-8px]': i == 1 })}
-              />
-            ))}
+    <div className="flex justify-between">
+      {stats.map((stat) => (
+        <div key={stat.label} className="space-y-1">
+          <div className="flex items-center gap-1">
+            <p className="font-clashDisplay font-semibold leading-none">
+              {!isNull(stat?.value) ? formatNumber(stat.value) : <Skeleton className="h-4 w-12" />}
+            </p>
+            {stat?.notes && <NotesIcon size={16} />}
           </div>
-          <p className="col-span-full text-sm/4 text-grey">Moderators</p>
+
+          <p className="text-sm text-muted-foreground">{stat.label}</p>
         </div>
-      )}
+      ))}
     </div>
   );
 }
