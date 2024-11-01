@@ -7,11 +7,12 @@ import { Popover, PopoverContent } from '@/components/ui/popover';
 import { cn, formatBigInt, isValidNumber } from '@/lib/utils';
 import { PopoverTrigger } from '@radix-ui/react-popover';
 import { useUi } from '@/providers/UiProvider';
-import { Badge } from './ui/badge';
-import { Input } from './ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import { ArrowBigUp } from 'lucide-react';
 import { useStakeProvider } from '@/providers/StakeProvider';
 import { usePrivy } from '@privy-io/react-auth';
+import NotesIcon from '@/components/NotesIcon';
 
 const defaultTips = [100, 1000, 10000];
 const logo = '/images/notes.png';
@@ -69,9 +70,9 @@ export default function UpvoteDownvote({
         <PopoverTrigger
           className={cn('flex items-center gap-1 px-4 py-2 font-semibold', className)}
         >
-          <span>{formatBigInt(BigInt(total))}</span>
-          <Image src={logo} width={16} height={16} alt="" />
           <ArrowBigUp className="hover:fill-black" onClick={handleUpvoteClick} />
+          <span>{formatBigInt(BigInt(total))}</span>
+          <NotesIcon size={16} />
         </PopoverTrigger>
         <PopoverContent className="flex w-48 flex-col gap-2">
           <h3 className="mb-2 text-xs font-semibold">Upvote</h3>

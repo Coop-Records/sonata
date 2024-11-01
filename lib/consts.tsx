@@ -108,6 +108,8 @@ export const PLATFORM_ICONS: Record<string, string> = {
   spotify: '/images/spotify.png',
   youtube: '/images/youtube.svg',
   soundcloud: '/images/soundcloud.png',
+  zora: '/images/zora.png',
+  soundxyz: '/images/soundxyz.png',
 };
 
 export const ZORA_TO_VIEM = {

@@ -1,17 +1,21 @@
 'use client';
-import UserDetails from '@/components/UserDetails';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import Link from 'next/link';
 import findValidEmbed from '@/lib/findValidEmbed';
 import { SupabasePost } from '@/types/SupabasePost';
 import fetchMetadata from '@/lib/fetchMetadata';
-import MediaPlayer from '../MediaPlayer';
+import MediaPlayer from '@/components/MediaPlayer';
 import { useEffect, useState } from 'react';
 import { TrackMetadata } from '@/types/Track';
 import Share from './Share';
-import { Separator } from '@/components/ui/separator';
-import UpvoteDownvote from '../UpvoteDownvote';
+import UpvoteDownvote from '@/components/UpvoteDownvote';
 import CollectButton from './CollectButton';
 import { EmbedUrl } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import findCollectibleUrl from '@/lib/findCollectibleUrlInCastEmbeds';
+import { timeFromNow } from '@/lib/utils';
+import Image from 'next/image';
+import { PLATFORM_ICONS } from '@/lib/consts';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
   const embed = findValidEmbed(cast);
@@ -38,18 +42,34 @@ const Cast = ({ cast = {} as SupabasePost }: { cast: SupabasePost }) => {
 
   if (!metadata) return <></>;
   return (
-    <div className="w-full space-y-4 ">
-      <div className="flex gap-2">
-        <UserDetails user={author} createdAt={cast.created_at} />
+    <div className="w-full space-y-4 rounded-3xl border border-muted  px-6 py-4">
+      <div className="flex items-center gap-2">
+        <Link href={`/${author.username}`}>
+          <Avatar className="size-4">
+            <AvatarImage src={author.pfp_url} />
+            <AvatarFallback>{author.display_name}</AvatarFallback>
+          </Avatar>
+        </Link>
+
+        <span className="text-[10px] font-light text-muted-foreground">
+          {author.display_name} posted {'• '}
+          {timeFromNow(cast.created_at)}
+        </span>
       </div>
 
       <MediaPlayer metadata={metadata} />
-      <div className="flex gap-2">
+      <div className="flex items-center gap-6">
         <UpvoteDownvote verifications={verifications} cast={cast} />
         {collectibleLink && <CollectButton collectUrl={collectibleLink} />}
-        <Share cast={cast} className="ml-auto" />
+        <div className="relative ml-auto size-6 overflow-hidden rounded-full">
+          {metadata?.type ? (
+            <Image alt="" fill src={PLATFORM_ICONS[metadata.type]} style={{ objectFit: 'cover' }} />
+          ) : (
+            <Skeleton className="size-full" />
+          )}
+        </div>
+        <Share cast={cast} />
       </div>
-      <Separator className="bg-muted" />
     </div>
   );
 };

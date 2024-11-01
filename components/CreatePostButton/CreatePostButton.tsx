@@ -4,7 +4,7 @@ import { useUi } from '@/providers/UiProvider';
 import PostDialog from './PostDialog';
 import Loader from '@/components/Loader';
 
-export default function CreatePost() {
+export default function CreatePostButton() {
   const { checkLoggedIn } = useUi();
   const dialog = useCreateModal();
 
