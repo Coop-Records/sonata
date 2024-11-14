@@ -11,7 +11,8 @@ const BalanceInfo = () => {
   const totalAllowance = dailyTipAllowance && formatBigInt(BigInt(dailyTipAllowance));
   const remainingBalance = balance && formatBigInt(balance);
   const userStake = stakedAmount && formatBigInt(BigInt(stakedAmount));
-  const totalBalance = formatBigInt(balance + BigInt(stakedAmount));
+  const bigIntBalance = BigInt(balance || 0);
+  const totalBalance = bigIntBalance + BigInt(stakedAmount);
 
   const stats = [
     {

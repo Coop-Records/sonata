@@ -12,9 +12,9 @@ const UserAvatar = ({ onClick, className }: UserAvatarProps) => {
   const { user } = usePrivy();
 
   return (
-    <Avatar className={cn('size-8', className)} onClick={onClick}>
+    <Avatar className={cn('size-8 cursor-pointer', className)} onClick={onClick}>
       {user?.farcaster?.pfp ? (
-        <AvatarImage src={user.farcaster.pfp} alt="User Avatar" />
+        <AvatarImage src={user.farcaster.pfp} className="object-cover" alt="User Avatar" />
       ) : (
         <AvatarFallback>{user?.farcaster?.displayName?.[0] || 'User'}</AvatarFallback>
       )}
